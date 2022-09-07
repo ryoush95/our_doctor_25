@@ -1,0 +1,41 @@
+import 'package:flutter/material.dart';
+
+//Colors
+const AppColor_Primary = Color(0xFF4B9EFF); // main app color
+const AppColor_Oxygen = Color(0xFF21eba0); // oxygen saturation graph color
+const AppColor_Breath = Color(0xFFFFB238); // breath graph color
+const AppColor_Primary_Disable = Color(0x334B9EFF);
+const AppColor_Green = Color(0xFF19D58F);
+const AppColor_Green_Disable = Color(0xFFd1f7e9);
+const AppColor_Red = Color(0xFFFF3838);
+const AppColor_Yellow = Color(0xFFFFce00);
+const AppColor_Gray = Color(0xFFE5E5E5); // input gray border, placeholder, divider, chatting send bg
+const AppColor_BlackText = Color(0xFF111112); // black text
+const AppColor_GrayText = Color(0xFFA0A0A0); // gray text
+const AppColor_Icon = Color(0xFF8E8E8E); // icon, input black border
+const AppColor_Selector_Border = Color(0xFFedeeef);
+const AppColor_Hint = Color(0xFFcfcfd0);
+const AppColor_Tab_Unselected = Color(0xFFcecece);
+const AppColor_Intro_Description = Color(0xFF949494);
+const AppColor_Step = Color(0xFFc9e2ff);
+const AppColor_Input_Title = Color(0xFF888888);
+const AppColor_Light_Gray = Color(0xFFf8f9fa);
+const AppColor_Table_Border = Color(0xFFf6f7f7);
+const AppColor_Table_DateTime = Color(0xFFb7b7b7);
+const AppColor_Out_Way = Color(0xFFffb238);
+const AppColor_Divider = Color(0xFFf4f5f6);
+const AppColor_Black_Disable = Color(0xFFe6e6e6);
+const AppColor_White = Color(0xFFFFFFFF);
+const AppColor_Height = Color(0xFF4B9EFF);
+const AppColor_a8daff = Color(0xFFA8DAFF);
+const AppColor_f4f5f7 = Color(0xFFF4F5F7);
+const AppColor_414141 = Color(0xFF414141);
+const AppColor_707071 = Color(0xFF707071);
+const AppColor_aaaaaa = Color(0xFFaaaaaa);
+const AppColor_Result_Text = Color(0xFF6D6E6F);
+const AppColor_Banner_Hint = Color(0xFF92C5FF);
+const AppColor_Banner_Test = Color(0xFFB5C4FF);
+const AppColor_Banner_Count = Color(0xFFD6EDFF);
+const AppColor_ecf5ff = Color(0xFFECF5FF);
+const AppColor_ffe166 = Color(0xFFFFE166);
+const AppColor_4b6eff = Color(0xFF4B6EFF);

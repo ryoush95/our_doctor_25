@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "989949984258",
+    "project_id": "wooadoctor",
+    "storage_bucket": "wooadoctor.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:989949984258:android:958c0aa7eeb86a1038711b",
+        "android_client_info": {
+          "package_name": "com.kyad.wooadoctor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "989949984258-80s1cqlkkorm50nuckqck798mu75d7s3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB6jwWQGe9_rCzmGTTlEIgO4tJ1XkZsEOQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "989949984258-80s1cqlkkorm50nuckqck798mu75d7s3.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "989949984258-i0gsd8mhaatga1b7fl773qh2cjmr4gvc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.kyad.wooadoctor"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

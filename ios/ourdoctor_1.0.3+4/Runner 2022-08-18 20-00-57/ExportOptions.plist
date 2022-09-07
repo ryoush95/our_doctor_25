@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>compileBitcode</key>
+	<true/>
+	<key>destination</key>
+	<string>export</string>
+	<key>manifest</key>
+	<dict>
+		<key>appURL</key>
+		<string>https://www.example.com/wooadoctor_1.0.3+6.apk</string>
+		<key>displayImageURL</key>
+		<string>https://</string>
+		<key>fullSizeImageURL</key>
+		<string>https://</string>
+	</dict>
+	<key>method</key>
+	<string>ad-hoc</string>
+	<key>signingStyle</key>
+	<string>automatic</string>
+	<key>stripSwiftSymbols</key>
+	<true/>
+	<key>teamID</key>
+	<string>V95V98XZXZ</string>
+	<key>thinning</key>
+	<string>&lt;thin-for-all-variants&gt;</string>
+</dict>
+</plist>

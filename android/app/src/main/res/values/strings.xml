@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">우아닥터</string>
+
+    <string name="kakao_app_key">66bed5a0bb50d14d57e723a72ec24ce8</string>
+    <string name="client_id">_d1YvUU42Zqb_Pr4w0J6</string>
+    <string name="client_secret">X8FopxYj6M</string>
+    <string name="client_name">wooadoctor</string>
+</resources>
