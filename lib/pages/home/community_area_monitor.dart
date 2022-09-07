@@ -95,7 +95,7 @@ class CommunityAreaState extends BaseState<CommunityArea2> {
           subArrCommunityList != null && subArrCommunityList.length > 1 
           ? SizedBox(
             width: double.infinity,
-            height: 220,
+            height: MediaQuery.of(context).size.width * .85,
             child: ListView.builder(
                 shrinkWrap: true,
                 scrollDirection: Axis.horizontal,
