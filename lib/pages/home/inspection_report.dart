@@ -14,6 +14,7 @@ import 'package:ourdoctor/pages/components/h16.dart';
 import 'package:ourdoctor/pages/components/h18.dart';
 import 'package:ourdoctor/pages/intro/first.dart';
 import 'package:ourdoctor/pages/my/custom_inspection.dart';
+import 'package:ourdoctor/pages/my/custom_inspection2.dart';
 import 'package:show_more_text_popup/show_more_text_popup.dart';
 
 class InspectionReport extends StatefulWidget {
@@ -150,7 +151,7 @@ class InspectionReportState extends BaseState<InspectionReport> {
             SizedBox(height: 10,),
             InkWell(
               onTap: () {
-                // Navigator.push(context, SlideRightTransRoute(builder: (context) => const CustomInspectionMainPage()));
+                Navigator.push(context, SlideRightTransRoute(builder: (context) => const CustomInspectionMainPage2()));
               },
               child: Visibility(
                 visible: dicInfo == null || dicInfo!.diagnose == null,
