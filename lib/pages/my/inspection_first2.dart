@@ -56,7 +56,7 @@ class InspectionFirstPage2State extends BaseState<InspectionFirstPage2> {
   }
 
   void goNext() {
-    if (widget.list.sublist(0, widget.list.length).where((element) => element.answer == 0).toList().isNotEmpty) {
+    if (widget.list.sublist(0, 10).where((element) => element.answer == 0).toList().isNotEmpty) {
       showToast('모든 문항에 대한 답변이 필요합니다.');
       return;
     }
@@ -88,7 +88,9 @@ class InspectionFirstPage2State extends BaseState<InspectionFirstPage2> {
                     SizedBox(width: screenSize.width, child: H24B(text: "영유아 검진", align: TextAlign.left)),
                     const SizedBox(height: 20),
                     H16(
-                        text: "영유아 검진 헤더",
+                        text: "⭐ 안내사항 ⭐\n" +
+                        " - 자녀의 영유아 검진 진행시 필수로 작성 해야 하는 문진표입니다.\n"+
+                        " - 국민건강보험(건강iN)에서 작성가능한 문진표와 동일한 것으로 작성 후 병원에서 사용이 가능합니다.",
                         maxLine: 100,
                         height: 1.7,
                         color: AppColor_707071,
@@ -128,7 +130,7 @@ class InspectionFirstPage2State extends BaseState<InspectionFirstPage2> {
         SizedBox(
           width: screenSize.width,
           child: H16(
-            text: "${index + 1}. ${widget.list[index].quiz}",
+            text: "${index + 1}. " + widget.list[index].quiz!,
             maxLine: 5,
             align: TextAlign.left,
             height: 1.5,

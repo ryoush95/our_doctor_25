@@ -149,39 +149,6 @@ class InspectionReportState extends BaseState<InspectionReport> {
               ),
             ),
             SizedBox(height: 10,),
-            InkWell(
-              onTap: () {
-                Navigator.push(context, SlideRightTransRoute(builder: (context) => const CustomInspectionMainPage2()));
-              },
-              child: Visibility(
-                visible: dicInfo == null || dicInfo!.diagnose == null,
-                child: Container(
-                    height: 60,
-                    width: double.infinity,
-                    decoration: BoxDecoration(border: Border.all(width: 1, color: AppColor_Primary), borderRadius: BorderRadius.circular(16), color: Colors.white),
-                    child: Stack(
-                      children: [
-                        Center(
-                          child: H18(
-                            text: "영유아 검진",
-                            weight: FW.bold,
-                            align: TextAlign.start,
-                            color: AppColor_Primary,
-                          ),
-                        ),
-                        Positioned(
-                          right: 20,
-                          top: 15,
-                          child: Image.asset(
-                            'assets/add_circle_black_24dp.png',
-                            width: 25,
-                            height: 25,
-                          ),
-                        )
-                      ],
-                    )),
-              ),
-            ),
             Visibility(
               visible: dicInfo != null && dicInfo!.diagnose != null,
               child: Container(
@@ -215,7 +182,8 @@ class InspectionReportState extends BaseState<InspectionReport> {
                               ),
                             )
                           ],
-                        )),
+                        ),
+                    ),
                     const SizedBox(height: 18),
                     SizedBox(
                       width: MediaQuery.of(context).size.width - 85,
@@ -228,8 +196,43 @@ class InspectionReportState extends BaseState<InspectionReport> {
                         height: 1.1,
                       ),
                     ),
+                    SizedBox(height: 10,),
                   ],
                 ),
+              ),
+            ),
+            //영유아 검진 시작
+            InkWell(
+              onTap: () {
+                Navigator.push(context, SlideRightTransRoute(builder: (context) => const CustomInspectionMainPage2()));
+              },
+              child: Visibility(
+                visible: true,
+                child: Container(
+                    height: 60,
+                    width: double.infinity,
+                    decoration: BoxDecoration(border: Border.all(width: 1, color: AppColor_Primary), borderRadius: BorderRadius.circular(16), color: Colors.white),
+                    child: Stack(
+                      children: [
+                        Center(
+                          child: H18(
+                            text: "영유아 검진",
+                            weight: FW.bold,
+                            align: TextAlign.start,
+                            color: AppColor_Primary,
+                          ),
+                        ),
+                        Positioned(
+                          right: 20,
+                          top: 15,
+                          child: Image.asset(
+                            'assets/add_circle_black_24dp.png',
+                            width: 25,
+                            height: 25,
+                          ),
+                        )
+                      ],
+                    )),
               ),
             ),
             Visibility(
