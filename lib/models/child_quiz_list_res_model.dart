@@ -1,16 +1,16 @@
-class ChatQuizListResModel2 {
-  List<QuizDto2>? data;
+class ChildQuizListResModel {
+  List<ChildQuizDto>? data;
   int? result;
   String? msg;
   String? reason;
 
-  ChatQuizListResModel2 ({this.data, this.result, this.msg, this.reason});
+  ChildQuizListResModel ({this.data, this.result, this.msg, this.reason});
 
-  ChatQuizListResModel2.fromJson(Map<String, dynamic> json) {
+  ChildQuizListResModel.fromJson(Map<String, dynamic> json) {
     if (json['data'] != null) {
-      data = <QuizDto2>[];
+      data = <ChildQuizDto>[];
       json['data'].forEach((v) {
-        data!.add(new QuizDto2.fromJson(v));
+        data!.add(new ChildQuizDto.fromJson(v));
       });
     }
     result = json['result'];
@@ -30,18 +30,24 @@ class ChatQuizListResModel2 {
   }
 }
 
-class QuizDto2 {
+class ChildQuizDto {
   String? id;
   String? quiz;
+  String? age;
   String? type;
+  String? page;
+  String? result;
   int answer = 0;
 
-  QuizDto2({this.id, this.quiz, this.type});
+  ChildQuizDto({this.id, this.quiz, this.age, this.type, this.page, this.result});
 
-  QuizDto2.fromJson(Map<String, dynamic> json) {
+  ChildQuizDto.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     quiz = json['quiz'];
-    type = json['give_flag'];
+    age = json['age'];
+    type = json['main_type'];
+    page = json['page'];
+    result = json['result'];
   }
 
   Map<String, dynamic> toJson() {
@@ -49,6 +55,8 @@ class QuizDto2 {
     data['id'] = this.id;
     data['quiz'] = this.quiz;
     data['main_type'] = this.type;
+    data['age_type'] = this.age;
+    data['result'] = this.result;
     return data;
   }
 }

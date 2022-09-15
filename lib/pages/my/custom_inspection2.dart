@@ -9,6 +9,7 @@ import 'package:ourdoctor/helpers/transition.dart';
 import 'package:ourdoctor/language/language_service.dart';
 import 'package:ourdoctor/models/chat_quiz_list_res_model.dart';
 import 'package:ourdoctor/models/check_chat_res_model.dart';
+import 'package:ourdoctor/models/child_quiz_list_res_model.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
 import 'package:ourdoctor/pages/base/page_layout.dart';
 import 'package:ourdoctor/pages/components/h12.dart';
@@ -20,6 +21,7 @@ import 'custom_inspection_result.dart';
 import 'inspection_first.dart';
 import 'inspection_first2.dart';
 import 'inspection_second.dart';
+import 'inspection_second2.dart';
 import 'inspection_third.dart';
 
 class CustomInspectionMainPage2 extends StatefulWidget {
@@ -34,13 +36,14 @@ class CustomInspectionMainPage2State extends BaseState<CustomInspectionMainPage2
   late TabController tabController;
   final HttpService httpService = HttpService();
 
-  List<QuizDto> quizList = [];
+  List<ChildQuizDto> quizList2 = [];
+  List<ChildQuizDto> quizList3 = [];
   List<int> needAdditionalQuizIndex = [];
 
   @override
   void initState() {
     super.initState();
-    tabController = TabController(length: 3, vsync: this);
+    tabController = TabController(length: 2, vsync: this);
     tabController.addListener(() {
       // changeTab(tabController.index);
     });
@@ -55,7 +58,7 @@ class CustomInspectionMainPage2State extends BaseState<CustomInspectionMainPage2
       }
     });
 
-    getQuiz();
+    getQuiz2();
   }
 
   Future<bool> onBackPressed() async {
@@ -84,57 +87,11 @@ class CustomInspectionMainPage2State extends BaseState<CustomInspectionMainPage2
       });
       if (value.result == 0) {
         eventBus.fire(SelectChildEvent());
-        Navigator.pushReplacement(context, SlideRightTransRoute(builder: (context) => CustomInspectionFinalPage(score: value.data!.point!)));
-      } else {
-        showToast(value.msg ?? "");
-        if (value.result == 106) {}
-      }
-    }).catchError((onError) {
-      setState(() {
-        isLoading = false;
-      });
-      showToast(onError);
-    });
-  }
-
-  Future<void> checkChatScore() async {
-    List<Map<String, dynamic>> arrlist = [];
-    for (int i = 0; i < quizList.length; i++) {
-      List<String> value = [];
-      value.add(quizList[i].answer == 1 ? "Y" : "N");
-      Map<String, dynamic> info = {
-        'id': int.parse(quizList[i].id!),
-        'value': value,
-      };
-      arrlist.add(info);
-    }
-    String chat_info = json.encode(arrlist);
-    print(gUserInfo!.accessToken! + "," + chat_info);
-
-    setState(() {
-      isLoading = true;
-    });
-    Future<CheckChatResModel> info = httpService.checkChat(chat_info);
-    info.then((CheckChatResModel value) async {
-      setState(() {
-        isLoading = false;
-      });
-      if (value.result == 0) {
-        Navigator.push(
+        Navigator.pushReplacement(
             context,
             SlideRightTransRoute(
-                builder: (context) => CustomInspectionResultPage(
-                    score: value.data!.point!,
-                    onTap: (int score) {
-                      if (score >= 3 && score <= 7) {
-                        loadAdditionalQuiz();
-
-                        tabIndex = 2;
-                        changeTab(tabIndex);
-                      } else {
-                        Navigator.pop(context);
-                      }
-                    })));
+                builder: (context) =>
+                    CustomInspectionFinalPage(score: value.data!.point!)));
       } else {
         showToast(value.msg ?? "");
         if (value.result == 106) {}
@@ -152,23 +109,51 @@ class CustomInspectionMainPage2State extends BaseState<CustomInspectionMainPage2
       tabIndex = 1;
       changeTab(tabIndex);
     } else if (tabIndex == 1) {
-      checkChatScore();
-    } else if (tabIndex == 2) {}
+      // checkChatScore();
+      showToast("검사가 저장되었습니다");
+    }
   }
 
-  Future<void> getQuiz() async {
+  Future<void> getQuiz2() async {
     print(gUserInfo!.id!);
+    int birth_code = 0;
+    DateTime dt = DateTime.parse(gSelChildInfo!.birth!);
+    int aa = DateTime.now().difference(dt).inDays ~/ 30;
+    if (aa < 1) {
+      birth_code = 1;
+    } else if (aa >= 3 && aa <= 6) {
+      birth_code = 2;
+    } else if (aa >= 8 && aa <= 12) {
+      birth_code = 3;
+    } else if (aa >= 17 && aa <= 24) {
+      birth_code = 4;
+    } else if (aa >= 29 && aa <= 36) {
+      birth_code = 5;
+    } else if (aa >= 41 && aa <= 48) {
+      birth_code = 6;
+    } else if (aa >= 53 && aa <= 60) {
+      birth_code = 7;
+    }
     setState(() {
       isLoading = true;
     });
-    Future<ChatQuizListResModel> info = httpService.getChatQuizList();
-    info.then((ChatQuizListResModel value) async {
+    Future<ChildQuizListResModel> info = httpService.getChildQuizList();
+    info.then((ChildQuizListResModel value) async {
       setState(() {
         isLoading = false;
       });
       if (value.result == 0) {
-        quizList.clear();
-        quizList.addAll(value.data!);
+        quizList2.clear();
+        for (var e in value.data!) {
+          print("${e.page}");
+          if (e.age == birth_code.toString() && e.page == 1.toString()) {
+            quizList2.add(e);
+          } else if (e.age == birth_code.toString() && e.page == 2.toString()) {
+            quizList3.add(e);
+          }
+        }
+        print(birth_code);
+        // quizList2.addAll(value.data!);
         //for test
         // for (int i = 0; i < quizList.length; i++) {
         //   quizList[i].answer = 1;
@@ -186,21 +171,12 @@ class CustomInspectionMainPage2State extends BaseState<CustomInspectionMainPage2
     });
   }
 
-  void loadAdditionalQuiz() {
-    needAdditionalQuizIndex.clear();
-    for (int i = 0; i < quizList.length; i++) {
-      if ((quizList[i].giveFlag == 'y' && quizList[i].answer == 1) || (quizList[i].giveFlag == 'n' && quizList[i].answer == 2)) {
-        needAdditionalQuizIndex.add(i);
-      }
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return PageLayout(
         onBack: onBackPressed,
         isLoading: isLoading,
-        child: quizList.isEmpty
+        child: quizList2.isEmpty
             ? Container()
             : Container(
                 width: double.infinity,
@@ -213,16 +189,16 @@ class CustomInspectionMainPage2State extends BaseState<CustomInspectionMainPage2
                     ),
                     Expanded(
                         child: Container(
+                      // child: InspectionFirstPage2(list: quizList2),
                       child: DefaultTabController(
-                        length: 3,
+                        length: 2,
                         child: Scaffold(
                             body: TabBarView(
                           controller: tabController,
                           physics: const NeverScrollableScrollPhysics(),
                           children: [
-                            InspectionFirstPage2(list: quizList),
-                            InspectionSecondPage(list: quizList),
-                            InspectionThirdPage(list: quizList, additional_list: needAdditionalQuizIndex)
+                            InspectionFirstPage2(list: quizList2),
+                            InspectionSecondPage2(list: quizList3),
                           ],
                         )),
                       ),

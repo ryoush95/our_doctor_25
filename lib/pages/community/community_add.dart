@@ -234,14 +234,16 @@ class AddCommunityPageState extends BaseState<AddCommunityPage> {
               title: LanguageService.trans('choose_topic'),
               selectedItem: topic,
               onPop: (selectedIndex) {
+                //카테고리 변환시 무조건 비밀글 설정
                 if (selectedIndex != -1) {
                   setState(() {
                     topic = topicList[selectedIndex];
+                    bSecret = false;
                   });
-                } else {
-                  // setState(() {
-                  //   topic = '';
-                  // });
+                // } else {
+                //   setState(() {
+                //     topic = '';
+                //   });
                 }
               });
         });

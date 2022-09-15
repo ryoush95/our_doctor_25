@@ -240,7 +240,6 @@ class InfoAreaState extends BaseState<InfoArea> {
       });
       if (value.result == 0) {
         dicHomeDataInfo = value.data!;
-        print("${dicHomeDataInfo!.symptom}@@@@@@@@@@@@@@@@@@@@@@@@@@@");
         setState(() {});
       } else {
         showToast(value.msg ?? "");

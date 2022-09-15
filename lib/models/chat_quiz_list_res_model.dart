@@ -1,3 +1,5 @@
+import 'package:flutter/widgets.dart';
+
 class ChatQuizListResModel {
   List<QuizDto>? data;
   int? result;

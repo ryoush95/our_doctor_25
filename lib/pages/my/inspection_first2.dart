@@ -6,7 +6,7 @@ import 'package:ourdoctor/global/global.dart';
 import 'package:ourdoctor/global/http_service.dart';
 import 'package:ourdoctor/helpers/common_util.dart';
 import 'package:ourdoctor/language/language_service.dart';
-import 'package:ourdoctor/models/chat_quiz_list_res_model.dart';
+import 'package:ourdoctor/models/child_quiz_list_res_model.dart';
 import 'package:ourdoctor/models/product_list_res_model.dart';
 import 'package:ourdoctor/models/default_res_model.dart';
 import 'package:ourdoctor/pages/alarm/alarm.dart';
@@ -23,7 +23,7 @@ import 'package:ourdoctor/pages/components/simple_header.dart';
 import 'package:sprintf/sprintf.dart';
 
 class InspectionFirstPage2 extends StatefulWidget {
-  final List<QuizDto> list;
+  final List<ChildQuizDto> list;
 
   InspectionFirstPage2({Key? key, required this.list}) : super(key: key);
 
@@ -56,7 +56,7 @@ class InspectionFirstPage2State extends BaseState<InspectionFirstPage2> {
   }
 
   void goNext() {
-    if (widget.list.sublist(0, 10).where((element) => element.answer == 0).toList().isNotEmpty) {
+    if (widget.list.sublist(0, widget.list.length).where((element) => element.answer == 0).toList().isNotEmpty) {
       showToast('모든 문항에 대한 답변이 필요합니다.');
       return;
     }
@@ -64,7 +64,7 @@ class InspectionFirstPage2State extends BaseState<InspectionFirstPage2> {
   }
 
   bool checkValid() {
-    if (widget.list.sublist(0, 10).where((element) => element.answer == 0).toList().isNotEmpty) {
+    if (widget.list.sublist(0, widget.list.length).where((element) => element.answer == 0).toList().isNotEmpty) {
       return false;
     }
     return true;
@@ -100,7 +100,7 @@ class InspectionFirstPage2State extends BaseState<InspectionFirstPage2> {
                     ListView.builder(
                         shrinkWrap: true,
                         itemBuilder: _itemBuilder,
-                        itemCount: 10,
+                        itemCount: widget.list.length,
                         controller: _listController
                     ),
                   ],

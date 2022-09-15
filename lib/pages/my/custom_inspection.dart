@@ -168,6 +168,7 @@ class CustomInspectionMainPageState extends BaseState<CustomInspectionMainPage> 
       if (value.result == 0) {
         quizList.clear();
         quizList.addAll(value.data!);
+        debugPrint('${quizList[0].quiz}@@@@@@@@@@@@@@@@@@@@@');
         //for test
         // for (int i = 0; i < quizList.length; i++) {
         //   quizList[i].answer = 1;
@@ -242,7 +243,6 @@ class CustomInspectionMainPageState extends BaseState<CustomInspectionMainPage> 
   }
 
   Widget _buildTabHeaderItem(int step) {
-    print(step);
     return Container(
         width: MediaQuery.of(context).size.width - 60,
         height: 100,

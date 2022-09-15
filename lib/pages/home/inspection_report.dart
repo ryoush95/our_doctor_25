@@ -196,18 +196,20 @@ class InspectionReportState extends BaseState<InspectionReport> {
                         height: 1.1,
                       ),
                     ),
-                    SizedBox(height: 10,),
                   ],
                 ),
               ),
             ),
+            SizedBox(height: 10,),
             //영유아 검진 시작
             InkWell(
               onTap: () {
-                Navigator.push(context, SlideRightTransRoute(builder: (context) => const CustomInspectionMainPage2()));
+                Navigator.push(context, SlideRightTransRoute(
+                    builder: (context) => const CustomInspectionMainPage2()),
+                );
               },
               child: Visibility(
-                visible: true,
+                visible: getChildQuiz(),
                 child: Container(
                     height: 60,
                     width: double.infinity,
@@ -332,5 +334,27 @@ class InspectionReportState extends BaseState<InspectionReport> {
     } else {
       return "오늘 오후";
     }
+  }
+
+  bool getChildQuiz() {
+    DateTime dt = DateTime.parse(gSelChildInfo!.birth!);
+    int aa = DateTime.now().difference(dt).inDays ~/ 30;
+    print(gSelChildInfo!.birth! + "22222222222222222222222222222222222222");
+    if (aa < 1) {
+      return true;
+    } else if (aa >= 3 && aa <= 6) {
+      return true;
+    } else if (aa >= 8 && aa <= 12) {
+      return true;
+    } else if (aa >= 17 && aa <=24) {
+      return true;
+    } else if (aa >= 29 && aa <= 36) {
+      return true;
+    } else if (aa >= 41 && aa <= 48) {
+      return true;
+    } else if (aa >= 53 && aa <= 60) {
+      return true;
+    }
+    return false;
   }
 }
