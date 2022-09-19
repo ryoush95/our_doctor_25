@@ -7,6 +7,7 @@ import 'package:ourdoctor/global/app_colors.dart';
 import 'package:ourdoctor/global/app_get_it.dart';
 import 'package:ourdoctor/helpers/fcm.dart';
 import 'package:ourdoctor/pages/splash/splash.dart';
+import 'package:ourdoctor/provider/child_quiz_provider.dart';
 import 'package:ourdoctor/provider/convert_score_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -20,6 +21,7 @@ void main() {
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_) => ConvertScoreProvider()),
+      ChangeNotifierProvider(create: (_) => ChildQuizProvider()),
     ],
     child: MyApp(),
   ));

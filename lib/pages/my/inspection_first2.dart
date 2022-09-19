@@ -20,7 +20,8 @@ import 'package:ourdoctor/pages/components/h20.dart';
 import 'package:ourdoctor/pages/components/h24_b.dart';
 import 'package:ourdoctor/pages/components/main_text_button.dart';
 import 'package:ourdoctor/pages/components/simple_header.dart';
-import 'package:sprintf/sprintf.dart';
+import 'package:ourdoctor/provider/child_quiz_provider.dart';
+import 'package:provider/provider.dart';
 
 class InspectionFirstPage2 extends StatefulWidget {
   final List<ChildQuizDto> list;
@@ -56,15 +57,19 @@ class InspectionFirstPage2State extends BaseState<InspectionFirstPage2> {
   }
 
   void goNext() {
-    if (widget.list.sublist(0, widget.list.length).where((element) => element.answer == 0).toList().isNotEmpty) {
+    if (widget.list.sublist(0, widget.list.length).where((element) => element.answer == "").toList().isNotEmpty) {
       showToast('모든 문항에 대한 답변이 필요합니다.');
       return;
     }
+    for(var i in widget.list){
+      Provider.of<ChildQuizProvider>(context, listen: false).updateList(i.id!, i.answer);
+    }
+
     eventBus.fire(UpdateQuizEvent());
   }
 
   bool checkValid() {
-    if (widget.list.sublist(0, widget.list.length).where((element) => element.answer == 0).toList().isNotEmpty) {
+    if (widget.list.sublist(0, widget.list.length).where((element) => element.answer == "").toList().isNotEmpty) {
       return false;
     }
     return true;
@@ -138,20 +143,28 @@ class InspectionFirstPage2State extends BaseState<InspectionFirstPage2> {
           ),
         ),
         const SizedBox(height: 15),
-        SizedBox(
+        widget.list[index].result == "1"
+            ? SizedBox(
+          child: TextField(
+            keyboardType: TextInputType.text,
+            onChanged: (value) {
+              widget.list[index].answer = value;
+            },
+          ),
+        ) : SizedBox(
           height: 40,
           child: Row(
             children: [
               InkWell(
                 onTap: () {
                   setState(() {
-                    widget.list[index].answer = 1;
+                    widget.list[index].answer = "예";
                   });
                 },
                 child: Row(
                   children: [
                     Image.asset(
-                      widget.list[index].answer == 1 ? "assets/ic_option_on.png" : "assets/ic_option_off.png",
+                      widget.list[index].answer == "예" ? "assets/ic_option_on.png" : "assets/ic_option_off.png",
                       width: 25,
                       height: 25,
                     ),
@@ -164,13 +177,13 @@ class InspectionFirstPage2State extends BaseState<InspectionFirstPage2> {
               InkWell(
                 onTap: () {
                   setState(() {
-                    widget.list[index].answer = 2;
+                    widget.list[index].answer = "아니오";
                   });
                 },
                 child: Row(
                   children: [
                     Image.asset(
-                      widget.list[index].answer == 2 ? "assets/ic_option_on.png" : "assets/ic_option_off.png",
+                      widget.list[index].answer == "아니오" ? "assets/ic_option_on.png" : "assets/ic_option_off.png",
                       width: 25,
                       height: 25,
                     ),

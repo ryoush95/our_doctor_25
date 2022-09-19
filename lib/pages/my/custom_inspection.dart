@@ -168,7 +168,6 @@ class CustomInspectionMainPageState extends BaseState<CustomInspectionMainPage> 
       if (value.result == 0) {
         quizList.clear();
         quizList.addAll(value.data!);
-        debugPrint('${quizList[0].quiz}@@@@@@@@@@@@@@@@@@@@@');
         //for test
         // for (int i = 0; i < quizList.length; i++) {
         //   quizList[i].answer = 1;

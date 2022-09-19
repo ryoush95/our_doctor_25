@@ -22,6 +22,7 @@ import 'package:ourdoctor/models/brain_quiz_list_res_model.dart';
 import 'package:ourdoctor/models/category_list_res_model.dart';
 import 'package:ourdoctor/models/chat_quiz_list_res_model.dart';
 import 'package:ourdoctor/models/check_chat_res_model.dart';
+import 'package:ourdoctor/models/check_child_model.dart';
 import 'package:ourdoctor/models/child_quiz_list_res_model.dart';
 import 'package:ourdoctor/models/childinfo_res_model.dart';
 import 'package:ourdoctor/models/comment_list_res_model.dart';
@@ -2095,7 +2096,25 @@ class HttpService {
       throw Exception(LanguageService.trans("server_fail"));
     }
   }
+  //맞춤검사 결과
+  Future<CheckChatResModel> checkChat(String chat_info) async {
+    String _url = API_BASE_URL + "api/Monitor2/check_m_chat";
+    Map<String, String> body = {
+      'access_token': gUserInfo!.accessToken!,
+      'chat_info': chat_info,
+    };
+    Uri myUri = Uri.parse(_url);
+    final response = await http.post(myUri, body: body);
+    if (response.statusCode == 200) {
+      return CheckChatResModel.fromJson(json.decode(response.body));
+    } else {
+      // If that call was not successful, throw an error.
+      showToast(LanguageService.trans("server_fail"));
+      throw Exception(LanguageService.trans("server_fail"));
+    }
+  }
 
+  //영유아 검사
   Future<ChildQuizListResModel> getChildQuizList() async {
     String _url = API_BASE_URL + "api/Monitor2/m_child_quiz_list";
     Map<String, String> body = {
@@ -2112,17 +2131,20 @@ class HttpService {
     }
   }
 
-  //맞춤검사 결과
-  Future<CheckChatResModel> checkChat(String chat_info) async {
-    String _url = API_BASE_URL + "api/Monitor2/check_m_chat";
+  //영유아 검사 결과 전송
+  Future<CheckChildQuizModel> checkChildQuiz(String id, String rating, String text, String photos) async {
+    String _url = API_BASE_URL + "api/ProductReview/write_review";
     Map<String, String> body = {
       'access_token': gUserInfo!.accessToken!,
-      'chat_info': chat_info,
+      'id': id,
+      'rating': rating,
+      'text': text,
+      'photos': photos,
     };
     Uri myUri = Uri.parse(_url);
     final response = await http.post(myUri, body: body);
     if (response.statusCode == 200) {
-      return CheckChatResModel.fromJson(json.decode(response.body));
+      return CheckChildQuizModel.fromJson(json.decode(response.body));
     } else {
       // If that call was not successful, throw an error.
       showToast(LanguageService.trans("server_fail"));

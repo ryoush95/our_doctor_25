@@ -7,22 +7,20 @@ import 'package:ourdoctor/global/http_service.dart';
 import 'package:ourdoctor/helpers/common_util.dart';
 import 'package:ourdoctor/helpers/transition.dart';
 import 'package:ourdoctor/language/language_service.dart';
-import 'package:ourdoctor/models/chat_quiz_list_res_model.dart';
 import 'package:ourdoctor/models/check_chat_res_model.dart';
 import 'package:ourdoctor/models/child_quiz_list_res_model.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
 import 'package:ourdoctor/pages/base/page_layout.dart';
 import 'package:ourdoctor/pages/components/h12.dart';
 import 'package:ourdoctor/pages/components/simple_header.dart';
+import 'package:ourdoctor/provider/child_quiz_provider.dart';
+import 'package:provider/provider.dart';
 
 import '../app_event.dart';
 import 'custom_inspection_final.dart';
 import 'custom_inspection_result.dart';
-import 'inspection_first.dart';
 import 'inspection_first2.dart';
-import 'inspection_second.dart';
 import 'inspection_second2.dart';
-import 'inspection_third.dart';
 
 class CustomInspectionMainPage2 extends StatefulWidget {
   const CustomInspectionMainPage2({Key? key}) : super(key: key);
@@ -52,12 +50,6 @@ class CustomInspectionMainPage2State extends BaseState<CustomInspectionMainPage2
         goNext();
       }
     });
-    eventBus.on<CheckChatQuizEvent>().listen((event) {
-      if (mounted) {
-        checkAdditionalChatScore(event.chat_info);
-      }
-    });
-
     getQuiz2();
   }
 
@@ -110,7 +102,7 @@ class CustomInspectionMainPage2State extends BaseState<CustomInspectionMainPage2
       changeTab(tabIndex);
     } else if (tabIndex == 1) {
       // checkChatScore();
-      showToast("검사가 저장되었습니다");
+      // showToast("검사가 저장되었습니다");
     }
   }
 
@@ -145,7 +137,6 @@ class CustomInspectionMainPage2State extends BaseState<CustomInspectionMainPage2
       if (value.result == 0) {
         quizList2.clear();
         for (var e in value.data!) {
-          print("${e.page}");
           if (e.age == birth_code.toString() && e.page == 1.toString()) {
             quizList2.add(e);
           } else if (e.age == birth_code.toString() && e.page == 2.toString()) {

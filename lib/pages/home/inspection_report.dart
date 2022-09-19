@@ -15,6 +15,8 @@ import 'package:ourdoctor/pages/components/h18.dart';
 import 'package:ourdoctor/pages/intro/first.dart';
 import 'package:ourdoctor/pages/my/custom_inspection.dart';
 import 'package:ourdoctor/pages/my/custom_inspection2.dart';
+import 'package:ourdoctor/provider/child_quiz_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:show_more_text_popup/show_more_text_popup.dart';
 
 class InspectionReport extends StatefulWidget {
@@ -204,6 +206,7 @@ class InspectionReportState extends BaseState<InspectionReport> {
             //영유아 검진 시작
             InkWell(
               onTap: () {
+                Provider.of<ChildQuizProvider>(context, listen: false).quizList;
                 Navigator.push(context, SlideRightTransRoute(
                     builder: (context) => const CustomInspectionMainPage2()),
                 );

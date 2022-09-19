@@ -37,7 +37,7 @@ class ChildQuizDto {
   String? type;
   String? page;
   String? result;
-  int answer = 0;
+  String answer = "";
 
   ChildQuizDto({this.id, this.quiz, this.age, this.type, this.page, this.result});
 
