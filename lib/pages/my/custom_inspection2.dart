@@ -68,33 +68,33 @@ class CustomInspectionMainPage2State extends BaseState<CustomInspectionMainPage2
     });
   }
 
-  Future<void> checkAdditionalChatScore(String chat_info) async {
-    setState(() {
-      isLoading = true;
-    });
-    Future<CheckChatResModel> info = httpService.checkChat(chat_info);
-    info.then((CheckChatResModel value) async {
-      setState(() {
-        isLoading = false;
-      });
-      if (value.result == 0) {
-        eventBus.fire(SelectChildEvent());
-        Navigator.pushReplacement(
-            context,
-            SlideRightTransRoute(
-                builder: (context) =>
-                    CustomInspectionFinalPage(score: value.data!.point!)));
-      } else {
-        showToast(value.msg ?? "");
-        if (value.result == 106) {}
-      }
-    }).catchError((onError) {
-      setState(() {
-        isLoading = false;
-      });
-      showToast(onError);
-    });
-  }
+  // Future<void> checkAdditionalChatScore(String chat_info) async {
+  //   setState(() {
+  //     isLoading = true;
+  //   });
+  //   Future<CheckChatResModel> info = httpService.checkChat(chat_info);
+  //   info.then((CheckChatResModel value) async {
+  //     setState(() {
+  //       isLoading = false;
+  //     });
+  //     if (value.result == 0) {
+  //       eventBus.fire(SelectChildEvent());
+  //       Navigator.pushReplacement(
+  //           context,
+  //           SlideRightTransRoute(
+  //               builder: (context) =>
+  //                   CustomInspectionFinalPage(score: value.data!.point!)));
+  //     } else {
+  //       showToast(value.msg ?? "");
+  //       if (value.result == 106) {}
+  //     }
+  //   }).catchError((onError) {
+  //     setState(() {
+  //       isLoading = false;
+  //     });
+  //     showToast(onError);
+  //   });
+  // }
 
   void goNext() {
     if (tabIndex == 0) {

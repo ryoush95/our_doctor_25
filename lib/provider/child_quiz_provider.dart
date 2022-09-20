@@ -12,7 +12,7 @@ class ChildQuizProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void updateList(String quiz,String result) {
+  void updateList(quiz, result) {
     _quizList.add(quiz);
     _resultList.add(result);
     notifyListeners();

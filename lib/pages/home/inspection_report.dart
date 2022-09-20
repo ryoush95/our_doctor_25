@@ -206,9 +206,10 @@ class InspectionReportState extends BaseState<InspectionReport> {
             //영유아 검진 시작
             InkWell(
               onTap: () {
-                Provider.of<ChildQuizProvider>(context, listen: false).quizList;
+
                 Navigator.push(context, SlideRightTransRoute(
-                    builder: (context) => const CustomInspectionMainPage2()),
+                    builder: (context) => ChangeNotifierProvider(create: (_) => ChildQuizProvider(),
+                    child:CustomInspectionMainPage2(),)),
                 );
               },
               child: Visibility(
@@ -341,21 +342,20 @@ class InspectionReportState extends BaseState<InspectionReport> {
 
   bool getChildQuiz() {
     DateTime dt = DateTime.parse(gSelChildInfo!.birth!);
-    int aa = DateTime.now().difference(dt).inDays ~/ 30;
-    print(gSelChildInfo!.birth! + "22222222222222222222222222222222222222");
-    if (aa < 1) {
+    int childBirth = DateTime.now().difference(dt).inDays ~/ 30;
+    if (childBirth < 1) {
       return true;
-    } else if (aa >= 3 && aa <= 6) {
+    } else if (childBirth >= 3 && childBirth <= 6) {
       return true;
-    } else if (aa >= 8 && aa <= 12) {
+    } else if (childBirth >= 8 && childBirth <= 12) {
       return true;
-    } else if (aa >= 17 && aa <=24) {
+    } else if (childBirth >= 17 && childBirth <=24) {
       return true;
-    } else if (aa >= 29 && aa <= 36) {
+    } else if (childBirth >= 29 && childBirth <= 36) {
       return true;
-    } else if (aa >= 41 && aa <= 48) {
+    } else if (childBirth >= 41 && childBirth <= 48) {
       return true;
-    } else if (aa >= 53 && aa <= 60) {
+    } else if (childBirth >= 53 && childBirth <= 60) {
       return true;
     }
     return false;

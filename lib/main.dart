@@ -21,7 +21,7 @@ void main() {
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_) => ConvertScoreProvider()),
-      ChangeNotifierProvider(create: (_) => ChildQuizProvider()),
+      // ChangeNotifierProvider(create: (_) => ChildQuizProvider()),
     ],
     child: MyApp(),
   ));

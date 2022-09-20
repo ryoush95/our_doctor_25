@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:ourdoctor/global/app_colors.dart';
@@ -7,6 +9,7 @@ import 'package:ourdoctor/global/http_service.dart';
 import 'package:ourdoctor/helpers/common_util.dart';
 import 'package:ourdoctor/language/language_service.dart';
 import 'package:ourdoctor/models/chat_quiz_list_res_model.dart';
+import 'package:ourdoctor/models/check_child_model.dart';
 import 'package:ourdoctor/models/child_quiz_list_res_model.dart';
 import 'package:ourdoctor/models/product_list_res_model.dart';
 import 'package:ourdoctor/models/default_res_model.dart';
@@ -59,16 +62,29 @@ class InspectionSecondPage2State extends BaseState<InspectionSecondPage2> {
   }
 
   void goNext() {
+    final p = Provider.of<ChildQuizProvider>(context, listen: false);
     if (widget.list.sublist(0,widget.list.length).where((element) => element.answer == "").toList().isNotEmpty) {
       showToast('모든 문항에 대한 답변이 필요합니다.');
       return;
     }
     for(var i in widget.list){
-      Provider.of<ChildQuizProvider>(context, listen: false).updateList(i.id!, i.answer);
+      p.updateList(i.id!, i.answer);
     }
     // eventBus.fire(UpdateQuizEvent());
-    Provider.of<ChildQuizProvider>(context, listen: false).clearList();
+    // String birth = gSelChildInfo!.birth.toString();
+    String ql = json.encode(p.quizList);
+    String rl = json.encode(p.resultList);
+    Future<CheckChildQuizModel> insert = httpService.checkChildQuiz(ql, rl);
+    insert.then((value) async {
+      if(value.result != 0){
+        showToast(value.msg ?? "");
+      }
+    }).catchError((onError) {
+      print(onError.toString());
+    });
+    // p.clearList();
     Navigator.pop(context);
+    showToast('검사가 저장되었습니다');
   }
 
   bool checkValid() {

@@ -64,7 +64,7 @@ class InspectionFirstPage2State extends BaseState<InspectionFirstPage2> {
     for(var i in widget.list){
       Provider.of<ChildQuizProvider>(context, listen: false).updateList(i.id!, i.answer);
     }
-
+    print(Provider.of<ChildQuizProvider>(context, listen: false).quizList);
     eventBus.fire(UpdateQuizEvent());
   }
 
