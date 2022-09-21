@@ -121,6 +121,15 @@ class InspectionSecondPage2State extends BaseState<InspectionSecondPage2> {
                         color: AppColor_707071,
                         weight: FW.medium,
                         align: TextAlign.left),
+                    const Divider(color: AppColor_707071,
+                      thickness: 1,),
+                    H16(
+                        text: "아이 질문",
+                        maxLine: 100,
+                        height: 1.7,
+                        color: AppColor_707071,
+                        weight: FW.medium,
+                        align: TextAlign.left),
                     const SizedBox(height: 40),
                     ListView.builder(shrinkWrap: true, itemBuilder: _itemBuilder, itemCount: widget.list.length, controller: _listController)
                   ],
@@ -163,8 +172,13 @@ class InspectionSecondPage2State extends BaseState<InspectionSecondPage2> {
             ? SizedBox(
           child: TextField(
             keyboardType: TextInputType.text,
+            decoration: InputDecoration(
+                hintText: "답변"
+            ),
             onChanged: (value) {
-              widget.list[index].answer = value;
+              setState(() {
+                widget.list[index].answer = value;
+              });
             },
           ),
         ) : SizedBox(

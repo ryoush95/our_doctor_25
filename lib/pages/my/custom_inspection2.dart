@@ -109,7 +109,6 @@ class CustomInspectionMainPage2State extends BaseState<CustomInspectionMainPage2
 
   Future<void> getQuiz2() async {
     print(gUserInfo!.id!);
-
     DateTime dt = DateTime.parse(gSelChildInfo!.birth!);
     int aa = DateTime.now().difference(dt).inDays ~/ 30;
     if (aa < 1) {
@@ -146,7 +145,6 @@ class CustomInspectionMainPage2State extends BaseState<CustomInspectionMainPage2
             quizList3.add(e);
           }
         }
-        print(birth_code);
         // quizList2.addAll(value.data!);
         //for test
         // for (int i = 0; i < quizList.length; i++) {
@@ -172,7 +170,7 @@ class CustomInspectionMainPage2State extends BaseState<CustomInspectionMainPage2
         isLoading: isLoading,
         child: quizList2.isEmpty
             ? Container()
-            : Container(
+            : SizedBox(
                 width: double.infinity,
                 height: double.infinity,
                 child: Column(

@@ -32,8 +32,9 @@ class HomeBraninDto {
   Diagnose? diagnose;
   bool? classExist;
   bool? storeExist;
+  String? quizCode;
 
-  HomeBraninDto({this.value, this.percent, this.inputTime, this.diagnose, this.classExist, this.storeExist});
+  HomeBraninDto({this.value, this.percent, this.inputTime, this.diagnose, this.classExist, this.storeExist, this.quizCode});
 
   HomeBraninDto.fromJson(Map<String, dynamic> json) {
     value = json['value'] ?? "";
@@ -42,6 +43,7 @@ class HomeBraninDto {
     diagnose = json['diagnose'] != null ? new Diagnose.fromJson(json['diagnose']) : null;
     classExist = json['class_exist'];
     storeExist = json['store_exist'];
+    quizCode = json['quiz_code'] ?? "";
   }
 
   Map<String, dynamic> toJson() {
@@ -54,6 +56,7 @@ class HomeBraninDto {
     }
     data['class_exist'] = this.classExist;
     data['store_exist'] = this.storeExist;
+    data['quiz_code'] = this.quizCode;
     return data;
   }
 }

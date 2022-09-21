@@ -113,6 +113,15 @@ class InspectionFirstPage2State extends BaseState<InspectionFirstPage2> {
                         color: AppColor_707071,
                         weight: FW.medium,
                         align: TextAlign.left),
+                    const Divider(color: AppColor_707071,
+                    thickness: 1,),
+                    H16(
+                        text: "부모 질문",
+                        maxLine: 100,
+                        height: 1.7,
+                        color: AppColor_707071,
+                        weight: FW.medium,
+                        align: TextAlign.left),
                     const SizedBox(height: 40),
                     ListView.builder(
                         shrinkWrap: true,
@@ -125,7 +134,7 @@ class InspectionFirstPage2State extends BaseState<InspectionFirstPage2> {
               ),
             ),
             MainTextButton(
-              text: LanguageService.trans("next"),
+              text: "다음",
               backgroundColor: AppColor_Primary,
               style: AppTextStyle.PD(Colors.white, 18, weight: FW.bold),
               radius: 0,
@@ -159,8 +168,13 @@ class InspectionFirstPage2State extends BaseState<InspectionFirstPage2> {
             ? SizedBox(
           child: TextField(
             keyboardType: TextInputType.text,
+            decoration: InputDecoration(
+              hintText: "답변"
+            ),
             onChanged: (value) {
-              widget.list[index].answer = value;
+              setState(() {
+                widget.list[index].answer = value;
+              });
             },
           ),
         ) : SizedBox(

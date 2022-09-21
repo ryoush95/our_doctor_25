@@ -91,10 +91,8 @@ class InspectionReportState extends BaseState<InspectionReport> {
 
   @override
   Widget build(BuildContext context) {
-    var screenSize = MediaQuery.of(context).size;
-
     return Container(
-        decoration: BoxDecoration(color: Colors.white),
+        decoration: const BoxDecoration(color: Colors.white),
         child: Column(
           children: [
             Row(
@@ -151,7 +149,7 @@ class InspectionReportState extends BaseState<InspectionReport> {
                     )),
               ),
             ),
-            SizedBox(height: 10,),
+            const SizedBox(height: 10,),
             Visibility(
               visible: dicInfo != null && dicInfo!.diagnose != null,
               child: Container(
@@ -203,43 +201,83 @@ class InspectionReportState extends BaseState<InspectionReport> {
                 ),
               ),
             ),
-            SizedBox(height: 10,),
+            const SizedBox(height: 10,),
             //영유아 검진 시작
-            InkWell(
-              onTap: () {
-
-                Navigator.push(context, SlideRightTransRoute(
-                    builder: (context) => ChangeNotifierProvider(create: (_) => ChildQuizProvider(),
-                    child:CustomInspectionMainPage2(),)),
-                );
-              },
-              child: Visibility(
-                visible: getChildQuiz(),
-                child: Container(
-                    height: 60,
-                    width: double.infinity,
-                    decoration: BoxDecoration(border: Border.all(width: 1, color: AppColor_Primary), borderRadius: BorderRadius.circular(16), color: Colors.white),
-                    child: Stack(
-                      children: [
-                        Center(
-                          child: H18(
-                            text: "$childQuiz 영유아 검진",
-                            weight: FW.bold,
-                            align: TextAlign.start,
-                            color: AppColor_Primary,
+            Visibility(
+              visible: getChildQuiz(),
+              child:
+              dicInfo?.quizCode == childQuiz
+              ?Container(
+                height: 60,
+                width: double.infinity,
+                decoration: BoxDecoration(border: Border.all(width: 1, color: AppColor_Green), borderRadius: BorderRadius.circular(16), color: Colors.white),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      height: 30,
+                      width: double.infinity,
+                      child: Stack(
+                        children: [
+                          Center(
+                            child: H18(
+                              text: "$childQuiz차 영유아 검진",
+                              weight: FW.bold,
+                              align: TextAlign.start,
+                              color: AppColor_Green,
+                            ),
                           ),
-                        ),
-                        Positioned(
-                          right: 20,
-                          top: 15,
-                          child: Image.asset(
-                            'assets/add_circle_black_24dp.png',
-                            width: 25,
-                            height: 25,
+                          Positioned(
+                            right: 20,
+                            top: 0,
+                            child: Image.asset(
+                              'assets/check_circle_black_24dp.png',
+                              width: 24,
+                              height: 24,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              )
+              :InkWell(
+                onTap: () {
+                  Navigator.push(context, SlideRightTransRoute(
+                      builder: (context) => ChangeNotifierProvider(create: (_) => ChildQuizProvider(),
+                        child:CustomInspectionMainPage2(),)),
+                  );
+                },
+                child: Visibility(
+                  visible: getChildQuiz(),
+                  child: Container(
+                      height: 60,
+                      width: double.infinity,
+                      decoration: BoxDecoration(border: Border.all(width: 1, color: AppColor_Primary), borderRadius: BorderRadius.circular(16), color: Colors.white),
+                      child: Stack(
+                        children: [
+                          Center(
+                            child: H18(
+                              text: "$childQuiz차 영유아 검진",
+                              weight: FW.bold,
+                              align: TextAlign.start,
+                              color: AppColor_Primary,
+                            ),
                           ),
-                        )
-                      ],
-                    )),
+                          Positioned(
+                            right: 20,
+                            top: 15,
+                            child: Image.asset(
+                              'assets/add_circle_black_24dp.png',
+                              width: 25,
+                              height: 25,
+                            ),
+                          )
+                        ],
+                      )),
+                ),
               ),
             ),
             Visibility(
@@ -343,30 +381,30 @@ class InspectionReportState extends BaseState<InspectionReport> {
 
   bool getChildQuiz() {
     DateTime dt = DateTime.parse(gSelChildInfo!.birth!);
-    int childBirth = DateTime.now().difference(dt).inDays ~/ 30;
-    if (childBirth < 1) {
-      childQuiz = '1차';
+    int birthCode = DateTime.now().difference(dt).inDays ~/ 30;
+    if (birthCode < 1) {
+      childQuiz = '1';
       return true;
-    } else if (childBirth >= 3 && childBirth <= 6) {
-      childQuiz = '2차';
+    } else if (birthCode >= 3 && birthCode <= 6) {
+      childQuiz = '2';
       return true;
-    } else if (childBirth >= 8 && childBirth <= 12) {
-      childQuiz = '3차';
+    } else if (birthCode >= 8 && birthCode <= 12) {
+      childQuiz = '3';
       return true;
-    } else if (childBirth >= 17 && childBirth <=24) {
-      childQuiz = '4차';
+    } else if (birthCode >= 17 && birthCode <=24) {
+      childQuiz = '4';
       return true;
-    } else if (childBirth >= 29 && childBirth <= 36) {
-      childQuiz = '5차';
+    } else if (birthCode >= 29 && birthCode <= 36) {
+      childQuiz = '5';
       return true;
-    } else if (childBirth >= 41 && childBirth <= 48) {
-      childQuiz = '6차';
+    } else if (birthCode >= 41 && birthCode <= 48) {
+      childQuiz = '6';
       return true;
-    } else if (childBirth >= 53 && childBirth <= 60) {
-      childQuiz = '7차';
+    } else if (birthCode >= 53 && birthCode <= 60) {
+      childQuiz = '7';
       return true;
-    } else if (childBirth >= 65 && childBirth <= 71) {
-      childQuiz = '8차';
+    } else if (birthCode >= 65 && birthCode <= 71) {
+      childQuiz = '8';
       return true;
     }
     return false;
