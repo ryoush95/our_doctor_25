@@ -88,6 +88,12 @@ class ReportAreaState extends BaseState<ReportArea> with TickerProviderStateMixi
       }
     });
 
+    eventBus.on<CheckChildQuizEvent>().listen((event) {
+      if(mounted) {
+        changeTab(0);
+      }
+    });
+
     getHomeGraphTall();
     getHomeGraphWeight();
 

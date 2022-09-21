@@ -86,6 +86,10 @@ class CheckChatQuizEvent {
   });
 }
 
+class CheckChildQuizEvent {
+  CheckChildQuizEvent();
+}
+
 class MoreHomeCareEvent {
   int type;
 
