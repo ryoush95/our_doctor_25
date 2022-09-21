@@ -5,6 +5,7 @@ import 'package:ourdoctor/global/app_styles.dart';
 import 'package:ourdoctor/global/global.dart';
 import 'package:ourdoctor/global/http_service.dart';
 import 'package:ourdoctor/helpers/common_util.dart';
+import 'package:ourdoctor/helpers/transition.dart';
 import 'package:ourdoctor/language/language_service.dart';
 import 'package:ourdoctor/models/child_quiz_list_res_model.dart';
 import 'package:ourdoctor/models/product_list_res_model.dart';
@@ -20,6 +21,7 @@ import 'package:ourdoctor/pages/components/h20.dart';
 import 'package:ourdoctor/pages/components/h24_b.dart';
 import 'package:ourdoctor/pages/components/main_text_button.dart';
 import 'package:ourdoctor/pages/components/simple_header.dart';
+import 'package:ourdoctor/pages/my/photo_view.dart';
 import 'package:ourdoctor/provider/child_quiz_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -64,7 +66,6 @@ class InspectionFirstPage2State extends BaseState<InspectionFirstPage2> {
     for(var i in widget.list){
       Provider.of<ChildQuizProvider>(context, listen: false).updateList(i.id!, i.answer);
     }
-    print(Provider.of<ChildQuizProvider>(context, listen: false).quizList);
     eventBus.fire(UpdateQuizEvent());
   }
 
@@ -90,7 +91,18 @@ class InspectionFirstPage2State extends BaseState<InspectionFirstPage2> {
                   //mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     const SizedBox(height: 30),
-                    SizedBox(width: screenSize.width, child: H24B(text: "영유아 검진", align: TextAlign.left)),
+                    Row(
+                      children: [
+                        SizedBox(child: H24B(text: "영유아 검진", align: TextAlign.left)),
+                        SizedBox(width: 10,),
+                        InkWell(
+                            onTap: () {
+                              Navigator.push(context, SlideRightTransRoute(builder: (context) => PhotoViewPage(imgs: ['assets/img_child_quiz.png'], type: 1)));
+                            },
+                            child: Image.asset('assets/question_mark_black_24dp.png', width: 22)
+                        )
+                      ],
+                    ),
                     const SizedBox(height: 20),
                     H16(
                         text: "⭐ 안내사항 ⭐\n" +

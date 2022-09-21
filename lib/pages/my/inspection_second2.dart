@@ -30,8 +30,9 @@ import 'package:sprintf/sprintf.dart';
 
 class InspectionSecondPage2 extends StatefulWidget {
   final List<ChildQuizDto> list;
+  final int birth_code;
 
-  InspectionSecondPage2({Key? key, required this.list}) : super(key: key);
+  InspectionSecondPage2({Key? key, required this.list, required this.birth_code}) : super(key: key);
 
   @override
   InspectionSecondPage2State createState() => InspectionSecondPage2State();
@@ -74,7 +75,7 @@ class InspectionSecondPage2State extends BaseState<InspectionSecondPage2> {
     // String birth = gSelChildInfo!.birth.toString();
     String ql = json.encode(p.quizList);
     String rl = json.encode(p.resultList);
-    Future<CheckChildQuizModel> insert = httpService.checkChildQuiz(ql, rl);
+    Future<CheckChildQuizModel> insert = httpService.checkChildQuiz(ql, rl, widget.birth_code.toString());
     insert.then((value) async {
       if(value.result != 0){
         showToast(value.msg ?? "");

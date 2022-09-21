@@ -2132,13 +2132,14 @@ class HttpService {
   }
 
   //영유아 검사 결과 전송
-  Future<CheckChildQuizModel> checkChildQuiz( String quiz_id, String quiz_result) async {
+  Future<CheckChildQuizModel> checkChildQuiz( String quiz_id, String quiz_result,String birth_code) async {
     String _url = API_BASE_URL + "api/Monitor2/m_child_quiz_result";
     Map<String, String> body = {
       'access_token': gUserInfo!.accessToken!,
       'patient_id': gSelChildInfo!.id!,
       'quiz_id': quiz_id,
       'quiz_result': quiz_result,
+      'quiz_code' : birth_code,
     };
     Uri myUri = Uri.parse(_url);
     final response = await http.post(myUri, body: body);

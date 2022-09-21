@@ -37,6 +37,7 @@ class CustomInspectionMainPage2State extends BaseState<CustomInspectionMainPage2
   List<ChildQuizDto> quizList2 = [];
   List<ChildQuizDto> quizList3 = [];
   List<int> needAdditionalQuizIndex = [];
+  int birth_code = 0;
 
   @override
   void initState() {
@@ -108,7 +109,7 @@ class CustomInspectionMainPage2State extends BaseState<CustomInspectionMainPage2
 
   Future<void> getQuiz2() async {
     print(gUserInfo!.id!);
-    int birth_code = 0;
+
     DateTime dt = DateTime.parse(gSelChildInfo!.birth!);
     int aa = DateTime.now().difference(dt).inDays ~/ 30;
     if (aa < 1) {
@@ -125,6 +126,8 @@ class CustomInspectionMainPage2State extends BaseState<CustomInspectionMainPage2
       birth_code = 6;
     } else if (aa >= 53 && aa <= 60) {
       birth_code = 7;
+    }else if (aa >= 65 && aa <= 71) {
+      birth_code = 8;
     }
     setState(() {
       isLoading = true;
@@ -189,7 +192,7 @@ class CustomInspectionMainPage2State extends BaseState<CustomInspectionMainPage2
                           physics: const NeverScrollableScrollPhysics(),
                           children: [
                             InspectionFirstPage2(list: quizList2),
-                            InspectionSecondPage2(list: quizList3),
+                            InspectionSecondPage2(list: quizList3, birth_code: birth_code,),
                           ],
                         )),
                       ),

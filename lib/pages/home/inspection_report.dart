@@ -36,6 +36,7 @@ class InspectionReportState extends BaseState<InspectionReport> {
   final HttpService httpService = HttpService();
   HomeBraninDto? dicInfo;
   final tooltip = GlobalKey();
+  String childQuiz = "";
   void showMoreText() {
     ShowMoreTextPopup popup = ShowMoreTextPopup(context,
         text: LanguageService.trans("report_guie"), textStyle: AppTextStyle.PD(AppColor_BlackText, 12), height: 87, width: 200, backgroundColor: Colors.white, padding: EdgeInsets.symmetric(horizontal: 4, vertical: 10), borderRadius: BorderRadius.circular(10.0), onDismiss: () {});
@@ -222,7 +223,7 @@ class InspectionReportState extends BaseState<InspectionReport> {
                       children: [
                         Center(
                           child: H18(
-                            text: "영유아 검진",
+                            text: "$childQuiz 영유아 검진",
                             weight: FW.bold,
                             align: TextAlign.start,
                             color: AppColor_Primary,
@@ -344,18 +345,28 @@ class InspectionReportState extends BaseState<InspectionReport> {
     DateTime dt = DateTime.parse(gSelChildInfo!.birth!);
     int childBirth = DateTime.now().difference(dt).inDays ~/ 30;
     if (childBirth < 1) {
+      childQuiz = '1차';
       return true;
     } else if (childBirth >= 3 && childBirth <= 6) {
+      childQuiz = '2차';
       return true;
     } else if (childBirth >= 8 && childBirth <= 12) {
+      childQuiz = '3차';
       return true;
     } else if (childBirth >= 17 && childBirth <=24) {
+      childQuiz = '4차';
       return true;
     } else if (childBirth >= 29 && childBirth <= 36) {
+      childQuiz = '5차';
       return true;
     } else if (childBirth >= 41 && childBirth <= 48) {
+      childQuiz = '6차';
       return true;
     } else if (childBirth >= 53 && childBirth <= 60) {
+      childQuiz = '7차';
+      return true;
+    } else if (childBirth >= 65 && childBirth <= 71) {
+      childQuiz = '8차';
       return true;
     }
     return false;
