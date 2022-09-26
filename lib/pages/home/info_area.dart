@@ -497,12 +497,13 @@ class InfoAreaState extends BaseState<InfoArea> {
                             weight: FW.regular,
                             color: Colors.red,
                           ),
-                          dicHomeDataInfo!.symptomCnt! > 0
-                              ? H16(
-                                  text: "외 ${dicHomeDataInfo!.symptomCnt}",
-                                  weight: FW.regular,
-                                )
-                              : Container()
+                          // dicHomeDataInfo!.symptomCnt! > 0
+                          //     ? H16(
+                          //         text: " 외 ${dicHomeDataInfo!.symptomCnt}",
+                          //         weight: FW.regular,
+                          //         color: Colors.red,
+                          //       )
+                          //     : Container()
                         ],
                       ),
                       const SizedBox(height: 7),

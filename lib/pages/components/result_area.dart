@@ -25,6 +25,8 @@ class ResultAreaState extends BaseState<ResultArea> {
 
   final tooltip = GlobalKey();
 
+  String exam = '';
+
   void showMoreText() {
     ShowMoreTextPopup popup = ShowMoreTextPopup(context,
         text: LanguageService.trans("report_guie"), textStyle: AppTextStyle.PD(AppColor_BlackText, 12), height: 87, width: 200, backgroundColor: Colors.white, padding: EdgeInsets.symmetric(horizontal: 4, vertical: 10), borderRadius: BorderRadius.circular(10.0), onDismiss: () {});
@@ -36,6 +38,18 @@ class ResultAreaState extends BaseState<ResultArea> {
   @override
   Widget build(BuildContext context) {
     var screenSize = MediaQuery.of(context).size;
+    String status = widget.diagnose!.result!;
+    if(status == '과신장') {
+      exam = LanguageService.trans("minute_height_comment4");
+    } else if(status == "부모마음 저신장" || status == "의학적 저신장" || status == "저신장"){
+      exam = LanguageService.trans("minute_height_comment1");
+    } else if(status == "과체중" || status == "비만"){
+      exam = LanguageService.trans("minute_weight_comment5");
+    } else if(status == "의학적 저체중" || status == "부모마음 저체중" || status == "저체중"){
+      exam = LanguageService.trans("minute_weight_comment1");
+    } else {
+      exam = LanguageService.trans("minute_weight_comment3");
+    }
 
     return Container(
         decoration: BoxDecoration(color: Colors.white),
@@ -81,7 +95,7 @@ class ResultAreaState extends BaseState<ResultArea> {
                   log(widget.diagnose!.comment!);
                 },
                 child: H16(
-                  text: '우리아이는 또래보다 키가 많이 크네요. 이런 경우는 너무 빠른 성장을 하는지, 2차성징이 조숙하게 나타나지는 않는지, 주기적인 확인이 필요합니다.', 
+                  text: exam,
                   weight: FW.regular, 
                   height: 1.6, 
                   align: TextAlign.justify,

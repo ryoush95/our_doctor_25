@@ -187,10 +187,10 @@ class AddCommunityPageState extends BaseState<AddCommunityPage> {
   }
 
   void addcommunity() {
-    if (keyboardIsVisible(context)) {
-      FocusScope.of(context).requestFocus(FocusNode());
-      return;
-    }
+    // if (keyboardIsVisible(context)) {
+    //   FocusScope.of(context).requestFocus(FocusNode());
+    //   return;
+    // }
 
     FocusScope.of(context).requestFocus(FocusNode());
     if (topic == "") {
@@ -389,7 +389,7 @@ class AddCommunityPageState extends BaseState<AddCommunityPage> {
     return KeyboardActionsConfig(
       keyboardActionsPlatform: KeyboardActionsPlatform.IOS,
       keyboardBarColor: Colors.grey[200],
-      nextFocus: true,
+      nextFocus: false,
       actions: [
         KeyboardActionsItem(
           focusNode: _nodeText,
@@ -448,7 +448,7 @@ class AddCommunityPageState extends BaseState<AddCommunityPage> {
                           InkWell(
                             onTap: addcommunity,
                             child: H18(
-                              text: keyboardIsVisible(context) ? "완료" : (widget.uid != "" ? "변경" : "등록"),
+                              text:widget.uid != "" ? "변경" : "등록",
                               weight: FW.medium,
                               height: 1.0,
                               color: AppColor_Primary,
@@ -499,7 +499,7 @@ class AddCommunityPageState extends BaseState<AddCommunityPage> {
                                   controller: contentsController,
                                   style: AppTextStyle.PD(AppColor_BlackText, 16, weight: FW.regular, height: 1.2),
                                   keyboardType: TextInputType.multiline,
-                                  maxLines: null,
+                                  maxLines: 50,
                                   onEditingComplete: () => node.unfocus(),
                                   decoration: InputDecoration(
                                     hintText: LanguageService.trans("input_content"),

@@ -37,6 +37,7 @@ class InspectionReportState extends BaseState<InspectionReport> {
   HomeBraninDto? dicInfo;
   final tooltip = GlobalKey();
   String childQuiz = "";
+  int testNum = 0;
   void showMoreText() {
     ShowMoreTextPopup popup = ShowMoreTextPopup(context,
         text: LanguageService.trans("report_guie"), textStyle: AppTextStyle.PD(AppColor_BlackText, 12), height: 87, width: 200, backgroundColor: Colors.white, padding: EdgeInsets.symmetric(horizontal: 4, vertical: 10), borderRadius: BorderRadius.circular(10.0), onDismiss: () {});
@@ -73,7 +74,15 @@ class InspectionReportState extends BaseState<InspectionReport> {
       });
       if (value.result == 0) {
         dicInfo = value.data!;
-        setState(() {});
+        setState(() {
+          if(dicInfo!.diagnose == null && (dicInfo!.quizCode != childQuiz && getChildQuiz())){
+            testNum = 2;
+          } else if(dicInfo!.diagnose == null || (dicInfo!.quizCode != childQuiz && getChildQuiz())){
+            testNum = 1;
+          } else {
+            testNum = 0;
+          }
+        });
       } else {
         showToast(value.msg ?? "");
         if (value.result == 106) {
@@ -95,18 +104,21 @@ class InspectionReportState extends BaseState<InspectionReport> {
         decoration: const BoxDecoration(color: Colors.white),
         child: Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                H18(text: "1개 ", weight: FW.bold),
-                H18(text: "항목에 대한", weight: FW.regular),
-              ],
+            Visibility(
+              visible: testNum != 0,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  H18(text: "$testNum개 ", weight: FW.bold),
+                  H18(text: "항목에 대한", weight: FW.regular),
+                ],
+              ),
             ),
             const SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                H16(text: (dicInfo != null && dicInfo!.diagnose != null) ? "맞춤검사를 완료했습니다" : "맞춤검사가 가능합니다", weight: FW.regular),
+                H16(text: testNum == 0 ? "맞춤검사를 완료했습니다" : "맞춤검사가 가능합니다", weight: FW.regular),
                 const SizedBox(width: 5),
                 Image.asset(
                   (dicInfo != null && dicInfo!.diagnose != null) ? 'assets/ic_status1.png' : 'assets/ic_smile5.png',
