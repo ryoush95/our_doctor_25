@@ -291,13 +291,13 @@ class OrderPageState extends BaseState<OrderPage> {
                                   H16(
                                     text: LanguageService.trans("shipping_address"),
                                   ),
-                                  const SizedBox(height: 15),
-                                  H16(
-                                    text: sprintf("%s, %s", [gUserInfo!.nickname, gUserInfo!.phone]),
-                                    weight: FW.regular,
-                                    color: AppColor_BlackText,
-                                    align: TextAlign.left,
-                                  ),
+                                  // const SizedBox(height: 15),
+                                  // H16(
+                                  //   text: sprintf("%s, %s", [gUserInfo!.nickname, gUserInfo!.phone]),
+                                  //   weight: FW.regular,
+                                  //   color: AppColor_BlackText,
+                                  //   align: TextAlign.left,
+                                  // ),
                                   const SizedBox(height: 20),
                                   const Divider(thickness: 2, color: AppColor_Light_Gray),
                                   const SizedBox(height: 20),
