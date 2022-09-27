@@ -564,9 +564,9 @@ Color getColorFromString2(String status) {
 }
 
 Color getColorFromHeight(String status) {
-  if (status == "부모마음 저신장" || status == "과신장") {
+  if ( status == "과신장") {
     return const Color(0xFFFFCE20);
-  } else if (status == "의학적 저신장") {
+  } else if (status == "의학적 저신장" || status == "부모마음 저신장") {
     return const Color(0xFFFF3838);
   } else {
     return const Color(0xFF4B9EFF);

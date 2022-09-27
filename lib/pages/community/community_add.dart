@@ -237,11 +237,12 @@ class AddCommunityPageState extends BaseState<AddCommunityPage> {
                 if (selectedIndex != -1) {
                   setState(() {
                     topic = topicList[selectedIndex];
+                    bSecret = false;
                   });
-                } else {
-                  // setState(() {
-                  //   topic = '';
-                  // });
+                // } else {
+                //   setState(() {
+                //     topic = '';
+                //   });
                 }
               });
         });
@@ -659,7 +660,8 @@ class AddCommunityPageState extends BaseState<AddCommunityPage> {
                             child: Container(
                               height: 60,
                               padding: const EdgeInsets.symmetric(horizontal: 30),
-                              child: Row(
+                              child: topic == "자유게시판"? Container() :
+                              Row(
                                 children: [
                                   Image.asset(
                                     bSecret ? 'assets/ic_rect_check_on.png' : 'assets/ic_rect_check_off.png',

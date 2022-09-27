@@ -30,7 +30,9 @@ class ItemDevelopmentState extends BaseState<ItemDevelopment> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ClipPath(
-              clipper: ShapeBorderClipper(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+              clipper: ShapeBorderClipper(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10))),
               child: Stack(
                 children: [
                   Visibility(

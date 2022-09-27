@@ -31,7 +31,8 @@ class Data {
   List<GrowthList>? growthList;
   List<DevelopmentList>? developmentList;
 
-  Data({this.storyList, this.communityList, this.growthList, this.developmentList});
+
+  Data({this.storyList, this.communityList, this.growthList, this.developmentList, });
 
   Data.fromJson(Map<String, dynamic> json) {
     if (json['story_list'] != null) {
@@ -141,18 +142,18 @@ class CommunityList {
   String? blogUrl;
 
   CommunityList({
-    this.uid, 
-    this.topic, 
-    this.content, 
-    this.regTime, 
-    this.userUid, 
-    this.code, 
-    this.status, 
-    this.delYn, 
-    this.title, 
-    this.imgUrl, 
-    this.fixed, 
-    this.image, 
+    this.uid,
+    this.topic,
+    this.content,
+    this.regTime,
+    this.userUid,
+    this.code,
+    this.status,
+    this.delYn,
+    this.title,
+    this.imgUrl,
+    this.fixed,
+    this.image,
     this.tabKind,
     this.blogUrl,
   });

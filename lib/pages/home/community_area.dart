@@ -80,7 +80,7 @@ class CommunityAreaState extends BaseState<CommunityArea> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              H20(text: LanguageService.trans('community')),
+              H20(text: LanguageService.trans('우아팁')),
               InkWell(
                 onTap: () {
                   eventBus.fire(MoreCommunityEvent());

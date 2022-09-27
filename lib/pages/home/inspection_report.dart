@@ -14,6 +14,9 @@ import 'package:ourdoctor/pages/components/h16.dart';
 import 'package:ourdoctor/pages/components/h18.dart';
 import 'package:ourdoctor/pages/intro/first.dart';
 import 'package:ourdoctor/pages/my/custom_inspection.dart';
+import 'package:ourdoctor/pages/my/custom_inspection2.dart';
+import 'package:ourdoctor/provider/child_quiz_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:show_more_text_popup/show_more_text_popup.dart';
 
 class InspectionReport extends StatefulWidget {
@@ -33,6 +36,8 @@ class InspectionReportState extends BaseState<InspectionReport> {
   final HttpService httpService = HttpService();
   HomeBraninDto? dicInfo;
   final tooltip = GlobalKey();
+  String childQuiz = "";
+  int testNum = 0;
   void showMoreText() {
     ShowMoreTextPopup popup = ShowMoreTextPopup(context,
         text: LanguageService.trans("report_guie"), textStyle: AppTextStyle.PD(AppColor_BlackText, 12), height: 87, width: 200, backgroundColor: Colors.white, padding: EdgeInsets.symmetric(horizontal: 4, vertical: 10), borderRadius: BorderRadius.circular(10.0), onDismiss: () {});
@@ -69,7 +74,15 @@ class InspectionReportState extends BaseState<InspectionReport> {
       });
       if (value.result == 0) {
         dicInfo = value.data!;
-        setState(() {});
+        setState(() {
+          if(dicInfo!.diagnose == null && dicInfo!.quizCode != childQuiz && getChildQuiz()){
+            testNum = 2;
+          } else if(dicInfo!.diagnose == null || (dicInfo!.quizCode != childQuiz && getChildQuiz())){
+            testNum = 1;
+          } else {
+            testNum = 0;
+          }
+        });
       } else {
         showToast(value.msg ?? "");
         if (value.result == 106) {
@@ -87,24 +100,25 @@ class InspectionReportState extends BaseState<InspectionReport> {
 
   @override
   Widget build(BuildContext context) {
-    var screenSize = MediaQuery.of(context).size;
-
     return Container(
-        decoration: BoxDecoration(color: Colors.white),
+        decoration: const BoxDecoration(color: Colors.white),
         child: Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                H18(text: "1개 ", weight: FW.bold),
-                H18(text: "항목에 대한", weight: FW.regular),
-              ],
+            Visibility(
+              visible: testNum != 0,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  H18(text: "$testNum개 ", weight: FW.bold),
+                  H18(text: "항목에 대한", weight: FW.regular),
+                ],
+              ),
             ),
             const SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                H16(text: (dicInfo != null && dicInfo!.diagnose != null) ? "맞춤검사를 완료했습니다" : "맞춤검사가 가능합니다", weight: FW.regular),
+                H16(text: testNum == 0 ? "맞춤검사를 완료했습니다" : "맞춤검사가 가능합니다", weight: FW.regular),
                 const SizedBox(width: 5),
                 Image.asset(
                   (dicInfo != null && dicInfo!.diagnose != null) ? 'assets/ic_status1.png' : 'assets/ic_smile5.png',
@@ -147,40 +161,7 @@ class InspectionReportState extends BaseState<InspectionReport> {
                     )),
               ),
             ),
-            SizedBox(height: 10,),
-            InkWell(
-              onTap: () {
-                // Navigator.push(context, SlideRightTransRoute(builder: (context) => const CustomInspectionMainPage()));
-              },
-              child: Visibility(
-                visible: dicInfo == null || dicInfo!.diagnose == null,
-                child: Container(
-                    height: 60,
-                    width: double.infinity,
-                    decoration: BoxDecoration(border: Border.all(width: 1, color: AppColor_Primary), borderRadius: BorderRadius.circular(16), color: Colors.white),
-                    child: Stack(
-                      children: [
-                        Center(
-                          child: H18(
-                            text: "영유아 검진",
-                            weight: FW.bold,
-                            align: TextAlign.start,
-                            color: AppColor_Primary,
-                          ),
-                        ),
-                        Positioned(
-                          right: 20,
-                          top: 15,
-                          child: Image.asset(
-                            'assets/add_circle_black_24dp.png',
-                            width: 25,
-                            height: 25,
-                          ),
-                        )
-                      ],
-                    )),
-              ),
-            ),
+            const SizedBox(height: 10,),
             Visibility(
               visible: dicInfo != null && dicInfo!.diagnose != null,
               child: Container(
@@ -214,7 +195,8 @@ class InspectionReportState extends BaseState<InspectionReport> {
                               ),
                             )
                           ],
-                        )),
+                        ),
+                    ),
                     const SizedBox(height: 18),
                     SizedBox(
                       width: MediaQuery.of(context).size.width - 85,
@@ -228,6 +210,85 @@ class InspectionReportState extends BaseState<InspectionReport> {
                       ),
                     ),
                   ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 10,),
+            //영유아 검진 시작
+            Visibility(
+              visible: getChildQuiz(),
+              child:
+              dicInfo?.quizCode == childQuiz
+              ?Container(
+                height: 60,
+                width: double.infinity,
+                decoration: BoxDecoration(border: Border.all(width: 1, color: AppColor_Green), borderRadius: BorderRadius.circular(16), color: Colors.white),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      height: 30,
+                      width: double.infinity,
+                      child: Stack(
+                        children: [
+                          Center(
+                            child: H18(
+                              text: "$childQuiz차 영유아 검진",
+                              weight: FW.bold,
+                              align: TextAlign.start,
+                              color: AppColor_Green,
+                            ),
+                          ),
+                          Positioned(
+                            right: 20,
+                            top: 0,
+                            child: Image.asset(
+                              'assets/check_circle_black_24dp.png',
+                              width: 24,
+                              height: 24,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              )
+              :InkWell(
+                onTap: () {
+                  Navigator.push(context, SlideRightTransRoute(
+                      builder: (context) => ChangeNotifierProvider(create: (_) => ChildQuizProvider(),
+                        child:CustomInspectionMainPage2(),)),
+                  );
+                },
+                child: Visibility(
+                  visible: getChildQuiz(),
+                  child: Container(
+                      height: 60,
+                      width: double.infinity,
+                      decoration: BoxDecoration(border: Border.all(width: 1, color: AppColor_Primary), borderRadius: BorderRadius.circular(16), color: Colors.white),
+                      child: Stack(
+                        children: [
+                          Center(
+                            child: H18(
+                              text: "$childQuiz차 영유아 검진",
+                              weight: FW.bold,
+                              align: TextAlign.start,
+                              color: AppColor_Primary,
+                            ),
+                          ),
+                          Positioned(
+                            right: 20,
+                            top: 15,
+                            child: Image.asset(
+                              'assets/add_circle_black_24dp.png',
+                              width: 25,
+                              height: 25,
+                            ),
+                          )
+                        ],
+                      )),
                 ),
               ),
             ),
@@ -328,5 +389,36 @@ class InspectionReportState extends BaseState<InspectionReport> {
     } else {
       return "오늘 오후";
     }
+  }
+
+  bool getChildQuiz() {
+    DateTime dt = DateTime.parse(gSelChildInfo!.birth!);
+    int birthCode = DateTime.now().difference(dt).inDays ~/ 30;
+    if (birthCode < 1) {
+      childQuiz = '1';
+      return true;
+    } else if (birthCode >= 3 && birthCode <= 6) {
+      childQuiz = '2';
+      return true;
+    } else if (birthCode >= 8 && birthCode <= 12) {
+      childQuiz = '3';
+      return true;
+    } else if (birthCode >= 17 && birthCode <=24) {
+      childQuiz = '4';
+      return true;
+    } else if (birthCode >= 29 && birthCode <= 36) {
+      childQuiz = '5';
+      return true;
+    } else if (birthCode >= 41 && birthCode <= 48) {
+      childQuiz = '6';
+      return true;
+    } else if (birthCode >= 53 && birthCode <= 60) {
+      childQuiz = '7';
+      return true;
+    } else if (birthCode >= 65 && birthCode <= 71) {
+      childQuiz = '8';
+      return true;
+    }
+    return false;
   }
 }

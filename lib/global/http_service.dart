@@ -22,6 +22,7 @@ import 'package:ourdoctor/models/brain_quiz_list_res_model.dart';
 import 'package:ourdoctor/models/category_list_res_model.dart';
 import 'package:ourdoctor/models/chat_quiz_list_res_model.dart';
 import 'package:ourdoctor/models/check_chat_res_model.dart';
+import 'package:ourdoctor/models/child_quiz_list_res_model.dart';
 import 'package:ourdoctor/models/childinfo_res_model.dart';
 import 'package:ourdoctor/models/comment_list_res_model.dart';
 import 'package:ourdoctor/models/community_add_res_model.dart';
@@ -2088,6 +2089,39 @@ class HttpService {
     final response = await http.post(myUri, body: body);
     if (response.statusCode == 200) {
       return ChatQuizListResModel.fromJson(json.decode(response.body));
+    } else {
+      // If that call was not successful, throw an error.
+      showToast(LanguageService.trans("server_fail"));
+      throw Exception(LanguageService.trans("server_fail"));
+    }
+  }
+
+  //영유아 검진 질문 리스트 신청
+  Future<ChildQuizListResModel> getChildhQuizList() async {
+    String _url = API_BASE_URL + "api/Monitor2/m_child_quiz_list";
+    Map<String, String> body = {
+      'access_token': gUserInfo!.accessToken!,
+    };
+    Uri myUri = Uri.parse(_url);
+    final response = await http.post(myUri, body: body);
+    if (response.statusCode == 200) {
+      return ChildQuizListResModel.fromJson(json.decode(response.body));
+    } else {
+      // If that call was not successful, throw an error.
+      showToast(LanguageService.trans("server_fail"));
+      throw Exception(LanguageService.trans("server_fail"));
+    }
+  }
+
+  Future<ChildQuizListResModel> getChildQuizList() async {
+    String _url = API_BASE_URL + "api/Monitor2/m_child_quiz_list";
+    Map<String, String> body = {
+      'access_token': gUserInfo!.accessToken!,
+    };
+    Uri myUri = Uri.parse(_url);
+    final response = await http.post(myUri, body: body);
+    if (response.statusCode == 200) {
+      return ChildQuizListResModel.fromJson(json.decode(response.body));
     } else {
       // If that call was not successful, throw an error.
       showToast(LanguageService.trans("server_fail"));

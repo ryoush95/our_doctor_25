@@ -18,6 +18,7 @@ import 'package:url_launcher/url_launcher.dart';
 class DevelopmentalClassArea extends StatefulWidget {
   DevelopmentalClassArea({Key? key, this.curCategory = 0}) : super(key: key);
   int? curCategory;
+
   @override
   DevelopmentalClassAreaState createState() => DevelopmentalClassAreaState();
 }
@@ -49,7 +50,8 @@ class DevelopmentalClassAreaState extends BaseState<DevelopmentalClassArea> {
       isLoading = true;
     });
 
-    Future<HomeDataResModel> info = httpService.homeData(widget.curCategory == 0 ? "home" : "monitor");
+    Future<HomeDataResModel> info =
+        httpService.homeData(widget.curCategory == 0 ? "home" : "monitor");
     info.then((HomeDataResModel value) async {
       setState(() {
         isLoading = false;
@@ -61,7 +63,8 @@ class DevelopmentalClassAreaState extends BaseState<DevelopmentalClassArea> {
         showToast(value.msg ?? "");
         if (value.result == 106) {
           //token expired
-          Navigator.pushReplacement(context, SlideRightTransRoute(builder: (context) => FirstPage()));
+          Navigator.pushReplacement(
+              context, SlideRightTransRoute(builder: (context) => FirstPage()));
         }
       }
     }).catchError((onError) {
@@ -102,16 +105,21 @@ class DevelopmentalClassAreaState extends BaseState<DevelopmentalClassArea> {
                 itemCount: arrDeveloperList!.length,
                 itemBuilder: (BuildContext context, int index) {
                   return InkWell(
-                    child: ItemDevelopment(info: arrDeveloperList!.elementAt(index)),
+                    child: ItemDevelopment(
+                        info: arrDeveloperList!.elementAt(index)),
                     onTap: () {
-                      String _link = arrDeveloperList!.elementAt(index).videoLink!;
+                      String _link =
+                          arrDeveloperList!.elementAt(index).videoLink!;
                       if (_link == "") {
                         showToast("비디오링크가 존재하지 않습니다.");
                       }
                       //_launchURL(_link);
-                      Navigator.push(context, SlideRightTransRoute(builder: (context) => ProductDetail(
-                        pid: arrDeveloperList!.elementAt(index).id!,
-                      )));
+                      Navigator.push(
+                          context,
+                          SlideRightTransRoute(
+                              builder: (context) => ProductDetail(
+                                    pid: arrDeveloperList!.elementAt(index).id!,
+                                  )));
                     },
                   );
                 }),

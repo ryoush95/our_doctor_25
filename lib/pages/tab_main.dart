@@ -16,6 +16,7 @@ import 'package:ourdoctor/helpers/common_util.dart';
 import 'package:ourdoctor/helpers/fcm.dart';
 import 'package:ourdoctor/helpers/transition.dart';
 import 'package:ourdoctor/language/language_service.dart';
+import 'package:ourdoctor/models/basket_list_res_model.dart';
 import 'package:ourdoctor/models/childinfo_res_model.dart';
 import 'package:ourdoctor/models/default_res_model.dart';
 import 'package:ourdoctor/models/live_res_model.dart';
@@ -39,7 +40,6 @@ import 'package:ourdoctor/pages/my/order_complete.dart';
 import 'package:ourdoctor/pages/my/shopping_basket.dart';
 import 'package:sprintf/sprintf.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import 'alarm/alarm.dart';
 import 'base/page_layout.dart';
 import 'components/drawer_navigation.dart';
@@ -50,7 +50,8 @@ import 'home/home_fragment.dart';
 import 'monitoring/monitoring_fragment.dart';
 
 class TabMainPage extends StatefulWidget {
-  TabMainPage({Key? key, this.pageIdx = 1, this.infoTabIdx = 0}) : super(key: key);
+  TabMainPage({Key? key, this.pageIdx = 1, this.infoTabIdx = 0})
+      : super(key: key);
 
   int? pageIdx;
   int? infoTabIdx;
@@ -59,7 +60,13 @@ class TabMainPage extends StatefulWidget {
   TabMainPageState createState() => TabMainPageState();
 }
 
-class TabMainPageState extends BaseState<TabMainPage> with TickerProviderStateMixin {
+class TabMainPageState extends BaseState<TabMainPage>
+    with TickerProviderStateMixin {
+  int shipping_fee = 0;
+  List<bool> checkStatus = [];
+  var textEditingControllers = <TextEditingController>[];
+
+  List<BasketDto> basketList = [];
   int backButtonTimestamp = 0;
   MainTab currentTab = MainTab.home;
   String title = "";
@@ -69,12 +76,22 @@ class TabMainPageState extends BaseState<TabMainPage> with TickerProviderStateMi
   bool isBadge = false;
 
   final sideMenuList = [
-    SideMenuCategory(icon: 'ic_ua_point.png', title: 'ua_point', route: MyPointPage()),
-    SideMenuCategory(icon: 'ic_basket.png', title: 'shopping_basket', route: ShoppingBasketPage()),
-    SideMenuCategory(icon: 'ic_jjim_product.png', title: 'favorite_product', route: FavoriteProductPage()),
-    SideMenuCategory(icon: 'ic_pencil.svg', title: 'view_my_posts', route: MyPostsPage()),
-    SideMenuCategory(icon: 'settings_black_24dp.png', title: 'my_page', route: MyPagePage()),
-    SideMenuCategory(icon: 'ic_faq.png', title: 'notice_faq', route: FaqListPage()),
+    SideMenuCategory(
+        icon: 'ic_ua_point.png', title: 'ua_point', route: MyPointPage()),
+    SideMenuCategory(
+        icon: 'ic_basket.png',
+        title: 'shopping_basket',
+        route: ShoppingBasketPage()),
+    SideMenuCategory(
+        icon: 'ic_jjim_product.png',
+        title: 'favorite_product',
+        route: FavoriteProductPage()),
+    SideMenuCategory(
+        icon: 'ic_pencil.svg', title: 'view_my_posts', route: MyPostsPage()),
+    SideMenuCategory(
+        icon: 'settings_black_24dp.png', title: 'my_page', route: MyPagePage()),
+    SideMenuCategory(
+        icon: 'ic_faq.png', title: 'notice_faq', route: FaqListPage()),
     SideMenuCategory(icon: '9c_ask.png', title: 'inquiry'),
     SideMenuCategory(icon: 'ic_databook.png', title: 'archives'),
   ];
@@ -98,7 +115,8 @@ class TabMainPageState extends BaseState<TabMainPage> with TickerProviderStateMi
   }
 
   Future<void> goAlarmPage() async {
-    String result = await Navigator.push(context, SlideRightTransRoute(builder: (context) => AlarmPage(type: 0)));
+    String result = await Navigator.push(context,
+        SlideRightTransRoute(builder: (context) => AlarmPage(type: 0)));
     if (result == "story") {
       setState(() {
         tabController.index = 3;
@@ -165,11 +183,18 @@ class TabMainPageState extends BaseState<TabMainPage> with TickerProviderStateMi
           return Container(
             height: 150,
             padding: const EdgeInsets.fromLTRB(25, 50, 25, 0),
-            decoration: const BoxDecoration(borderRadius: BorderRadius.only(topLeft: Radius.circular(25), topRight: Radius.circular(25)), color: Colors.white),
+            decoration: const BoxDecoration(
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(25),
+                    topRight: Radius.circular(25)),
+                color: Colors.white),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                H18(text: LanguageService.trans('logout_confirm'), height: 1.5, weight: FW.regular),
+                H18(
+                    text: LanguageService.trans('logout_confirm'),
+                    height: 1.5,
+                    weight: FW.regular),
                 const SizedBox(height: 30),
                 SizedBox(
                   width: double.infinity,
@@ -180,7 +205,10 @@ class TabMainPageState extends BaseState<TabMainPage> with TickerProviderStateMi
                         child: Container(
                           width: 80,
                           height: 35,
-                          child: H16(text: LanguageService.trans('confirm'), color: AppColor_Red, weight: FW.medium),
+                          child: H16(
+                              text: LanguageService.trans('confirm'),
+                              color: AppColor_Red,
+                              weight: FW.medium),
                         ),
                         onTap: reqLogout,
                       ),
@@ -188,7 +216,9 @@ class TabMainPageState extends BaseState<TabMainPage> with TickerProviderStateMi
                         child: Container(
                           width: 80,
                           height: 35,
-                          child: H16(text: LanguageService.trans('cancel'), weight: FW.medium),
+                          child: H16(
+                              text: LanguageService.trans('cancel'),
+                              weight: FW.medium),
                         ),
                         onTap: () {
                           Navigator.pop(context);
@@ -211,11 +241,18 @@ class TabMainPageState extends BaseState<TabMainPage> with TickerProviderStateMi
           return Container(
             height: 150,
             padding: const EdgeInsets.fromLTRB(25, 50, 25, 0),
-            decoration: const BoxDecoration(borderRadius: BorderRadius.only(topLeft: Radius.circular(25), topRight: Radius.circular(25)), color: Colors.white),
+            decoration: const BoxDecoration(
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(25),
+                    topRight: Radius.circular(25)),
+                color: Colors.white),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                H18(text: LanguageService.trans('delete_child_alert'), height: 1.5, weight: FW.regular),
+                H18(
+                    text: LanguageService.trans('delete_child_alert'),
+                    height: 1.5,
+                    weight: FW.regular),
                 const SizedBox(height: 30),
                 SizedBox(
                   width: double.infinity,
@@ -226,7 +263,10 @@ class TabMainPageState extends BaseState<TabMainPage> with TickerProviderStateMi
                         child: SizedBox(
                           width: 80,
                           height: 35,
-                          child: H16(text: LanguageService.trans('confirm'), color: AppColor_Red, weight: FW.medium),
+                          child: H16(
+                              text: LanguageService.trans('confirm'),
+                              color: AppColor_Red,
+                              weight: FW.medium),
                         ),
                         onTap: () {
                           showLeftMenu();
@@ -238,12 +278,14 @@ class TabMainPageState extends BaseState<TabMainPage> with TickerProviderStateMi
                         child: Container(
                           width: 80,
                           height: 35,
-                          child: H16(text: LanguageService.trans('cancel'), weight: FW.medium),
+                          child: H16(
+                              text: LanguageService.trans('cancel'),
+                              weight: FW.medium),
                         ),
                         onTap: () {
                           Navigator.pop(context);
                         },
-                      ), 
+                      ),
                     ],
                   ),
                 )
@@ -275,20 +317,20 @@ class TabMainPageState extends BaseState<TabMainPage> with TickerProviderStateMi
 
     tabController.addListener(() {
       int idx = tabController.index;
-      switch(idx) {
-        case 0 :
+      switch (idx) {
+        case 0:
           currentTab = MainTab.home;
           break;
-        case 1 :
+        case 1:
           currentTab = MainTab.monitoring;
           break;
-        case 2 :
+        case 2:
           currentTab = MainTab.home_care;
           break;
-        case 3 :
+        case 3:
           currentTab = MainTab.community;
           break;
-        
+
         default:
           currentTab = MainTab.home;
           break;
@@ -355,6 +397,39 @@ class TabMainPageState extends BaseState<TabMainPage> with TickerProviderStateMi
     //     eventBus.fire(InfoTabEvent(type: widget.infoTabIdx!));
     //   }
     // });
+    BasketList();
+  }
+
+  Future<void> BasketList() async {
+    setState(() {
+      isLoading = true;
+    });
+    Future<BasketListResModel> info = httpService.getBasketList();
+    info.then((BasketListResModel value) async {
+      setState(() {
+        isLoading = false;
+      });
+      if (value.result == 0) {
+        shipping_fee = int.parse(value.data!.deliver_price!);
+        basketList.addAll(value.data!.lists!);
+
+        List.generate(basketList.length, (index) => checkStatus.add(false));
+        for (int i = 0; i < basketList.length; i++) {
+          var textEditingController =
+              TextEditingController(text: basketList[i].count.toString());
+          textEditingControllers.add(textEditingController);
+        }
+        setState(() {});
+      } else {
+        showToast(value.msg ?? "");
+        if (value.result == 106) {}
+      }
+    }).catchError((onError) {
+      setState(() {
+        isLoading = false;
+      });
+      showToast(onError);
+    });
   }
 
 //   Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -472,7 +547,9 @@ class TabMainPageState extends BaseState<TabMainPage> with TickerProviderStateMi
 //     await flutterLocalNotificationsPlugin.show(0, title, message, platformChannelSpecifics, payload: payload);
 //   }
   // main activity에서 설정
-  Future<void> setupFcmListener(void Function(Map<String, dynamic> data) onReceive, void Function(Map<String, dynamic> data) onClick) async {
+  Future<void> setupFcmListener(
+      void Function(Map<String, dynamic> data) onReceive,
+      void Function(Map<String, dynamic> data) onClick) async {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
       //RemoteNotification? notification = message.notification;
       AndroidNotification? android = message.notification?.android;
@@ -487,7 +564,8 @@ class TabMainPageState extends BaseState<TabMainPage> with TickerProviderStateMi
 
     // Get any messages which caused the application to open from
     // a terminated state.
-    RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
+    RemoteMessage? initialMessage =
+        await FirebaseMessaging.instance.getInitialMessage();
 
     // If the message also contains a data property with a "type" of "chat",
     // navigate to a chat screen
@@ -497,7 +575,8 @@ class TabMainPageState extends BaseState<TabMainPage> with TickerProviderStateMi
 
     // Also handle any interaction when the app is in the background via a
     // Stream listener
-    FirebaseMessaging.onMessageOpenedApp.listen((message) => {onClick(message.data)});
+    FirebaseMessaging.onMessageOpenedApp
+        .listen((message) => {onClick(message.data)});
 
     initLocalNotification(onClick);
   }
@@ -510,7 +589,11 @@ class TabMainPageState extends BaseState<TabMainPage> with TickerProviderStateMi
     if (data['type'] == 'order_complete') {
       String orderID = data['uid'];
       // eventBus.fire(PaymentFinish(order_id: orderID));
-      Navigator.push(context, SlideRightTransRoute(builder: (context) => OrderCompletePage(orderID: int.parse(orderID))));
+      Navigator.push(
+          context,
+          SlideRightTransRoute(
+              builder: (context) =>
+                  OrderCompletePage(orderID: int.parse(orderID))));
     }
   }
 
@@ -523,21 +606,30 @@ class TabMainPageState extends BaseState<TabMainPage> with TickerProviderStateMi
         if (uid == "") {
           return;
         }
-        Navigator.push(context, SlideRightTransRoute(builder: (context) => CommunityDetailPage(uid: uid)));
+        Navigator.push(
+            context,
+            SlideRightTransRoute(
+                builder: (context) => CommunityDetailPage(uid: uid)));
         break;
       case "reply_added":
         String uid = data["uid"];
         if (uid == "") {
           return;
         }
-        Navigator.push(context, SlideRightTransRoute(builder: (context) => CommunityDetailPage(uid: uid)));
+        Navigator.push(
+            context,
+            SlideRightTransRoute(
+                builder: (context) => CommunityDetailPage(uid: uid)));
         break;
       case "comment_added":
         String uid = data["uid"];
         if (uid == "") {
           return;
         }
-        Navigator.push(context, SlideRightTransRoute(builder: (context) => CommunityDetailPage(uid: uid)));
+        Navigator.push(
+            context,
+            SlideRightTransRoute(
+                builder: (context) => CommunityDetailPage(uid: uid)));
         break;
     }
   }
@@ -669,7 +761,14 @@ class TabMainPageState extends BaseState<TabMainPage> with TickerProviderStateMi
                               child: RoundContainer(
                                 width: 60.0,
                                 height: 60.0,
-                                bgColor: (gUserInfo!.selectedChildUid == (i < (allCount - 1) ? gUserInfo!.childList!.elementAt(i - 1).id! : "")) ? AppColor_Primary : Colors.white,
+                                bgColor: (gUserInfo!.selectedChildUid ==
+                                        (i < (allCount - 1)
+                                            ? gUserInfo!.childList!
+                                                .elementAt(i - 1)
+                                                .id!
+                                            : ""))
+                                    ? AppColor_Primary
+                                    : Colors.white,
                                 child: Center(
                                   child: Stack(
                                     children: [
@@ -677,7 +776,9 @@ class TabMainPageState extends BaseState<TabMainPage> with TickerProviderStateMi
                                           visible: !isExistImg(i),
                                           child: Center(
                                             child: Image.asset(
-                                              (getChildGender(i) == 1 ? 'assets/ic_default_male.png' : 'assets/ic_default_female.png'),
+                                              (getChildGender(i) == 1
+                                                  ? 'assets/ic_default_male.png'
+                                                  : 'assets/ic_default_female.png'),
                                               width: 60,
                                               height: 60,
                                             ),
@@ -710,10 +811,15 @@ class TabMainPageState extends BaseState<TabMainPage> with TickerProviderStateMi
                               Visibility(
                                   visible: i != allCount - 1,
                                   child: Image.asset(
-                                    (getChildGender(i) == 1 ? 'assets/ic_male.png' : 'assets/ic_female.png'),
+                                    (getChildGender(i) == 1
+                                        ? 'assets/ic_male.png'
+                                        : 'assets/ic_female.png'),
                                     width: 20,
                                   )),
-                              Flexible(child: H14(text: getChildName(i), weight: FW.regular)),
+                              Flexible(
+                                  child: H14(
+                                      text: getChildName(i),
+                                      weight: FW.regular)),
                             ],
                           ),
                         ),
@@ -727,7 +833,10 @@ class TabMainPageState extends BaseState<TabMainPage> with TickerProviderStateMi
                 child: InkWell(
                   onTap: () {
                     showLeftMenu();
-                    Navigator.push(context, SlideRightTransRoute(builder: (context) => AddChildren1Page()));
+                    Navigator.push(
+                        context,
+                        SlideRightTransRoute(
+                            builder: (context) => AddChildren1Page()));
                   },
                   child: SizedBox(
                     width: 60,
@@ -742,7 +851,8 @@ class TabMainPageState extends BaseState<TabMainPage> with TickerProviderStateMi
                                 height: 60.0,
                                 bgColor: Colors.white,
                                 child: Center(
-                                  child: Image.asset('assets/ic_add_child.png', width: 60, height: 60),
+                                  child: Image.asset('assets/ic_add_child.png',
+                                      width: 60, height: 60),
                                 ),
                               ),
                             ),
@@ -773,7 +883,11 @@ class TabMainPageState extends BaseState<TabMainPage> with TickerProviderStateMi
       return false;
     }
 
-    if (gUserInfo!.childList!.elementAt(index - 1).profileImgUrl!.isEmpty || gUserInfo!.childList!.elementAt(index - 1).profileImgUrl!.contains("img_photo_default")) {
+    if (gUserInfo!.childList!.elementAt(index - 1).profileImgUrl!.isEmpty ||
+        gUserInfo!.childList!
+            .elementAt(index - 1)
+            .profileImgUrl!
+            .contains("img_photo_default")) {
       return false;
     } else {
       return true;
@@ -798,11 +912,13 @@ class TabMainPageState extends BaseState<TabMainPage> with TickerProviderStateMi
       return false;
     }
 
-    if (gUserInfo!.selectedChildUid == null || gUserInfo!.selectedChildUid == "") {
+    if (gUserInfo!.selectedChildUid == null ||
+        gUserInfo!.selectedChildUid == "") {
       return false;
     }
 
-    if (gUserInfo!.selectedChildUid == gUserInfo!.childList!.elementAt(index - 1).id) {
+    if (gUserInfo!.selectedChildUid ==
+        gUserInfo!.childList!.elementAt(index - 1).id) {
       return true;
     } else {
       return false;
@@ -855,7 +971,8 @@ class TabMainPageState extends BaseState<TabMainPage> with TickerProviderStateMi
         showToast(value.msg ?? "");
         if (value.result == 106) {
           //token expired
-          Navigator.pushReplacement(context, SlideRightTransRoute(builder: (context) => FirstPage()));
+          Navigator.pushReplacement(
+              context, SlideRightTransRoute(builder: (context) => FirstPage()));
         }
       }
     }).catchError((onError) {
@@ -882,12 +999,14 @@ class TabMainPageState extends BaseState<TabMainPage> with TickerProviderStateMi
         LocalService.setUserID("");
         LocalService.setUserPwd("");
         LocalService.setUserType("");
-        Navigator.pushReplacement(context, SlideRightTransRoute(builder: (context) => FirstPage()));
+        Navigator.pushReplacement(
+            context, SlideRightTransRoute(builder: (context) => FirstPage()));
       } else {
         showToast(value.msg ?? "");
         if (value.result == 106) {
           //token expired
-          Navigator.pushReplacement(context, SlideRightTransRoute(builder: (context) => FirstPage()));
+          Navigator.pushReplacement(
+              context, SlideRightTransRoute(builder: (context) => FirstPage()));
         }
       }
     }).catchError((onError) {
@@ -916,7 +1035,8 @@ class TabMainPageState extends BaseState<TabMainPage> with TickerProviderStateMi
         showToast(value.msg ?? "");
         if (value.result == 106) {
           //token expired
-          Navigator.pushReplacement(context, SlideRightTransRoute(builder: (context) => FirstPage()));
+          Navigator.pushReplacement(
+              context, SlideRightTransRoute(builder: (context) => FirstPage()));
         }
       }
     }).catchError((onError) {
@@ -933,7 +1053,8 @@ class TabMainPageState extends BaseState<TabMainPage> with TickerProviderStateMi
       isLoading = true;
     });
     String childUid = "";
-    if (gUserInfo!.selectedChildUid == null || gUserInfo!.selectedChildUid == "") {
+    if (gUserInfo!.selectedChildUid == null ||
+        gUserInfo!.selectedChildUid == "") {
       gUserInfo!.selectedChildUid = gUserInfo!.id;
       childUid = gUserInfo!.id!;
     } else {
@@ -953,7 +1074,8 @@ class TabMainPageState extends BaseState<TabMainPage> with TickerProviderStateMi
         showToast(value.msg ?? "");
         if (value.result == 106) {
           //token expired
-          Navigator.pushReplacement(context, SlideRightTransRoute(builder: (context) => FirstPage()));
+          Navigator.pushReplacement(
+              context, SlideRightTransRoute(builder: (context) => FirstPage()));
         }
       }
     }).catchError((onError) {
@@ -988,7 +1110,8 @@ class TabMainPageState extends BaseState<TabMainPage> with TickerProviderStateMi
         showToast(value.msg ?? "");
         if (value.result == 106) {
           //token expired
-          Navigator.pushReplacement(context, SlideRightTransRoute(builder: (context) => FirstPage()));
+          Navigator.pushReplacement(
+              context, SlideRightTransRoute(builder: (context) => FirstPage()));
         }
       }
     }).catchError((onError) {
@@ -1024,7 +1147,8 @@ class TabMainPageState extends BaseState<TabMainPage> with TickerProviderStateMi
         showToast(value.msg ?? "");
         if (value.result == 106) {
           //token expired
-          Navigator.pushReplacement(context, SlideRightTransRoute(builder: (context) => FirstPage()));
+          Navigator.pushReplacement(
+              context, SlideRightTransRoute(builder: (context) => FirstPage()));
         }
       }
     }).catchError((onError) {
@@ -1090,9 +1214,8 @@ class TabMainPageState extends BaseState<TabMainPage> with TickerProviderStateMi
                         height: 60,
                         padding: const EdgeInsets.only(left: 20, right: 10),
                         child: Image.asset(
-                          'assets/notifications_none_black_24dp.png', 
-                          width: 24
-                        ),
+                            'assets/notifications_none_black_24dp.png',
+                            width: 24),
                       ),
                       onTap: () {
                         goAlarmPage();
@@ -1127,7 +1250,8 @@ class TabMainPageState extends BaseState<TabMainPage> with TickerProviderStateMi
                 ),
                 Container(
                   alignment: Alignment.center,
-                  child: MonitoringFragment(type: widget.infoTabIdx, pageType: widget.pageIdx),
+                  child: MonitoringFragment(
+                      type: widget.infoTabIdx, pageType: widget.pageIdx),
                 ),
                 Container(
                   alignment: Alignment.center,
@@ -1145,17 +1269,22 @@ class TabMainPageState extends BaseState<TabMainPage> with TickerProviderStateMi
             width: double.infinity,
             height: 100,
             padding: const EdgeInsets.fromLTRB(55, 25, 55, 0),
-            decoration: const BoxDecoration(color: Colors.white, borderRadius: BorderRadius.only(topLeft: Radius.circular(25.0), topRight: Radius.circular(25.0)), boxShadow: [
-              BoxShadow(
-                color: AppColor_Gray,
-                blurRadius: 10.0, // soften the shadow
-                spreadRadius: 5.0, //extend the shadow
-                offset: Offset(
-                  5.0, // Move to right 10  horizontally
-                  5.0, // Move to bottom 5 Vertically
-                ),
-              )
-            ]),
+            decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(25.0),
+                    topRight: Radius.circular(25.0)),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColor_Gray,
+                    blurRadius: 10.0, // soften the shadow
+                    spreadRadius: 5.0, //extend the shadow
+                    offset: Offset(
+                      5.0, // Move to right 10  horizontally
+                      5.0, // Move to bottom 5 Vertically
+                    ),
+                  )
+                ]),
             child: Stack(
               children: [
                 Align(
@@ -1163,124 +1292,167 @@ class TabMainPageState extends BaseState<TabMainPage> with TickerProviderStateMi
                     alignment: Alignment.bottomLeft,
                     child: Container(
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween, 
-                        children: [
-                        GestureDetector(
-                            onTap: () {
-                              if (currentTab == MainTab.home) {
-                                return;
-                              }
-                              changeTab(MainTab.home);
-                            },
-                            behavior: HitTestBehavior.translucent,
-                            child: Column(mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.center, children: [
-                              Stack(
-                                children: [
-                                  Image.asset("assets/ic_home_off.png", width: 16),
-                                  Visibility(
-                                    visible: currentTab == MainTab.home,
-                                    child: Image.asset("assets/ic_home_on.png", width: 16),
-                                  )
-                                ],
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            GestureDetector(
+                                onTap: () {
+                                  if (currentTab == MainTab.home) {
+                                    return;
+                                  }
+                                  changeTab(MainTab.home);
+                                },
+                                behavior: HitTestBehavior.translucent,
+                                child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Stack(
+                                        children: [
+                                          Image.asset("assets/ic_home_off.png",
+                                              width: 16),
+                                          Visibility(
+                                            visible: currentTab == MainTab.home,
+                                            child: Image.asset(
+                                                "assets/ic_home_on.png",
+                                                width: 16),
+                                          )
+                                        ],
+                                      ),
+                                      const SizedBox(height: 10),
+                                      H13(
+                                        text: LanguageService.trans('home'),
+                                        color: currentTab == MainTab.home
+                                            ? AppColor_Primary
+                                            : AppColor_Tab_Unselected,
+                                        weight: FW.medium,
+                                      )
+                                    ])),
+                            Container(
+                              child: GestureDetector(
+                                behavior: HitTestBehavior.translucent,
+                                onTap: () {
+                                  if (currentTab == MainTab.monitoring) {
+                                    return;
+                                  }
+                                  changeTab(MainTab.monitoring);
+                                },
+                                child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Stack(
+                                        children: [
+                                          Opacity(
+                                            opacity: 0.2,
+                                            child: Image.asset(
+                                              "assets/ic_monitor_off.png",
+                                              width: 20,
+                                            ),
+                                          ),
+                                          Visibility(
+                                            visible: currentTab ==
+                                                MainTab.monitoring,
+                                            child: Image.asset(
+                                                "assets/ic_take1.png",
+                                                width: 20),
+                                          )
+                                        ],
+                                      ),
+                                      const SizedBox(height: 7),
+                                      H13(
+                                        text:
+                                            LanguageService.trans('monitoring'),
+                                        color: currentTab == MainTab.monitoring
+                                            ? AppColor_Primary
+                                            : AppColor_Tab_Unselected,
+                                        weight: FW.medium,
+                                      )
+                                    ]),
                               ),
-                              const SizedBox(height: 10),
-                              H13(
-                                text: LanguageService.trans('home'),
-                                color: currentTab == MainTab.home ? AppColor_Primary : AppColor_Tab_Unselected,
-                                weight: FW.medium,
-                              )
-                            ])),
-                        Container(
-                          child: GestureDetector(
-                            behavior: HitTestBehavior.translucent,
-                            onTap: () {
-                              if (currentTab == MainTab.monitoring) {
-                                return;
-                              }
-                              changeTab(MainTab.monitoring);
-                            },
-                            child: Column(mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.center, children: [
-                              Stack(
-                                children: [
-                                  Opacity(
-                                    opacity: 0.2,
-                                    child: Image.asset(
-                                      "assets/ic_monitor_off.png",
-                                      width: 20,
-                                    ),
-                                  ),
-                                  Visibility(
-                                    visible: currentTab == MainTab.monitoring,
-                                    child: Image.asset("assets/ic_take1.png", width: 20),
-                                  )
-                                ],
+                            ),
+                            Container(
+                              child: GestureDetector(
+                                  behavior: HitTestBehavior.translucent,
+                                  onTap: () {
+                                    if (currentTab == MainTab.home_care) {
+                                      return;
+                                    }
+                                    faqFromSide = false;
+                                    changeTab(MainTab.home_care);
+                                  },
+                                  child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Stack(
+                                          children: [
+                                            Image.asset(
+                                                "assets/ic_story_off.png",
+                                                width: 20),
+                                            Visibility(
+                                              visible: currentTab ==
+                                                  MainTab.home_care,
+                                              child: Image.asset(
+                                                  "assets/ic_story_on.png",
+                                                  width: 20),
+                                            )
+                                          ],
+                                        ),
+                                        const SizedBox(height: 7),
+                                        H13(
+                                          text: LanguageService.trans(
+                                              'home_care'),
+                                          color: currentTab == MainTab.home_care
+                                              ? AppColor_Primary
+                                              : AppColor_Tab_Unselected,
+                                          weight: FW.medium,
+                                        )
+                                      ])),
+                            ),
+                            Container(
+                              child: GestureDetector(
+                                behavior: HitTestBehavior.translucent,
+                                onTap: () {
+                                  if (currentTab == MainTab.community) {
+                                    return;
+                                  }
+                                  changeTab(MainTab.community);
+                                },
+                                child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Stack(
+                                        children: [
+                                          Image.asset("assets/ic_com_of.png",
+                                              width: 20),
+                                          Visibility(
+                                            visible:
+                                                currentTab == MainTab.community,
+                                            child: Image.asset(
+                                                "assets/ic_monitor_on.png",
+                                                width: 20),
+                                          )
+                                        ],
+                                      ),
+                                      const SizedBox(height: 7),
+                                      H13(
+                                        text:
+                                            LanguageService.trans('community'),
+                                        color: currentTab == MainTab.community
+                                            ? AppColor_Primary
+                                            : AppColor_Tab_Unselected,
+                                        weight: FW.medium,
+                                      )
+                                    ]),
                               ),
-                              const SizedBox(height: 7),
-                              H13(
-                                text: LanguageService.trans('monitoring'),
-                                color: currentTab == MainTab.monitoring ? AppColor_Primary : AppColor_Tab_Unselected,
-                                weight: FW.medium,
-                              )
-                            ]),
-                          ),
-                        ),
-                        Container(
-                          child: GestureDetector(
-                              behavior: HitTestBehavior.translucent,
-                              onTap: () {
-                                if (currentTab == MainTab.home_care) {
-                                  return;
-                                }
-                                faqFromSide = false;
-                                changeTab(MainTab.home_care);
-                              },
-                              child: Column(mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.center, children: [
-                                Stack(
-                                  children: [
-                                    Image.asset("assets/ic_story_off.png", width: 20),
-                                    Visibility(
-                                      visible: currentTab == MainTab.home_care,
-                                      child: Image.asset("assets/ic_story_on.png", width: 20),
-                                    )
-                                  ],
-                                ),
-                                const SizedBox(height: 7),
-                                H13(
-                                  text: LanguageService.trans('home_care'),
-                                  color: currentTab == MainTab.home_care ? AppColor_Primary : AppColor_Tab_Unselected,
-                                  weight: FW.medium,
-                                )
-                              ])),
-                        ),
-                        Container(
-                          child: GestureDetector(
-                            behavior: HitTestBehavior.translucent,
-                            onTap: () {
-                              if (currentTab == MainTab.community) {
-                                return;
-                              }
-                              changeTab(MainTab.community);
-                            },
-                            child: Column(mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.center, children: [
-                              Stack(
-                                children: [
-                                  Image.asset("assets/ic_com_of.png", width: 20),
-                                  Visibility(
-                                    visible: currentTab == MainTab.community,
-                                    child: Image.asset("assets/ic_monitor_on.png", width: 20),
-                                  )
-                                ],
-                              ),
-                              const SizedBox(height: 7),
-                              H13(
-                                text: LanguageService.trans('community'),
-                                color: currentTab == MainTab.community ? AppColor_Primary : AppColor_Tab_Unselected,
-                                weight: FW.medium,
-                              )
-                            ]),
-                          ),
-                        ),
-                      ]),
+                            ),
+                          ]),
                     ))
               ],
             ),
@@ -1306,7 +1478,8 @@ class TabMainPageState extends BaseState<TabMainPage> with TickerProviderStateMi
                   Image.asset('assets/ic_left_logo.png', height: 18),
                   Expanded(child: Container()),
                   InkWell(
-                    child: Image.asset('assets/clear_black_24dp.png', height: 24),
+                    child:
+                        Image.asset('assets/clear_black_24dp.png', height: 24),
                     onTap: showLeftMenu,
                   )
                 ],
@@ -1351,9 +1524,7 @@ class TabMainPageState extends BaseState<TabMainPage> with TickerProviderStateMi
               ),
             ),
             const SizedBox(height: 36),
-            ...List.generate(
-              sideMenuList.length, (int idx) => sideMenu(idx)
-            ),
+            ...List.generate(sideMenuList.length, (int idx) => sideMenu(idx)),
             const SizedBox(height: 20),
             GestureDetector(
               behavior: HitTestBehavior.translucent,
@@ -1361,7 +1532,10 @@ class TabMainPageState extends BaseState<TabMainPage> with TickerProviderStateMi
                   padding: const EdgeInsets.all(10),
                   width: double.infinity,
                   child: Center(
-                    child: H14(text: LanguageService.trans('logout'), weight: FW.medium, color: AppColor_GrayText),
+                    child: H14(
+                        text: LanguageService.trans('logout'),
+                        weight: FW.medium,
+                        color: AppColor_GrayText),
                   )),
               onTap: onLogout,
             ),
@@ -1371,62 +1545,93 @@ class TabMainPageState extends BaseState<TabMainPage> with TickerProviderStateMi
   }
 
   sideMenu(int idx) => Container(
-    margin: const EdgeInsets.symmetric(horizontal: 22),
-    padding: idx != 3 
-      ? const EdgeInsets.only(top: 15, bottom: 13)
-      : const EdgeInsets.only(top: 40, bottom: 13),
-    decoration: BoxDecoration(
-      border: Border(
-        bottom: BorderSide(
-          width: 1,
-          color: idx != 2 && idx != sideMenuList.length -1 ? AppColor_Divider : Colors.transparent
-        ),
-      )
-    ),
-    child: GestureDetector(
-      onTap: () {
-        showLeftMenu();
-        if(idx == 6) {
-          _launchURL(KAKAOTALK_CHAT);
-        } else if(idx == 7) {
-          _launchURL(DATEBOOK_URL);
-        } else {
-          Navigator.push(context, SlideRightTransRoute(builder: (ctx) => sideMenuList[idx].route!));
-        }
-      },
-      behavior: HitTestBehavior.translucent,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
+        margin: const EdgeInsets.symmetric(horizontal: 22),
+        padding: idx != 3
+            ? const EdgeInsets.only(top: 15, bottom: 13)
+            : const EdgeInsets.only(top: 40, bottom: 13),
+        decoration: BoxDecoration(
+            border: Border(
+          bottom: BorderSide(
+              width: 1,
+              color: idx != 2 && idx != sideMenuList.length - 1
+                  ? AppColor_Divider
+                  : Colors.transparent),
+        )),
+        child: GestureDetector(
+          onTap: () {
+            showLeftMenu();
+            if (idx == 6) {
+              _launchURL(KAKAOTALK_CHAT);
+            } else if (idx == 7) {
+              _launchURL(DATEBOOK_URL);
+            } else {
+              Navigator.push(
+                  context,
+                  SlideRightTransRoute(
+                      builder: (ctx) => sideMenuList[idx].route!));
+            }
+          },
+          behavior: HitTestBehavior.translucent,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              idx != 3
-              ? Image.asset('assets/${sideMenuList[idx].icon}', height: 20)
-              : SvgPicture.asset('assets/${sideMenuList[idx].icon}', height: 20),
-              const SizedBox(width: 12),
-              H16(text: LanguageService.trans(sideMenuList[idx].title), weight: FW.regular),
+              Row(
+                children: [
+                  idx != 3
+                      ? Image.asset('assets/${sideMenuList[idx].icon}',
+                          height: 20)
+                      : SvgPicture.asset('assets/${sideMenuList[idx].icon}',
+                          height: 20),
+                  const SizedBox(width: 12),
+                  H16(
+                      text: LanguageService.trans(sideMenuList[idx].title),
+                      weight: FW.regular),
+                ],
+              ),
+              Row(
+                children: [
+                  idx == 0
+                      ? Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 7),
+                            decoration: BoxDecoration(
+                              color: AppColor_f4f5f7,
+                              borderRadius: BorderRadius.circular(15.0),
+                            ),
+                            child: H12(
+                              text: sprintf(
+                                  "%s P", [ValidPrice(gUserInfo!.point!)]),
+                              weight: FW.regular,
+                            ),
+                          ),
+                        )
+                      : const SizedBox(),
+                  idx == 1
+                      ? Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 7),
+                            decoration: BoxDecoration(
+                              color: AppColor_f4f5f7,
+                              borderRadius: BorderRadius.circular(15.0),
+                            ),
+                            child: H12(
+                              text: sprintf(
+                                  "%s 개", [(basketList.length.toString())]),
+                              weight: FW.regular,
+                            ),
+                          ),
+                        )
+                      : const SizedBox(),
+                ],
+              ),
             ],
           ),
-          idx == 0
-          ? Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
-              decoration: BoxDecoration(
-                color: AppColor_f4f5f7,
-                borderRadius: BorderRadius.circular(15.0),
-              ),
-              child: H12(
-                text: sprintf("%s P", [ValidPrice(gUserInfo!.point!)]),
-                weight: FW.regular,
-              ),
-            ),
-          )
-          : const SizedBox(),
-        ],
-      ),
-    ),
-  );
+        ),
+      );
 }
 
 class SideMenuCategory {

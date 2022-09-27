@@ -33,6 +33,7 @@ class ResultAreaState extends BaseState<ResultArea> {
     );
   }
 
+
   @override
   Widget build(BuildContext context) {
     var screenSize = MediaQuery.of(context).size;
@@ -81,7 +82,7 @@ class ResultAreaState extends BaseState<ResultArea> {
                   log(widget.diagnose!.comment!);
                 },
                 child: H16(
-                  text: '우리아이는 또래보다 키가 많이 크네요. 이런 경우는 너무 빠른 성장을 하는지, 2차성징이 조숙하게 나타나지는 않는지, 주기적인 확인이 필요합니다.', 
+                  text: '',
                   weight: FW.regular, 
                   height: 1.6, 
                   align: TextAlign.justify,

@@ -72,10 +72,19 @@ class LanguageReportState extends BaseState<LanguageReport> {
 
     if (pageType == 0) {
       result = "언어력이 " + dicInfo!.diagnose!.result! + "해요";
+      if (dicInfo!.diagnose!.result == "주의") {
+        result = "언어력이 " + dicInfo!.diagnose!.result! + "가 필요해요";
+      }
     } else if (pageType == 1) {
-      result = "운동신경 " + dicInfo!.diagnose!.result! + "해요";
+      result = "운동신경이 " + dicInfo!.diagnose!.result! + "해요";
+      if (dicInfo!.diagnose!.result == "주의") {
+        result = "운동신경을 " + dicInfo!.diagnose!.result! + " 해주세요";
+      }
     } else if (pageType == 2) {
       result = "사회성이 " + dicInfo!.diagnose!.result! + "해요";
+      if (dicInfo!.diagnose!.result == "주의") {
+        result = "사회성에 " + dicInfo!.diagnose!.result! + "가 필요해요";
+      }
     }
 
     return result;

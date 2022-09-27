@@ -401,11 +401,15 @@ class EditChildPageState extends BaseState<EditChildPage> {
                                       ],
                                     )),
                               ),
-                              ElevatedButton(onPressed: (){
-                                setState(() {
-                                  profileImage = "";
-                                });
-                              }, child: Text('사진 지우기')),
+                              Visibility(
+                                visible: profileImage.isNotEmpty,
+                                child: ElevatedButton(onPressed: (){
+                                  setState(() {
+                                    print(profileImage);
+                                    profileImage = "";
+                                  });
+                                }, child: Text('사진 지우기')),
+                              ),
                               const SizedBox(height: 15),
                               H14(
                                 text: LanguageService.trans("name"),

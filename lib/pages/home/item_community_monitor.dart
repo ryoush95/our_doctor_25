@@ -33,7 +33,7 @@ class ItemCommunityState extends BaseState<ItemCommunity2> {
     }
     return result;
   }
-
+//교육
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -82,7 +82,7 @@ class ItemCommunityState extends BaseState<ItemCommunity2> {
                   borderRadius: BorderRadius.circular(8.0),
                   child: ExtendedImage.network(
                     widget.item.imgUrl!,
-                    height: MediaQuery.of(context).size.width * .7,
+                    height: 240,      // 사진 사이즈
                     fit: BoxFit.fill,
                   ),
                 ),

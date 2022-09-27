@@ -34,6 +34,7 @@ class ItemCommunityState extends BaseState<ItemCommunity> {
     return result;
   }
 
+  //우아팁
   @override
   Widget build(BuildContext context) {
     return Container(

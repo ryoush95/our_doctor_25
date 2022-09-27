@@ -25,6 +25,8 @@ import 'package:ourdoctor/pages/my/photo_view.dart';
 import 'package:ourdoctor/pages/tab_main.dart';
 import 'package:substring_highlight/substring_highlight.dart';
 
+import 'monitoring_fragment.dart';
+
 // class RecordItem {
 //   late int type;
 //   late String amDateTime;
@@ -1118,7 +1120,7 @@ class MonitoringResultPageState extends BaseState<MonitoringResultPage> {
                           InkWell(
                             onTap: () {
                               // log(curCategory.toString());
-                              Navigator.pushReplacement(context, SlideRightTransRoute(builder: (context) => TabMainPage(pageIdx: 2, infoTabIdx: curCategory)));
+                              Navigator.pushReplacement(context, SlideRightTransRoute(builder: (context) => MonitoringFragment(type: 0, pageType: curCategory)));
                             },
                             child: Container(
                               width: isToday(info) ? (MediaQuery.of(context).size.width - 66) / 2 : MediaQuery.of(context).size.width - 60,
