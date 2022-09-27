@@ -33,7 +33,7 @@ class ItemCommunityState extends BaseState<ItemCommunity2> {
     }
     return result;
   }
-
+//교육
   @override
   Widget build(BuildContext context) {
     return Container(

@@ -29,7 +29,8 @@ class CareFragment extends StatefulWidget {
   CareFragmentState createState() => CareFragmentState();
 }
 
-class CareFragmentState extends BaseState<CareFragment> with TickerProviderStateMixin {
+class CareFragmentState extends BaseState<CareFragment>
+    with TickerProviderStateMixin {
   int tabIndex = 0;
   int category = 0;
   String keyword = "";
@@ -41,8 +42,18 @@ class CareFragmentState extends BaseState<CareFragment> with TickerProviderState
   List<HomeCareBannerDto>? arrBannerList = [];
   List<PdtLikeDto>? arrLikeList = [];
   List<PdtLikeDto>? arrNewList = [];
-  List<Color>? GROWTH_COLOR = [const Color(0xFFB5C4FF), const Color(0xFF9DD6FF), const Color(0xFFB6DAE0), const Color(0xFFC6B9F0)];
-  List<Color>? DEVELOPMENT_COLOR = [const Color(0xFFFFE72F), const Color(0xFFFFA429), const Color(0xFFADE641), const Color(0xFF44C924)];
+  List<Color>? GROWTH_COLOR = [
+    const Color(0xFFB5C4FF),
+    const Color(0xFF9DD6FF),
+    const Color(0xFFB6DAE0),
+    const Color(0xFFC6B9F0)
+  ];
+  List<Color>? DEVELOPMENT_COLOR = [
+    const Color(0xFFFFE72F),
+    const Color(0xFFFFA429),
+    const Color(0xFFADE641),
+    const Color(0xFF44C924)
+  ];
 
   @override
   void initState() {
@@ -75,7 +86,8 @@ class CareFragmentState extends BaseState<CareFragment> with TickerProviderState
 
   Future<void> goChatting() async {
     try {
-      final int result = await platform.invokeMethod('talk', {"uid": gUserInfo!.id, "name": gUserInfo!.name});
+      final int result = await platform.invokeMethod(
+          'talk', {"uid": gUserInfo!.id, "name": gUserInfo!.name});
     } on PlatformException catch (e) {
       showToast("'${e.message}'.");
     }
@@ -89,7 +101,8 @@ class CareFragmentState extends BaseState<CareFragment> with TickerProviderState
       isLoading = true;
     });
 
-    Future<HomeCareBannerResModel> info = httpService.homecareBannerList(category == 0 ? "GROWTH" : "DEVELOPMENT");
+    Future<HomeCareBannerResModel> info = httpService
+        .homecareBannerList(category == 0 ? "GROWTH" : "DEVELOPMENT");
     info.then((HomeCareBannerResModel value) async {
       setState(() {
         isLoading = false;
@@ -101,7 +114,8 @@ class CareFragmentState extends BaseState<CareFragment> with TickerProviderState
         showToast(value.msg ?? "");
         if (value.result == 106) {
           //token expired
-          Navigator.pushReplacement(context, SlideRightTransRoute(builder: (context) => FirstPage()));
+          Navigator.pushReplacement(
+              context, SlideRightTransRoute(builder: (context) => FirstPage()));
         }
       }
     }).catchError((onError) {
@@ -118,7 +132,8 @@ class CareFragmentState extends BaseState<CareFragment> with TickerProviderState
       isLoading = true;
     });
 
-    Future<HomeCareDataResModel> info = httpService.homecareDataInfo(category == 0 ? "GROWTH" : "DEVELOPMENT");
+    Future<HomeCareDataResModel> info =
+        httpService.homecareDataInfo(category == 0 ? "GROWTH" : "DEVELOPMENT");
     info.then((HomeCareDataResModel value) async {
       setState(() {
         isLoading = false;
@@ -131,7 +146,8 @@ class CareFragmentState extends BaseState<CareFragment> with TickerProviderState
         showToast(value.msg ?? "");
         if (value.result == 106) {
           //token expired
-          Navigator.pushReplacement(context, SlideRightTransRoute(builder: (context) => FirstPage()));
+          Navigator.pushReplacement(
+              context, SlideRightTransRoute(builder: (context) => FirstPage()));
         }
       }
     }).catchError((onError) {
@@ -151,15 +167,33 @@ class CareFragmentState extends BaseState<CareFragment> with TickerProviderState
             width: double.infinity,
             height: double.infinity,
             child: SingleChildScrollView(
-                child: Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
-              CareBanner(),
-              const SizedBox(height: 28),
-              CategoryShow(),
-              SearchBar(),
-              const SizedBox(height: 60),
-              category == 0 ? ProductShow(category: category, title: LanguageService.trans("popular_item"), list: arrLikeList) : ProductShow(category: category, title: LanguageService.trans("popular_class"), list: arrLikeList),
-              category == 0 ? ProductShow(category: category, title: LanguageService.trans("new_products_miss"), list: arrNewList) : ProductShow(category: category, title: LanguageService.trans("new_class"), list: arrNewList),
-            ]))));
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                  CareBanner(),
+                  const SizedBox(height: 28),
+                  CategoryShow(),
+                  SearchBar(),
+                  const SizedBox(height: 60),
+                  category == 0
+                      ? ProductShow(
+                          category: category,
+                          title: LanguageService.trans("popular_item"),
+                          list: arrLikeList)
+                      : ProductShow(
+                          category: category,
+                          title: LanguageService.trans("popular_class"),
+                          list: arrLikeList),
+                  category == 0
+                      ? ProductShow(
+                          category: category,
+                          title: LanguageService.trans("new_products_miss"),
+                          list: arrNewList)
+                      : ProductShow(
+                          category: category,
+                          title: LanguageService.trans("new_class"),
+                          list: arrNewList),
+                ]))));
   }
 
   Widget CareBanner() {
@@ -170,7 +204,8 @@ class CareFragmentState extends BaseState<CareFragment> with TickerProviderState
               height: 110,
               width: double.infinity,
               padding: const EdgeInsets.all(30),
-              decoration: BoxDecoration(color: category == 0 ? AppColor_Primary : AppColor_Yellow),
+              decoration: BoxDecoration(
+                  color: category == 0 ? AppColor_Primary : AppColor_Yellow),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 //mainAxisAlignment: MainAxisAlignment.start,
@@ -200,7 +235,8 @@ class CareFragmentState extends BaseState<CareFragment> with TickerProviderState
                     },
                     child: H18(
                       text: LanguageService.trans("development_class"),
-                      color: category == 1 ? Colors.white : AppColor_Banner_Hint,
+                      color:
+                          category == 1 ? Colors.white : AppColor_Banner_Hint,
                       weight: FW.semi_bold,
                     ),
                   ),
@@ -223,16 +259,21 @@ class CareFragmentState extends BaseState<CareFragment> with TickerProviderState
                             // padding: const EdgeInsets.all(12),
                             margin: const EdgeInsets.only(left: 10),
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.all(Radius.circular(12.0)),
-                              color: category == 0 ? GROWTH_COLOR![index % 4] : DEVELOPMENT_COLOR![index % 4],
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(12.0)),
+                              color: category == 0
+                                  ? GROWTH_COLOR![index % 4]
+                                  : DEVELOPMENT_COLOR![index % 4],
                             ),
                             child: Stack(
                               children: [
                                 Positioned(
                                   child: Container(
-                                    width: MediaQuery.of(context).size.width - 74,
+                                    width:
+                                        MediaQuery.of(context).size.width - 74,
                                     height: 170,
-                                    decoration: const BoxDecoration(color: AppColor_Selector_Border),
+                                    decoration: const BoxDecoration(
+                                        color: AppColor_Selector_Border),
                                     child: ExtendedImage.network(
                                       info.image!,
                                       width: 350,
@@ -246,7 +287,8 @@ class CareFragmentState extends BaseState<CareFragment> with TickerProviderState
                                 ),
                                 Positioned(
                                   child: H16(
-                                    text: "1 / " + arrBannerList!.length.toString(),
+                                    text: "1 / " +
+                                        arrBannerList!.length.toString(),
                                     color: Colors.white,
                                     weight: FW.semi_bold,
                                     align: TextAlign.start,
@@ -287,7 +329,6 @@ class CareFragmentState extends BaseState<CareFragment> with TickerProviderState
                                 //     ],
                                 //   ),
                                 // ),
-
                               ],
                             )),
                         onTap: () {
@@ -309,7 +350,12 @@ class CareFragmentState extends BaseState<CareFragment> with TickerProviderState
           children: [
             InkWell(
               onTap: () async {
-                String recv = await Navigator.push(context, SlideRightTransRoute(builder: (context) => ProductList(category: category == 0 ? "GROWTH" : "DEVELOPMENT")));
+                String recv = await Navigator.push(
+                    context,
+                    SlideRightTransRoute(
+                        builder: (context) => ProductList(
+                            category:
+                                category == 0 ? "GROWTH" : "DEVELOPMENT")));
                 if (recv == "200") {
                   getHomeDataInfo();
                 }
@@ -319,7 +365,11 @@ class CareFragmentState extends BaseState<CareFragment> with TickerProviderState
                 height: 70,
                 child: Column(
                   children: [
-                    category == 0 ? Image.asset('assets/cake_black_24dp.png', width: 40, height: 25) : Image.asset('assets/cake_black_24dp1.png', width: 40, height: 25),
+                    category == 0
+                        ? Image.asset('assets/cake_black_24dp.png',
+                            width: 40, height: 25)
+                        : Image.asset('assets/cake_black_24dp1.png',
+                            width: 40, height: 25),
                     const SizedBox(height: 10),
                     H13(text: "전체", weight: FW.medium),
                   ],
@@ -328,7 +378,13 @@ class CareFragmentState extends BaseState<CareFragment> with TickerProviderState
             ),
             InkWell(
               onTap: () async {
-                String recv = await Navigator.push(context, SlideRightTransRoute(builder: (context) => HomeCareListPage(category_1: category == 0 ? "GROWTH" : "DEVELOPMENT", category_2: "BODY")));
+                String recv = await Navigator.push(
+                    context,
+                    SlideRightTransRoute(
+                        builder: (context) => HomeCareListPage(
+                            category_1:
+                                category == 0 ? "GROWTH" : "DEVELOPMENT",
+                            category_2: "BODY")));
                 if (recv == "200") {
                   getHomeDataInfo();
                 }
@@ -338,7 +394,15 @@ class CareFragmentState extends BaseState<CareFragment> with TickerProviderState
                 height: 70,
                 child: Column(
                   children: [
-                    category == 0 ? Image.asset('assets/face_retouching_natural_black_24dp.png', width: 40, height: 25) : Image.asset('assets/face_retouching_natural_black_24dp1.png', width: 40, height: 25),
+                    category == 0
+                        ? Image.asset(
+                            'assets/face_retouching_natural_black_24dp.png',
+                            width: 40,
+                            height: 25)
+                        : Image.asset(
+                            'assets/face_retouching_natural_black_24dp1.png',
+                            width: 40,
+                            height: 25),
                     const SizedBox(height: 10),
                     H13(text: "신체", weight: FW.medium),
                   ],
@@ -347,7 +411,13 @@ class CareFragmentState extends BaseState<CareFragment> with TickerProviderState
             ),
             InkWell(
               onTap: () async {
-                String recv = await Navigator.push(context, SlideRightTransRoute(builder: (context) => HomeCareListPage(category_1: category == 0 ? "GROWTH" : "DEVELOPMENT", category_2: "BRAIN")));
+                String recv = await Navigator.push(
+                    context,
+                    SlideRightTransRoute(
+                        builder: (context) => HomeCareListPage(
+                            category_1:
+                                category == 0 ? "GROWTH" : "DEVELOPMENT",
+                            category_2: "BRAIN")));
                 if (recv == "200") {
                   getHomeDataInfo();
                 }
@@ -357,7 +427,11 @@ class CareFragmentState extends BaseState<CareFragment> with TickerProviderState
                 height: 70,
                 child: Column(
                   children: [
-                    category == 0 ? Image.asset('assets/psychology_black_24dp.png', width: 40, height: 25) : Image.asset('assets/psychology_black_24dp1.png', width: 40, height: 25),
+                    category == 0
+                        ? Image.asset('assets/psychology_black_24dp.png',
+                            width: 40, height: 25)
+                        : Image.asset('assets/psychology_black_24dp1.png',
+                            width: 40, height: 25),
                     const SizedBox(height: 10),
                     H13(text: "두뇌", weight: FW.medium),
                   ],
@@ -366,7 +440,13 @@ class CareFragmentState extends BaseState<CareFragment> with TickerProviderState
             ),
             InkWell(
               onTap: () async {
-                String recv = await Navigator.push(context, SlideRightTransRoute(builder: (context) => HomeCareListPage(category_1: category == 0 ? "GROWTH" : "DEVELOPMENT", category_2: "RECOMMEND")));
+                String recv = await Navigator.push(
+                    context,
+                    SlideRightTransRoute(
+                        builder: (context) => HomeCareListPage(
+                            category_1:
+                                category == 0 ? "GROWTH" : "DEVELOPMENT",
+                            category_2: "RECOMMEND")));
                 if (recv == "200") {
                   getHomeDataInfo();
                 }
@@ -376,7 +456,15 @@ class CareFragmentState extends BaseState<CareFragment> with TickerProviderState
                 height: 70,
                 child: Column(
                   children: [
-                    category == 0 ? Image.asset('assets/volunteer_activism_black_24dp.png', width: 40, height: 25) : Image.asset('assets/volunteer_activism_black_24dp1.png', width: 40, height: 25),
+                    category == 0
+                        ? Image.asset(
+                            'assets/volunteer_activism_black_24dp.png',
+                            width: 40,
+                            height: 25)
+                        : Image.asset(
+                            'assets/volunteer_activism_black_24dp1.png',
+                            width: 40,
+                            height: 25),
                     const SizedBox(height: 10),
                     H13(text: "맞춤추천", weight: FW.medium),
                   ],
@@ -394,7 +482,9 @@ class CareFragmentState extends BaseState<CareFragment> with TickerProviderState
         height: 40,
         margin: const EdgeInsets.symmetric(horizontal: 30),
         padding: const EdgeInsets.symmetric(horizontal: 20),
-        decoration: BoxDecoration(color: AppColor_Light_Gray, borderRadius: BorderRadius.circular(20)),
+        decoration: BoxDecoration(
+            color: AppColor_Light_Gray,
+            borderRadius: BorderRadius.circular(20)),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -416,7 +506,13 @@ class CareFragmentState extends BaseState<CareFragment> with TickerProviderState
                   else
                     {
                       FocusScope.of(context).requestFocus(FocusNode()),
-                      Navigator.push(context, SlideRightTransRoute(builder: (context) => ProductList(category: category == 0 ? "GROWTH" : "DEVELOPMENT", keyword: keyword))),
+                      Navigator.push(
+                          context,
+                          SlideRightTransRoute(
+                              builder: (context) => ProductList(
+                                  category:
+                                      category == 0 ? "GROWTH" : "DEVELOPMENT",
+                                  keyword: keyword))),
                     }
                 },
                 placeholder: LanguageService.trans('search_hint'),
@@ -435,7 +531,16 @@ class CareFragmentState extends BaseState<CareFragment> with TickerProviderState
             width: 110,
             height: 70,
             child: Column(
-              children: [Image.asset('assets/add_reaction_black_24dp.png', width: 22, height: 25), const SizedBox(height: 8), H14(text: "Personalized recommendation", maxLine: 2, height: 1.3, weight: FW.semi_bold)],
+              children: [
+                Image.asset('assets/add_reaction_black_24dp.png',
+                    width: 22, height: 25),
+                const SizedBox(height: 8),
+                H14(
+                    text: "Personalized recommendation",
+                    maxLine: 2,
+                    height: 1.3,
+                    weight: FW.semi_bold)
+              ],
             ),
           ),
         ],

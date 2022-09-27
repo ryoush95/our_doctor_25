@@ -13,6 +13,8 @@ import 'package:ourdoctor/pages/base/base_state.dart';
 import 'package:ourdoctor/pages/base/page_layout.dart';
 import 'package:ourdoctor/pages/components/app_floating_button.dart';
 import 'package:ourdoctor/pages/components/h14.dart';
+import 'package:ourdoctor/pages/components/h16.dart';
+import 'package:ourdoctor/pages/components/h18.dart';
 import 'package:ourdoctor/pages/components/h20.dart';
 import 'package:ourdoctor/pages/home/circular_progress.dart';
 import 'package:ourdoctor/pages/home/community_area.dart';
@@ -38,7 +40,7 @@ class MonitoringFragmentState extends BaseState<MonitoringFragment> {
   // List<MonitoringDto> monitoringList = [];
   final ScrollController _scrController = ScrollController();
   ScrollController scrollController = ScrollController();
-  static const platform = const MethodChannel('doctor.flutter.dev');
+  static const platform = MethodChannel('doctor.flutter.dev');
   final HttpService httpService = HttpService();
   bool isLast = false;
   int page = 0;
@@ -260,15 +262,21 @@ class MonitoringFragmentState extends BaseState<MonitoringFragment> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     TopArea(name: gSelChildInfo!.name!, type: 0),
-                    const SizedBox(height: 56),
+                    const SizedBox(height: 35),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        const SizedBox(width: 32),
-                        H20(text: curCategory == 0 ? "신체 발달 스코어" : "두뇌 발달 스코어"),
+                        H18(text: "신체 발달 스코어" ),
+                        H18(text: "두뇌 발달 스코어" ),
                       ],
                     ),
-                    CircularProgress(type: 1, subType: curCategory),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        CircularProgress(subType: 0),
+                        CircularProgress(subType: 1),
+                      ],
+                    ),
                     const SizedBox(height: 30),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -279,7 +287,7 @@ class MonitoringFragmentState extends BaseState<MonitoringFragment> {
                             children: [
                               Container(
                                 // width: 100,
-                                child: H20(text: LanguageService.trans('development_report'), maxLine: 2, align: TextAlign.start),
+                                child: H20(text: LanguageService.trans('발달 리포트'), maxLine: 2, align: TextAlign.start),
                               ),
                               // const SizedBox(width: 3),
                               // InkWell(
@@ -314,21 +322,21 @@ class MonitoringFragmentState extends BaseState<MonitoringFragment> {
                                           boxShadow: [
                                             curCategory == 0
                                                 ? const BoxShadow(
-                                                    color: AppColor_Table_Border,
-                                                    blurRadius: 4.0, // soften the shadow
-                                                    spreadRadius: 2.0, //extend the shadow
-                                                    offset: Offset(
-                                                      3.0, // Move to right 10  horizontally
-                                                      3.0, // Move to bottom 5 Vertically
-                                                    ))
+                                                color: AppColor_Table_Border,
+                                                blurRadius: 4.0, // soften the shadow
+                                                spreadRadius: 2.0, //extend the shadow
+                                                offset: Offset(
+                                                  3.0, // Move to right 10  horizontally
+                                                  3.0, // Move to bottom 5 Vertically
+                                                ))
                                                 : const BoxShadow(
-                                                    color: AppColor_Table_Border,
-                                                    blurRadius: 0.0, // soften the shadow
-                                                    spreadRadius: 0.0, //extend the shadow
-                                                    offset: Offset(
-                                                      0.0, // Move to right 10  horizontally
-                                                      0.0, // Move to bottom 5 Vertically
-                                                    ))
+                                                color: AppColor_Table_Border,
+                                                blurRadius: 0.0, // soften the shadow
+                                                spreadRadius: 0.0, //extend the shadow
+                                                offset: Offset(
+                                                  0.0, // Move to right 10  horizontally
+                                                  0.0, // Move to bottom 5 Vertically
+                                                ))
                                           ],
                                           color: curCategory == 0 ? AppColor_Primary : AppColor_Table_Border),
                                       child: Center(
@@ -355,21 +363,21 @@ class MonitoringFragmentState extends BaseState<MonitoringFragment> {
                                           boxShadow: [
                                             curCategory == 1
                                                 ? const BoxShadow(
-                                                    color: AppColor_Table_Border,
-                                                    blurRadius: 4.0, // soften the shadow
-                                                    spreadRadius: 2.0, //extend the shadow
-                                                    offset: Offset(
-                                                      3.0, // Move to right 10  horizontally
-                                                      3.0, // Move to bottom 5 Vertically
-                                                    ))
+                                                color: AppColor_Table_Border,
+                                                blurRadius: 4.0, // soften the shadow
+                                                spreadRadius: 2.0, //extend the shadow
+                                                offset: Offset(
+                                                  3.0, // Move to right 10  horizontally
+                                                  3.0, // Move to bottom 5 Vertically
+                                                ))
                                                 : const BoxShadow(
-                                                    color: AppColor_Table_Border,
-                                                    blurRadius: 0.0, // soften the shadow
-                                                    spreadRadius: 0.0, //extend the shadow
-                                                    offset: Offset(
-                                                      0.0, // Move to right 10  horizontally
-                                                      0.0, // Move to bottom 5 Vertically
-                                                    ))
+                                                color: AppColor_Table_Border,
+                                                blurRadius: 0.0, // soften the shadow
+                                                spreadRadius: 0.0, //extend the shadow
+                                                offset: Offset(
+                                                  0.0, // Move to right 10  horizontally
+                                                  0.0, // Move to bottom 5 Vertically
+                                                ))
                                           ],
                                           color: curCategory == 1 ? AppColor_Primary : AppColor_Table_Border),
                                       child: Center(

@@ -33,11 +33,7 @@ import 'package:ourdoctor/pages/woo_story_webview.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 class CommunityDetailPage extends StatefulWidget {
-  CommunityDetailPage({
-    Key? key, 
-    required this.uid,
-    this.videoUrl,
-  }) : super(key: key);
+  CommunityDetailPage({Key? key, required this.uid, this.videoUrl,}) : super(key: key);
 
   String? uid;
   String? videoUrl;
@@ -56,14 +52,14 @@ class CommunityDetailPageState extends BaseState<CommunityDetailPage> {
   int replyCnt = 0;
   String parentUid = "0";
   int nPage = 0;
-  bool isLast = true;    
+  bool isLast = true;
   List<ReplyDto> arrReplyList = [];
   bool _editReply = false;
   late String _prevContent;
   late String _editUid;
 
   //리스트뷰 컨트롤러
-  late ScrollController controller; 
+  late ScrollController controller;
   int _selectedImgIndex = 0;
   List<String> arrImgList = [];
 
@@ -87,26 +83,23 @@ class CommunityDetailPageState extends BaseState<CommunityDetailPage> {
   void dispose() {
     replyFocusNode.dispose();
     _videoController?.close();
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown
-    ]);
+    SystemChrome.setPreferredOrientations(
+        [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
     super.dispose();
   }
 
   _initYotubeController() {
-    if(widget.videoUrl != '' && widget.videoUrl != null) {
+    if (widget.videoUrl != '' && widget.videoUrl != null) {
       final videoId = convertUrlToId(widget.videoUrl!);
       _videoController = YoutubePlayerController(
-        initialVideoId: videoId,
-        params: const YoutubePlayerParams(
-          autoPlay: true,
-          showControls: true,
-          showFullscreenButton: true,
-          desktopMode: false,
-          mute: true,
-        )
-      );
+          initialVideoId: videoId,
+          params: const YoutubePlayerParams(
+            autoPlay: true,
+            showControls: true,
+            showFullscreenButton: true,
+            desktopMode: false,
+            mute: true,
+          ));
 
       _videoController?.onEnterFullscreen = () {
         SystemChrome.setPreferredOrientations([
@@ -116,10 +109,8 @@ class CommunityDetailPageState extends BaseState<CommunityDetailPage> {
       };
 
       _videoController?.onExitFullscreen = () {
-        SystemChrome.setPreferredOrientations([
-          DeviceOrientation.portraitUp,
-          DeviceOrientation.portraitDown
-        ]);
+        SystemChrome.setPreferredOrientations(
+            [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
       };
     }
   }
@@ -159,7 +150,11 @@ class CommunityDetailPageState extends BaseState<CommunityDetailPage> {
                 action1: LanguageService.trans('to_edit'),
                 action2: LanguageService.trans('to_delete'),
                 onAction1: () {
-                  Navigator.push(context, SlideRightTransRoute(builder: (context) => AddCommunityPage(uid: widget.uid, info: dicDetailInfo)));
+                  Navigator.push(
+                      context,
+                      SlideRightTransRoute(
+                          builder: (context) => AddCommunityPage(
+                              uid: widget.uid, info: dicDetailInfo)));
                 },
                 onAction2: () {
                   reqCommunityDel();
@@ -174,11 +169,14 @@ class CommunityDetailPageState extends BaseState<CommunityDetailPage> {
                 onAction: () {
                   //FIXME: report
                   // onClickReport();
-                  Navigator.push(context, SlideRightTransRoute(builder: (context) => ReportPage(
-                    uid: widget.uid.toString(),
-                    writer: dicDetailInfo!.nickname!,
-                    title: dicDetailInfo!.title!, 
-                  )));
+                  Navigator.push(
+                      context,
+                      SlideRightTransRoute(
+                          builder: (context) => ReportPage(
+                                uid: widget.uid.toString(),
+                                writer: dicDetailInfo!.nickname!,
+                                title: dicDetailInfo!.title!,
+                              )));
                 });
           });
     }
@@ -229,8 +227,7 @@ class CommunityDetailPageState extends BaseState<CommunityDetailPage> {
                   _editUid = info.commentUid!;
                   _editReply = true;
                   setState(() {});
-                }  
-              );
+                });
           });
     } else {
       showCupertinoModalPopup(
@@ -244,12 +241,15 @@ class CommunityDetailPageState extends BaseState<CommunityDetailPage> {
                   replyFocusNode.requestFocus();
                 },
                 onAction2: () {
-                  Navigator.push(context, SlideRightTransRoute(builder: (context) => ReportPage(
-                    uid: info.commentUid.toString(),
-                    writer: info.nickname!,
-                    title: info.content!, 
-                    comment: true,
-                  )));
+                  Navigator.push(
+                      context,
+                      SlideRightTransRoute(
+                          builder: (context) => ReportPage(
+                                uid: info.commentUid.toString(),
+                                writer: info.nickname!,
+                                title: info.content!,
+                                comment: true,
+                              )));
                   // onClickReplyReport(info.commentUid!);
                 });
           });
@@ -259,7 +259,7 @@ class CommunityDetailPageState extends BaseState<CommunityDetailPage> {
   //댓글 수정
   void _editComment(String uid, String content) {
     FocusScope.of(context).requestFocus(FocusNode());
-    if(content == "") {
+    if (content == "") {
       showToast(LanguageService.trans("input_reply_hint"));
       return;
     }
@@ -272,17 +272,18 @@ class CommunityDetailPageState extends BaseState<CommunityDetailPage> {
       isLoading = false;
       setState(() {});
 
-    if(value.result == 0) {
-      showToast(LanguageService.trans("edit_reply"));
-      clearInfo();
-      getReplyList();
-    } else {
-      showToast(value.msg ?? "");
-      if(value.result == 106) {
-        // token expiration. 
-        Navigator.pushReplacement(context, SlideRightTransRoute(builder: (context) => FirstPage()));
+      if (value.result == 0) {
+        showToast(LanguageService.trans("edit_reply"));
+        clearInfo();
+        getReplyList();
+      } else {
+        showToast(value.msg ?? "");
+        if (value.result == 106) {
+          // token expiration.
+          Navigator.pushReplacement(
+              context, SlideRightTransRoute(builder: (context) => FirstPage()));
+        }
       }
-    }
     }).catchError((onError) {
       isLoading = false;
       setState(() {});
@@ -348,12 +349,15 @@ class CommunityDetailPageState extends BaseState<CommunityDetailPage> {
             return ActionSheet1(
                 action: LanguageService.trans('report'),
                 onAction: () {
-                  Navigator.push(context, SlideRightTransRoute(builder: (context) => ReportPage(
-                    uid: info.commentUid.toString(),
-                    writer: info.nickname!,
-                    title: info.content!, 
-                    comment: true,
-                  )));
+                  Navigator.push(
+                      context,
+                      SlideRightTransRoute(
+                          builder: (context) => ReportPage(
+                                uid: info.commentUid.toString(),
+                                writer: info.nickname!,
+                                title: info.content!,
+                                comment: true,
+                              )));
                   // onClickReplyReport(info.commentUid!);
                 });
           });
@@ -377,115 +381,128 @@ class CommunityDetailPageState extends BaseState<CommunityDetailPage> {
 
   Widget _getTiles(int index) {
     ReplyDto info = arrReplyList.elementAt(index);
-      return Column(
-        children: [
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 30),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(vertical: 20),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        H14(
-                            text: info.delYn == "y"
+    return Column(
+      children: [
+        Container(
+          margin: const EdgeInsets.symmetric(horizontal: 30),
+          child: Row(
+            children: [
+              Expanded(
+                child: Container(
+                  margin: const EdgeInsets.symmetric(vertical: 20),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      H14(
+                        text: info.delYn == "y"
                             ? LanguageService.trans("deleted_comment")
                             : info.content!,
-                            weight: FW.regular,
-                            maxLine: 100,
-                            color: AppColor_BlackText,
-                            align: TextAlign.left,
-                            height: 1.3,
+                        weight: FW.regular,
+                        maxLine: 100,
+                        color: AppColor_BlackText,
+                        align: TextAlign.left,
+                        height: 1.3,
+                      ),
+                      const SizedBox(height: 10),
+                      Row(
+                        children: [
+                          Visibility(
+                            visible: info.userType != "normal",
+                            child: Column(
+                              children: [
+                                Image.asset('assets/ic_small_notice.png',
+                                    width: 12, height: 12),
+                                const SizedBox(width: 20),
+                              ],
+                            ),
                           ),
-                        const SizedBox(height: 10),
-                        Row(
-                          children: [
-                            Visibility(
-                              visible: info.userType != "normal",
-                              child: Column(
-                                children: [
-                                  Image.asset('assets/ic_small_notice.png', width: 12, height: 12),
-                                  const SizedBox(width: 20),
-                                ],
-                              ),
+                          H12(
+                            //text: info.userType != "normal" ? info.name! : getMaskName(info.name!) + " : " + diffTime(info.regTime!),
+                            text: info.nickname! +
+                                " ・ " +
+                                diffTime(info.regTime!),
+                            weight: FW.medium,
+                            color: AppColor_BlackText.withOpacity(0.4),
+                            align: TextAlign.left,
+                          ),
+                          const SizedBox(width: 20),
+                          InkWell(
+                            onTap: () {
+                              reqReplyLike(info.commentUid!, index, -1);
+                            },
+                            child: Row(
+                              children: [
+                                Image.asset(
+                                  info.likeYn == "n"
+                                      ? 'assets/ic_like_off.png'
+                                      : 'assets/ic_like_on.png',
+                                  width: 20,
+                                ),
+                                const SizedBox(width: 5),
+                                H14(
+                                  text: info.likeCnt!,
+                                  color: AppColor_BlackText.withOpacity(0.4),
+                                  weight: FW.regular,
+                                  align: TextAlign.left,
+                                ),
+                              ],
                             ),
-                            H12(
-                              //text: info.userType != "normal" ? info.name! : getMaskName(info.name!) + " : " + diffTime(info.regTime!),
-                              text: info.nickname! + " ・ " + diffTime(info.regTime!),
-                              weight: FW.medium,
-                              color: AppColor_BlackText.withOpacity(0.4),
-                              align: TextAlign.left,
-                            ),
-                            const SizedBox(width: 20),
-                            InkWell(
-                              onTap: () {
-                                reqReplyLike(info.commentUid!, index, -1);
-                              },
-                              child: Row(
-                                children: [
-                                  Image.asset(
-                                    info.likeYn == "n" ? 'assets/ic_like_off.png' : 'assets/ic_like_on.png',
-                                    width: 20,
-                                  ),
-                                  const SizedBox(width: 5),
-                                  H14(
-                                    text: info.likeCnt!,
-                                    color: AppColor_BlackText.withOpacity(0.4),
-                                    weight: FW.regular,
-                                    align: TextAlign.left,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
-                const SizedBox(width: 10),
-                InkWell(
-                  onTap: () {
-                    viewReplyMore(info, index);
-                  },
-                  child: Image.asset(
-                    'assets/ic_more_reply.png',
-                    width: 20,
-                  ),
+              ),
+              const SizedBox(width: 10),
+              InkWell(
+                onTap: () {
+                  viewReplyMore(info, index);
+                },
+                child: Image.asset(
+                  'assets/ic_more_reply.png',
+                  width: 20,
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-          Container(
-            height: 1,
-            color: AppColor_Selector_Border,
+        ),
+        Container(
+          height: 1,
+          color: AppColor_Selector_Border,
+        ),
+        Visibility(
+          visible: info.replyList != null && info.replyList!.isNotEmpty,
+          child: ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemBuilder: (BuildContext context, int idx) {
+              if (arrReplyList
+                      .elementAt(index)
+                      .replyList!
+                      .elementAt(idx)
+                      .delYn ==
+                  'y') {
+                return const SizedBox();
+              } else {
+                return _getReplyTiles(index, idx);
+              }
+            },
+            itemCount: (info.replyList == null || info.replyList!.isEmpty)
+                ? 0
+                : info.replyList!.length,
           ),
-          Visibility(
-            visible: info.replyList != null && info.replyList!.isNotEmpty,
-            child: ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemBuilder: (BuildContext context, int idx) {
-                    if(arrReplyList.elementAt(index).replyList!.elementAt(idx).delYn == 'y') {
-                      return const SizedBox();
-                    } else {
-                      return _getReplyTiles(index, idx);
-                    }
-              },
-              itemCount: (info.replyList == null || info.replyList!.isEmpty) ? 0 : info.replyList!.length,
-            ),
-          ),
-        ],
-      );
+        ),
+      ],
+    );
   }
-  
 
   Widget _getReplyTiles(int parentIdx, int childIdx) {
-    ReplyReplyDto info = arrReplyList.elementAt(parentIdx).replyList!.elementAt(childIdx);
-    String _parentNickname = arrReplyList.elementAt(parentIdx).nickname.toString();
+    ReplyReplyDto info =
+        arrReplyList.elementAt(parentIdx).replyList!.elementAt(childIdx);
+    String _parentNickname =
+        arrReplyList.elementAt(parentIdx).nickname.toString();
     return Column(
       children: [
         Container(
@@ -500,7 +517,7 @@ class CommunityDetailPageState extends BaseState<CommunityDetailPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       H12(
-                        text: '@$_parentNickname ', 
+                        text: '@$_parentNickname ',
                         weight: FW.regular,
                         maxLine: 100,
                         color: AppColor_BlackText.withOpacity(.4),
@@ -522,14 +539,17 @@ class CommunityDetailPageState extends BaseState<CommunityDetailPage> {
                             visible: info.userType != "normal",
                             child: Column(
                               children: [
-                                Image.asset('assets/ic_small_notice.png', width: 12, height: 12),
+                                Image.asset('assets/ic_small_notice.png',
+                                    width: 12, height: 12),
                                 const SizedBox(width: 20),
                               ],
                             ),
                           ),
                           H12(
                             //text: info.userType != "normal" ? info.name! : getMaskName(info.name!) + " : " + diffTime(info.regTime!),
-                            text: info.nickname! + " ・ " + diffTime(info.regTime!),
+                            text: info.nickname! +
+                                " ・ " +
+                                diffTime(info.regTime!),
                             weight: FW.medium,
                             color: AppColor_BlackText.withOpacity(0.4),
                             align: TextAlign.left,
@@ -537,12 +557,15 @@ class CommunityDetailPageState extends BaseState<CommunityDetailPage> {
                           const SizedBox(width: 20),
                           InkWell(
                             onTap: () {
-                              reqReplyLike(info.commentUid!, parentIdx, childIdx);
+                              reqReplyLike(
+                                  info.commentUid!, parentIdx, childIdx);
                             },
                             child: Row(
                               children: [
                                 Image.asset(
-                                  info.likeYn == "n" ? 'assets/ic_like_off.png' : 'assets/ic_like_on.png',
+                                  info.likeYn == "n"
+                                      ? 'assets/ic_like_off.png'
+                                      : 'assets/ic_like_on.png',
                                   width: 20,
                                 ),
                                 const SizedBox(width: 5),
@@ -625,9 +648,10 @@ class CommunityDetailPageState extends BaseState<CommunityDetailPage> {
         onTap: () {
           if (arrImgList.length > 0) {
             Navigator.push(
-              context, 
-              SlideRightTransRoute(builder: (context) => PhotoViewPage(imgs: arrImgList, type: 0))
-            );
+                context,
+                SlideRightTransRoute(
+                    builder: (context) =>
+                        PhotoViewPage(imgs: arrImgList, type: 0)));
           }
         },
         child: ExtendedImage.network(
@@ -647,7 +671,8 @@ class CommunityDetailPageState extends BaseState<CommunityDetailPage> {
       isLoading = true;
     });
 
-    Future<CommunityDetailResModel> info = httpService.communityDetail(widget.uid!);
+    Future<CommunityDetailResModel> info =
+        httpService.communityDetail(widget.uid!);
     info.then((CommunityDetailResModel value) {
       setState(() {
         isLoading = false;
@@ -667,7 +692,8 @@ class CommunityDetailPageState extends BaseState<CommunityDetailPage> {
         showToast(value.msg ?? "");
         if (value.result == 106) {
           //token expired
-          Navigator.pushReplacement(context, SlideRightTransRoute(builder: (context) => FirstPage()));
+          Navigator.pushReplacement(
+              context, SlideRightTransRoute(builder: (context) => FirstPage()));
         }
       }
     }).catchError((onError) {
@@ -695,7 +721,8 @@ class CommunityDetailPageState extends BaseState<CommunityDetailPage> {
         showToast(value.msg ?? "");
         if (value.result == 106) {
           //token expired
-          Navigator.pushReplacement(context, SlideRightTransRoute(builder: (context) => FirstPage()));
+          Navigator.pushReplacement(
+              context, SlideRightTransRoute(builder: (context) => FirstPage()));
         }
       }
     }).catchError((onError) {
@@ -717,7 +744,8 @@ class CommunityDetailPageState extends BaseState<CommunityDetailPage> {
       isLoading = true;
     });
 
-    Future<DefaultResModel> info = httpService.commentAdd(widget.uid!, parentUid, replyContent);
+    Future<DefaultResModel> info =
+        httpService.commentAdd(widget.uid!, parentUid, replyContent);
     info.then((DefaultResModel value) {
       setState(() {
         isLoading = false;
@@ -735,7 +763,8 @@ class CommunityDetailPageState extends BaseState<CommunityDetailPage> {
         showToast(value.msg ?? "");
         if (value.result == 106) {
           //token expired
-          Navigator.pushReplacement(context, SlideRightTransRoute(builder: (context) => FirstPage()));
+          Navigator.pushReplacement(
+              context, SlideRightTransRoute(builder: (context) => FirstPage()));
         }
       }
     }).catchError((onError) {
@@ -765,7 +794,8 @@ class CommunityDetailPageState extends BaseState<CommunityDetailPage> {
         showToast(value.msg ?? "");
         if (value.result == 106) {
           //token expired
-          Navigator.pushReplacement(context, SlideRightTransRoute(builder: (context) => FirstPage()));
+          Navigator.pushReplacement(
+              context, SlideRightTransRoute(builder: (context) => FirstPage()));
         }
       }
     }).catchError((onError) {
@@ -796,7 +826,8 @@ class CommunityDetailPageState extends BaseState<CommunityDetailPage> {
         showToast(value.msg ?? "");
         if (value.result == 106) {
           //token expired
-          Navigator.pushReplacement(context, SlideRightTransRoute(builder: (context) => FirstPage()));
+          Navigator.pushReplacement(
+              context, SlideRightTransRoute(builder: (context) => FirstPage()));
         }
       }
     }).catchError((onError) {
@@ -827,7 +858,8 @@ class CommunityDetailPageState extends BaseState<CommunityDetailPage> {
         showToast(value.msg ?? "");
         if (value.result == 106) {
           //token expired
-          Navigator.pushReplacement(context, SlideRightTransRoute(builder: (context) => FirstPage()));
+          Navigator.pushReplacement(
+              context, SlideRightTransRoute(builder: (context) => FirstPage()));
         }
       }
     }).catchError((onError) {
@@ -855,7 +887,8 @@ class CommunityDetailPageState extends BaseState<CommunityDetailPage> {
         showToast(value.msg ?? "");
         if (value.result == 106) {
           //token expired
-          Navigator.pushReplacement(context, SlideRightTransRoute(builder: (context) => FirstPage()));
+          Navigator.pushReplacement(
+              context, SlideRightTransRoute(builder: (context) => FirstPage()));
         }
       }
     }).catchError((onError) {
@@ -872,7 +905,8 @@ class CommunityDetailPageState extends BaseState<CommunityDetailPage> {
       isLoading = true;
     });
 
-    Future<CommentListResModel> info = httpService.commentList(widget.uid!, nPage);
+    Future<CommentListResModel> info =
+        httpService.commentList(widget.uid!, nPage);
     info.then((CommentListResModel value) {
       setState(() {
         isLoading = false;
@@ -887,7 +921,8 @@ class CommunityDetailPageState extends BaseState<CommunityDetailPage> {
         showToast(value.msg ?? "");
         if (value.result == 106) {
           //token expired
-          Navigator.pushReplacement(context, SlideRightTransRoute(builder: (context) => FirstPage()));
+          Navigator.pushReplacement(
+              context, SlideRightTransRoute(builder: (context) => FirstPage()));
         }
       }
     }).catchError((onError) {
@@ -926,22 +961,40 @@ class CommunityDetailPageState extends BaseState<CommunityDetailPage> {
         } else {
           //대대슬 좋아요
           int count = 0;
-          String likeYn = arrReplyList.elementAt(pIndex).replyList!.elementAt(sIndex).likeYn!;
+          String likeYn = arrReplyList
+              .elementAt(pIndex)
+              .replyList!
+              .elementAt(sIndex)
+              .likeYn!;
           if (likeYn == "n") {
-            arrReplyList.elementAt(pIndex).replyList!.elementAt(sIndex).likeYn = "y";
-            count = int.parse(arrReplyList.elementAt(pIndex).replyList!.elementAt(sIndex).likeCnt!) + 1;
+            arrReplyList.elementAt(pIndex).replyList!.elementAt(sIndex).likeYn =
+                "y";
+            count = int.parse(arrReplyList
+                    .elementAt(pIndex)
+                    .replyList!
+                    .elementAt(sIndex)
+                    .likeCnt!) +
+                1;
           } else {
-            arrReplyList.elementAt(pIndex).replyList!.elementAt(sIndex).likeYn = "n";
-            count = int.parse(arrReplyList.elementAt(pIndex).replyList!.elementAt(sIndex).likeCnt!) - 1;
+            arrReplyList.elementAt(pIndex).replyList!.elementAt(sIndex).likeYn =
+                "n";
+            count = int.parse(arrReplyList
+                    .elementAt(pIndex)
+                    .replyList!
+                    .elementAt(sIndex)
+                    .likeCnt!) -
+                1;
           }
-          arrReplyList.elementAt(pIndex).replyList!.elementAt(sIndex).likeCnt = count.toString();
+          arrReplyList.elementAt(pIndex).replyList!.elementAt(sIndex).likeCnt =
+              count.toString();
           setState(() {});
         }
       } else {
         showToast(value.msg ?? "");
         if (value.result == 106) {
           //token expired
-          Navigator.pushReplacement(context, SlideRightTransRoute(builder: (context) => FirstPage()));
+          Navigator.pushReplacement(
+              context, SlideRightTransRoute(builder: (context) => FirstPage()));
         }
       }
     }).catchError((onError) {
@@ -965,7 +1018,7 @@ class CommunityDetailPageState extends BaseState<CommunityDetailPage> {
               child: Column(
                 children: [
                   Container(
-                    height: 60,
+                      height: 60,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -975,7 +1028,8 @@ class CommunityDetailPageState extends BaseState<CommunityDetailPage> {
                             },
                             behavior: HitTestBehavior.translucent,
                             child: Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 25, vertical: 20),
                               child: Image.asset(
                                 'assets/path_12225.png',
                                 width: 10,
@@ -989,7 +1043,8 @@ class CommunityDetailPageState extends BaseState<CommunityDetailPage> {
                             },
                             behavior: HitTestBehavior.translucent,
                             child: Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 25, vertical: 20),
                               child: Image.asset(
                                 'assets/ic_more.png',
                                 width: 25,
@@ -1008,18 +1063,22 @@ class CommunityDetailPageState extends BaseState<CommunityDetailPage> {
                           children: [
                             const SizedBox(height: 10),
                             Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 25),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 25),
                                 child: Row(
                                   children: [
                                     H12(
-                                      text: dicDetailInfo == null ? "" : getTopicName(dicDetailInfo!.topic!),
+                                      text: dicDetailInfo == null
+                                          ? ""
+                                          : getTopicName(dicDetailInfo!.topic!),
                                       color: AppColor_Primary,
                                       weight: FW.bold,
                                       align: TextAlign.left,
                                     ),
                                     const SizedBox(width: 5),
                                     Visibility(
-                                      visible: (dicDetailInfo != null && dicDetailInfo!.secret == "1"),
+                                      visible: (dicDetailInfo != null &&
+                                          dicDetailInfo!.secret == "1"),
                                       child: Image.asset(
                                         'assets/ic_lock.png',
                                         width: 18,
@@ -1029,9 +1088,12 @@ class CommunityDetailPageState extends BaseState<CommunityDetailPage> {
                                 )),
                             const SizedBox(height: 9),
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 25),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 25),
                               child: H18(
-                                text: dicDetailInfo == null ? "" : dicDetailInfo!.title!,
+                                text: dicDetailInfo == null
+                                    ? ""
+                                    : dicDetailInfo!.title!,
                                 color: AppColor_BlackText,
                                 weight: FW.regular,
                                 maxLine: 10,
@@ -1040,9 +1102,14 @@ class CommunityDetailPageState extends BaseState<CommunityDetailPage> {
                             ),
                             const SizedBox(height: 20),
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 25),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 25),
                               child: H12(
-                                text: dicDetailInfo == null ? "" : (dicDetailInfo!.nickname! + " ・ " + diffTime(dicDetailInfo!.regTime!)),
+                                text: dicDetailInfo == null
+                                    ? ""
+                                    : (dicDetailInfo!.nickname! +
+                                        " ・ " +
+                                        diffTime(dicDetailInfo!.regTime!)),
                                 color: AppColor_BlackText.withOpacity(0.4),
                                 weight: FW.medium,
                                 align: TextAlign.left,
@@ -1052,21 +1119,22 @@ class CommunityDetailPageState extends BaseState<CommunityDetailPage> {
                             Container(
                               height: 1,
                               color: AppColor_BlackText.withOpacity(0.1),
-                              margin: const EdgeInsets.symmetric(horizontal: 25),
+                              margin:
+                                  const EdgeInsets.symmetric(horizontal: 25),
                             ),
                             //NOTE: content
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 25),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 25),
                               margin: EdgeInsets.only(top: 25),
                               child: H14(
-                                text: dicDetailInfo?.content ?? "", 
-                                maxLine: 150, 
-                                weight: FW.regular, 
-                                align: TextAlign.start, 
-                                height: 1.3
-                              ),
+                                  text: dicDetailInfo?.content ?? "",
+                                  maxLine: 150,
+                                  weight: FW.regular,
+                                  align: TextAlign.start,
+                                  height: 1.3),
                             ),
-                            
+
                             // Container(
                             //   padding: const EdgeInsets.symmetric(horizontal: 25),
                             //   margin: const EdgeInsets.only(top: 20.0),
@@ -1100,101 +1168,136 @@ class CommunityDetailPageState extends BaseState<CommunityDetailPage> {
                             //     ),
                             //   ),
                             // ),
-                            //FIXME: youtube 
+                            //FIXME: youtube
                             widget.videoUrl != '' && widget.videoUrl != null
-                            ? Container(
-                              margin: const EdgeInsets.only(left: 25, right: 25, bottom: 25, top: 30),
-                              child: YoutubePlayerIFrame(
-                                controller: _videoController,
-                              ),
-                            )
-                            : Container(
-                              width: MediaQuery.of(context).size.width,
-                              height: arrImgList.length > 0 ? MediaQuery.of(context).size.width - 50 : 0,
-                              margin: const EdgeInsets.only(top: 30.0),
-                              child: StreamBuilder<Object>(
-                                stream: null,
-                                builder: (context, snapshot) {
-                                  return Stack(
-                                    children: <Widget>[
-                                      PageView.builder(
-                                        itemCount: arrImgList.length,
-                                        controller: PageController(viewportFraction: 1),
-                                        itemBuilder: (BuildContext context, int index) {
-                                          return _getImgTiles(index);
-                                        },
-                                        onPageChanged: (int index) => setState(() => _selectedImgIndex = index),
-                                      ),
-                                    ],
-                                  );
-                                },
-                              ),
-                            ),
-                            arrImgList.length > 1 
-                            ? Visibility(
-                              visible: arrImgList.isNotEmpty,
-                              child: Container(
-                                width: MediaQuery.of(context).size.width,
-                                margin: const EdgeInsets.only(top: 5.0),
-                                child: Center(
-                                  child: DotsIndicator(
-                                    dotsCount: arrImgList.isEmpty ? 1 : arrImgList.length,
-                                    position: _selectedImgIndex.toDouble(),
-                                    decorator: DotsDecorator(
-                                      color: const Color(0xFF000000).withOpacity(0.12), // Inactive color
-                                      activeColor: const Color(0xFF332A2F),
+                                ? Container(
+                                    margin: const EdgeInsets.only(
+                                        left: 25,
+                                        right: 25,
+                                        bottom: 25,
+                                        top: 30),
+                                    child: YoutubePlayerIFrame(
+                                      controller: _videoController,
+                                    ),
+                                  )
+                                : Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    height: arrImgList.length > 0
+                                        ? MediaQuery.of(context).size.width - 50
+                                        : 0,
+                                    margin: const EdgeInsets.only(top: 30.0),
+                                    child: StreamBuilder<Object>(
+                                      stream: null,
+                                      builder: (context, snapshot) {
+                                        return Stack(
+                                          children: <Widget>[
+                                            PageView.builder(
+                                              itemCount: arrImgList.length,
+                                              controller: PageController(
+                                                  viewportFraction: 1),
+                                              itemBuilder:
+                                                  (BuildContext context,
+                                                      int index) {
+                                                return _getImgTiles(index);
+                                              },
+                                              onPageChanged: (int index) =>
+                                                  setState(() =>
+                                                      _selectedImgIndex =
+                                                          index),
+                                            ),
+                                          ],
+                                        );
+                                      },
                                     ),
                                   ),
-                                ),
-                              ),
-                            )
-                            : const SizedBox(),
-                            dicDetailInfo?.blogUrl != null && dicDetailInfo?.blogUrl != "" && dicDetailInfo?.topic != "team"
-                            ? Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 25),
-                                margin: const EdgeInsets.only(top: 20, bottom: 15),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    H14(
-                                      text: '▶︎ ${LanguageService.trans('more_details')}', 
-                                      weight: FW.regular,
-                                      align: TextAlign.start,
-                                    ),
-                                  Container(
-                                    margin: const EdgeInsets.only(top: 5),
-                                    child: Linkify(
-                                      onOpen: (link) {
-                                          Navigator.push(
-                                            context, 
-                                            SlideRightTransRoute(builder: (context) => WooStoryWebView(url: link.url))
-                                          );
-                                        },
-                                        text: dicDetailInfo!.blogUrl!.toString(),
+                            arrImgList.length > 1
+                                ? Visibility(
+                                    visible: arrImgList.isNotEmpty,
+                                    child: Container(
+                                      width: MediaQuery.of(context).size.width,
+                                      margin: const EdgeInsets.only(top: 5.0),
+                                      child: Center(
+                                        child: DotsIndicator(
+                                          dotsCount: arrImgList.isEmpty
+                                              ? 1
+                                              : arrImgList.length,
+                                          position:
+                                              _selectedImgIndex.toDouble(),
+                                          decorator: DotsDecorator(
+                                            color: const Color(0xFF000000)
+                                                .withOpacity(
+                                                    0.12), // Inactive color
+                                            activeColor:
+                                                const Color(0xFF332A2F),
+                                          ),
+                                        ),
                                       ),
                                     ),
-                                  ],
-                                ),
-                            )
-                            : const SizedBox(),
+                                  )
+                                : const SizedBox(),
+                            dicDetailInfo?.blogUrl != null &&
+                                    dicDetailInfo?.blogUrl != "" &&
+                                    dicDetailInfo?.topic != "team"
+                                ? Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 25),
+                                    margin: const EdgeInsets.only(
+                                        top: 20, bottom: 15),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        H14(
+                                          text:
+                                              '▶︎ ${LanguageService.trans('more_details')}',
+                                          weight: FW.regular,
+                                          align: TextAlign.start,
+                                        ),
+                                        Container(
+                                          margin: const EdgeInsets.only(top: 5),
+                                          child: Linkify(
+                                            onOpen: (link) {
+                                              Navigator.push(
+                                                  context,
+                                                  SlideRightTransRoute(
+                                                      builder: (context) =>
+                                                          WooStoryWebView(
+                                                              url: link.url)));
+                                            },
+                                            text: dicDetailInfo!.blogUrl!
+                                                .toString(),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                : const SizedBox(),
                             Visibility(
-                              visible: dicDetailInfo != null && dicDetailInfo!.topic! != "life",
+                              visible: dicDetailInfo != null &&
+                                  dicDetailInfo!.topic! != "life",
                               child: Container(
                                 width: 120,
                                 height: 52,
-                                padding: const EdgeInsets.symmetric(horizontal: 25),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 25),
                                 child: InkWell(
                                   onTap: reqCommunityLike,
                                   child: Row(
                                     children: [
                                       Image.asset(
-                                        (dicDetailInfo == null || dicDetailInfo!.likeYn == "n") ? 'assets/ic_like_off.png' : 'assets/ic_like_on.png',
+                                        (dicDetailInfo == null ||
+                                                dicDetailInfo!.likeYn == "n")
+                                            ? 'assets/ic_like_off.png'
+                                            : 'assets/ic_like_on.png',
                                         width: 20,
                                       ),
                                       const SizedBox(width: 5),
                                       H14(
-                                        text: dicDetailInfo == null ? "" : dicDetailInfo!.likeCnt!,
-                                        color: AppColor_BlackText.withOpacity(0.4),
+                                        text: dicDetailInfo == null
+                                            ? ""
+                                            : dicDetailInfo!.likeCnt!,
+                                        color:
+                                            AppColor_BlackText.withOpacity(0.4),
                                         weight: FW.regular,
                                         align: TextAlign.left,
                                       ),
@@ -1209,7 +1312,8 @@ class CommunityDetailPageState extends BaseState<CommunityDetailPage> {
                             ),
                             Container(
                               height: 50,
-                              padding: const EdgeInsets.symmetric(horizontal: 25),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 25),
                               child: Row(
                                 children: [
                                   H14(
@@ -1253,7 +1357,7 @@ class CommunityDetailPageState extends BaseState<CommunityDetailPage> {
                                     color: AppColor_BlackText.withOpacity(0.4),
                                     weight: FW.regular,
                                     align: TextAlign.center,
-                                  ),  
+                                  ),
                                 ),
                               ),
                             ),
@@ -1265,11 +1369,14 @@ class CommunityDetailPageState extends BaseState<CommunityDetailPage> {
                                 controller: controller,
                                 itemBuilder: (BuildContext context, int index) {
                                   final list = arrReplyList[index];
-                                  if(list.delYn == 'y' && list.replyList!.isEmpty) {
+                                  if (list.delYn == 'y' &&
+                                      list.replyList!.isEmpty) {
                                     return const SizedBox();
-                                  } else if(list.delYn == 'y' && list.replyList!.isNotEmpty) {
-                                    final result = list.replyList!.where((e) => e.delYn == 'n');
-                                    if(result.isNotEmpty) {
+                                  } else if (list.delYn == 'y' &&
+                                      list.replyList!.isNotEmpty) {
+                                    final result = list.replyList!
+                                        .where((e) => e.delYn == 'n');
+                                    if (result.isNotEmpty) {
                                       return _getTiles(index);
                                     } else {
                                       return const SizedBox();
@@ -1296,7 +1403,7 @@ class CommunityDetailPageState extends BaseState<CommunityDetailPage> {
                           padding: const EdgeInsets.symmetric(horizontal: 30),
                           child: Row(
                             children: [
-                              //FIXME: 댓글 수정 
+                              //FIXME: 댓글 수정
                               input(_editReply),
                               btnAdd(_editReply),
                             ],
@@ -1316,76 +1423,79 @@ class CommunityDetailPageState extends BaseState<CommunityDetailPage> {
   }
 
   input(bool edit) => Expanded(
-    child: SizedBox(
-      height: MediaQuery.of(context).size.height,
-      child: TextField(
-        textAlignVertical: TextAlignVertical.center,
-        focusNode: replyFocusNode,
-        controller: replyController,
-        keyboardType: TextInputType.multiline,
-        maxLines: null,
-        // textInputAction: TextInputAction.next,
-        decoration: InputDecoration(
-          hintText: edit ? _prevContent : LanguageService.trans("input_reply_hint"),
-          counterText: "",
-          border: InputBorder.none,
-          hintStyle: AppTextStyle.PD(AppColor_Hint, 14, weight: FW.regular),
-          suffixIcon: replyController.text.length > 0 
-            ? GestureDetector(
-            behavior: HitTestBehavior.translucent,
-            onTap: () {
-              replyController.clear();
-              replyContent = '';
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height,
+          child: TextField(
+            textAlignVertical: TextAlignVertical.center,
+            focusNode: replyFocusNode,
+            controller: replyController,
+            keyboardType: TextInputType.multiline,
+            maxLines: null,
+            // textInputAction: TextInputAction.next,
+            decoration: InputDecoration(
+              hintText: edit
+                  ? _prevContent
+                  : LanguageService.trans("input_reply_hint"),
+              counterText: "",
+              border: InputBorder.none,
+              hintStyle: AppTextStyle.PD(AppColor_Hint, 14, weight: FW.regular),
+              suffixIcon: replyController.text.length > 0
+                  ? GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      onTap: () {
+                        replyController.clear();
+                        replyContent = '';
+                        setState(() {});
+                      },
+                      child: const Icon(Icons.clear_rounded,
+                          color: AppColor_Icon, size: 16),
+                    )
+                  : const SizedBox(),
+            ),
+            onChanged: (text) {
+              replyContent = text;
               setState(() {});
             },
-            child: const Icon(Icons.clear_rounded, color: AppColor_Icon, size: 16),
-          )
-          : const SizedBox(),
+          ),
         ),
-        onChanged: (text) {
-          replyContent = text;
-          setState(() {});
-        },
-      ),
-    ),
-  );
+      );
 
   btnAdd(bool edit) => GestureDetector(
-    behavior: HitTestBehavior.translucent,
-    onTap: () {
-      if(edit) {
-        if(replyController.text.length > 0) {
-          _editComment(_editUid, replyContent);
-        } else {
-          _editReply = false;
-          clearInfo();
-          setState(() {});
-        }
-      } else {
-        reqCommentAdd();
-      }
-      // edit ? _editComment(_editUid, replyContent) : reqCommentAdd();
-    },
-    child: SizedBox(
-      width: 50,
-      height: MediaQuery.of(context).size.height,
-      child: Align(
-        alignment: Alignment.centerRight,
-        child: H14(
-          text: edit ? 
-            replyController.text.length > 0 
-              ? LanguageService.trans('edit') 
-              : LanguageService.trans('cancel1')
-            : LanguageService.trans('input'),
-          color: edit ?
-            replyController.text.length > 0 
-              ? AppColor_Primary
-              : AppColor_Red 
-            : AppColor_Primary,
-          weight: FW.medium,
-          align: TextAlign.right,
+        behavior: HitTestBehavior.translucent,
+        onTap: () {
+          if (edit) {
+            if (replyController.text.length > 0) {
+              _editComment(_editUid, replyContent);
+            } else {
+              _editReply = false;
+              clearInfo();
+              setState(() {});
+            }
+          } else {
+            reqCommentAdd();
+          }
+          // edit ? _editComment(_editUid, replyContent) : reqCommentAdd();
+        },
+        child: SizedBox(
+          width: 50,
+          height: MediaQuery.of(context).size.height,
+          child: Align(
+            alignment: Alignment.centerRight,
+            child: H14(
+              text: edit
+                  ? replyController.text.length > 0
+                      ? LanguageService.trans('edit')
+                      : LanguageService.trans('cancel1')
+                  : LanguageService.trans('input'),
+              color: edit
+                  ? replyController.text.length > 0
+                      ? AppColor_Primary
+                      : AppColor_Red
+                  : AppColor_Primary,
+              weight: FW.medium,
+              align: TextAlign.right,
+            ),
+          ),
         ),
-      ),
-    ),
-  );
+      );
 }

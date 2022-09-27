@@ -47,7 +47,8 @@ class ItemGrowthState extends BaseState<ItemGrowth> {
         showToast(value.msg ?? "");
         if (value.result == 106) {
           //token expired
-          Navigator.pushReplacement(context, SlideRightTransRoute(builder: (context) => FirstPage()));
+          Navigator.pushReplacement(
+              context, SlideRightTransRoute(builder: (context) => FirstPage()));
         }
       }
     }).catchError((onError) {
@@ -75,7 +76,9 @@ class ItemGrowthState extends BaseState<ItemGrowth> {
           Stack(
             children: [
               ClipPath(
-                clipper: ShapeBorderClipper(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                clipper: ShapeBorderClipper(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10))),
                 child: ExtendedImage.network(
                   widget.info!.mainImage!,
                   width: 150,
@@ -108,7 +111,9 @@ class ItemGrowthState extends BaseState<ItemGrowth> {
           Container(
             width: 150,
             child: H16(
-              text: ValidPrice(sprintf("%.0f", [double.parse(widget.info!.price!)])) + "원",
+              text: ValidPrice(
+                      sprintf("%.0f", [double.parse(widget.info!.price!)])) +
+                  "원",
               weight: FW.bold,
               maxLine: 1,
               align: TextAlign.start,
@@ -124,7 +129,9 @@ class ItemGrowthState extends BaseState<ItemGrowth> {
                 scrollDirection: Axis.horizontal,
                 itemCount: widget.info!.tags!.split(",").length,
                 itemBuilder: (BuildContext context, int index) {
-                  String tag = widget.info!.tags!.split(",").length > index ? widget.info!.tags!.split(",")[index] : "";
+                  String tag = widget.info!.tags!.split(",").length > index
+                      ? widget.info!.tags!.split(",")[index]
+                      : "";
                   return Container(
                     height: tag == "" ? 0 : 22,
                     padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -148,22 +155,22 @@ class ItemGrowthState extends BaseState<ItemGrowth> {
     );
   }
 
-  // Widget buildtagItem(int index) {
-  //   String tag = widget.info!.tags!.split(",").length > index ? widget.info!.tags!.split(",")[index] : "";
-  //   return Container(
-  //     height: tag == "" ? 0 : 22,
-  //     padding: const EdgeInsets.symmetric(horizontal: 5),
-  //     decoration: BoxDecoration(
-  //       borderRadius: BorderRadius.circular(11.0),
-  //       border: Border.all(color: AppColor_Selector_Border),
-  //     ),
-  //     child: Center(
-  //       child: H14(
-  //         text: tag,
-  //         weight: FW.regular,
-  //         color: AppColor_GrayText,
-  //       ),
-  //     ),
-  //   );
-  // }
+// Widget buildtagItem(int index) {
+//   String tag = widget.info!.tags!.split(",").length > index ? widget.info!.tags!.split(",")[index] : "";
+//   return Container(
+//     height: tag == "" ? 0 : 22,
+//     padding: const EdgeInsets.symmetric(horizontal: 5),
+//     decoration: BoxDecoration(
+//       borderRadius: BorderRadius.circular(11.0),
+//       border: Border.all(color: AppColor_Selector_Border),
+//     ),
+//     child: Center(
+//       child: H14(
+//         text: tag,
+//         weight: FW.regular,
+//         color: AppColor_GrayText,
+//       ),
+//     ),
+//   );
+// }
 }

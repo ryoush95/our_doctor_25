@@ -23,6 +23,8 @@ import 'package:ourdoctor/pages/my/photo_view.dart';
 import 'package:ourdoctor/pages/tab_main.dart';
 import 'package:substring_highlight/substring_highlight.dart';
 
+import 'monitoring_fragment.dart';
+
 class MonitoringResult1Page extends StatefulWidget {
   MonitoringResult1Page({Key? key, required this.uid}) : super(key: key);
 
@@ -924,7 +926,7 @@ class MonitoringResult1PageState extends BaseState<MonitoringResult1Page> {
                               ),
                               InkWell(
                                 onTap: () {
-                                  Navigator.pushReplacement(context, SlideRightTransRoute(builder: (context) => TabMainPage(pageIdx: 2, infoTabIdx: curCategory)));
+                                  Navigator.pushReplacement(context, SlideRightTransRoute(builder: (context) => MonitoringFragment(type: 0, pageType: curCategory)));
                                 },
                                 child: Container(
                                   width: (MediaQuery.of(context).size.width - 66) / 2,

@@ -40,7 +40,12 @@ import 'package:ourdoctor/pages/monitoring/second_step.dart';
 import 'package:show_more_text_popup/show_more_text_popup.dart';
 
 class FirstStepPage extends StatefulWidget {
-  FirstStepPage({Key? key, required this.selPhysical, required this.selBrain, this.uid = ""}) : super(key: key);
+  FirstStepPage(
+      {Key? key,
+      required this.selPhysical,
+      required this.selBrain,
+      this.uid = ""})
+      : super(key: key);
 
   List<int>? selPhysical;
   List<int>? selBrain;
@@ -143,7 +148,14 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
 
     _listController = ScrollController();
     if (monitoringData == null ||
-        (monitoringData!.height == "" && monitoringData!.weight == "" && monitoringData!.nutrition == "0,0,0,0") && monitoringData!.sleep_at_night == "" && monitoringData!.sleep_at_lunch == "" && monitoringData!.language == "" && monitoringData!.sociability == "" && monitoringData!.work_out == "") {
+        (monitoringData!.height == "" &&
+                monitoringData!.weight == "" &&
+                monitoringData!.nutrition == "0,0,0,0") &&
+            monitoringData!.sleep_at_night == "" &&
+            monitoringData!.sleep_at_lunch == "" &&
+            monitoringData!.language == "" &&
+            monitoringData!.sociability == "" &&
+            monitoringData!.work_out == "") {
       //새로 추가
       monitoringData = MonitoringDayDto();
 
@@ -156,7 +168,6 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
       monitoringData!.language = "";
       monitoringData!.sociability = "";
       monitoringData!.work_out = "";
-
 
       if (monitoringData!.symptom_list == null) {
         monitoringData!.symptom_list = [];
@@ -196,22 +207,25 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
       heightInputController.text = monitoringData!.height!;
       weightInputController.text = monitoringData!.weight!;
 
-      int sleep_at_lunch = int.parse(monitoringData!.sleep_at_lunch! == "" ? "0" : monitoringData!.sleep_at_lunch!);
-      int sleep_at_night = int.parse(monitoringData!.sleep_at_night! == "" ? "0" : monitoringData!.sleep_at_night!);
+      int sleep_at_lunch = int.parse(monitoringData!.sleep_at_lunch! == ""
+          ? "0"
+          : monitoringData!.sleep_at_lunch!);
+      int sleep_at_night = int.parse(monitoringData!.sleep_at_night! == ""
+          ? "0"
+          : monitoringData!.sleep_at_night!);
 
-      if(sleep_at_night >= (60 * 13)) {
-        sleep_night_hour = (sleep_at_night ~/60).toString() + "시간 이상";
+      if (sleep_at_night >= (60 * 13)) {
+        sleep_night_hour = (sleep_at_night ~/ 60).toString() + "시간 이상";
       } else {
-        sleep_night_hour = (sleep_at_night ~/60).toString() + "시간";
+        sleep_night_hour = (sleep_at_night ~/ 60).toString() + "시간";
       }
 
-      if(sleep_at_lunch >= (60 * 7)) {
-        sleep_launch_hour = (sleep_at_lunch ~/60).toString() + "시간 이상";
+      if (sleep_at_lunch >= (60 * 7)) {
+        sleep_launch_hour = (sleep_at_lunch ~/ 60).toString() + "시간 이상";
       } else {
-        sleep_launch_hour = (sleep_at_lunch ~/60).toString() + "시간";
+        sleep_launch_hour = (sleep_at_lunch ~/ 60).toString() + "시간";
       }
 
-      
       // sleep_night_hour = (sleep_at_night ~/ 60).toString() + "시간";
       sleep_night_min = (sleep_at_night % 60).toString() + "분";
       // sleep_launch_hour = (sleep_at_lunch ~/ 60).toString() + "시간";
@@ -240,10 +254,11 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
       }
 
       //재입력시 칼로리 비우기
-      if(monitoringData!.nutrition!.isNotEmpty) {
-        for(int i=0; i<4; i++){
+      if (monitoringData!.nutrition!.isNotEmpty) {
+        for (int i = 0; i < 4; i++) {
           selNutrition.add(i);
-          nutritionalStatus1[i] = '${monitoringData!.nutrition!.split(",")[i]}\nkcal';
+          nutritionalStatus1[i] =
+              '${monitoringData!.nutrition!.split(",")[i]}\nkcal';
         }
         setState(() {});
       }
@@ -271,7 +286,8 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
       if (monitoringData!.symptom_list!.isNotEmpty) {
         hasDisease = 1;
         for (int i = 0; i < monitoringData!.symptom_list!.length; i++) {
-          MonitoringSymptomDto item = monitoringData!.symptom_list!.elementAt(i);
+          MonitoringSymptomDto item =
+              monitoringData!.symptom_list!.elementAt(i);
 
           MonitoringSymptomDto info = MonitoringSymptomDto();
           info.category = item.category;
@@ -281,11 +297,15 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
           info.surgey_time = item.surgey_time;
           info.medication = item.medication;
 
-          recordTimeControllerList.add(TextEditingController(text: info.record_time));
-          surgeryControllerList.add(TextEditingController(text: info.surgey_name));
-          surgeryDateControllerList.add(TextEditingController(text: info.surgey_time));
+          recordTimeControllerList
+              .add(TextEditingController(text: info.record_time));
+          surgeryControllerList
+              .add(TextEditingController(text: info.surgey_name));
+          surgeryDateControllerList
+              .add(TextEditingController(text: info.surgey_time));
           if (info.category == "직접입력") {
-            directInputController.add(TextEditingController(text: info.symptom));
+            directInputController
+                .add(TextEditingController(text: info.symptom));
           } else {
             directInputController.add(TextEditingController());
           }
@@ -500,7 +520,7 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
     }
     final lunch_hour;
     final launch_min;
-    if(sleep_launch_hour.contains("이상")) {
+    if (sleep_launch_hour.contains("이상")) {
       lunch_hour = int.parse(sleep_launch_hour.replaceAll("시간 이상", ""));
       sleep_launch_min = "0분";
       launch_min = int.parse(sleep_launch_min.replaceAll("분", ""));
@@ -510,10 +530,10 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
     }
 
     // int launch_hour = int.parse(sleep_launch_hour.replaceAll("시간", ""));
-    
+
     final night_hour;
     final night_min;
-    if(sleep_night_hour.contains("이상")) {
+    if (sleep_night_hour.contains("이상")) {
       night_hour = int.parse(sleep_night_hour.replaceAll("시간 이상", ""));
       sleep_night_min = "0분";
       night_min = int.parse(sleep_night_min.replaceAll("분", ""));
@@ -539,10 +559,19 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
         String category = monitoringData!.symptom_list![i].category!;
         //질병
         if (category == "직접입력") {
-          monitoringData!.symptom_list![i].symptom = directInputController[i].text;
+          monitoringData!.symptom_list![i].symptom =
+              directInputController[i].text;
         }
       }
-      String _recv = await Navigator.push(context, SlideRightTransRoute(builder: (context) => SecondStepPage(selBrain: widget.selBrain, hasDisease: hasDisease, surgeryList: surgeryList, hasphotoList: hasphotoList, uid: uid)));
+      String _recv = await Navigator.push(
+          context,
+          SlideRightTransRoute(
+              builder: (context) => SecondStepPage(
+                  selBrain: widget.selBrain,
+                  hasDisease: hasDisease,
+                  surgeryList: surgeryList,
+                  hasphotoList: hasphotoList,
+                  uid: uid)));
       if (_recv != null && _recv != "") {
         // uid = _recv;
         Navigator.pop(context, _recv);
@@ -552,7 +581,8 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
 
   Future<void> showBirthdayDlg(index) async {
     FocusScope.of(context).requestFocus(FocusNode());
-    var _result = await showDialog(context: context, builder: (_) => SelectDate1Dialog(type: 1));
+    var _result = await showDialog(
+        context: context, builder: (_) => SelectDate1Dialog(type: 1));
     if (_result != null && _result != "") {
       // birthInputController.text = birth;
       monitoringData!.symptom_list![index].record_time = _result;
@@ -568,7 +598,8 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
 
   Future<void> showSurgerydateDlg(index) async {
     FocusScope.of(context).requestFocus(FocusNode());
-    var _result = await showDialog(context: context, builder: (_) => SelectDate1Dialog(type: 2));
+    var _result = await showDialog(
+        context: context, builder: (_) => SelectDate1Dialog(type: 2));
     if (_result != null && _result != "") {
       surgery_date = _result;
       surgeryDateControllerList[index].text = surgery_date;
@@ -581,7 +612,9 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
     showDialog(
         context: context,
         builder: (context) {
-          return PhotoDialog(onGallery: getGalleryImageAndCrop, onCamera: getCameraImageAndCrop);
+          return PhotoDialog(
+              onGallery: getGalleryImageAndCrop,
+              onCamera: getCameraImageAndCrop);
         });
   }
 
@@ -616,7 +649,12 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
       aspectRatioPresets: [
         CropAspectRatioPreset.square,
       ],
-      androidUiSettings: AndroidUiSettings(toolbarTitle: LanguageService.trans('image_crop'), toolbarColor: Colors.white, toolbarWidgetColor: Colors.black, initAspectRatio: CropAspectRatioPreset.original, lockAspectRatio: false),
+      androidUiSettings: AndroidUiSettings(
+          toolbarTitle: LanguageService.trans('image_crop'),
+          toolbarColor: Colors.white,
+          toolbarWidgetColor: Colors.black,
+          initAspectRatio: CropAspectRatioPreset.original,
+          lockAspectRatio: false),
     );
     return croppedFile;
   }
@@ -657,10 +695,12 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
   //모니터링 기록
   Future<void> saveMonitoring() async {
     DateFormat dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss");
-    String monitoring_time = dateFormat.format(DateTime.now()); //앱내 모니터링 날짜(yyyy-MM-dd HH:mm:ss)
+    String monitoring_time =
+        dateFormat.format(DateTime.now()); //앱내 모니터링 날짜(yyyy-MM-dd HH:mm:ss)
     String height = monitoringData!.height!; //신장
     String weight = monitoringData!.weight!; //몸무게
-    String nutrition = monitoringData!.nutrition!; //카로리(아침,점심,간식,저녁), 반점으로 구분, 없으면 0
+    String nutrition =
+        monitoringData!.nutrition!; //카로리(아침,점심,간식,저녁), 반점으로 구분, 없으면 0
     String sleep_at_night = monitoringData!.sleep_at_night!; //밤잠
     String sleep_at_lunch = monitoringData!.sleep_at_lunch!; //낮잠
     String symptom_list = ""; //질병데이터 json 리스트(예시대로 올려야 함)
@@ -717,14 +757,29 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
       isLoading = true;
     });
 
-    Future<MonitoringRecordResModel> info = httpService.monitoringRecord(monitoring_time, height, weight, nutrition, sleep_at_night, sleep_at_lunch, symptom_list, language, sociability, work_out, uid);
+    Future<MonitoringRecordResModel> info = httpService.monitoringRecord(
+        monitoring_time,
+        height,
+        weight,
+        nutrition,
+        sleep_at_night,
+        sleep_at_lunch,
+        symptom_list,
+        language,
+        sociability,
+        work_out,
+        uid);
     info.then((MonitoringRecordResModel value) async {
       setState(() {
         isLoading = false;
       });
       if (value.result == 0) {
         LocalService.setMonitoringStatus("1");
-        String _recv = await Navigator.push(context, SlideRightTransRoute(builder: (context) => MonitoringResult1Page(uid: value.data!.id)));
+        String _recv = await Navigator.push(
+            context,
+            SlideRightTransRoute(
+                builder: (context) =>
+                    MonitoringResult1Page(uid: value.data!.id)));
         if (_recv != null && _recv != "") {
           Navigator.pop(context, _recv);
         }
@@ -732,7 +787,8 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
         if (value.result == 106) {
           //token expired
           showToast(value.msg ?? "");
-          Navigator.pushReplacement(context, SlideRightTransRoute(builder: (context) => FirstPage()));
+          Navigator.pushReplacement(
+              context, SlideRightTransRoute(builder: (context) => FirstPage()));
         } else if (value.result == 203) {
           showToast("오늘 이미 모니터링을 하셨습니다.");
         } else {
@@ -771,19 +827,27 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
 
   //수면
   String getThirdName() {
-    if (!widget.selPhysical!.contains(0) && !widget.selPhysical!.contains(1) && !widget.selPhysical!.contains(3)) {
+    if (!widget.selPhysical!.contains(0) &&
+        !widget.selPhysical!.contains(1) &&
+        !widget.selPhysical!.contains(3)) {
       return "1. 어제의 수면 시간을 기록해주세요.";
     }
 
-    if (!widget.selPhysical!.contains(0) && widget.selPhysical!.contains(1) && widget.selPhysical!.contains(3)) {
+    if (!widget.selPhysical!.contains(0) &&
+        widget.selPhysical!.contains(1) &&
+        widget.selPhysical!.contains(3)) {
       return "3. 어제의 수면 시간을 기록해주세요.";
     }
 
-    if (widget.selPhysical!.contains(0) && !widget.selPhysical!.contains(1) && widget.selPhysical!.contains(3)) {
+    if (widget.selPhysical!.contains(0) &&
+        !widget.selPhysical!.contains(1) &&
+        widget.selPhysical!.contains(3)) {
       return "3. 어제의 수면 시간을 기록해주세요.";
     }
 
-    if (widget.selPhysical!.contains(0) && widget.selPhysical!.contains(1) && widget.selPhysical!.contains(3)) {
+    if (widget.selPhysical!.contains(0) &&
+        widget.selPhysical!.contains(1) &&
+        widget.selPhysical!.contains(3)) {
       return "3. 어제의 수면 시간을 기록해주세요.";
     }
 
@@ -792,27 +856,45 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
 
   //질병
   String getFourName() {
-    if (!widget.selPhysical!.contains(0) && !widget.selPhysical!.contains(1) && !widget.selPhysical!.contains(2) && !widget.selPhysical!.contains(3)) {
+    if (!widget.selPhysical!.contains(0) &&
+        !widget.selPhysical!.contains(1) &&
+        !widget.selPhysical!.contains(2) &&
+        !widget.selPhysical!.contains(3)) {
       return "1. 어제의 수면 시간을 기록해주세요.";
     }
 
-    if (widget.selPhysical!.contains(0) && widget.selPhysical!.contains(1) && widget.selPhysical!.contains(2) && widget.selPhysical!.contains(3)) {
+    if (widget.selPhysical!.contains(0) &&
+        widget.selPhysical!.contains(1) &&
+        widget.selPhysical!.contains(2) &&
+        widget.selPhysical!.contains(3)) {
       return "4. 오늘의 질병 현황을 기록해주세요.";
     }
 
-    if (!widget.selPhysical!.contains(0) && widget.selPhysical!.contains(1) && !widget.selPhysical!.contains(2) && !widget.selPhysical!.contains(3)) {
+    if (!widget.selPhysical!.contains(0) &&
+        widget.selPhysical!.contains(1) &&
+        !widget.selPhysical!.contains(2) &&
+        !widget.selPhysical!.contains(3)) {
       return "2. 오늘의 질병 현황을 기록해주세요.";
     }
 
-    if (widget.selPhysical!.contains(0) && !widget.selPhysical!.contains(1) && !widget.selPhysical!.contains(2) && !widget.selPhysical!.contains(3)) {
+    if (widget.selPhysical!.contains(0) &&
+        !widget.selPhysical!.contains(1) &&
+        !widget.selPhysical!.contains(2) &&
+        !widget.selPhysical!.contains(3)) {
       return "2. 오늘의 질병 현황을 기록해주세요.";
     }
 
-    if (!widget.selPhysical!.contains(0) && !widget.selPhysical!.contains(1) && widget.selPhysical!.contains(2) && !widget.selPhysical!.contains(3)) {
+    if (!widget.selPhysical!.contains(0) &&
+        !widget.selPhysical!.contains(1) &&
+        widget.selPhysical!.contains(2) &&
+        !widget.selPhysical!.contains(3)) {
       return "2. 오늘의 질병 현황을 기록해주세요.";
     }
 
-    if (!widget.selPhysical!.contains(0) && !widget.selPhysical!.contains(1) && !widget.selPhysical!.contains(2) && widget.selPhysical!.contains(3)) {
+    if (!widget.selPhysical!.contains(0) &&
+        !widget.selPhysical!.contains(1) &&
+        !widget.selPhysical!.contains(2) &&
+        widget.selPhysical!.contains(3)) {
       return "2. 오늘의 질병 현황을 기록해주세요.";
     }
 
@@ -872,7 +954,8 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
                         const SizedBox(height: 20),
                         //키와 체중
                         Visibility(
-                          visible: widget.selPhysical!.contains(0) || widget.selPhysical!.contains(1),
+                          visible: widget.selPhysical!.contains(0) ||
+                              widget.selPhysical!.contains(1),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -907,16 +990,20 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
                                           children: [
                                             Expanded(
                                               child: OutlineNumInput(
-                                                controller: heightInputController,
-                                                keyboardType: const TextInputType.numberWithOptions(
+                                                controller:
+                                                    heightInputController,
+                                                keyboardType:
+                                                    const TextInputType
+                                                        .numberWithOptions(
                                                   decimal: true,
                                                   signed: true,
                                                 ),
-                                                textInputAction: TextInputAction.done,
+                                                textInputAction:
+                                                    TextInputAction.done,
                                                 placeholder: "",
                                                 onChanged: (text) {
                                                   monitoringData!.height = text;
-                                                  setState((){});
+                                                  setState(() {});
                                                   checkValid();
                                                 },
                                               ),
@@ -924,7 +1011,7 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
                                             const SizedBox(width: 10),
                                             H17(
                                               text: LanguageService.trans("cm"),
-                                              weight: FW.medium, 
+                                              weight: FW.medium,
                                               color: AppColor_BlackText,
                                             ),
                                           ],
@@ -943,12 +1030,16 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
                                           children: [
                                             Expanded(
                                               child: OutlineNumInput(
-                                                controller: weightInputController,
-                                                keyboardType: const TextInputType.numberWithOptions(
+                                                controller:
+                                                    weightInputController,
+                                                keyboardType:
+                                                    const TextInputType
+                                                        .numberWithOptions(
                                                   decimal: true,
                                                   signed: true,
                                                 ),
-                                                textInputAction: TextInputAction.done,
+                                                textInputAction:
+                                                    TextInputAction.done,
                                                 placeholder: "",
                                                 onChanged: (text) {
                                                   monitoringData!.weight = text;
@@ -978,14 +1069,24 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              H16(text: getSecondName(), weight: FW.medium, color: AppColor_BlackText, align: TextAlign.start),
+                              H16(
+                                  text: getSecondName(),
+                                  weight: FW.medium,
+                                  color: AppColor_BlackText,
+                                  align: TextAlign.start),
                               const SizedBox(height: 12),
                               GridView.builder(
                                   shrinkWrap: true,
                                   physics: const NeverScrollableScrollPhysics(),
                                   itemCount: nutritionalStatus.length,
-                                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4, childAspectRatio: 1, mainAxisSpacing: 5, crossAxisSpacing: 3),
-                                  itemBuilder: (BuildContext context, int index) {
+                                  gridDelegate:
+                                      const SliverGridDelegateWithFixedCrossAxisCount(
+                                          crossAxisCount: 4,
+                                          childAspectRatio: 1,
+                                          mainAxisSpacing: 5,
+                                          crossAxisSpacing: 3),
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
                                     // return AppCheckboxFill(
                                     //   text: nutritionalStatus[index],
                                     //   checked: false,
@@ -998,8 +1099,14 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
                                     // );
                                     return InkWell(
                                       onTap: () async {
-                                        FocusScope.of(context).requestFocus(FocusNode());
-                                        String received = await Navigator.push(context, SlideRightTransRoute(builder: (context) => CaloriCalcPage(type: index)));
+                                        FocusScope.of(context)
+                                            .requestFocus(FocusNode());
+                                        String received = await Navigator.push(
+                                            context,
+                                            SlideRightTransRoute(
+                                                builder: (context) =>
+                                                    CaloriCalcPage(
+                                                        type: index)));
                                         if (received != "") {
                                           /*
                                       if (selNutrition.contains(index)) {
@@ -1019,36 +1126,51 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
                                         checkValid();
                                       }
                                        */
-                                        if (!selNutrition.contains(index)) {
+                                          if (!selNutrition.contains(index)) {
                                             selNutrition.add(index);
                                           }
-                                        if(received != "0"){
-                                          nutritionalStatus1[index] = received + "\nkcal";
-                                        } else {
-                                          nutritionalStatus1[index] = "";
-                                        }
+                                          if (received != "0") {
+                                            nutritionalStatus1[index] =
+                                                received + "\nkcal";
+                                          } else {
+                                            nutritionalStatus1[index] = "";
+                                          }
                                           // nutritionalStatus1[index] = received + "\nkcal";
-                                          var arr = monitoringData!.nutrition!.split(",");
-                                          if(received != "0"){
+                                          var arr = monitoringData!.nutrition!
+                                              .split(",");
+                                          if (received != "0") {
                                             arr[index] = received;
                                           } else {
                                             arr[index] = "";
                                           }
                                           // arr[index] = received;
-                                          monitoringData!.nutrition = arr.join(",");
+                                          monitoringData!.nutrition =
+                                              arr.join(",");
                                           checkValid();
                                         }
                                       },
                                       child: Container(
                                         height: 70,
-                                        padding: const EdgeInsets.symmetric(horizontal: 10.00),
-                                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(25.0), color: selNutrition.contains(index) ? AppColor_Primary : AppColor_BlackText.withOpacity(0.05)),
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 10.00),
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(25.0),
+                                            color: selNutrition.contains(index)
+                                                ? AppColor_Primary
+                                                : AppColor_BlackText
+                                                    .withOpacity(0.05)),
                                         child: Center(
                                           child: H18(
-                                            text: selNutrition.contains(index) ? nutritionalStatus1[index] : nutritionalStatus[index],
+                                            text: selNutrition.contains(index)
+                                                ? nutritionalStatus1[index]
+                                                : nutritionalStatus[index],
                                             weight: FW.medium,
                                             maxLine: 3,
-                                            color: selNutrition.contains(index) ? AppColor_White : AppColor_BlackText.withOpacity(0.5),
+                                            color: selNutrition.contains(index)
+                                                ? AppColor_White
+                                                : AppColor_BlackText
+                                                    .withOpacity(0.5),
                                           ),
                                         ),
                                       ),
@@ -1064,11 +1186,19 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              H16(text: getThirdName(), weight: FW.medium, color: AppColor_BlackText, align: TextAlign.start),
+                              H16(
+                                  text: getThirdName(),
+                                  weight: FW.medium,
+                                  color: AppColor_BlackText,
+                                  align: TextAlign.start),
                               const SizedBox(height: 18),
                               SizedBox(
                                 width: MediaQuery.of(context).size.width,
-                                child: H16(text: "낮잠 수면 시간", weight: FW.medium, color: AppColor_BlackText, align: TextAlign.start),
+                                child: H16(
+                                    text: "낮잠 수면 시간",
+                                    weight: FW.medium,
+                                    color: AppColor_BlackText,
+                                    align: TextAlign.start),
                               ),
                               const SizedBox(height: 10),
                               Row(
@@ -1080,10 +1210,15 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
                                         categoryList: timeList1,
                                         onSelect: (selectedCategory) {
                                           setState(() {
-                                            if(sleep_launch_hour == timeList1[timeList1.length - 1]) {
-                                              sleep_launch_hour = selectedCategory!.split(" ")[0];
+                                            if (sleep_launch_hour ==
+                                                timeList1[
+                                                    timeList1.length - 1]) {
+                                              sleep_launch_hour =
+                                                  selectedCategory!
+                                                      .split(" ")[0];
                                             } else {
-                                              sleep_launch_hour = selectedCategory!;
+                                              sleep_launch_hour =
+                                                  selectedCategory!;
                                             }
                                             checkValid();
                                             //getDistrictList();
@@ -1099,7 +1234,8 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
                                         categoryList: timeList2,
                                         onSelect: (selectedCategory) {
                                           setState(() {
-                                            sleep_launch_min = selectedCategory!;
+                                            sleep_launch_min =
+                                                selectedCategory!;
                                             checkValid();
                                             //getDistrictList();
                                           });
@@ -1109,7 +1245,11 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
                                 ],
                               ),
                               const SizedBox(height: 35),
-                              H16(text: "밤잠 수면 시간", weight: FW.medium, color: AppColor_BlackText, align: TextAlign.start),
+                              H16(
+                                  text: "밤잠 수면 시간",
+                                  weight: FW.medium,
+                                  color: AppColor_BlackText,
+                                  align: TextAlign.start),
                               const SizedBox(height: 10),
                               Row(
                                 children: [
@@ -1120,7 +1260,8 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
                                         categoryList: timeList3,
                                         onSelect: (selectedCategory) {
                                           setState(() {
-                                            sleep_night_hour = selectedCategory!;
+                                            sleep_night_hour =
+                                                selectedCategory!;
                                             checkValid();
                                             //getDistrictList();
                                           });
@@ -1154,7 +1295,11 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              H16(text: getFourName(), weight: FW.medium, color: AppColor_BlackText, align: TextAlign.start),
+                              H16(
+                                  text: getFourName(),
+                                  weight: FW.medium,
+                                  color: AppColor_BlackText,
+                                  align: TextAlign.start),
                               const SizedBox(height: 15),
                               SizedBox(
                                 height: 40,
@@ -1169,12 +1314,18 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
                                       child: Row(
                                         children: [
                                           Image.asset(
-                                            hasDisease == 1 ? "assets/ic_option_on.png" : "assets/ic_option_off.png",
+                                            hasDisease == 1
+                                                ? "assets/ic_option_on.png"
+                                                : "assets/ic_option_off.png",
                                             width: 25,
                                             height: 25,
                                           ),
                                           const SizedBox(width: 10),
-                                          H16(text: LanguageService.trans("exist"), weight: FW.medium, color: AppColor_BlackText),
+                                          H16(
+                                              text: LanguageService.trans(
+                                                  "exist"),
+                                              weight: FW.medium,
+                                              color: AppColor_BlackText),
                                         ],
                                       ),
                                     ),
@@ -1188,12 +1339,18 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
                                       child: Row(
                                         children: [
                                           Image.asset(
-                                            hasDisease == 2 ? "assets/ic_option_on.png" : "assets/ic_option_off.png",
+                                            hasDisease == 2
+                                                ? "assets/ic_option_on.png"
+                                                : "assets/ic_option_off.png",
                                             width: 25,
                                             height: 25,
                                           ),
                                           const SizedBox(width: 10),
-                                          H16(text: LanguageService.trans("none"), weight: FW.medium, color: AppColor_BlackText),
+                                          H16(
+                                              text:
+                                                  LanguageService.trans("none"),
+                                              weight: FW.medium,
+                                              color: AppColor_BlackText),
                                         ],
                                       ),
                                     ),
@@ -1205,14 +1362,17 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
                                   child: ListView.builder(
                                     shrinkWrap: true,
                                     itemBuilder: _itemBuilder,
-                                    itemCount: monitoringData!.symptom_list!.length,
+                                    itemCount:
+                                        monitoringData!.symptom_list!.length,
                                     controller: _listController,
                                   )),
                               const SizedBox(height: 10),
                               Container(
                                 height: 45,
                                 width: double.infinity,
-                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(14), color: AppColor_Light_Gray),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(14),
+                                    color: AppColor_Light_Gray),
                                 child: InkWell(
                                     onTap: () {
                                       if (hasDisease == 1) {
@@ -1225,7 +1385,8 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
                                     },
                                     child: Center(
                                         child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
                                         Image.asset(
                                           "assets/add_circle_black_24dp.png",
@@ -1233,7 +1394,11 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
                                           height: 25,
                                         ),
                                         const SizedBox(width: 5),
-                                        H16(text: LanguageService.trans("add_disease"), weight: FW.medium, color: AppColor_Primary),
+                                        H16(
+                                            text: LanguageService.trans(
+                                                "add_disease"),
+                                            weight: FW.medium,
+                                            color: AppColor_Primary),
                                       ],
                                     ))),
                               ),
@@ -1266,7 +1431,8 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
                   radius: 0,
                   height: 66,
                   disable: !isValid,
-                  disableBackground: !isValid ? AppColor_Primary_Disable : Colors.transparent,
+                  disableBackground:
+                      !isValid ? AppColor_Primary_Disable : Colors.transparent,
                   onPressed: () {
                     if (!isValid) {
                       return;
@@ -1288,303 +1454,384 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
             width: screenSize.width - 60,
             padding: const EdgeInsets.symmetric(horizontal: 20),
             decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
-            child: Column(mainAxisSize: MainAxisSize.min, mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.start, children: [
-              const SizedBox(height: 20),
-              Row(
+            child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  const SizedBox(height: 20),
+                  Row(
+                    children: [
+                      H16(
+                        text: LanguageService.trans(
+                            "please_select_a_disease_category"),
+                        weight: FW.medium,
+                        color: AppColor_BlackText,
+                        align: TextAlign.left,
+                      ),
+                      Expanded(child: Container()),
+                      InkWell(
+                        onTap: () {
+                          // foodAddList.removeAt(index);
+                          // checkValid();
+                          // setState(() {});
+                          delSymptom(index);
+                        },
+                        child: Visibility(
+                          visible: index > 0,
+                          child: Image.asset(
+                            'assets/ic_delete.png',
+                            width: 20,
+                            height: 20,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Selector(
+                      selectedCategory: category[index],
+                      categoryList: categoryList[index],
+                      onSelect: (selectedCategory) {
+                        setState(() {
+                          selSymtomidx = index;
+                          category[index] = selectedCategory!;
+                          monitoringData!.symptom_list![index].category =
+                              selectedCategory;
+                          if (selectedCategory == "직접입력") {
+                            checkValid();
+                          } else {
+                            getSymtomList();
+                          }
+                        });
+                      },
+                      hint: "질병 카테고리를 선택해주세요"),
+                  const SizedBox(height: 10),
+                  Visibility(
+                    visible:
+                        monitoringData!.symptom_list![index].category != "직접입력",
+                    child: Selector(
+                        selectedCategory: symptom[index],
+                        categoryList: symptomList[index],
+                        onSelect: (selectedCategory) {
+                          setState(() {
+                            selSymtomidx = index;
+                            symptom[index] = selectedCategory!;
+                            monitoringData!.symptom_list![index].symptom =
+                                selectedCategory;
+                            checkValid();
+                          });
+                        },
+                        hint: "증상을 선택해주세요"),
+                  ),
+                  Visibility(
+                    visible:
+                        monitoringData!.symptom_list![index].category == "직접입력",
+                    child: Container(
+                      height: 52,
+                      child: OutlineInput(
+                        controller: directInputController[index],
+                        keyboardType: TextInputType.text,
+                        textInputAction: TextInputAction.next,
+                        onEditingComplete: () => node.nextFocus(),
+                        placeholder: "증상을 입력해주세요.",
+                        onChanged: (text) => {
+                          directInputController[index].text = text,
+                          checkValid()
+                        },
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 40),
                   H16(
-                    text: LanguageService.trans("please_select_a_disease_category"),
+                    text: LanguageService.trans(
+                        "please_record_the_time_of_diagnosis_of_the_disease"),
                     weight: FW.medium,
                     color: AppColor_BlackText,
                     align: TextAlign.left,
+                    height: 1.3,
                   ),
-                  Expanded(child: Container()),
-                  InkWell(
-                    onTap: () {
-                      // foodAddList.removeAt(index);
-                      // checkValid();
-                      // setState(() {});
-                      delSymptom(index);
-                    },
-                    child: Visibility(
-                      visible: index > 0,
-                      child: Image.asset(
-                        'assets/ic_delete.png',
-                        width: 20,
-                        height: 20,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 10),
-              Selector(
-                  selectedCategory: category[index],
-                  categoryList: categoryList[index],
-                  onSelect: (selectedCategory) {
-                    setState(() {
-                      selSymtomidx = index;
-                      category[index] = selectedCategory!;
-                      monitoringData!.symptom_list![index].category = selectedCategory;
-                      if (selectedCategory == "직접입력") {
-                        checkValid();
-                      } else {
-                        getSymtomList();
-                      }
-                    });
-                  },
-                  hint: "질병 카테고리를 선택해주세요"),
-              const SizedBox(height: 10),
-              Visibility(
-                visible: monitoringData!.symptom_list![index].category != "직접입력",
-                child: Selector(
-                    selectedCategory: symptom[index],
-                    categoryList: symptomList[index],
-                    onSelect: (selectedCategory) {
-                      setState(() {
-                        selSymtomidx = index;
-                        symptom[index] = selectedCategory!;
-                        monitoringData!.symptom_list![index].symptom = selectedCategory;
-                        checkValid();
-                      });
-                    },
-                    hint: "증상을 선택해주세요"),
-              ),
-              Visibility(
-                visible: monitoringData!.symptom_list![index].category == "직접입력",
-                child: Container(
-                  height: 52,
-                  child: OutlineInput(
-                    controller: directInputController[index],
-                    keyboardType: TextInputType.text,
-                    textInputAction: TextInputAction.next,
-                    onEditingComplete: () => node.nextFocus(),
-                    placeholder: "증상을 입력해주세요.",
-                    onChanged: (text) => {directInputController[index].text = text, checkValid()},
-                  ),
-                ),
-              ),
-              const SizedBox(height: 40),
-              H16(
-                text: LanguageService.trans("please_record_the_time_of_diagnosis_of_the_disease"),
-                weight: FW.medium,
-                color: AppColor_BlackText,
-                align: TextAlign.left,
-                height: 1.3,
-              ),
-              const SizedBox(height: 10),
-              SizedBox(
-                height: 55,
-                child: TextField(
-                  style: AppTextStyle.PD(AppColor_BlackText, 16, weight: FW.medium),
-                  controller: recordTimeControllerList[index],
-                  onEditingComplete: () => node.nextFocus(),
-                  maxLines: 1,
-                  maxLength: -1,
-                  keyboardType: TextInputType.text,
-                  textAlignVertical: TextAlignVertical.center,
-                  textAlign: TextAlign.start,
-                  textInputAction: TextInputAction.next,
-                  enableInteractiveSelection: false,
-                  focusNode: AlwaysDisabledFocusNode(),
-                  onTap: () {
-                    showBirthdayDlg(index);
-                  },
-                  // onChanged: (text) => {,},
-                  decoration: InputDecoration(
-                    counterText: "",
-                    enabledBorder: const OutlineInputBorder(borderSide: BorderSide(color: AppColor_Selector_Border), borderRadius: BorderRadius.all(Radius.circular(12.0))),
-                    focusedBorder: const OutlineInputBorder(borderSide: BorderSide(color: AppColor_BlackText), borderRadius: BorderRadius.all(Radius.circular(12.0))),
-                    hintText: "YYMMDD",
-                    hintStyle: AppTextStyle.PD(AppColor_Hint, 16, weight: FW.medium),
-                    border: InputBorder.none,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 46),
-              H16(text: LanguageService.trans("please_record_whether_the_disease_was_operated_tested"), weight: FW.medium, color: AppColor_BlackText, align: TextAlign.left, maxLine: 3, height: 1.3),
-              const SizedBox(height: 21),
-              SizedBox(
-                height: 40,
-                child: Row(
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        surgeryList[index] = 1;
-                        checkValid();
-                        setState(() {});
-                      },
-                      child: Row(
-                        children: [
-                          Image.asset(
-                            surgeryList[index] == 1 ? "assets/ic_option_on.png" : "assets/ic_option_off.png",
-                            width: 25,
-                            height: 25,
-                          ),
-                          const SizedBox(width: 10),
-                          H16(text: LanguageService.trans("있음"), weight: FW.medium, color: AppColor_BlackText),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 25),
-                    InkWell(
-                      onTap: () {
-                        surgeryList[index] = 2;
-                        checkValid();
-                        setState(() {});
-                      },
-                      child: Row(
-                        children: [
-                          Image.asset(
-                            surgeryList[index] == 2 ? "assets/ic_option_on.png" : "assets/ic_option_off.png",
-                            width: 25,
-                            height: 25,
-                          ),
-                          const SizedBox(width: 10),
-                          H16(text: LanguageService.trans("없음"), weight: FW.medium, color: AppColor_BlackText),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Visibility(
-                  visible: surgeryList[index] == 1,
-                  child: Column(children: [
-                    const SizedBox(height: 10),
-                    OutlineInput(
-                      controller: surgeryControllerList[index],
-                      keyboardType: TextInputType.text,
-                      textInputAction: TextInputAction.next,
+                  const SizedBox(height: 10),
+                  SizedBox(
+                    height: 55,
+                    child: TextField(
+                      style: AppTextStyle.PD(AppColor_BlackText, 16,
+                          weight: FW.medium),
+                      controller: recordTimeControllerList[index],
                       onEditingComplete: () => node.nextFocus(),
-                      placeholder: "수술/검사명",
-                      onChanged: (text) => {monitoringData!.symptom_list![index].surgey_name = text, checkValid()},
-                    ),
-                    const SizedBox(height: 10),
-                    SizedBox(
-                      height: 55,
-                      child: TextField(
-                        style: AppTextStyle.PD(AppColor_BlackText, 16, weight: FW.medium),
-                        controller: surgeryDateControllerList[index],
-                        onEditingComplete: () => node.nextFocus(),
-                        maxLines: 1,
-                        maxLength: -1,
-                        keyboardType: TextInputType.text,
-                        textAlignVertical: TextAlignVertical.center,
-                        textAlign: TextAlign.start,
-                        textInputAction: TextInputAction.next,
-                        enableInteractiveSelection: false,
-                        focusNode: AlwaysDisabledFocusNode(),
-                        onTap: () {
-                          showSurgerydateDlg(index);
-                        },
-                        onChanged: (text) => {monitoringData!.symptom_list![index].surgey_time = text},
-                        decoration: InputDecoration(
-                          counterText: "",
-                          enabledBorder: const OutlineInputBorder(borderSide: BorderSide(color: AppColor_Selector_Border), borderRadius: BorderRadius.all(Radius.circular(12.0))),
-                          focusedBorder: const OutlineInputBorder(borderSide: BorderSide(color: AppColor_BlackText), borderRadius: BorderRadius.all(Radius.circular(12.0))),
-                          hintText: "YYMMDD",
-                          hintStyle: AppTextStyle.PD(AppColor_Hint, 16, weight: FW.medium),
-                          border: InputBorder.none,
-                        ),
-                      ),
-                    ),
-                  ])),
-              const SizedBox(height: 46),
-              H16(text: LanguageService.trans("please_record_the_medication_and_prescription_photos"), weight: FW.medium, color: AppColor_BlackText, align: TextAlign.left, maxLine: 3, height: 1.3),
-              const SizedBox(height: 18),
-              SizedBox(
-                height: 40,
-                child: Row(
-                  children: [
-                    InkWell(
+                      maxLines: 1,
+                      maxLength: -1,
+                      keyboardType: TextInputType.text,
+                      textAlignVertical: TextAlignVertical.center,
+                      textAlign: TextAlign.start,
+                      textInputAction: TextInputAction.next,
+                      enableInteractiveSelection: false,
+                      focusNode: AlwaysDisabledFocusNode(),
                       onTap: () {
-                        hasphotoList[index] = 1;
-                        checkValid();
-                        setState(() {});
+                        showBirthdayDlg(index);
                       },
-                      child: Row(
-                        children: [
-                          Image.asset(
-                            hasphotoList[index] == 1 ? "assets/ic_option_on.png" : "assets/ic_option_off.png",
-                            width: 25,
-                            height: 25,
-                          ),
-                          const SizedBox(width: 10),
-                          H16(text: "복약 있음", weight: FW.medium, color: AppColor_BlackText),
-                        ],
+                      // onChanged: (text) => {,},
+                      decoration: InputDecoration(
+                        counterText: "",
+                        enabledBorder: const OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: AppColor_Selector_Border),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(12.0))),
+                        focusedBorder: const OutlineInputBorder(
+                            borderSide: BorderSide(color: AppColor_BlackText),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(12.0))),
+                        hintText: "YYMMDD",
+                        hintStyle: AppTextStyle.PD(AppColor_Hint, 16,
+                            weight: FW.medium),
+                        border: InputBorder.none,
                       ),
                     ),
-                    const SizedBox(width: 25),
-                    InkWell(
-                      onTap: () {
-                        hasphotoList[index] = 2;
-                        checkValid();
-                        setState(() {});
-                      },
-                      child: Row(
-                        children: [
-                          Image.asset(
-                            hasphotoList[index] == 2 ? "assets/ic_option_on.png" : "assets/ic_option_off.png",
-                            width: 25,
-                            height: 25,
-                          ),
-                          const SizedBox(width: 10),
-                          H16(text: LanguageService.trans("no_medication"), weight: FW.medium, color: AppColor_BlackText),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Visibility(
-                  visible: hasphotoList[index] == 1,
-                  child: Column(children: [
-                    InkWell(
-                      onTap: () {
-                        setState(() {
-                          cur_symptom = index;
-                        });
-                        onSelectPhoto();
-                      },
-                      child: Container(
-                        height: 50,
-                        padding: const EdgeInsets.only(left: 20),
-                        decoration: BoxDecoration(border: Border.all(color: AppColor_Selector_Border, width: 1.0), borderRadius: BorderRadius.circular(15)),
-                        child: Row(
-                          children: [
-                            Image.asset("assets/camera_alt_black_24dp.png", width: 15),
-                            const SizedBox(width: 10),
-                            H14(
-                              text: LanguageService.trans("add_prescription_photo"),
-                              weight: FW.medium,
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                    Visibility(
-                      visible: imageList[index] != "",
-                      child: Container(
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12.0),
-                          // image: DecorationImage(image: AssetImage
-                          //   ("assets/image_9.png"), fit: BoxFit.cover)
-                        ),
-                        child: ClipPath(
-                          clipper: ShapeBorderClipper(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
-                          child: Image.network(
-                            imageList[index],
-                            width: MediaQuery.of(context).size.width - 60,
-                            height: MediaQuery.of(context).size.width - 60,
-                            fit: BoxFit.contain,
+                  ),
+                  const SizedBox(height: 46),
+                  H16(
+                      text: LanguageService.trans(
+                          "please_record_whether_the_disease_was_operated_tested"),
+                      weight: FW.medium,
+                      color: AppColor_BlackText,
+                      align: TextAlign.left,
+                      maxLine: 3,
+                      height: 1.3),
+                  const SizedBox(height: 21),
+                  SizedBox(
+                    height: 40,
+                    child: Row(
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            surgeryList[index] = 1;
+                            checkValid();
+                            setState(() {});
+                          },
+                          child: Row(
+                            children: [
+                              Image.asset(
+                                surgeryList[index] == 1
+                                    ? "assets/ic_option_on.png"
+                                    : "assets/ic_option_off.png",
+                                width: 25,
+                                height: 25,
+                              ),
+                              const SizedBox(width: 10),
+                              H16(
+                                  text: LanguageService.trans("있음"),
+                                  weight: FW.medium,
+                                  color: AppColor_BlackText),
+                            ],
                           ),
                         ),
-                      ),
-                    )
-                  ])),
-              const SizedBox(height: 20)
-            ])));
+                        const SizedBox(width: 25),
+                        InkWell(
+                          onTap: () {
+                            surgeryList[index] = 2;
+                            checkValid();
+                            setState(() {});
+                          },
+                          child: Row(
+                            children: [
+                              Image.asset(
+                                surgeryList[index] == 2
+                                    ? "assets/ic_option_on.png"
+                                    : "assets/ic_option_off.png",
+                                width: 25,
+                                height: 25,
+                              ),
+                              const SizedBox(width: 10),
+                              H16(
+                                  text: LanguageService.trans("없음"),
+                                  weight: FW.medium,
+                                  color: AppColor_BlackText),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Visibility(
+                      visible: surgeryList[index] == 1,
+                      child: Column(children: [
+                        const SizedBox(height: 10),
+                        OutlineInput(
+                          controller: surgeryControllerList[index],
+                          keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.next,
+                          onEditingComplete: () => node.nextFocus(),
+                          placeholder: "수술/검사명",
+                          onChanged: (text) => {
+                            monitoringData!.symptom_list![index].surgey_name =
+                                text,
+                            checkValid()
+                          },
+                        ),
+                        const SizedBox(height: 10),
+                        SizedBox(
+                          height: 55,
+                          child: TextField(
+                            style: AppTextStyle.PD(AppColor_BlackText, 16,
+                                weight: FW.medium),
+                            controller: surgeryDateControllerList[index],
+                            onEditingComplete: () => node.nextFocus(),
+                            maxLines: 1,
+                            maxLength: -1,
+                            keyboardType: TextInputType.text,
+                            textAlignVertical: TextAlignVertical.center,
+                            textAlign: TextAlign.start,
+                            textInputAction: TextInputAction.next,
+                            enableInteractiveSelection: false,
+                            focusNode: AlwaysDisabledFocusNode(),
+                            onTap: () {
+                              showSurgerydateDlg(index);
+                            },
+                            onChanged: (text) => {
+                              monitoringData!.symptom_list![index].surgey_time =
+                                  text
+                            },
+                            decoration: InputDecoration(
+                              counterText: "",
+                              enabledBorder: const OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: AppColor_Selector_Border),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(12.0))),
+                              focusedBorder: const OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: AppColor_BlackText),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(12.0))),
+                              hintText: "YYMMDD",
+                              hintStyle: AppTextStyle.PD(AppColor_Hint, 16,
+                                  weight: FW.medium),
+                              border: InputBorder.none,
+                            ),
+                          ),
+                        ),
+                      ])),
+                  const SizedBox(height: 46),
+                  H16(
+                      text: LanguageService.trans(
+                          "please_record_the_medication_and_prescription_photos"),
+                      weight: FW.medium,
+                      color: AppColor_BlackText,
+                      align: TextAlign.left,
+                      maxLine: 3,
+                      height: 1.3),
+                  const SizedBox(height: 18),
+                  SizedBox(
+                    height: 40,
+                    child: Row(
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            hasphotoList[index] = 1;
+                            checkValid();
+                            setState(() {});
+                          },
+                          child: Row(
+                            children: [
+                              Image.asset(
+                                hasphotoList[index] == 1
+                                    ? "assets/ic_option_on.png"
+                                    : "assets/ic_option_off.png",
+                                width: 25,
+                                height: 25,
+                              ),
+                              const SizedBox(width: 10),
+                              H16(
+                                  text: "복약 있음",
+                                  weight: FW.medium,
+                                  color: AppColor_BlackText),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(width: 25),
+                        InkWell(
+                          onTap: () {
+                            hasphotoList[index] = 2;
+                            checkValid();
+                            setState(() {});
+                          },
+                          child: Row(
+                            children: [
+                              Image.asset(
+                                hasphotoList[index] == 2
+                                    ? "assets/ic_option_on.png"
+                                    : "assets/ic_option_off.png",
+                                width: 25,
+                                height: 25,
+                              ),
+                              const SizedBox(width: 10),
+                              H16(
+                                  text: LanguageService.trans("no_medication"),
+                                  weight: FW.medium,
+                                  color: AppColor_BlackText),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Visibility(
+                      visible: hasphotoList[index] == 1,
+                      child: Column(children: [
+                        InkWell(
+                          onTap: () {
+                            setState(() {
+                              cur_symptom = index;
+                            });
+                            onSelectPhoto();
+                          },
+                          child: Container(
+                            height: 50,
+                            padding: const EdgeInsets.only(left: 20),
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                    color: AppColor_Selector_Border,
+                                    width: 1.0),
+                                borderRadius: BorderRadius.circular(15)),
+                            child: Row(
+                              children: [
+                                Image.asset("assets/camera_alt_black_24dp.png",
+                                    width: 15),
+                                const SizedBox(width: 10),
+                                H14(
+                                  text: LanguageService.trans(
+                                      "add_prescription_photo"),
+                                  weight: FW.medium,
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        Visibility(
+                          visible: imageList[index] != "",
+                          child: Container(
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12.0),
+                              // image: DecorationImage(image: AssetImage
+                              //   ("assets/image_9.png"), fit: BoxFit.cover)
+                            ),
+                            child: ClipPath(
+                              clipper: ShapeBorderClipper(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12))),
+                              child: Image.network(
+                                imageList[index],
+                                width: MediaQuery.of(context).size.width - 60,
+                                height: MediaQuery.of(context).size.width - 60,
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                          ),
+                        )
+                      ])),
+                  const SizedBox(height: 20)
+                ])));
   }
 }

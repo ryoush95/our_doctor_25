@@ -4,7 +4,16 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
 
 class PageLayout extends StatefulWidget {
-  PageLayout({Key? key, required this.child, this.onBack, this.isLoading, this.isAvoidResize, this.drawer, this.scaffoldKey, this.top}) : super(key: key) {
+  PageLayout(
+      {Key? key,
+      required this.child,
+      this.onBack,
+      this.isLoading,
+      this.isAvoidResize,
+      this.drawer,
+      this.scaffoldKey,
+      this.top})
+      : super(key: key) {
     this.isLoading ??= false;
     this.isAvoidResize ??= true;
     this.drawer ??= null;

@@ -41,7 +41,13 @@ class TopAreaState extends BaseState<TopArea> {
 
   void showMoreText() {
     ShowMoreTextPopup popup = ShowMoreTextPopup(context,
-        text: LanguageService.trans("monitoring_guie"), textStyle: AppTextStyle.PD(AppColor_BlackText, 12), height: 87, width: 140, backgroundColor: Colors.white, padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 10), borderRadius: BorderRadius.circular(10.0), onDismiss: () {
+        text: LanguageService.trans("monitoring_guie"),
+        textStyle: AppTextStyle.PD(AppColor_BlackText, 12),
+        height: 87,
+        width: 140,
+        backgroundColor: Colors.white,
+        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 10),
+        borderRadius: BorderRadius.circular(10.0), onDismiss: () {
       // ScaffoldMessenger.of(context)
       //     .showSnackBar(SnackBar(content: Text("Dismiss callback!")));
     });
@@ -58,14 +64,16 @@ class TopAreaState extends BaseState<TopArea> {
     // titleMsg = sprintf(LanguageService.trans("childrens") + " \n" + LanguageService.trans("what_future_height"), [isMorning() ? LanguageService.trans("am") : LanguageService.trans("pm")]);
     // titleMsg1 = sprintf(LanguageService.trans("childrens_growing_rapidly"), [95]);
     titleMsg = "어린이는 폭풍성장중 \n 종합 발달스코어 ";
-    titleMsg1 = sprintf(LanguageService.trans("childrens_growing_rapidly"), [95]);
+    titleMsg1 =
+        sprintf(LanguageService.trans("childrens_growing_rapidly"), [95]);
     //getFinalResultInfo();
     getMonitor2HomeDataInfo();
 
     Future.delayed(const Duration(milliseconds: 500), () {
       if (gSignupMonitoring) {
         gSignupMonitoring = false;
-        Navigator.push(context, SlideRightTransRoute(builder: (context) => MonitoringStartPage()));
+        Navigator.push(context,
+            SlideRightTransRoute(builder: (context) => MonitoringStartPage()));
       }
     });
 
@@ -106,7 +114,9 @@ class TopAreaState extends BaseState<TopArea> {
     return result;
 
     if (dicInfo == null || dicInfo!.regtime! == "") {
-      result = LanguageService.trans(isMorning() ? 'home_start_am_monitoring' : 'home_start_pm_monitoring');
+      result = LanguageService.trans(isMorning()
+          ? 'home_start_am_monitoring'
+          : 'home_start_pm_monitoring');
       return result;
     }
 
@@ -115,9 +125,13 @@ class TopAreaState extends BaseState<TopArea> {
     int oldHour = int.parse(regtime.substring(11, 13));
     String currentDate = getCurrentDate();
     if (oldDate != currentDate) {
-      result = LanguageService.trans(isMorning() ? 'home_start_am_monitoring' : 'home_start_pm_monitoring');
+      result = LanguageService.trans(isMorning()
+          ? 'home_start_am_monitoring'
+          : 'home_start_pm_monitoring');
     } else {
-      result = LanguageService.trans(isMorning() ? 'home_start_am_monitoring' : 'home_start_pm_monitoring');
+      result = LanguageService.trans(isMorning()
+          ? 'home_start_am_monitoring'
+          : 'home_start_pm_monitoring');
       var dt = DateTime.now();
       int curHour = dt.hour;
       if (curHour < 12) {
@@ -139,10 +153,12 @@ class TopAreaState extends BaseState<TopArea> {
   void goMonitorStart() {
     if (dicHomeDataInfo == null || dicHomeDataInfo!.todayResult == null) {
       monitoringData = null;
-      Navigator.push(context, SlideRightTransRoute(builder: (context) => MonitoringStartPage()));
+      Navigator.push(context,
+          SlideRightTransRoute(builder: (context) => MonitoringStartPage()));
     } else {
       //모니터링 리스트페이지로
-      Navigator.push(context, SlideRightTransRoute(builder: (context) => MonitoringResultPage()));
+      Navigator.push(context,
+          SlideRightTransRoute(builder: (context) => MonitoringResultPage()));
     }
 
     /*
@@ -227,7 +243,8 @@ class TopAreaState extends BaseState<TopArea> {
         showToast(value.msg ?? "");
         if (value.result == 106) {
           //token expired
-          Navigator.pushReplacement(context, SlideRightTransRoute(builder: (context) => FirstPage()));
+          Navigator.pushReplacement(
+              context, SlideRightTransRoute(builder: (context) => FirstPage()));
         }
       }
     }).catchError((onError) {
@@ -256,7 +273,8 @@ class TopAreaState extends BaseState<TopArea> {
         showToast(value.msg ?? "");
         if (value.result == 106) {
           //token expired
-          Navigator.pushReplacement(context, SlideRightTransRoute(builder: (context) => FirstPage()));
+          Navigator.pushReplacement(
+              context, SlideRightTransRoute(builder: (context) => FirstPage()));
         }
       }
     }).catchError((onError) {
@@ -273,23 +291,34 @@ class TopAreaState extends BaseState<TopArea> {
     return Container(
       height: 190,
       padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-      decoration: const BoxDecoration(color: Colors.white, borderRadius: BorderRadius.only(bottomLeft: Radius.circular(23.0), bottomRight: Radius.circular(23.0)), boxShadow: [
-        BoxShadow(
-          color: AppColor_Gray,
-          blurRadius: 5.0, // soften the shadow
-          spreadRadius: 2.0, //extend the shadow
-          offset: Offset(
-            5.0, // Move to right 10  horizontally
-            5.0, // Move to bottom 5 Vertically
-          ),
-        )
-      ]),
+      decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(23.0),
+              bottomRight: Radius.circular(23.0)),
+          boxShadow: [
+            BoxShadow(
+              color: AppColor_Gray,
+              blurRadius: 5.0, // soften the shadow
+              spreadRadius: 2.0, //extend the shadow
+              offset: Offset(
+                5.0, // Move to right 10  horizontally
+                5.0, // Move to bottom 5 Vertically
+              ),
+            )
+          ]),
       child: Stack(
         children: [
           Positioned(
             top: 25,
             right: 4,
-            child: Image.asset((dicHomeDataInfo == null || dicHomeDataInfo!.todayResult == null) ? 'assets/ic_child_search.png' : 'assets/ic_child_search1.png', width: 114, height: 104),
+            child: Image.asset(
+                (dicHomeDataInfo == null ||
+                        dicHomeDataInfo!.todayResult == null)
+                    ? 'assets/ic_child_search.png'
+                    : 'assets/ic_child_search1.png',
+                width: 114,
+                height: 104),
           ),
           Align(
               alignment: Alignment.centerLeft,
@@ -298,15 +327,29 @@ class TopAreaState extends BaseState<TopArea> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    H14(text: month + LanguageService.trans('month') + ' ' + day + LanguageService.trans('day') + ' ' + days[weekday % 7]),
+                    H14(
+                        text: month +
+                            LanguageService.trans('month') +
+                            ' ' +
+                            day +
+                            LanguageService.trans('day') +
+                            ' ' +
+                            days[weekday % 7]),
                     const SizedBox(height: 20),
                     RichText(
                       softWrap: true,
                       textAlign: TextAlign.start,
                       text: TextSpan(children: [
-                        TextSpan(text: widget.name + ' ', style: AppTextStyle.PD(AppColor_Primary, 16, weight: FW.bold)),
-                        TextSpan(text: widget.type == 0 ? titleMsg + "${topScore} 점"
-                            : titleMsg1, style: AppTextStyle.PD(AppColor_BlackText, 16, weight: FW.regular, height: 1.5)),
+                        TextSpan(
+                            text: widget.name + ' ',
+                            style: AppTextStyle.PD(AppColor_Primary, 16,
+                                weight: FW.bold)),
+                        TextSpan(
+                            text: widget.type == 0
+                                ? titleMsg + "${topScore} 점"
+                                : titleMsg1,
+                            style: AppTextStyle.PD(AppColor_BlackText, 16,
+                                weight: FW.regular, height: 1.5)),
                       ]),
                     ),
                     const SizedBox(height: 35),
@@ -320,7 +363,8 @@ class TopAreaState extends BaseState<TopArea> {
                                 Center(
                                   child: MainTextButton(
                                     text: getButtonName(),
-                                    style: AppTextStyle.PD(Colors.white, 16, weight: FW.medium),
+                                    style: AppTextStyle.PD(Colors.white, 16,
+                                        weight: FW.medium),
                                     width: 200,
                                     height: 40,
                                     radius: 20,

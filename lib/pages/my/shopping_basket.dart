@@ -38,12 +38,12 @@ class ShoppingBasketPageState extends BaseState<ShoppingBasketPage> {
   bool checkAll = false;
   ScrollController scrollController = ScrollController();
 
-  List<bool> checkStatus = [];
-  var textEditingControllers = <TextEditingController>[];
   int selectedCount = 0;
   double amount = 0;
   double discount_amount = 0;
   int shipping_fee = 0;
+  List<bool> checkStatus = [];
+  var textEditingControllers = <TextEditingController>[];
 
   List<BasketDto> basketList = [];
 

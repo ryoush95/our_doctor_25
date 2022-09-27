@@ -49,10 +49,11 @@ class CircularProgressState extends BaseState<CircularProgress> {
         content = "신체 - 신장/체중/생활습관/질병 모니터링 결과를\n종합적으로 판단한 스코어입니다.\n\n더 높은 스코어를 획득할 수 있도록\n우아닥터와 함께 해주세요.";
         fWidth = 290;
         fHeight = 105;
-      } else {
+      } else if(widget.subType == 1) {
         content = "두뇌 - 언어/운동/사회성/맞춤검사 모니터링 결과를\n종합적으로 판단한 스코어입니다.\n\n더 높은 스코어를 획득할 수 있도록\n우아닥터와 함께 해주세요.";
         fWidth = 300;
         fHeight = 105;
+
       }
     }
 
@@ -152,17 +153,17 @@ class CircularProgressState extends BaseState<CircularProgress> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: double.infinity,
-      height: 200,
+      width: 180,
+      height: 180,
       child: Center(
         child: Container(
-          width: 192,
-          height: 162,
+          width: 162,
+          height: 152,
           child: Stack(
             children: [
               Center(
                 child: CircularPercentIndicator(
-                  radius: 156.0,
+                  radius: 136.0,
                   lineWidth: 13.0,
                   animation: true,
                   percent: dicHomeDataInfo == null ? 0 : showScore() / 100,
