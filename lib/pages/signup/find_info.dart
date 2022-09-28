@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_html/shims/dart_ui_real.dart';
 import 'package:mobx/mobx.dart';
 import 'package:ourdoctor/global/app_colors.dart';
 import 'package:ourdoctor/global/app_styles.dart';
@@ -29,6 +32,9 @@ class FindInfoPage extends StatefulWidget {
 class FindInfoPageState extends BaseState<FindInfoPage> {
   int pageType = 1;
   final HttpService httpService = HttpService();
+  late Timer timer;
+  int stimer = 30;
+  bool timerBt = true;
 
   //아이디 찾기 관련
   String idName = "";
@@ -157,10 +163,27 @@ class FindInfoPageState extends BaseState<FindInfoPage> {
     }
   }
 
+  void startTimer() {
+    var count = const Duration(seconds: 1);
+    timer = Timer.periodic(count, (timer) {
+      if (stimer == 0){
+        setState(() {
+          timer.cancel();
+          stimer = 60;
+          timerBt = true;
+        });
+      }else {
+        setState(() {
+          stimer--;
+        });
+      }
+    });
+  }
+
   Widget FindIdPage() {
     final node = FocusScope.of(context);
     return Container(
-      width: double.infinity,
+      width: MediaQuery.of(context).size.width,
       padding: const EdgeInsets.symmetric(horizontal: 30),
       child: Column(
         children: [
@@ -243,18 +266,47 @@ class FindInfoPageState extends BaseState<FindInfoPage> {
                             weight: FW.medium,
                             color: AppColor_BlackText.withOpacity(0.5),
                           ),
-                        ),
-                        UnderlineInput(
-                          controller: codeInputController,
-                          keyboardType: TextInputType.phone,
-                          isSecure: true,
-                          textInputAction: TextInputAction.done,
-                          onEditingComplete: () => node.nextFocus(),
-                          placeholder: LanguageService.trans("input_code_hint"),
-                          onChanged: (text) => {
-                            idCode = text,
-                            checkIdValid(),
-                          },
+                        ), Row(
+                          children: [
+                            Expanded(
+                              child: SizedBox(
+                                height: 50,
+                                width: MediaQuery.of(context).size.width - 160,
+                                child: UnderlineInput(
+                                  controller: codeInputController,
+                                  keyboardType: TextInputType.phone,
+                                  isSecure: true,
+                                  textInputAction: TextInputAction.done,
+                                  onEditingComplete: () => node.nextFocus(),
+                                  placeholder: LanguageService.trans("input_code_hint"),
+                                  onChanged: (text) => {
+                                    idCode = text,
+                                    checkIdValid(),
+                                  },
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 10.0,),
+                            SizedBox(
+                              height: 50,
+                              width: 80,
+                              child: timerBt ? MainTextButton(
+                                onPressed: (){
+                                  if (pageType == 1) {
+                                    nIdStep = 0;
+                                    reqSendCode();
+                                    startTimer();
+                                    timerBt = false;
+                                  }
+                                },
+                                text: "인증번호\n 재전송",
+                                style: const TextStyle(color: AppColor_White, fontSize: 14),
+                              ) : MainTextButton(
+                                backgroundColor: AppColor_Gray,
+                                text : stimer.toString(),
+                              ),
+                            )
+                          ],
                         ),
                       ],
                     ),
@@ -363,16 +415,46 @@ class FindInfoPageState extends BaseState<FindInfoPage> {
                             color: AppColor_BlackText.withOpacity(0.5),
                           ),
                         ),
-                        UnderlineInput(
-                          controller: passCodeInputController,
-                          keyboardType: TextInputType.phone,
-                          textInputAction: TextInputAction.done,
-                          onEditingComplete: () => node.nextFocus(),
-                          placeholder: LanguageService.trans("input_code_hint"),
-                          onChanged: (text) => {
-                            passCode = text,
-                            checkPassValid(),
-                          },
+                        Row(
+                          children: [
+                            Expanded(
+                              child: SizedBox(
+                                height: 50,
+                                width: MediaQuery.of(context).size.width - 160,
+                                child: UnderlineInput(
+                                  controller: passCodeInputController,
+                                  keyboardType: TextInputType.phone,
+                                  textInputAction: TextInputAction.done,
+                                  onEditingComplete: () => node.nextFocus(),
+                                  placeholder: LanguageService.trans("input_code_hint"),
+                                  onChanged: (text) => {
+                                    passCode = text,
+                                    checkPassValid(),
+                                  },
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 10.0,),
+                            SizedBox(
+                              height: 50,
+                              width: 80,
+                              child: timerBt ? MainTextButton(
+                                onPressed: (){
+                                  if (pageType != 1) {
+                                    nPassStep = 0;
+                                    reqSendCode();
+                                    startTimer();
+                                    timerBt = false;
+                                  }
+                                },
+                                text: "인증번호\n 재전송",
+                                style: const TextStyle(color: AppColor_White, fontSize: 14),
+                              ) : MainTextButton(
+                                backgroundColor: AppColor_Gray,
+                                text : stimer.toString(),
+                              ),
+                            )
+                          ],
                         ),
                       ],
                     ),
