@@ -372,7 +372,7 @@ class DiseaseReportState extends BaseState<DiseaseReport> {
                 Visibility(
                   visible: dicDiseaseInfo != null && dicDiseaseInfo!.symptomStartDate!.isNotEmpty,
                   child: H14(
-                    text: "D+" + checkSelDate1(dicDiseaseInfo == null ? "" : dicDiseaseInfo!.symptomStartDate!).toString(),
+                    text: "D+" + checkSelDate1(dicDiseaseInfo == null ? "" : item.createdAt!).toString(),
                     weight: FW.semi_bold,
                     align: TextAlign.start,
                     color: AppColor_Primary,
@@ -389,7 +389,7 @@ class DiseaseReportState extends BaseState<DiseaseReport> {
                     decoration: BoxDecoration(border: Border.all(width: 1.5, color: AppColor_Green), borderRadius: BorderRadius.circular(12.0), color: Colors.white),
                     child: Center(
                       child: H14(
-                        text: "완치됐어요",
+                        text: "완치확인",
                         weight: FW.semi_bold,
                         align: TextAlign.start,
                         color: AppColor_Green,

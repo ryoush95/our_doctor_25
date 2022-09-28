@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:ourdoctor/global/app_colors.dart';
 import 'package:ourdoctor/global/app_styles.dart';
 import 'package:ourdoctor/global/global.dart';
@@ -14,6 +15,7 @@ import 'package:ourdoctor/helpers/common_util.dart';
 import 'package:ourdoctor/helpers/transition.dart';
 import 'package:ourdoctor/language/language_service.dart';
 import 'package:ourdoctor/models/default_res_model.dart';
+import 'package:ourdoctor/models/home_disease_res_model.dart';
 import 'package:ourdoctor/models/home_monitor_res_model.dart';
 import 'package:ourdoctor/models/upload_res_model.dart';
 import 'package:ourdoctor/pages/app_event.dart';
@@ -40,6 +42,10 @@ class InfoAreaState extends BaseState<InfoArea> {
   final imagePicker = ImagePicker();
   String? finalMeasureDate = "";
   String not_measure = LanguageService.trans("not_measured");
+  String newDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+  HOmeSymptomGraphDto? dicDiseaseInfo;
+  int type = 0;
+  String firstSym = "";
 
   @override
   void initState() {
@@ -231,6 +237,37 @@ class InfoAreaState extends BaseState<InfoArea> {
   Future<void> getMonitor2HomeDataInfo() async {
     setState(() {
       isLoading = true;
+    });
+
+    Future<HOmeSymptomGraphResModel> info2 = httpService.homeDiseaseGraph(newDate);
+    info2.then((HOmeSymptomGraphResModel value) async {
+      setState(() {
+        isLoading = false;
+      });
+      if (value.result == 0) {
+        if (value.data!.symptomList!.isEmpty) {
+          type = 0;
+        } else {
+          type = 1;
+        }
+        dicDiseaseInfo = value.data;
+        setState(() {
+          if(type == 1){
+            firstSym = dicDiseaseInfo!.symptomList![0].symptom!;
+          }
+        });
+      } else {
+        showToast(value.msg ?? "");
+        if (value.result == 106) {
+          //token expired
+          Navigator.pushReplacement(context, SlideRightTransRoute(builder: (context) => FirstPage()));
+        }
+      }
+    }).catchError((onError) {
+      setState(() {
+        isLoading = false;
+      });
+      showToast(onError);
     });
 
     Future<HomeMonitorResModel> info = httpService.homeMonitorInfo();
@@ -486,24 +523,30 @@ class InfoAreaState extends BaseState<InfoArea> {
                       Row(
                         children: [
                           H16(
-                            text: "질병 ",
+                            text: "질병",
                             weight: FW.regular,
                           ),
                           H16(
-                            text: (dicHomeDataInfo == null ||
-                                    dicHomeDataInfo!.symptom! == "")
-                                ? "질병 없음"
-                                : dicHomeDataInfo!.symptom!,
+                            text: type == 0
+                                ? " 질병 없음"
+                                : " $firstSym",
                             weight: FW.regular,
                             color: Colors.red,
                           ),
-                          // dicHomeDataInfo!.symptomCnt! > 0
-                          //     ? H16(
-                          //         text: " 외 ${dicHomeDataInfo!.symptomCnt}",
-                          //         weight: FW.regular,
-                          //         color: Colors.red,
-                          //       )
-                          //     : Container()
+                          type == 1 && dicDiseaseInfo!.symptomList!.length > 1
+                              ? Row(
+                                children: [
+                                  H16(
+                                    text: " 외 ",
+                                    weight: FW.regular,
+                                  ),
+                                  H16(
+                                    text: " ${dicDiseaseInfo!.symptomList!.length -1}",
+                                    weight: FW.regular,
+                                    color: Colors.red,
+                                  )
+                                ],
+                              ):const SizedBox(),
                         ],
                       ),
                       const SizedBox(height: 7),
