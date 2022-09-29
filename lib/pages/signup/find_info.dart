@@ -64,12 +64,16 @@ class FindInfoPageState extends BaseState<FindInfoPage> {
   var passCodeInputController = TextEditingController();
   var newPassInputController = TextEditingController();
 
-
   @override
   void initState() {
     super.initState();
     pageType = widget.type;
     setState(() {});
+  }
+  @override
+  void dispose() {
+    super.dispose();
+    timer.cancel();
   }
 
   Future<bool> onBackPressed() async {
@@ -126,7 +130,10 @@ class FindInfoPageState extends BaseState<FindInfoPage> {
         });
       }
     } else if (nPassStep == 1) {
-      if (passId.isEmpty || passName.isEmpty || passPhone.isEmpty || passCode.isEmpty) {
+      if (passId.isEmpty ||
+          passName.isEmpty ||
+          passPhone.isEmpty ||
+          passCode.isEmpty) {
         setState(() {
           isPassValid = false;
         });
@@ -166,13 +173,13 @@ class FindInfoPageState extends BaseState<FindInfoPage> {
   void startTimer() {
     var count = const Duration(seconds: 1);
     timer = Timer.periodic(count, (timer) {
-      if (stimer == 0){
+      if (stimer == 0) {
         setState(() {
           timer.cancel();
           stimer = 60;
           timerBt = true;
         });
-      }else {
+      } else {
         setState(() {
           stimer--;
         });
@@ -266,7 +273,8 @@ class FindInfoPageState extends BaseState<FindInfoPage> {
                             weight: FW.medium,
                             color: AppColor_BlackText.withOpacity(0.5),
                           ),
-                        ), Row(
+                        ),
+                        Row(
                           children: [
                             Expanded(
                               child: SizedBox(
@@ -278,7 +286,8 @@ class FindInfoPageState extends BaseState<FindInfoPage> {
                                   isSecure: true,
                                   textInputAction: TextInputAction.done,
                                   onEditingComplete: () => node.nextFocus(),
-                                  placeholder: LanguageService.trans("input_code_hint"),
+                                  placeholder:
+                                      LanguageService.trans("input_code_hint"),
                                   onChanged: (text) => {
                                     idCode = text,
                                     checkIdValid(),
@@ -290,21 +299,24 @@ class FindInfoPageState extends BaseState<FindInfoPage> {
                             SizedBox(
                               height: 50,
                               width: 80,
-                              child: timerBt ? MainTextButton(
-                                onPressed: (){
-                                  if (pageType == 1) {
-                                    nIdStep = 0;
-                                    reqSendCode();
-                                    startTimer();
-                                    timerBt = false;
-                                  }
-                                },
-                                text: "인증번호\n 재전송",
-                                style: const TextStyle(color: AppColor_White, fontSize: 14),
-                              ) : MainTextButton(
-                                backgroundColor: AppColor_Gray,
-                                text : stimer.toString(),
-                              ),
+                              child: timerBt
+                                  ? MainTextButton(
+                                      onPressed: () {
+                                        if (pageType == 1) {
+                                          nIdStep = 0;
+                                          reqSendCode();
+                                          startTimer();
+                                          timerBt = false;
+                                        }
+                                      },
+                                      text: "인증번호\n 재전송",
+                                      style: const TextStyle(
+                                          color: AppColor_White, fontSize: 14),
+                                    )
+                                  : MainTextButton(
+                                      backgroundColor: AppColor_Gray,
+                                      text: stimer.toString(),
+                                    ),
                             )
                           ],
                         ),
@@ -438,21 +450,24 @@ class FindInfoPageState extends BaseState<FindInfoPage> {
                             SizedBox(
                               height: 50,
                               width: 80,
-                              child: timerBt ? MainTextButton(
-                                onPressed: (){
-                                  if (pageType != 1) {
-                                    nPassStep = 0;
-                                    reqSendCode();
-                                    startTimer();
-                                    timerBt = false;
-                                  }
-                                },
-                                text: "인증번호\n 재전송",
-                                style: const TextStyle(color: AppColor_White, fontSize: 14),
-                              ) : MainTextButton(
-                                backgroundColor: AppColor_Gray,
-                                text : stimer.toString(),
-                              ),
+                              child: timerBt
+                                  ? MainTextButton(
+                                      onPressed: () {
+                                        if (pageType != 1) {
+                                          nPassStep = 0;
+                                          reqSendCode();
+                                          startTimer();
+                                          timerBt = false;
+                                        }
+                                      },
+                                      text: "인증번호\n 재전송",
+                                      style: const TextStyle(
+                                          color: AppColor_White, fontSize: 14),
+                                    )
+                                  : MainTextButton(
+                                      backgroundColor: AppColor_Gray,
+                                      text: stimer.toString(),
+                                    ),
                             )
                           ],
                         ),
@@ -538,7 +553,8 @@ class FindInfoPageState extends BaseState<FindInfoPage> {
       isLoading = true;
     });
 
-    Future<FindIdResModel> offerInfo = httpService.findId(idPhone, idName, idCode);
+    Future<FindIdResModel> offerInfo =
+        httpService.findId(idPhone, idName, idCode);
     offerInfo.then((FindIdResModel value) async {
       setState(() {
         isLoading = false;
@@ -576,7 +592,8 @@ class FindInfoPageState extends BaseState<FindInfoPage> {
       isLoading = true;
     });
 
-    Future<PassSetResModel> offerInfo = httpService.findPwd(passPhone, passName, passId, passCode);
+    Future<PassSetResModel> offerInfo =
+        httpService.findPwd(passPhone, passName, passId, passCode);
     offerInfo.then((PassSetResModel value) async {
       setState(() {
         isLoading = false;
@@ -637,8 +654,12 @@ class FindInfoPageState extends BaseState<FindInfoPage> {
                 style: AppTextStyle.PD(Colors.white, 18, weight: FW.bold),
                 width: MediaQuery.of(context).size.width - 60,
                 disable: !isIdValid,
-                disableBackground: !isIdValid ? AppColor_Primary_Disable : Colors.transparent,
+                disableBackground:
+                    !isIdValid ? AppColor_Primary_Disable : Colors.transparent,
                 onPressed: () {
+                  if (!isIdValid) {
+                    showToast('정보를 확인해주세요');
+                  }
                   focusNode.unfocus();
                   if (nIdStep == 2) {
                     onBackPressed();
@@ -665,8 +686,13 @@ class FindInfoPageState extends BaseState<FindInfoPage> {
                 style: AppTextStyle.PD(Colors.white, 18, weight: FW.bold),
                 width: MediaQuery.of(context).size.width - 60,
                 disable: !isPassValid,
-                disableBackground: !isPassValid ? AppColor_Primary_Disable : Colors.transparent,
+                disableBackground: !isPassValid
+                    ? AppColor_Primary_Disable
+                    : Colors.transparent,
                 onPressed: () {
+                  if (!isPassValid) {
+                    showToast('정보를 확인해주세요');
+                  }
                   focusNode.unfocus();
                   if (nPassStep == 3) {
                     onBackPressed();
@@ -690,76 +716,95 @@ class FindInfoPageState extends BaseState<FindInfoPage> {
 
   @override
   Widget build(BuildContext context) {
+    Size scsize = MediaQuery.of(context).size;
     return Scaffold(
       body: PageLayout(
           isLoading: isLoading,
           isAvoidResize: false,
-          child: Column(
-            children: [
-              Container(
-                  height: 55,
-                  padding: const EdgeInsets.symmetric(horizontal: 30),
-                  child: Row(
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          onBackPressed();
-                        },
-                        child: Image.asset(
-                          'assets/path_12225.png',
-                          width: 10,
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                      Expanded(child: Container())
-                    ],
-                  )),
-              const SizedBox(height: 50),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 30),
-                child: Row(
+          child: Stack(children: [
+            SingleChildScrollView(
+              child: SizedBox(
+                height: scsize.height - 30,
+                child: Column(
                   children: [
-                    InkWell(
-                      onTap: () {
-                        pageType = 1;
-                        setState(() {});
-                      },
-                      child: H24B(
-                        text: LanguageService.trans("find_id"),
-                        color: pageType == 1 ? AppColor_Primary : AppColor_BlackText.withOpacity(0.2),
+                    Container(
+                        height: 55,
+                        padding: const EdgeInsets.symmetric(horizontal: 30),
+                        child: Row(
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                onBackPressed();
+                              },
+                              child: Image.asset(
+                                'assets/path_12225.png',
+                                width: 10,
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                            Expanded(child: Container())
+                          ],
+                        )),
+                    const SizedBox(height: 50),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 30),
+                      child: Row(
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              pageType = 1;
+                              setState(() {});
+                            },
+                            child: H24B(
+                              text: LanguageService.trans("find_id"),
+                              color: pageType == 1
+                                  ? AppColor_Primary
+                                  : AppColor_BlackText.withOpacity(0.2),
+                            ),
+                          ),
+                          const SizedBox(width: 20),
+                          InkWell(
+                            onTap: () {
+                              pageType = 2;
+                              setState(() {});
+                            },
+                            child: H24B(
+                              text: LanguageService.trans("find_password"),
+                              color: pageType == 2
+                                  ? AppColor_Primary
+                                  : AppColor_BlackText.withOpacity(0.2),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    const SizedBox(width: 20),
-                    InkWell(
-                      onTap: () {
-                        pageType = 2;
-                        setState(() {});
-                      },
-                      child: H24B(
-                        text: LanguageService.trans("find_password"),
-                        color: pageType == 2 ? AppColor_Primary : AppColor_BlackText.withOpacity(0.2),
+                    SingleChildScrollView(
+                      child: Stack(
+                        children: [
+                          Visibility(
+                            visible: pageType == 1,
+                            child: FindIdPage(),
+                          ),
+                          Visibility(
+                            visible: pageType == 2,
+                            child: FindPassPage(),
+                          ),
+                        ],
                       ),
                     ),
                   ],
                 ),
               ),
-              SingleChildScrollView(
-                child: Stack(
-                  children: [
-                    Visibility(
-                      visible: pageType == 1,
-                      child: FindIdPage(),
-                    ),
-                    Visibility(
-                      visible: pageType == 2,
-                      child: FindPassPage(),
-                    ),
-                  ],
+            ),
+            Column(
+              children: [
+                SizedBox(
+                  height: scsize.height - 100,
                 ),
-              )
-            ],
-          )),
-      bottomSheet: bottomButton(),
+                bottomButton(),
+              ],
+            )
+          ])),
     );
   }
 }
