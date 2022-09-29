@@ -93,11 +93,13 @@ class ItemGrowthState extends BaseState<ItemGrowth> {
                         productLike(widget.info!.id!);
                       },
                       child: widget.info!.liked! == "1"
-                          ? Image.asset('assets/ic_heart_on.png', width: 40)
+                          ? Icon(Icons.favorite, color: Colors.pinkAccent,)
+                          : Icon(Icons.favorite_border),
+                          /*? Image.asset('assets/ic_heart_on.png', width: 40)
                           : Image.asset(
                               'assets/ic_heart_off.png',
                               width: 40,
-                            )),
+                            )*/),
                   right: 5,
                   top: 5),
             ],

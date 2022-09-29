@@ -1119,8 +1119,8 @@ class MonitoringResultPageState extends BaseState<MonitoringResultPage> {
                               )),
                           InkWell(
                             onTap: () {
-                              // log(curCategory.toString());
-                              Navigator.pushReplacement(context, SlideRightTransRoute(builder: (context) => MonitoringFragment(type: 0, pageType: curCategory)));
+                               //log(curCategory.toString());
+                              Navigator.pushReplacement(context, SlideRightTransRoute(builder: (context) =>  TabMainPage(pageIdx: 2, infoTabIdx: curCategory)));
                             },
                             child: Container(
                               width: isToday(info) ? (MediaQuery.of(context).size.width - 66) / 2 : MediaQuery.of(context).size.width - 60,

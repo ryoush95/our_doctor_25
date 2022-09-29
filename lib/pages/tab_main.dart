@@ -391,12 +391,12 @@ class TabMainPageState extends BaseState<TabMainPage>
     // registerNotificationListeners();
     setupFcmListener(_recvMessage, _clickMessage);
 
-    // Future.delayed(const Duration(milliseconds: 100), () {
-    //   if (widget.pageIdx == 2) {
-    //     changeTab(MainTab.monitoring);
-    //     eventBus.fire(InfoTabEvent(type: widget.infoTabIdx!));
-    //   }
-    // });
+     Future.delayed(const Duration(milliseconds: 100), () {
+       if (widget.pageIdx == 2) {
+         changeTab(MainTab.monitoring);
+        // eventBus.fire(InfoTabEvent(type: widget.infoTabIdx!));
+       }
+     });
     BasketList();
   }
 

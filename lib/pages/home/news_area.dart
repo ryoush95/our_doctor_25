@@ -7,6 +7,7 @@ import 'package:ourdoctor/helpers/common_util.dart';
 import 'package:ourdoctor/helpers/transition.dart';
 import 'package:ourdoctor/language/language_service.dart';
 import 'package:ourdoctor/models/community_add_res_model.dart';
+import 'package:ourdoctor/models/community_detail_res_model.dart';
 import 'package:ourdoctor/models/community_list_res_model.dart';
 import 'package:ourdoctor/models/home_data_res_model.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
@@ -33,6 +34,7 @@ class NewsArea extends StatefulWidget {
 class NewsAreaState extends BaseState<NewsArea> {
   final HttpService httpService = HttpService();
   List<CommunityList>? arrNewsList;
+  CommunityDetailDto? dicDetailInfo;
 
   @override
   void initState() {
@@ -126,6 +128,7 @@ class NewsAreaState extends BaseState<NewsArea> {
                                   SlideRightTransRoute(
                                       builder: (context) => CommunityDetailPage(
                                             uid: info.uid,
+                                        videoUrl: info.blogUrl,
                                           )));
                             }
                           },

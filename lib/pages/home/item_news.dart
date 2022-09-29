@@ -2,6 +2,7 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:ourdoctor/global/app_colors.dart';
 import 'package:ourdoctor/global/app_styles.dart';
+import 'package:ourdoctor/models/community_detail_res_model.dart';
 import 'package:ourdoctor/models/home_data_res_model.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
 import 'package:ourdoctor/pages/components/h12.dart';
@@ -16,24 +17,29 @@ class ItemNews extends StatefulWidget {
 }
 
 class ItemNewsState extends BaseState<ItemNews> {
+  CommunityDetailDto? dicDetailInfo;
 
 
   String getTopicName(String topic) {
-    String result = "";
-    if (topic == "notice") {
-      result = "공지/이벤트";
-    } else if (topic == "treatment") {
-      result = "뉴스";
-    } else if (topic == "school") {
-      result = "교육";
-    } else if (topic == "faq") {
-      result = "질문";
-    } else if (topic == "talk") {
-      result = "자유게시판";
-    } else {
-      result = "우아팁";
+      String result = "";
+      if (widget.item.topic! == "treatment") {
+
+        if (topic == "notice") {
+        result = "공지/이벤트";
+      } else if (topic == "treatment") {
+        result = "뉴스";
+      } else if (topic == "school") {
+        result = "교육";
+      } else if (topic == "faq") {
+        result = "질문";
+      } else if (topic == "talk") {
+        result = "자유게시판";
+      } else {
+        result = "우아팁";
+      }
     }
-    return result;
+      return result;
+
   }
 
   @override
@@ -52,6 +58,7 @@ class ItemNewsState extends BaseState<ItemNews> {
         children: [
           Row(
             children: [
+              //H14(text: dicDetailInfo == null ? "treatment" : getTopicName(dicDetailInfo!.topic!),),
               H14(text: "[" + getTopicName(widget.item.topic!) + "]", weight: FW.semi_bold, color: AppColor_Primary),
               const SizedBox(width: 5),
               // Expanded(

@@ -926,7 +926,7 @@ class MonitoringResult1PageState extends BaseState<MonitoringResult1Page> {
                               ),
                               InkWell(
                                 onTap: () {
-                                  Navigator.pushReplacement(context, SlideRightTransRoute(builder: (context) => MonitoringFragment(type: 0, pageType: curCategory)));
+                                  Navigator.pushReplacement(context, SlideRightTransRoute(builder: (context) => TabMainPage(pageIdx: 2, infoTabIdx: curCategory)));
                                 },
                                 child: Container(
                                   width: (MediaQuery.of(context).size.width - 66) / 2,
