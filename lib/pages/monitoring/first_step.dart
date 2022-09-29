@@ -465,6 +465,10 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
         if (category == "") {
           return;
         }
+        String? symptom = monitoringData!.symptom_list![i].symptom;
+        if (symptom == "") {
+          return;
+        }
         //질병 체크
         if (category == "직접입력") {
           String? symptom = directInputController[i].text;
@@ -860,7 +864,7 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
         !widget.selPhysical!.contains(1) &&
         !widget.selPhysical!.contains(2) &&
         !widget.selPhysical!.contains(3)) {
-      return "1. 어제의 수면 시간을 기록해주세요.";
+      return "1. 오늘의 질병 현황을 기록해주세요.";
     }
 
     if (widget.selPhysical!.contains(0) &&
@@ -1496,8 +1500,7 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
                         setState(() {
                           selSymtomidx = index;
                           category[index] = selectedCategory!;
-                          monitoringData!.symptom_list![index].category =
-                              selectedCategory;
+                          monitoringData!.symptom_list![index].category = selectedCategory;
                           if (selectedCategory == "직접입력") {
                             checkValid();
                           } else {
@@ -1517,8 +1520,7 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
                           setState(() {
                             selSymtomidx = index;
                             symptom[index] = selectedCategory!;
-                            monitoringData!.symptom_list![index].symptom =
-                                selectedCategory;
+                            monitoringData!.symptom_list![index].symptom = selectedCategory;
                             checkValid();
                           });
                         },

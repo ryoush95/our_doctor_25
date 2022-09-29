@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:ourdoctor/global/app_colors.dart';
 import 'package:ourdoctor/global/app_styles.dart';
 import 'package:ourdoctor/global/global.dart';
@@ -16,6 +17,7 @@ import 'package:ourdoctor/pages/base/base_state.dart';
 import 'package:ourdoctor/pages/components/h16.dart';
 import 'package:ourdoctor/pages/components/h18.dart';
 import 'package:ourdoctor/pages/dialog/dlg_common.dart';
+import 'package:ourdoctor/pages/dialog/dlg_kaori_time.dart';
 import 'package:ourdoctor/pages/home/disease_report.dart';
 import 'package:ourdoctor/pages/home/height_report.dart';
 import 'package:ourdoctor/pages/home/inspection_report.dart';
@@ -26,6 +28,8 @@ import 'package:ourdoctor/pages/home/weight_report.dart';
 import 'package:ourdoctor/pages/intro/first.dart';
 import 'package:ourdoctor/pages/my/photo_view.dart';
 import 'package:sprintf/sprintf.dart';
+
+import 'lifestyle_line_chart.dart';
 
 class ReportArea extends StatefulWidget {
   final type;
@@ -570,7 +574,7 @@ class ReportAreaState extends BaseState<ReportArea> with TickerProviderStateMixi
               Container(padding: const EdgeInsets.symmetric(horizontal: 30), child: WeightReport(data: dicHomeGraphWeightInfo!, result: widget.result)),
             ],
           );
-        }
+        }//생활습관
       } else if (reportTabController.index == 2) {
         if (dicHomeGraphLifeStyleInfo == null || dicHomeGraphLifeStyleInfo!.monitoringFood == null) {
           return Container(decoration: BoxDecoration(borderRadius: BorderRadius.circular(18.0), color: AppColor_Light_Gray), padding: const EdgeInsets.only(left: 30, right: 30, top: 50, bottom: 50), margin: const EdgeInsets.symmetric(horizontal: 30), child: PrevMonitoring());

@@ -45,6 +45,7 @@ class MonitoringFragmentState extends BaseState<MonitoringFragment> {
   bool isLast = false;
   int page = 0;
   int curCategory = 0;
+  int curCategory1 = 0;
   List<MonitorListDto>? arrMonitorList = [];
 
   final tooltip = GlobalKey();
@@ -59,6 +60,7 @@ class MonitoringFragmentState extends BaseState<MonitoringFragment> {
   void onChooseCategory(int index) {
     setState(() {
       curCategory = index;
+      curCategory1 = index;
     });
   }
 
@@ -66,6 +68,7 @@ class MonitoringFragmentState extends BaseState<MonitoringFragment> {
   void initState() {
     super.initState();
     curCategory = widget.type!;
+    curCategory1 = widget.type!;
     scrollController = ScrollController()..addListener(loadMore);
     getMonitorList();
 
@@ -273,8 +276,8 @@ class MonitoringFragmentState extends BaseState<MonitoringFragment> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        CircularProgress(subType: 0),
-                        CircularProgress(subType: 1),
+                        CircularProgress(type: 1, subType: curCategory1 = 0),
+                        CircularProgress(type: 2, subType: curCategory1 = 1),
                       ],
                     ),
                     const SizedBox(height: 30),
@@ -394,7 +397,7 @@ class MonitoringFragmentState extends BaseState<MonitoringFragment> {
                     ),
                     const SizedBox(height: 10),
                     InfoArea(type: curCategory),
-                    ReportArea(type: curCategory, result: 1),
+                    ReportArea(type: curCategory, result: 0),
                     const SizedBox(height: 60),
                     GrowthStoreArea(curCategory: 1),
                     const SizedBox(height: 60),

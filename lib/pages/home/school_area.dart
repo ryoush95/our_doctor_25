@@ -17,17 +17,18 @@ import 'package:ourdoctor/pages/home/item_community.dart';
 import 'package:ourdoctor/pages/intro/first.dart';
 
 import 'item_community_monitor.dart';
+import 'item_school.dart';
 
 class SchoolArea extends StatefulWidget {
   SchoolArea({Key? key, this.curCategory = 0}) : super(key: key);
   int? curCategory;
 
   @override
-  CommunityAreaState createState() => CommunityAreaState();
+  SchoolAreaState createState() => SchoolAreaState();
   
 }
 
-class CommunityAreaState extends BaseState<SchoolArea> {
+class SchoolAreaState extends BaseState<SchoolArea> {
   final HttpService httpService = HttpService();
   List<CommunityList>? arrCommunityList;
 
@@ -35,13 +36,13 @@ class CommunityAreaState extends BaseState<SchoolArea> {
   void initState() {
     super.initState();
 
-    getCommunityList();
+    getSchoolList();
   }
 
   // Network functions
   //////////////////////////////////
   //홈 데이터 얻기
-  Future<void> getCommunityList() async {
+  Future<void> getSchoolList() async {
     setState(() {
       isLoading = true;
     });
@@ -71,7 +72,7 @@ class CommunityAreaState extends BaseState<SchoolArea> {
 
   @override
   Widget build(BuildContext context) {
-      final subArrCommunityList = arrCommunityList?.sublist(0, 10);
+      final subArrCommunityList = arrCommunityList?.sublist(0, 15);
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 28),
@@ -103,7 +104,7 @@ class CommunityAreaState extends BaseState<SchoolArea> {
                 itemBuilder: (BuildContext context, int index) {
                   CommunityList info = subArrCommunityList.elementAt(index);
                   return InkWell(
-                    child: ItemCommunity(item: info),
+                    child: ItemSchool(item: info),
                     onTap: () {
                       if(widget.curCategory == 0) {
                         Navigator.push(context, SlideRightTransRoute(

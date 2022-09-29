@@ -40,7 +40,7 @@ class HomeFragmentState extends BaseState<HomeFragment> {
   final HttpService httpService = HttpService();
   HomeMonitorDto? dicHomeDataInfo;
   int curCategory = 0; //홈, 모니터링
-  int category = 1; //성장,발달
+  int category = 1; //발달
   List<PdtLikeDto>? arrLikeList = [];
   List<PdtLikeDto>? arrNewList = [];
   final tooltip = GlobalKey();
@@ -68,6 +68,7 @@ class HomeFragmentState extends BaseState<HomeFragment> {
   @override
   void initState() {
     super.initState();
+    getMonitor2HomeDataInfo();
     getHomeDataInfo();
     // if (getLeffDay() == 0 && isFirstApp) {
     //   showReviewDialog();
@@ -144,6 +145,7 @@ class HomeFragmentState extends BaseState<HomeFragment> {
       });
       if (value.result == 0) {
         arrLikeList = value.data!.pdtLikeList;
+        arrNewList = value.data!.pdtNewList;
         setState(() {});
       } else {
         showToast(value.msg ?? "");
@@ -176,8 +178,8 @@ class HomeFragmentState extends BaseState<HomeFragment> {
                   children: [
                     TopArea(name: gSelChildInfo!.name!, type: 0),
 
-                   /* const SizedBox(height: 30),
-                    NewsArea(curCategory: 0),*/
+                    const SizedBox(height: 30),//뉴스
+                    NewsArea(curCategory: 1),
                     const SizedBox(height: 30),
                     SchoolArea(curCategory: 2),//교육
                     const SizedBox(height: 30),
@@ -189,9 +191,6 @@ class HomeFragmentState extends BaseState<HomeFragment> {
                         category: category,
                         title: LanguageService.trans("발달클래스 홈케어"),
                         list: arrLikeList),
-                    const SizedBox(height: 30),
-
-
                   ],
                 ),
               ),

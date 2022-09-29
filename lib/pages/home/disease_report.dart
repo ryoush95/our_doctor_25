@@ -1,3 +1,4 @@
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:ourdoctor/global/app_colors.dart';
@@ -18,12 +19,15 @@ import 'package:ourdoctor/pages/components/h16.dart';
 import 'package:ourdoctor/pages/components/h18.dart';
 import 'package:ourdoctor/pages/components/h20.dart';
 import 'package:ourdoctor/pages/components/main_text_button.dart';
+import 'package:ourdoctor/pages/components/result_area.dart';
 import 'package:ourdoctor/pages/dialog/dlg_common.dart';
 import 'package:ourdoctor/pages/home/symptom_report.dart';
 import 'package:ourdoctor/pages/intro/first.dart';
 import 'package:ourdoctor/pages/my/photo_view.dart';
 import 'package:sprintf/sprintf.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import 'inoculation_info1.dart';
 
 class DiseaseData {
   String date;
@@ -32,7 +36,14 @@ class DiseaseData {
 }
 
 class DiseaseReport extends StatefulWidget {
-  DiseaseReport({Key? key, required this.data, required this.data1, required this.data2, this.result = 1, this.type = 0}) : super(key: key);
+  DiseaseReport(
+      {Key? key,
+      required this.data,
+      required this.data1,
+      required this.data2,
+      this.result = 1,
+      this.type = 0})
+      : super(key: key);
 
   final List<ReportDto> data;
   final List<ReportDto> data1;
@@ -166,7 +177,7 @@ class DiseaseReportState extends BaseState<DiseaseReport> {
         info.text = dicVaccineInfo!.healthList!.elementAt(i).name!;
         data.add(info);
       }
-    } else {
+    } else if(type == 2) {
       //접종 캘린더
       for (int i = 0; i < dicVaccineInfo!.vaccineList!.length; i++) {
         DateTime newDate = userBirth.add(Duration(days: 30 * int.parse(dicVaccineInfo!.vaccineList!.elementAt(i).periodStart!)));
@@ -199,7 +210,7 @@ class DiseaseReportState extends BaseState<DiseaseReport> {
                     Align(
                       alignment: Alignment.topLeft,
                       child: H20(
-                        text: "검진 캘린더",
+                        text: "캘린더",
                       ),
                     ),
                     const SizedBox(height: 20),
@@ -635,7 +646,7 @@ class DiseaseReportState extends BaseState<DiseaseReport> {
                             showBorder: false,
                             onPressed: () async {
                               // Navigator.pop(context);
-                              /*
+
                               if (dicVaccineInfo!.healthList!.isEmpty) {
                                 showToast("건강검진 내역이 없습니다.");
                                 return;
@@ -643,14 +654,14 @@ class DiseaseReportState extends BaseState<DiseaseReport> {
                               MonthstartDay = DateTime(now.year, now.month);
                               refreshCalendar();
                               checkupCalendar(1);
-                               */
-                              if (isMoreBirth(6)) {
+
+                             /* if (isMoreBirth(6)) {
                                 _launchURL(HEALTH_CALENDAR);
                               } else {
                                 CommonDialog().showHealthCalendarPopup(context).then((val) {
                                   if (val.toString() == "1") {}
                                 });
-                              }
+                              }*/
                             },
                           ),
                         ])),
@@ -660,19 +671,21 @@ class DiseaseReportState extends BaseState<DiseaseReport> {
                       margin: const EdgeInsets.only(top: 20),
                       decoration: BoxDecoration(borderRadius: BorderRadius.circular(18.0), color: AppColor_Light_Gray),
                       padding: const EdgeInsets.all(30),
-                      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                        // Row(
-                        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        //   children: [H16(text: "접종/검진"), H16(text: getVaccineCount(), color: AppColor_Green)],
-                        // ),
-                        /*
-                        Row(
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                             Row(
+                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                               children: [H16(text: "접종/검진"), H16(text: getVaccineCount(), color: AppColor_Green)],
+                             ),
+
+                      /*  Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             H16(text: "접종/검진"),
                             Image.asset('assets/ic_right_arrow.png', width: 10),
                           ],
-                        ),
+                        ),*/
                         const SizedBox(height: 24),
                         Container(
                           width: MediaQuery.of(context).size.width - 64,
@@ -697,7 +710,7 @@ class DiseaseReportState extends BaseState<DiseaseReport> {
                           showBorder: false,
                           onPressed: () async {
                             // Navigator.pop(context);
-                            /*
+
                             if (dicVaccineInfo!.healthList!.isEmpty) {
                               showToast("예방접종 내역이 없습니다.");
                               return;
@@ -705,106 +718,121 @@ class DiseaseReportState extends BaseState<DiseaseReport> {
                             MonthstartDay = DateTime(now.year, now.month);
                             refreshCalendar();
                             checkupCalendar(2);
-                             */
-                            /* 2022-06-29
+
+                           /* // 2022-06-29
                             if (isMoreBirth(12)) {
                               _launchURL(vaccine_CALENDAR);
                             } else {
                               CommonDialog().showVaccineCalendarPopup(context).then((val) {
                                 if (val.toString() == "1") {}
                               });
-                            }
-                             */
-                            Navigator.push(context, SlideRightTransRoute(builder: (context) => InoculationInfo1Page()));
+                            }*/
+
+                           // Navigator.push(context, SlideRightTransRoute(builder: (context) => InoculationInfo1Page()));
                           },
-                        ),*/
-                        H16(text: "접종/검진"),
-                        const SizedBox(height: 8),
-                        H14(
-                          text: "개인화된 정보를 확인 가능하도록\n업데이트 예정입니다.",
-                          weight: FW.semi_bold,
-                          align: TextAlign.start,
-                          maxLine: 2,
-                          color: AppColor_BlackText.withOpacity(0.4),
-                          height: 1.1,
                         ),
-                        const SizedBox(height: 25),
-                        InkWell(
-                          onTap: () {
-                            _launchURL(HEALTH_URL1);
-                          },
-                          child: Container(
-                              width: MediaQuery.of(context).size.width - 64 - 48,
-                              height: 46,
-                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(4.0), color: AppColor_Primary),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Image.asset('assets/ic_health1.png', width: 24),
-                                  const SizedBox(width: 6),
-                                  H16(
-                                    text: "예방 접종정보 확인하기",
-                                    weight: FW.medium,
-                                    color: Colors.white,
-                                  ),
-                                ],
-                              )),
+                            /*H16(text: "접종/검진"),
+                            const SizedBox(height: 8),
+                            H14(
+                              text: "개인화된 정보를 확인 가능하도록\n업데이트 예정입니다.",
+                              weight: FW.semi_bold,
+                              align: TextAlign.start,
+                              maxLine: 2,
+                              color: AppColor_BlackText.withOpacity(0.4),
+                              height: 1.1,
+                            ),
+                            const SizedBox(height: 25),
+                            InkWell(
+                              onTap: () {
+                                _launchURL(HEALTH_URL1);
+                              },
+                              child: Container(
+                                  width: MediaQuery.of(context).size.width -
+                                      64 -
+                                      48,
+                                  height: 46,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(4.0),
+                                      color: AppColor_Primary),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Image.asset('assets/ic_health1.png',
+                                          width: 24),
+                                      const SizedBox(width: 6),
+                                      H16(
+                                        text: "예방 접종정보 확인하기",
+                                        weight: FW.medium,
+                                        color: Colors.white,
+                                      ),
+                                    ],
+                                  )),
+                            ),
+                            const SizedBox(height: 12),
+                            InkWell(
+                              onTap: () {
+                                _launchURL(HEALTH_URL2);
+                              },
+                              child: Container(
+                                  width: MediaQuery.of(context).size.width -
+                                      64 -
+                                      48,
+                                  height: 46,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(4.0),
+                                      color: AppColor_Green),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Image.asset('assets/ic_health2.png',
+                                          width: 24),
+                                      const SizedBox(width: 6),
+                                      H16(
+                                        text: "영유아건강검진 정보 확인하기",
+                                        weight: FW.medium,
+                                        color: Colors.white,
+                                      ),
+                                    ],
+                                  )),
+                            ),*/
+                          ])),
+                  const SizedBox(height: 20),
+                  Container(
+                      width: MediaQuery.of(context).size.width - 64,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(18.0),
+                          color: AppColor_Light_Gray),
+                      // padding: const EdgeInsets.all(30),
+                      child: Column(children: [
+                        const SizedBox(height: 30),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            const SizedBox(width: 30),
+                            H16(text: "시기별 유행성 질환 Tip "),
+                            Image.asset(
+                              "assets/ic_disease_tip.png",
+                              width: 21,
+                            ),
+                          ],
                         ),
-                        const SizedBox(height: 12),
-                        InkWell(
-                          onTap: () {
-                            _launchURL(HEALTH_URL2);
-                          },
-                          child: Container(
-                              width: MediaQuery.of(context).size.width - 64 - 48,
-                              height: 46,
-                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(4.0), color: AppColor_Green),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Image.asset('assets/ic_health2.png', width: 24),
-                                  const SizedBox(width: 6),
-                                  H16(
-                                    text: "영유아건강검진 정보 확인하기",
-                                    weight: FW.medium,
-                                    color: Colors.white,
-                                  ),
-                                ],
-                              )),
+                        const SizedBox(height: 24),
+                        Container(
+                          width: MediaQuery.of(context).size.width - 64,
+                          decoration: const BoxDecoration(
+                              color: AppColor_Selector_Border),
+                          margin: const EdgeInsets.only(right: 30, left: 30),
+                          child: ExtendedImage.network(
+                            dicVaccineInfo == null
+                                ? ""
+                                : dicVaccineInfo!.tipImage!,
+                            width: MediaQuery.of(context).size.width - 64 - 60,
+                            fit: BoxFit.fitWidth,
+                            cache: true,
+                          ),
                         ),
+                        const SizedBox(height: 30),
                       ])),
-                  // const SizedBox(height: 20),
-                  // Container(
-                  //     width: MediaQuery.of(context).size.width - 64,
-                  //     decoration: BoxDecoration(borderRadius: BorderRadius.circular(18.0), color: AppColor_Light_Gray),
-                  //     // padding: const EdgeInsets.all(30),
-                  //     child: Column(children: [
-                  //       const SizedBox(height: 30),
-                  //       Row(
-                  //         mainAxisAlignment: MainAxisAlignment.start,
-                  //         children: [
-                  //           const SizedBox(width: 30),
-                  //           H16(text: "시기별 유행성 질환 Tip "),
-                  //           Image.asset(
-                  //             "assets/ic_disease_tip.png",
-                  //             width: 21,
-                  //           ),
-                  //         ],
-                  //       ),
-                  //       const SizedBox(height: 24),
-                  //       Container(
-                  //         width: MediaQuery.of(context).size.width - 64,
-                  //         decoration: const BoxDecoration(color: AppColor_Selector_Border),
-                  //         margin: const EdgeInsets.only(right: 30, left: 30),
-                  //         child: ExtendedImage.network(
-                  //           dicVaccineInfo == null ? "" : dicVaccineInfo!.tipImage!,
-                  //           width: MediaQuery.of(context).size.width - 64 - 60,
-                  //           fit: BoxFit.fitWidth,
-                  //           cache: true,
-                  //         ),
-                  //       ),
-                  //       const SizedBox(height: 30),
-                  //     ])),
                   // widget.result == 1 ? const SizedBox(height: 40) : const SizedBox(),
                   // widget.result == 1 ? ResultArea(type: 3, result: 2) : const SizedBox(),
                 ],
@@ -820,6 +848,7 @@ class DiseaseReportState extends BaseState<DiseaseReport> {
                     },
                     itemCount: dicDiseaseInfo == null ? 0 : dicDiseaseInfo!.symptomList!.length,
                   ),
+
                 ),
                 const SizedBox(height: 12),
                 Container(
