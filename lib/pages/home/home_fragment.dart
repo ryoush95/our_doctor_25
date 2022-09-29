@@ -68,7 +68,7 @@ class HomeFragmentState extends BaseState<HomeFragment> {
   @override
   void initState() {
     super.initState();
-    getMonitor2HomeDataInfo();
+    // getMonitor2HomeDataInfo();
     getHomeDataInfo();
     // if (getLeffDay() == 0 && isFirstApp) {
     //   showReviewDialog();
@@ -102,35 +102,35 @@ class HomeFragmentState extends BaseState<HomeFragment> {
   // Network functions
   //////////////////////////////////
   //홈 발달 리포트 얻기
-  Future<void> getMonitor2HomeDataInfo() async {
-    setState(() {
-      isLoading = true;
-    });
-
-    Future<HomeMonitorResModel> info = httpService.homeMonitorInfo();
-    info.then((HomeMonitorResModel value) async {
-      setState(() {
-        isLoading = false;
-      });
-      if (value.result == 0) {
-        dicHomeDataInfo = value.data!;
-        setState(() {});
-      } else {
-        showToast(value.msg ?? "");
-        if (value.result == 106) {
-          //token expired
-          Navigator.pushReplacement(
-              context, SlideRightTransRoute(builder: (context) => FirstPage()));
-        }
-      }
-    }).catchError((onError) {
-      setState(() {
-        isLoading = false;
-      });
-      showToast(onError);
-    });
-  }
-
+  // Future<void> getMonitor2HomeDataInfo() async {
+  //   setState(() {
+  //     isLoading = true;
+  //   });
+  //
+  //   Future<HomeMonitorResModel> info = httpService.homeMonitorInfo();
+  //   info.then((HomeMonitorResModel value) async {
+  //     setState(() {
+  //       isLoading = false;
+  //     });
+  //     if (value.result == 0) {
+  //       dicHomeDataInfo = value.data!;
+  //       setState(() {});
+  //     } else {
+  //       showToast(value.msg ?? "");
+  //       if (value.result == 106) {
+  //         //token expired
+  //         Navigator.pushReplacement(
+  //             context, SlideRightTransRoute(builder: (context) => FirstPage()));
+  //       }
+  //     }
+  //   }).catchError((onError) {
+  //     setState(() {
+  //       isLoading = false;
+  //     });
+  //     showToast(onError);
+  //   });
+  // }
+  //
   //홈케어 홈 데이터 얻기
   Future<void> getHomeDataInfo() async {
     setState(() {

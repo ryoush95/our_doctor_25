@@ -59,10 +59,10 @@ class NewsAreaState extends BaseState<NewsArea> {
         // arrNewsList.addAll(value.data!.contents!);
         var l = value.data!.contents!;
         for(var i in l){
+          if(arrNewsList.length >= 10) break;
           if(i.topic == "treatment"){
             arrNewsList.add(i);
           }
-
         }
       }
     }).catchError((onError) {
@@ -75,7 +75,6 @@ class NewsAreaState extends BaseState<NewsArea> {
 
   @override
   Widget build(BuildContext context) {
-    final subArrNewsList = arrNewsList.sublist(0, 10);
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 28),
@@ -97,17 +96,17 @@ class NewsAreaState extends BaseState<NewsArea> {
             ],
           ),
           const SizedBox(height: 12),
-          subArrNewsList != null && subArrNewsList.length > 1
+          arrNewsList.length > 1
               ? SizedBox(
                   width: double.infinity,
                   height: 220,
                   child: ListView.builder(
                       shrinkWrap: true,
                       scrollDirection: Axis.horizontal,
-                      itemCount: subArrNewsList.length,
+                      itemCount: arrNewsList.length,
                       itemBuilder: (BuildContext context, int index) {
                         CommunityDto info =
-                            subArrNewsList.elementAt(index);
+                             arrNewsList.elementAt(index);
                         return InkWell(
                           child: ItemNews(item: info),
                           onTap: () {

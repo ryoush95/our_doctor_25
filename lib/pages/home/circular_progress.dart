@@ -71,16 +71,13 @@ class CircularProgressState extends BaseState<CircularProgress> {
 
   double showScore() {
     double result = 0;
-    ConvertScoreProvider convertScore = Provider.of<ConvertScoreProvider>(context);
 
     if (dicHomeDataInfo == null) {
-      convertScore.changeScore(0);
       return result;
     }
 
     if (widget.type == 0) {
       result = dicHomeDataInfo!.totalScore!;
-      convertScore.changeScore(result);
     } else {
       if (widget.subType == 0) {
         result = dicHomeDataInfo!.bodyScore!;
@@ -170,7 +167,12 @@ class CircularProgressState extends BaseState<CircularProgress> {
                   center: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      H36B(text: (dicHomeDataInfo == null || showScore() == 0) ? "??" : convertScore(showScore().toString()), weight: FW.regular),
+                      H36B(
+                          text: (dicHomeDataInfo == null || showScore() == 0)
+                              ? "??"
+                              : convertScore(showScore().toString()),
+                          weight: FW.regular,
+                      ),
                       const SizedBox(width: 5),
                       H18(text: LanguageService.trans('jom'), weight: FW.regular),
                     ],

@@ -287,8 +287,9 @@ class TopAreaState extends BaseState<TopArea> {
 
   @override
   Widget build(BuildContext context) {
-    double topScore = Provider.of<ConvertScoreProvider>(context).score;
-    return Container(
+    // double topScore = Provider.of<ConvertScoreProvider>(context).score;
+    return !isLoading
+        ? Container(
       height: 190,
       padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
       decoration: const BoxDecoration(
@@ -345,9 +346,9 @@ class TopAreaState extends BaseState<TopArea> {
                             style: AppTextStyle.PD(AppColor_Primary, 16,
                                 weight: FW.bold)),
                         TextSpan(
-                            text: widget.type == 0
-                                ? titleMsg + "${topScore} 점"
-                                : titleMsg1,
+                            text: dicHomeDataInfo!.totalScore != 0
+                                ? titleMsg + "${dicHomeDataInfo!.totalScore} 점"
+                                : "어린이는 아직 \n모니터링 기록이 없어요",
                             style: AppTextStyle.PD(AppColor_BlackText, 16,
                                 weight: FW.regular, height: 1.5)),
                       ]),
@@ -382,6 +383,9 @@ class TopAreaState extends BaseState<TopArea> {
               )),
         ],
       ),
+    )
+    : const Center(
+      child: CircularProgressIndicator(),
     );
   }
 }
