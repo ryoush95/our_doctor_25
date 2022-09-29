@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:ourdoctor/global/app_colors.dart';
 import 'package:ourdoctor/global/app_styles.dart';
 import 'package:ourdoctor/models/community_detail_res_model.dart';
+import 'package:ourdoctor/models/community_list_res_model.dart';
 import 'package:ourdoctor/models/home_data_res_model.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
 import 'package:ourdoctor/pages/components/h12.dart';
@@ -11,7 +12,7 @@ import 'package:ourdoctor/pages/components/h14.dart';
 class ItemNews extends StatefulWidget {
   const ItemNews({Key? key, required this.item}) : super(key: key);
 
-  final CommunityList item;
+  final CommunityDto item;
   @override
   ItemNewsState createState() => ItemNewsState();
 }
@@ -22,9 +23,7 @@ class ItemNewsState extends BaseState<ItemNews> {
 
   String getTopicName(String topic) {
       String result = "";
-      if (widget.item.topic! == "treatment") {
-
-        if (topic == "notice") {
+      if (topic == "notice") {
         result = "공지/이벤트";
       } else if (topic == "treatment") {
         result = "뉴스";
@@ -37,7 +36,6 @@ class ItemNewsState extends BaseState<ItemNews> {
       } else {
         result = "우아팁";
       }
-    }
       return result;
 
   }

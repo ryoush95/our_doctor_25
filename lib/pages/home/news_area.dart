@@ -33,8 +33,9 @@ class NewsArea extends StatefulWidget {
 
 class NewsAreaState extends BaseState<NewsArea> {
   final HttpService httpService = HttpService();
-  List<CommunityList>? arrNewsList;
+  // CommunityListResModel? arrNewsList;
   CommunityDetailDto? dicDetailInfo;
+  List<CommunityDto> arrNewsList = [];
 
   @override
   void initState() {
@@ -49,23 +50,19 @@ class NewsAreaState extends BaseState<NewsArea> {
       isLoading = true;
     });
 
-    Future<HomeDataResModel> info =
-        httpService.homeData(widget.curCategory == 0 ? "home" : "monitor");
-    info.then((HomeDataResModel value) async {
+    Future<CommunityListResModel> info = httpService.communityList("", 0, "treatment", "recent", "");
+    info.then((CommunityListResModel value) async {
       setState(() {
         isLoading = false;
       });
       if (value.result == 0) {
-        // arrNewsList = value.data!.newsList;
-        arrNewsList = value.data!.communityList; //TODO:newslist
+        // arrNewsList.addAll(value.data!.contents!);
+        var l = value.data!.contents!;
+        for(var i in l){
+          if(i.topic == "treatment"){
+            arrNewsList.add(i);
+          }
 
-        setState(() {});
-      } else {
-        showToast(value.msg ?? "");
-        if (value.result == 106) {
-          //token expired
-          Navigator.pushReplacement(
-              context, SlideRightTransRoute(builder: (context) => FirstPage()));
         }
       }
     }).catchError((onError) {
@@ -78,7 +75,7 @@ class NewsAreaState extends BaseState<NewsArea> {
 
   @override
   Widget build(BuildContext context) {
-    final subArrNewsList = arrNewsList?.sublist(0, 10);
+    final subArrNewsList = arrNewsList.sublist(0, 10);
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 28),
@@ -109,28 +106,19 @@ class NewsAreaState extends BaseState<NewsArea> {
                       scrollDirection: Axis.horizontal,
                       itemCount: subArrNewsList.length,
                       itemBuilder: (BuildContext context, int index) {
-                        CommunityList info =
+                        CommunityDto info =
                             subArrNewsList.elementAt(index);
                         return InkWell(
                           child: ItemNews(item: info),
                           onTap: () {
-                            if (widget.curCategory == 0) {
                               Navigator.push(
                                   context,
                                   SlideRightTransRoute(
                                       builder: (context) => CommunityDetailPage(
                                             uid: info.uid,
-                                            videoUrl: info.blogUrl,
-                                          )));
-                            } else {
-                              Navigator.push(
-                                  context,
-                                  SlideRightTransRoute(
-                                      builder: (context) => CommunityDetailPage(
-                                            uid: info.uid,
-                                        videoUrl: info.blogUrl,
-                                          )));
-                            }
+                                            videoUrl: null,
+                                          )),
+                              );
                           },
                         );
                       }),

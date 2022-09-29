@@ -1505,6 +1505,7 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
                             checkValid();
                           } else {
                             getSymtomList();
+                            monitoringData!.symptom_list![index].symptom = symptomList[selSymtomidx][0];
                           }
                         });
                       },

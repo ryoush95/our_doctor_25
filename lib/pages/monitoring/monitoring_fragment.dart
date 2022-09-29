@@ -397,7 +397,7 @@ class MonitoringFragmentState extends BaseState<MonitoringFragment> {
                     ),
                     const SizedBox(height: 10),
                     InfoArea(type: curCategory),
-                    ReportArea(type: curCategory, result: 0),
+                    ReportArea(type: curCategory, result: 1),
                     const SizedBox(height: 60),
                     GrowthStoreArea(curCategory: 1),
                     const SizedBox(height: 60),
