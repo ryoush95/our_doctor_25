@@ -20,9 +20,11 @@ import 'package:ourdoctor/pages/home/community_area.dart';
 import 'package:ourdoctor/pages/home/developmental_class_area.dart';
 import 'package:ourdoctor/pages/home/growth_store_area.dart';
 import 'package:ourdoctor/pages/home/news_area.dart';
+import 'package:ourdoctor/pages/home/quiz_area.dart';
 import 'package:ourdoctor/pages/home/report_area.dart';
 import 'package:ourdoctor/pages/home/review_dialog.dart';
 import 'package:ourdoctor/pages/home/school_area.dart';
+import 'package:ourdoctor/pages/home/talk_area.dart';
 import 'package:ourdoctor/pages/home/top_area.dart';
 import 'package:ourdoctor/pages/intro/first.dart';
 import 'package:show_more_text_popup/show_more_text_popup.dart';
@@ -178,19 +180,23 @@ class HomeFragmentState extends BaseState<HomeFragment> {
                   children: [
                     TopArea(name: gSelChildInfo!.name!, type: 0),
 
-                    const SizedBox(height: 30),//뉴스
-                    NewsArea(curCategory: 1),
+                    const SizedBox(height: 30),
+                    QuizArea(),//질문
+                    const SizedBox(height: 30),
+                    TalkArea(),//게시판
+                    const SizedBox(height: 30),
+                    NewsArea(curCategory: 1),//뉴스
                     const SizedBox(height: 30),
                     SchoolArea(curCategory: 2),//교육
                     const SizedBox(height: 30),
                     CommunityArea(curCategory: 0), //우아팁
                     const SizedBox(height: 30),
-                    GrowthStoreArea(curCategory: 0),
-                    const SizedBox(height: 30),
-                    ProductShow(
+                    ProductShow(//발달클래스
                         category: category,
                         title: LanguageService.trans("발달클래스 홈케어"),
                         list: arrLikeList),
+                    GrowthStoreArea(curCategory: 0),//성장스토어
+                    const SizedBox(height: 30),
                   ],
                 ),
               ),

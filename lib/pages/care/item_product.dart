@@ -128,7 +128,7 @@ class ItemProductState extends BaseState<ItemProduct> {
                             //     width: 40,
                             //   ),
                             ? Icon(Icons.favorite, color: Colors.pinkAccent,)
-                            : Icon(Icons.favorite_border),
+                            : Icon(Icons.favorite_border, color: Colors.black26),
                     ),
                     right: 5,
                     top: 5),

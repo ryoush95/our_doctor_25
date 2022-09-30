@@ -94,7 +94,7 @@ class ItemGrowthState extends BaseState<ItemGrowth> {
                       },
                       child: widget.info!.liked! == "1"
                           ? Icon(Icons.favorite, color: Colors.pinkAccent,)
-                          : Icon(Icons.favorite_border),
+                          : Icon(Icons.favorite_border, color: Colors.black26),
                           /*? Image.asset('assets/ic_heart_on.png', width: 40)
                           : Image.asset(
                               'assets/ic_heart_off.png',
