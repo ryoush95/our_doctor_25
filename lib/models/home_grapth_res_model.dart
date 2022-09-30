@@ -592,7 +592,7 @@ class MonitoringSleep {
   double? percent;
   String? inputTime;
   Diagnose? diagnose;
-  int? difference;
+  double? difference;
 
   MonitoringSleep({
     this.value, 
@@ -614,7 +614,7 @@ class MonitoringSleep {
     if (json['difference'] == null) {
       difference = 0;
     } else {
-      difference = fromJsonInt(json['difference']);
+      difference = fromJsonDouble(json['difference']);
     }
   }
 

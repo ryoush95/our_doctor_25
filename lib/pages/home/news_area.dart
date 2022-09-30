@@ -22,7 +22,6 @@ import 'package:ourdoctor/pages/base/base_state.dart';
 import '../app_event.dart';
 import 'item_community.dart';
 import 'item_news.dart';
-import 'item_quiz.dart';
 
 class NewsArea extends StatefulWidget {
   NewsArea({Key? key, this.curCategory = 0}) : super(key: key);
@@ -61,7 +60,7 @@ class NewsAreaState extends BaseState<NewsArea> {
         var l = value.data!.contents!;
         for(var i in l){
           if(arrNewsList.length >= 10) break;
-          if(i.topic == "treatment" && i.imgUrl != null){
+          if(i.topic == "treatment" && i.imgUrl != ""){
             arrNewsList.add(i);
           }
         }
@@ -97,7 +96,7 @@ class NewsAreaState extends BaseState<NewsArea> {
             ],
           ),
           const SizedBox(height: 12),
-          arrNewsList.length > 1
+          !isLoading
               ? SizedBox(
                   width: double.infinity,
                   height: 220,
