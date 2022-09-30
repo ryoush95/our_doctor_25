@@ -43,7 +43,8 @@ class ItemNewsState extends BaseState<ItemNews> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: MediaQuery.of(context).size.width * .7,
+      width: 190,
+      height: 190,
       margin: const EdgeInsets.only(right: 10),
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
       decoration: BoxDecoration(
@@ -89,6 +90,7 @@ class ItemNewsState extends BaseState<ItemNews> {
                   borderRadius: BorderRadius.circular(8.0),
                   child: ExtendedImage.network(
                     widget.item.imgUrl!,
+
                     height: 158,
                     fit: BoxFit.fill,
                   ),
