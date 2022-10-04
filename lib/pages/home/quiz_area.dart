@@ -41,7 +41,6 @@ class QuizAreaState extends BaseState<QuizArea> {
   @override
   void initState() {
     super.initState();
-
     getNewsList();
   }
 
@@ -51,7 +50,7 @@ class QuizAreaState extends BaseState<QuizArea> {
       isLoading = true;
     });
 
-    Future<CommunityListResModel> info = httpService.communityList("", 0, "faq", "recent", "");
+    Future<CommunityListResModel> info = httpService.communityList("", 0, "faq", "like", "");
     info.then((CommunityListResModel value) async {
       setState(() {
         isLoading = false;
@@ -76,8 +75,7 @@ class QuizAreaState extends BaseState<QuizArea> {
 
   @override
   Widget build(BuildContext context) {
-    final subArrNewsList = arrNewsList.sublist(0, 5);
-
+    final subArrNewsList = arrNewsList.sublist(1, 6);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 28),
       child: Column(
@@ -101,9 +99,8 @@ class QuizAreaState extends BaseState<QuizArea> {
           subArrNewsList != null && subArrNewsList.length > 1
               ? SizedBox(
                   width: double.infinity,
-                  height: 300,
-
-                  child: ListView.separated(
+                  height: 163,
+                  child: ListView.builder(
                       //shrinkWrap: true,
                       //scrollDirection: Axis.vertical,
                       itemCount: subArrNewsList.length,
@@ -113,7 +110,7 @@ class QuizAreaState extends BaseState<QuizArea> {
                             subArrNewsList.elementAt(index);
                         return InkWell(
                           child: ItemQuiz(item: info),
-                          onTap: () {
+                          onTap: () async {
                             if(widget.curCategory == 0) {
                               Navigator.push(context, SlideRightTransRoute(
                                   builder: (context) => CommunityDetailPage(
@@ -126,11 +123,9 @@ class QuizAreaState extends BaseState<QuizArea> {
                                     uid: info.uid,
                                   )));
                             }
-
-                          },
+                          }
                         );
-
-                      },separatorBuilder: (BuildContext context, int index) { return Divider(thickness: 1);},
+                      },
                       ),
                 )
               : const SizedBox(),

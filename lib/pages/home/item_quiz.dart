@@ -8,6 +8,7 @@ import 'package:ourdoctor/models/community_detail_res_model.dart';
 import 'package:ourdoctor/models/community_list_res_model.dart';
 import 'package:ourdoctor/models/home_data_res_model.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
+import 'package:ourdoctor/pages/components/h10.dart';
 import 'package:ourdoctor/pages/components/h12.dart';
 import 'package:ourdoctor/pages/components/h14.dart';
 
@@ -33,9 +34,9 @@ class ItemQuizState extends BaseState<ItemQuiz> {
     } else if (topic == "school") {
       result = "교육";
     } else if (topic == "faq") {
-      result = "질문";
+      result = "Hit!";
     } else if (topic == "talk") {
-      result = "자유게시판";
+      result = "New!";
     } else {
       result = "우아팁";
     }
@@ -46,99 +47,70 @@ class ItemQuizState extends BaseState<ItemQuiz> {
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width * .7,
-      height: 55,
+      height: 40,
       margin: const EdgeInsets.only(right: 10),
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+      //padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
 
       /* decoration: BoxDecoration(
         color: Colors.white,
         border: Border.all(color: AppColor_Selector_Border),
         borderRadius: const BorderRadius.all(Radius.circular(8)),
       ),*/
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Visibility(
-            visible: widget.item.imgUrl! != "",
-            child: Container(
-              //margin: const EdgeInsets.only(top: 10,bottom: 8),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(6.0),
-                child: ExtendedImage.network(
-                  widget.item.imgUrl!,
-                  width: 50,
-                  height: 35,
-                  fit: BoxFit.fill,
-                ),
-              ),
-            ),
-          ),
-          Expanded(
               child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
+              const Divider(
+                height: 1,
+                color: Colors.black26,
+                thickness: 1,
+              ),
+              const SizedBox(height: 10),
               Row(
                 children: [
-                  const SizedBox(width: 5),
+                  const SizedBox(width: 7),
                   H14(
                       text: "[" + getTopicName(widget.item.topic!) + "]",
                       weight: FW.semi_bold,
                       color: AppColor_Primary),
-                  const SizedBox(width: 5),
+                  const SizedBox(width: 7),
                   Expanded(
                     child: H14(
                       text: widget.item.title!,
                       weight: FW.semi_bold,
-                      align: TextAlign.start,
+                      align: TextAlign.left,
                       color: AppColor_BlackText,
                       ellipsis: false,
                     ),
                   ),
+                  Container(
+                    width: 70,
+                    child: AutoSizeText(
+                      getcontent(widget.item),
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        color: AppColor_BlackText.withOpacity(.4),
+                        fontSize: 10,
+                      ),
+                      maxLines: 1,
+                      maxFontSize: 12,
+                      minFontSize: 8,
+                      textAlign: TextAlign.right,
+                    ),
+                  ),
                 ],
               ),
-              const SizedBox(height: 6),
-              Expanded(
-                child: AutoSizeText(
-                  getcontent(widget.item),
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    color: AppColor_BlackText.withOpacity(.4),
-                    fontSize: 10,
-                  ),
-                  maxLines: 1,
-                  maxFontSize: 12,
-                  minFontSize: 8,
-                  textAlign: TextAlign.right,
-                ),
-              ),
             ],
-          )),
-        ],
-      ),
+          ),
     );
   }
 
   String getcontent(CommunityDto info) {
     String result = "";
 
-    if (info.topic! == "notice") {
-      result = "우아닥터·" +
-          diffTime(info.regTime!) +
-          "·좋아요 " +
-          info.likeCnt.toString() +
-          "·댓글 " +
-          info.commentCnt.toString();
-    } else if (info.topic! == "life") {
-      result = info.nickname! +
-          "·" +
-          diffTime(info.regTime!) +
-          "·댓글 " +
-          info.commentCnt.toString();
-    } else {
-      result = info.nickname! +
-          "·" +
-          diffTime(info.regTime!) +
-          "·좋아요 " +
+    if (info.topic! != "") {
+      result = ""
+          //diffTime(info.regTime!) +
+          "좋아요 " +
           info.likeCnt.toString() +
           "·댓글 " +
           info.commentCnt.toString();

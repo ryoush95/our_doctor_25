@@ -63,7 +63,7 @@ class DiseaseReportState extends BaseState<DiseaseReport> {
   int type = 0; // 0이면 캘린더 표시, 1이면 질병
 
   List<DiseaseData> data = [
-    DiseaseData(date: "2022-05-08", text: "Health screenings"),
+    DiseaseData(date: "2022-10-1", text: "Health screenings"),
     DiseaseData(date: "2022-05-18", text: "MMR"),
   ];
 

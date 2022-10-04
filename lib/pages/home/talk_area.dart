@@ -76,7 +76,7 @@ class TalkAreaState extends BaseState<TalkArea> {
 
   @override
   Widget build(BuildContext context) {
-    final subArrNewsList = arrNewsList.sublist(0, 5);
+    final subArrNewsList = arrNewsList.sublist(1, 6);
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 28),
@@ -87,7 +87,7 @@ class TalkAreaState extends BaseState<TalkArea> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              H20(text: LanguageService.trans('자유게사판')),
+              H20(text: LanguageService.trans('자유게시판')),
               InkWell(
                 onTap: () {
                   eventBus.fire(MoreCommunityEvent());
@@ -100,31 +100,35 @@ class TalkAreaState extends BaseState<TalkArea> {
           subArrNewsList != null && subArrNewsList.length > 1
               ? SizedBox(
                   width: double.infinity,
-                  height: 300,
-                  child: ListView.separated(
-                      //shrinkWrap: false,
-                      //scrollDirection: Axis.vertical,
-                    physics: const NeverScrollableScrollPhysics(),
-                      itemCount: subArrNewsList.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        CommunityDto info =
-                            subArrNewsList.elementAt(index);
-                        return InkWell(
-                          child: ItemQuiz(item: info),
-                          onTap: () {
-                              Navigator.push(
-                                  context,
-                                  SlideRightTransRoute(
-                                      builder: (context) => CommunityDetailPage(
-                                            uid: info.uid,
-                                            videoUrl: null,
-                                          )),
-                              );
-                          },
-                        );
-                      },separatorBuilder: (BuildContext context, int index) { return Divider(thickness: 1);},
-                      ),
-                )
+                  height: 163,
+            child: ListView.builder(
+              //shrinkWrap: true,
+              //scrollDirection: Axis.vertical,
+              itemCount: subArrNewsList.length,
+              physics: const NeverScrollableScrollPhysics(),
+              itemBuilder: (BuildContext context, int index) {
+                CommunityDto info =
+                subArrNewsList.elementAt(index);
+                return InkWell(
+                    child: ItemQuiz(item: info),
+                    onTap: () {
+                      if(widget.curCategory == 0) {
+                        Navigator.push(context, SlideRightTransRoute(
+                            builder: (context) => CommunityDetailPage(
+                              uid: info.uid,
+                              videoUrl: info.blogUrl,
+                            )));
+                      } else {
+                        Navigator.push(context, SlideRightTransRoute(
+                            builder: (context) => CommunityDetailPage(
+                              uid: info.uid,
+                            )));
+                      }
+                    }
+                );
+              },
+            ),
+          )
               : const SizedBox(),
         ],
       ),

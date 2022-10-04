@@ -200,8 +200,8 @@ class CommunityFragmenttState extends BaseState<CommunityFragment> {
               }
             },
             child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 25),
-              margin: const EdgeInsets.symmetric(horizontal: 30),
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              margin: const EdgeInsets.symmetric(horizontal: 25),
               decoration: BoxDecoration(
                 color: (info.topic! == "notice" || info.fixed == "1") ? AppColor_Primary.withOpacity(0.05) : AppColor_Light_Gray,
                 borderRadius: const BorderRadius.all(Radius.circular(16)),
@@ -228,7 +228,7 @@ class CommunityFragmenttState extends BaseState<CommunityFragment> {
                                 ? AppColor_Primary 
                                 : AppColor_BlackText,
                               height: 1.1,
-                              fontSize: 16
+                              fontSize: 14,
                             ),
                             maxLines: 2,
                             color: AppColor_Yellow,
@@ -251,7 +251,7 @@ class CommunityFragmenttState extends BaseState<CommunityFragment> {
                                   style: TextStyle(
                                     fontWeight: FontWeight.w500,
                                     color: AppColor_BlackText.withOpacity(.4),
-                                    fontSize: 12,
+                                    fontSize: 10,
                                   ),
                                   maxLines: 1,
                                   maxFontSize: 12,
@@ -724,7 +724,7 @@ class CommunityFragmenttState extends BaseState<CommunityFragment> {
       fontWeight: FontWeight.w600,
       color: (info.topic! == "notice" || info.fixed == "1") ? AppColor_Primary : AppColor_BlackText,
       height: 1.1,
-      fontSize: 16,
+      fontSize: 14,
     ),
     textAlign: TextAlign.left,
     maxLines: 2,

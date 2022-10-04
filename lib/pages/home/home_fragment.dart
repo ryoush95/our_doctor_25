@@ -182,21 +182,21 @@ class HomeFragmentState extends BaseState<HomeFragment> {
 
                     const SizedBox(height: 30),
                     QuizArea(),//질문
-                    const SizedBox(height: 30),
+                    const SizedBox(height: 50),
                     TalkArea(),//게시판
-                    const SizedBox(height: 30),
+                    const SizedBox(height: 50),
                     NewsArea(curCategory: 1),//뉴스
-                    const SizedBox(height: 30),
+                    const SizedBox(height: 50),
                     SchoolArea(curCategory: 2),//교육
-                    const SizedBox(height: 30),
+                    const SizedBox(height: 50),
                     CommunityArea(curCategory: 0), //우아팁
-                    const SizedBox(height: 30),
+                    const SizedBox(height: 50),
                     ProductShow(//발달클래스
                         category: category,
                         title: LanguageService.trans("발달클래스 홈케어"),
                         list: arrLikeList),
                     GrowthStoreArea(curCategory: 0),//성장스토어
-                    const SizedBox(height: 30),
+                    const SizedBox(height: 90),
                   ],
                 ),
               ),
