@@ -42,6 +42,8 @@ class EditReviewPageState extends BaseState<EditReviewPage> {
   List<String> imageNames = [];
   int imageCount = 0;
 
+  String profileImage = "";
+
   @override
   void initState() {
     super.initState();
@@ -87,7 +89,7 @@ class EditReviewPageState extends BaseState<EditReviewPage> {
     showDialog(
         context: context,
         builder: (context) {
-          return PhotoDialog(onGallery: getGalleryImageAndCrop, onCamera: getCameraImageAndCrop);
+          return PhotoDialog(onGallery: getGalleryImageAndCrop, onCamera: getCameraImageAndCrop, onprofileImage: getProfileImage,);;
         });
   }
 
@@ -110,6 +112,13 @@ class EditReviewPageState extends BaseState<EditReviewPage> {
     var croppedImage = await cropImage(image.path);
     if (croppedImage != null) {
       uploadFile(croppedImage);
+    }
+  }
+
+  void getProfileImage() async {
+    Navigator.pop(context);
+    if (profileImage.isNotEmpty) {
+      profileImage = "";
     }
   }
 

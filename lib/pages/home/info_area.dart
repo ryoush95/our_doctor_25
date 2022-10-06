@@ -46,6 +46,7 @@ class InfoAreaState extends BaseState<InfoArea> {
   HOmeSymptomGraphDto? dicDiseaseInfo;
   int type = 0;
   String firstSym = "";
+  String profileImage = "";
 
   @override
   void initState() {
@@ -65,7 +66,8 @@ class InfoAreaState extends BaseState<InfoArea> {
         builder: (context) {
           return PhotoDialog(
               onGallery: getGalleryImageAndCrop,
-              onCamera: getCameraImageAndCrop);
+              onCamera: getCameraImageAndCrop,
+              onprofileImage: getProfileImage,);
         });
   }
 
@@ -88,6 +90,13 @@ class InfoAreaState extends BaseState<InfoArea> {
     var croppedImage = await cropImage(image.path);
     if (croppedImage != null) {
       uploadFile(croppedImage);
+    }
+  }
+
+  void getProfileImage() async {
+    Navigator.pop(context);
+    if (profileImage.isNotEmpty) {
+      profileImage = "";
     }
   }
 

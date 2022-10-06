@@ -128,7 +128,7 @@ class MonitoringStartPageState extends BaseState<MonitoringStartPage> {
     }
 
     List<String> arr = result.split(",");
-    result = result + sprintf(" 총 %d개 항목의 업데이트가 필요합니다", [arr.length]);
+    result = result + sprintf(" 총 %d개 항목의 업데이트가 필요합니다.", [arr.length]);
     return result;
   }
 

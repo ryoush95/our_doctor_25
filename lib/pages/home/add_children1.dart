@@ -133,7 +133,7 @@ class AddChildren1PageState extends BaseState<AddChildren1Page> {
     showDialog(
         context: context,
         builder: (context) {
-          return PhotoDialog(onGallery: getGalleryImageAndCrop, onCamera: getCameraImageAndCrop);
+          return PhotoDialog(onGallery: getGalleryImageAndCrop, onCamera: getCameraImageAndCrop, onprofileImage: getProfileImage,);;
         });
   }
 
@@ -156,6 +156,13 @@ class AddChildren1PageState extends BaseState<AddChildren1Page> {
     var croppedImage = await cropImage(image.path);
     if (croppedImage != null) {
       uploadFile(croppedImage);
+    }
+  }
+
+  void getProfileImage() async {
+    Navigator.pop(context);
+    if (profileImage.isNotEmpty) {
+      profileImage = "";
     }
   }
 

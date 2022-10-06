@@ -46,6 +46,8 @@ class WriteReviewPageState extends BaseState<WriteReviewPage> {
   int imageCount = 0;
   ProductDetailDto mData = ProductDetailDto();
 
+  String profileImage = "";
+
   @override
   void initState() {
     super.initState();
@@ -100,7 +102,7 @@ class WriteReviewPageState extends BaseState<WriteReviewPage> {
     showDialog(
         context: context,
         builder: (context) {
-          return PhotoDialog(onGallery: getGalleryImageAndCrop, onCamera: getCameraImageAndCrop);
+          return PhotoDialog(onGallery: getGalleryImageAndCrop, onCamera: getCameraImageAndCrop, onprofileImage: getProfileImage,);
         });
   }
 
@@ -123,6 +125,13 @@ class WriteReviewPageState extends BaseState<WriteReviewPage> {
     var croppedImage = await cropImage(image.path);
     if (croppedImage != null) {
       uploadFile(croppedImage);
+    }
+  }
+
+  void getProfileImage() async {
+    Navigator.pop(context);
+    if (profileImage.isNotEmpty) {
+      profileImage = "";
     }
   }
 

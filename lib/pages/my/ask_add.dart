@@ -35,6 +35,8 @@ class AddAskPageState extends BaseState<AddAskPage> {
 
   final titleController = TextEditingController();
   final contentsController = TextEditingController();
+  
+  String profileImage = "";
 
   @override
   void initState() {
@@ -62,7 +64,7 @@ class AddAskPageState extends BaseState<AddAskPage> {
     showDialog(
         context: context,
         builder: (context) {
-          return PhotoDialog(onGallery: getGalleryImageAndCrop, onCamera: getCameraImageAndCrop);
+          return PhotoDialog(onGallery: getGalleryImageAndCrop, onCamera: getCameraImageAndCrop, onprofileImage: getProfileImage,);
         });
   }
 
@@ -87,6 +89,14 @@ class AddAskPageState extends BaseState<AddAskPage> {
       uploadFile(croppedImage);
     }
   }
+
+  void getProfileImage() async {
+    Navigator.pop(context);
+    if (profileImage.isNotEmpty) {
+      profileImage = "";
+    }
+  }
+
 
   Future<File?> cropImage(String imagePath) async {
     File? croppedFile = await ImageCropper.cropImage(

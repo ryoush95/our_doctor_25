@@ -138,7 +138,7 @@ class ProductDialogState extends State<ProductDialog> {
                               height: 50,
                               child: Center(
                                 child: H16(
-                                  text: "장바구니에 상품을 담았어요",
+                                  text: "장바구니에 상품을 담았어요.",
                                   color: AppColor_BlackText.withOpacity(0.8),
                                   weight: FW.medium,
                                   height: 1.3,

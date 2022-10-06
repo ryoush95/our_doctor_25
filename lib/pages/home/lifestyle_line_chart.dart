@@ -30,14 +30,14 @@ class LifestyleLineChartState extends BaseState<LifestyleLineChart> {
     final result = widget.data.monitoringFood!.diagnose!.result!;
     switch(result) {
       case '정상':
-        return '$result이에요';
+        return '$result이에요.';
       case '부족':
-        return '$result해요';
+        return '$result해요.';
       case '과다':
-        return '$result예요';
+        return '$result예요.';
 
       default: 
-        return '$result입니다';
+        return '$result입니다.';
     }
   }
 
@@ -48,7 +48,7 @@ class LifestyleLineChartState extends BaseState<LifestyleLineChart> {
         return _diagnoseContainer(
           fText: '일일 권장섭취량대로',
           isNormal: true, 
-          sText: '섭취하고 있어요'
+          sText: '섭취하고 있어요.'
         );
 
       case '부족':
@@ -71,7 +71,7 @@ class LifestyleLineChartState extends BaseState<LifestyleLineChart> {
         return _diagnoseContainer(
           fText: '일일 권장섭취량대로',
           isNormal: true, 
-          sText: '섭취하고 있어요'
+          sText: '섭취하고 있어요.'
         );
     }
   }
@@ -89,7 +89,7 @@ class LifestyleLineChartState extends BaseState<LifestyleLineChart> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         isNormal 
-        ? H16(text: '섭취하고 있어요', color: AppColor_BlackText)
+        ? H16(text: '섭취하고 있어요.', color: AppColor_BlackText)
         : H16(
           text: "${roundOff(calories!)}kcal", 
           color: AppColor_BlackText,
@@ -100,7 +100,7 @@ class LifestyleLineChartState extends BaseState<LifestyleLineChart> {
           children: [
             const SizedBox(width: 5),
             H16(text: sText, color: getColorFromString2(sText),),
-            H16(text: '해요 ', color: AppColor_BlackText),
+            H16(text: '해요. ', color: AppColor_BlackText),
           ],
         ),
         Image.asset("assets/ic_icon2.png", width: 20),

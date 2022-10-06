@@ -348,19 +348,19 @@ class TopAreaState extends BaseState<TopArea> {
                         TextSpan(
                             text: dicHomeDataInfo!.totalScore != 0
                                 ? titleMsg
-                                : "어린이는 아직 \n모니터링 기록이 없어요",
+                                : "어린이는 아직 \n모니터링 기록이 없어요.",
                             style: AppTextStyle.PD(AppColor_BlackText, 16,
                                 weight: FW.regular,)),
                         TextSpan(
                             text: dicHomeDataInfo!.totalScore != 0
                                 ?   "${dicHomeDataInfo!.totalScore}"
-                                : "어린이는 아직 \n모니터링 기록이 없어요",
+                                : "",
                             style: AppTextStyle.PD(AppColor_BlackText, 16,
                                 weight: FW.bold, height: 1.5)),
                         TextSpan(
                             text: dicHomeDataInfo!.totalScore != 0
-                                ?   " 점"
-                                : "어린이는 아직 \n모니터링 기록이 없어요",
+                                ?   " 점!!"
+                                : "",
                             style: AppTextStyle.PD(AppColor_BlackText, 16,
                                 weight: FW.regular, height: 1.5)),
 

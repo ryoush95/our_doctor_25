@@ -226,7 +226,7 @@ class ChildEditPageState extends BaseState<ChildEditPage> {
     showDialog(
         context: context,
         builder: (context) {
-          return PhotoDialog(onGallery: getGalleryImageAndCrop, onCamera: getCameraImageAndCrop);
+          return PhotoDialog(onGallery: getGalleryImageAndCrop, onCamera: getCameraImageAndCrop, onprofileImage: getProfileImage,);;
         });
   }
 
@@ -249,6 +249,13 @@ class ChildEditPageState extends BaseState<ChildEditPage> {
     var croppedImage = await cropImage(image.path);
     if (croppedImage != null) {
       uploadFile(croppedImage);
+    }
+  }
+
+  void getProfileImage() async {
+    Navigator.pop(context);
+    if (profileImage.isNotEmpty) {
+      profileImage = "";
     }
   }
 

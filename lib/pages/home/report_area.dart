@@ -488,7 +488,7 @@ class ReportAreaState extends BaseState<ReportArea> with TickerProviderStateMixi
                       children: [
                         const SizedBox(width: 28),
                         H18(
-                          text: '신장 기록을 처음 완료했어요😊\n한달 주기로 기록을 지속해주세요', 
+                          text: '신장 기록을 처음 완료했어요.😊\n한달 주기로 기록을 지속해주세요.',
                           weight: FW.regular, 
                           maxLine: 2, 
                           align: TextAlign.start,
@@ -511,7 +511,7 @@ class ReportAreaState extends BaseState<ReportArea> with TickerProviderStateMixi
                               text: TextSpan(children: [
                               
                                 TextSpan(text: sprintf(LanguageService.trans('%.1fcm '), [dicHomeGraphTallInfo!.heightPrevDiff]), style: AppTextStyle.PD(AppColor_BlackText, 18, height: 1.8)),
-                                TextSpan(text: dicHomeGraphTallInfo!.heightPrevDiff! >= 0.0 ? '더 늘어났어요' : '줄어들었어요', style: AppTextStyle.PD(AppColor_BlackText, 18, weight: FW.regular)),
+                                TextSpan(text: dicHomeGraphTallInfo!.heightPrevDiff! >= 0.0 ? '더 늘어났어요.' : '줄어들었어요.', style: AppTextStyle.PD(AppColor_BlackText, 18, weight: FW.regular)),
                               ]),
                             ),
                           ],
@@ -538,7 +538,7 @@ class ReportAreaState extends BaseState<ReportArea> with TickerProviderStateMixi
                       children: [
                         const SizedBox(width: 28),
                         H18(
-                          text: '체중 기록을 처음 완료했어요😊\n일일 주기로 기록을 지속해주세요', 
+                          text: '체중 기록을 처음 완료했어요.😊\n일일 주기로 기록을 지속해주세요.',
                           weight: FW.regular, 
                           maxLine: 2, 
                           align: TextAlign.start,
@@ -561,7 +561,7 @@ class ReportAreaState extends BaseState<ReportArea> with TickerProviderStateMixi
                               textAlign: TextAlign.start,
                               text: TextSpan(children: [
                                 TextSpan(text: sprintf(LanguageService.trans('%.1fkg '), [dicHomeGraphWeightInfo!.weightPrevDiff]), style: AppTextStyle.PD(AppColor_BlackText, 18, height: 1.8)),
-                                TextSpan(text: dicHomeGraphWeightInfo!.weightPrevDiff! >= 0.0 ? '더 늘어났어요' : '줄어들었어요', style: AppTextStyle.PD(AppColor_BlackText, 18, weight: FW.regular)),
+                                TextSpan(text: dicHomeGraphWeightInfo!.weightPrevDiff! >= 0.0 ? '더 늘어났어요.' : '줄어들었어요.', style: AppTextStyle.PD(AppColor_BlackText, 18, weight: FW.regular)),
                               ]),
                             ),
                           ],

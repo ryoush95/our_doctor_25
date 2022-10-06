@@ -86,7 +86,7 @@ class InspectionSecondPage2State extends BaseState<InspectionSecondPage2> {
     // p.clearList();
     eventBus.fire(CheckChildQuizEvent());
     Navigator.pop(context);
-    showToast('검사가 저장되었습니다');
+    showToast('검사가 저장되었습니다.');
   }
 
   bool checkValid() {

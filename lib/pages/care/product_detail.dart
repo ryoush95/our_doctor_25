@@ -9,6 +9,7 @@ import 'package:ourdoctor/global/http_service.dart';
 import 'package:ourdoctor/helpers/common_util.dart';
 import 'package:ourdoctor/helpers/transition.dart';
 import 'package:ourdoctor/language/language_service.dart';
+import 'package:ourdoctor/models/basket_list_res_model.dart';
 import 'package:ourdoctor/models/default_res_model.dart';
 import 'package:ourdoctor/models/product_detail_res_model.dart';
 import 'package:ourdoctor/models/product_list_res_model.dart';
@@ -47,11 +48,14 @@ class ProductDetailtState extends BaseState<ProductDetail> {
   bool isLast = true;
   int totalReviewCount = 0;
   bool isLast_review = true;
+  List<bool> checkStatus = [];
+  int shipping_fee = 0;
+  var textEditingControllers = <TextEditingController>[];
   int currentPage = 0;
   ProductDetailDto mData = ProductDetailDto();
   List<ProductDto> arrProductList = [];
   List<ProductReviewDto> reviewList = [];
-
+  List<BasketDto> basketList = [];
   late PageController _pageController;
   late ScrollController _listController;
 
@@ -61,6 +65,7 @@ class ProductDetailtState extends BaseState<ProductDetail> {
 
   @override
   void initState() {
+    BasketList();
     getProductDetail();
     super.initState();
     mData.name = "";
@@ -111,6 +116,38 @@ class ProductDetailtState extends BaseState<ProductDetail> {
       setState(() {
         isLoading = false;
       });
+    });
+  }
+
+  Future<void> BasketList() async {
+    setState(() {
+      isLoading = true;
+    });
+    Future<BasketListResModel> info = httpService.getBasketList();
+    info.then((BasketListResModel value) async {
+      setState(() {
+        isLoading = false;
+      });
+      if (value.result == 0) {
+        shipping_fee = int.parse(value.data!.deliver_price!);
+        basketList.addAll(value.data!.lists!);
+
+        List.generate(basketList.length, (index) => checkStatus.add(false));
+        for (int i = 0; i < basketList.length; i++) {
+          var textEditingController =
+          TextEditingController(text: basketList[i].count.toString());
+          textEditingControllers.add(textEditingController);
+        }
+        setState(() {});
+      } else {
+        showToast(value.msg ?? "");
+        if (value.result == 106) {}
+      }
+    }).catchError((onError) {
+      setState(() {
+        isLoading = false;
+      });
+      showToast(onError);
     });
   }
 
@@ -223,6 +260,7 @@ class ProductDetailtState extends BaseState<ProductDetail> {
               title: mData.name != null ? mData.name : "",
               onBackPressed: onBackPressed,
               basket: goShoppingBasketPage,
+              basketList: basketList.length.toString() + "개",
             ),
             Expanded(
               child: Container(

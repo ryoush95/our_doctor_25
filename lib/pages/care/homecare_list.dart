@@ -139,7 +139,7 @@ class HomeCareListPageState extends BaseState<HomeCareListPage> {
       } else if (widget.category_2 == "BRAIN") {
         result = "언어 발달 관련 상품 ";
       } else if (widget.category_2 == "RECOMMEND") {
-        result = "자주 구매했어요";
+        result = "자주 구매했어요.";
       }
     } else {
       if (widget.category_2 == "BODY") {
@@ -147,7 +147,7 @@ class HomeCareListPageState extends BaseState<HomeCareListPage> {
       } else if (widget.category_2 == "BRAIN") {
         result = "언어 발달클래스";
       } else if (widget.category_2 == "RECOMMEND") {
-        result = getAge(gSelChildInfo!.birth!) + "세가 많이 수강중이에요";
+        result = getAge(gSelChildInfo!.birth!) + "세가 많이 수강중이에요.";
       }
     }
 

@@ -60,10 +60,12 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
   String askImage = "";
 
   bool isValid = true;
-
+  ScrollController controller = ScrollController();
   var heightInputController = TextEditingController();
   var weightInputController = TextEditingController();
   var birthInputController = TextEditingController();
+
+  String profileImage = "";
 
   // var surgeryInputController = TextEditingController();
   // var surgeryDateInputController = TextEditingController();
@@ -353,6 +355,12 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
     super.dispose();
   }
 
+  scrollDown() {
+    controller.animateTo(controller.position.maxScrollExtent + 50,
+        duration: const Duration(milliseconds: 200), curve: Curves.easeInOut);
+    setState(() {});
+  }
+
   getHeightAndWeight() async {
     Future<HomeMonitorResModel> info = httpService.homeMonitorInfo();
     info.then((HomeMonitorResModel value) async {
@@ -618,7 +626,8 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
         builder: (context) {
           return PhotoDialog(
               onGallery: getGalleryImageAndCrop,
-              onCamera: getCameraImageAndCrop);
+              onCamera: getCameraImageAndCrop,
+              onprofileImage: getProfileImage);
         });
   }
 
@@ -641,6 +650,13 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
     var croppedImage = await cropImage(image.path);
     if (croppedImage != null) {
       uploadFile(croppedImage);
+    }
+  }
+
+  void getProfileImage() async {
+    Navigator.pop(context);
+    if (profileImage.isNotEmpty) {
+      profileImage = "";
     }
   }
 
@@ -1225,6 +1241,7 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
                                                   selectedCategory!;
                                             }
                                             checkValid();
+                                            scrollDown();
                                             //getDistrictList();
                                           });
                                         },
@@ -1267,6 +1284,7 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
                                             sleep_night_hour =
                                                 selectedCategory!;
                                             checkValid();
+                                            scrollDown();
                                             //getDistrictList();
                                           });
                                         },
@@ -1282,6 +1300,7 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
                                           setState(() {
                                             sleep_night_min = selectedCategory!;
                                             checkValid();
+                                            scrollDown();
                                             //getDistrictList();
                                           });
                                         },
@@ -1509,7 +1528,7 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
                           }
                         });
                       },
-                      hint: "질병 카테고리를 선택해주세요"),
+                      hint: "질병 카테고리를 선택해주세요."),
                   const SizedBox(height: 10),
                   Visibility(
                     visible:
@@ -1525,7 +1544,7 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
                             checkValid();
                           });
                         },
-                        hint: "증상을 선택해주세요"),
+                        hint: "증상을 선택해주세요."),
                   ),
                   Visibility(
                     visible:

@@ -478,8 +478,8 @@ class SignUpParentPageState extends BaseState<SignUpParentPage> {
                                   text: _idRegexValid
                                     ? nDuplicatedId == 0 
                                       ? " "
-                                      : (nDuplicatedId == 1 ? "중복 아이디는 사용할 수 없습니다" : "사용가능한 아이디입니다")
-                                    : "아이디는 5-20자 사이의 영문 소문자, 숫자, 특수기호 ('_', '-') 만 사용 가능합니다",
+                                      : (nDuplicatedId == 1 ? "중복 아이디는 사용할 수 없습니다." : "사용가능한 아이디입니다.")
+                                    : "아이디는 5-20자 사이의 영문 소문자, 숫자, 특수기호 ('_', '-') 만 사용 가능합니다.",
                                   weight: FW.medium,
                                   align: TextAlign.start,
                                   color: nDuplicatedId == 1 || !_idRegexValid ? AppColor_Red : AppColor_Primary,
@@ -511,7 +511,7 @@ class SignUpParentPageState extends BaseState<SignUpParentPage> {
                                 child: H12(
                                   text: _pwdRegexValid
                                     ? ""
-                                    : "비밀번호는 8-16자 사이의 영문 대소문자, 숫자, 특수기호를 각 1개 이상 포함해야 합니다",
+                                    : "비밀번호는 8-16자 사이의 영문 대소문자, 숫자, 특수기호를 각 1개 이상 포함해야 합니다.",
                                   weight: FW.medium,
                                   align: TextAlign.start,
                                   color: AppColor_Red,
@@ -536,7 +536,7 @@ class SignUpParentPageState extends BaseState<SignUpParentPage> {
                               Container(
                                 margin: const EdgeInsets.only(top: 9),
                                 child: H12(
-                                  text: ((pwd.isEmpty && pwd1.isEmpty) || (pwd == pwd1)) ? " " : "비밀번호가 일치하지 않습니다",
+                                  text: ((pwd.isEmpty && pwd1.isEmpty) || (pwd == pwd1)) ? " " : "비밀번호가 일치하지 않습니다.",
                                   weight: FW.medium,
                                   color: AppColor_Red,
                                 ),
@@ -596,7 +596,7 @@ class SignUpParentPageState extends BaseState<SignUpParentPage> {
                         Container(
                           margin: const EdgeInsets.only(top: 9),
                           child: H12(
-                            text: nDuplicatedNickname == 0 ? " " : (nDuplicatedNickname == 1 ? "중복 닉네임은 사용할 수 없습니다" : "사용가능한 닉네임입니다"),
+                            text: nDuplicatedNickname == 0 ? " " : (nDuplicatedNickname == 1 ? "중복 닉네임은 사용할 수 없습니다." : "사용가능한 닉네임입니다."),
                             weight: FW.medium,
                             color: nDuplicatedNickname == 1 ? AppColor_Red : AppColor_Primary,
                           ),

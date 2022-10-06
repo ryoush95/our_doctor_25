@@ -254,7 +254,7 @@ class CaloriCalcPageState extends BaseState<CaloriCalcPage> {
                             height: 1.5),
                         const SizedBox(height: 8),
                         H14(
-                          text: "먹은 음식을 선택해 영양상태를 효과적으로 기록해보세요",
+                          text: "먹은 음식을 선택해 영양상태를 효과적으로 기록해보세요.",
                           weight: FW.medium,
                           align: TextAlign.left,
                           color: AppColor_BlackText,
@@ -306,7 +306,7 @@ class CaloriCalcPageState extends BaseState<CaloriCalcPage> {
                                   getFoodList();
                                 });
                               },
-                              hint: "분류를 선택하세요"),
+                              hint: "분류를 선택하세요."),
                         ),
                         const SizedBox(height: 12),
                         SizedBox(
@@ -337,7 +337,7 @@ class CaloriCalcPageState extends BaseState<CaloriCalcPage> {
                                   food = selectedCategory!;
                                 });
                               },
-                              hint: "음식을 선택하세요"),
+                              hint: "음식을 선택하세요."),
                         ),
                         Container(
                             width: MediaQuery.of(context).size.width,
@@ -405,7 +405,7 @@ class CaloriCalcPageState extends BaseState<CaloriCalcPage> {
                                 height: 66,
                                 child: Center(
                                   child: H14(
-                                    text: "음식을 선택해주세요",
+                                    text: "음식을 선택해주세요.",
                                     weight: FW.medium,
                                     color: AppColor_BlackText,
                                   ),

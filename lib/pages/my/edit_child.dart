@@ -193,7 +193,7 @@ class EditChildPageState extends BaseState<EditChildPage> {
     showDialog(
         context: context,
         builder: (context) {
-          return PhotoDialog(onGallery: getGalleryImageAndCrop, onCamera: getCameraImageAndCrop);
+          return PhotoDialog(onGallery: getGalleryImageAndCrop, onCamera: getCameraImageAndCrop, onprofileImage: getProfileImage,);
         });
   }
 
@@ -216,6 +216,13 @@ class EditChildPageState extends BaseState<EditChildPage> {
     var croppedImage = await cropImage(image.path);
     if (croppedImage != null) {
       uploadFile(croppedImage);
+    }
+  }
+
+  void getProfileImage() async {
+    Navigator.pop(context);
+    if (profileImage.isNotEmpty) {
+      profileImage = "";
     }
   }
 
@@ -401,7 +408,7 @@ class EditChildPageState extends BaseState<EditChildPage> {
                                       ],
                                     )),
                               ),
-                              Visibility(
+                            /*  Visibility(
                                 visible: profileImage.isNotEmpty,
                                 child: ElevatedButton(onPressed: (){
                                   setState(() {
@@ -409,7 +416,7 @@ class EditChildPageState extends BaseState<EditChildPage> {
                                     profileImage = "";
                                   });
                                 }, child: Text('사진 지우기')),
-                              ),
+                              ),*/
                               const SizedBox(height: 15),
                               H14(
                                 text: LanguageService.trans("name"),
@@ -711,7 +718,7 @@ class EditChildPageState extends BaseState<EditChildPage> {
                               const SizedBox(height: 35),
                               H16(text: LanguageService.trans("child_past_medical_history"), weight: FW.medium, color: AppColor_BlackText),
                               const SizedBox(height: 5),
-                              H14(text: "과거 병력이 없다면 체크하지 않아도 돼요", weight: FW.medium, color: AppColor_BlackText.withOpacity(0.3)),
+                              H14(text: "과거 병력이 없다면 체크하지 않아도 돼요.", weight: FW.medium, color: AppColor_BlackText.withOpacity(0.3)),
                               const SizedBox(height: 20),
                               GridView.builder(
                                   shrinkWrap: true,

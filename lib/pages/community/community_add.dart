@@ -55,6 +55,8 @@ class AddCommunityPageState extends BaseState<AddCommunityPage> {
   List<String> imgList = [];
   final FocusNode _nodeText = FocusNode();
 
+  String profileImage = "";
+
   @override
   void initState() {
     super.initState();
@@ -140,7 +142,7 @@ class AddCommunityPageState extends BaseState<AddCommunityPage> {
     showDialog(
         context: context,
         builder: (context) {
-          return PhotoDialog(onGallery: getGalleryImageAndCrop, onCamera: getCameraImageAndCrop);
+          return PhotoDialog(onGallery: getGalleryImageAndCrop, onCamera: getCameraImageAndCrop, onprofileImage: getProfileImage,);;
         });
   }
 
@@ -163,6 +165,13 @@ class AddCommunityPageState extends BaseState<AddCommunityPage> {
     var croppedImage = await cropImage(image.path);
     if (croppedImage != null) {
       uploadFile(croppedImage);
+    }
+  }
+
+  void getProfileImage() async {
+    Navigator.pop(context);
+    if (profileImage.isNotEmpty) {
+      profileImage = "";
     }
   }
 

@@ -118,7 +118,7 @@ class InspectionReportState extends BaseState<InspectionReport> {
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                H16(text: testNum == 0 ? "맞춤검사를 완료했습니다" : "맞춤검사가 가능합니다", weight: FW.regular),
+                H16(text: testNum == 0 ? "맞춤검사를 완료했습니다." : "맞춤검사가 가능합니다.", weight: FW.regular),
                 const SizedBox(width: 5),
                 Image.asset(
                   (dicInfo != null && dicInfo!.diagnose != null) ? 'assets/ic_status1.png' : 'assets/ic_smile5.png',

@@ -121,7 +121,7 @@ class InoculationInfo1PageState extends BaseState<InoculationInfo1Page> {
                       ),
                       const SizedBox(height: 5),
                       H18(
-                        text: "관리할 수 있어요",
+                        text: "관리할 수 있어요.",
                         weight: FW.medium,
                       ),
                       const SizedBox(height: 48),

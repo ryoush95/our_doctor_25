@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:ourdoctor/global/app_styles.dart';
+import 'package:ourdoctor/models/basket_list_res_model.dart';
+import 'package:ourdoctor/pages/components/h10.dart';
 import 'package:ourdoctor/pages/my/shopping_basket.dart';
+import 'package:sprintf/sprintf.dart';
 
+import 'h12.dart';
 import 'h18.dart';
 
 class SimpleHeader1 extends StatelessWidget {
   final title;
   final onBackPressed;
   final basket;
+  final basketList;
 
 
-  SimpleHeader1({Key? key, this.title, this.onBackPressed, this.basket}) : super(key: key);
+
+  SimpleHeader1({Key? key, this.title, this.onBackPressed, this.basket, required this.basketList}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -47,26 +53,53 @@ class SimpleHeader1 extends StatelessWidget {
             ),
           ),
 
+          basketButton(),
+          /*    Column(
+                children: [
+                  GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    child: Container(
+                      height: 50,
+                      padding: const EdgeInsets.only(left: 20, right: 10),
+                      child: Image.asset(
+                          'assets/ic_basket.png',
+                          width: 24),
 
-
-              GestureDetector(
-                behavior: HitTestBehavior.translucent,
-                child: Container(
-                  height: 60,
-                  padding: const EdgeInsets.only(left: 20, right: 10),
-                  child: Image.asset(
-                      'assets/ic_basket.png',
-                      width: 24),
-                ),
-                onTap: basket,
-
-              ),
-
+                    ),
+                    onTap: basket,
+                  ),
+                   H10(
+                    text: sprintf(
+                        "%s 개", [(basketList.length.toString())]),
+                  )
+                ],
+              ),*/
 
 
         ],
 
       ),
+    );
+  }
+
+  Column basketButton() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        GestureDetector(
+          behavior: HitTestBehavior.translucent,
+
+          child: Container(
+            height: 30,
+            padding: const EdgeInsets.only(left: 10, right: 10),
+              child: Image.asset( 'assets/ic_basket.png',),
+          ),
+          onTap: basket,
+        ),
+        H12(text: basketList,  weight: FW.regular,),
+
+
+      ],
     );
   }
 }

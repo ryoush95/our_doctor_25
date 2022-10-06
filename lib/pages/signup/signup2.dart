@@ -80,6 +80,8 @@ class SignupFamilyPageState extends BaseState<SignupFamilyPage> {
 
   bool isValid = false;
 
+  String profileImage1 = "";
+
   List<String> commonSymptoms = [];
   List<int> selCommon = [];
 
@@ -303,6 +305,9 @@ class SignupFamilyPageState extends BaseState<SignupFamilyPage> {
           return;
         }
       }
+      setState(() {
+        isValid = true;
+      });
     }
     /*
     for (int i = 0; i < selCommon.length; i++) {
@@ -400,7 +405,9 @@ class SignupFamilyPageState extends BaseState<SignupFamilyPage> {
             getGalleryImageAndCrop(index);
           }, onCamera: () {
             getCameraImageAndCrop(index);
-          });
+          }, onprofileImage: () {
+            getProfileImage();
+          },);
         });
   }
 
@@ -423,6 +430,13 @@ class SignupFamilyPageState extends BaseState<SignupFamilyPage> {
     var croppedImage = await cropImage(image.path);
     if (croppedImage != null) {
       uploadFile(croppedImage, index);
+    }
+  }
+
+  void getProfileImage() async {
+    Navigator.pop(context);
+    if (profileImage1.isNotEmpty) {
+      profileImage1 = "";
     }
   }
 
@@ -501,7 +515,8 @@ class SignupFamilyPageState extends BaseState<SignupFamilyPage> {
     childWeightInputController.add(TextEditingController());
     birthInputController1.add(TextEditingController());
     childSymptomInputController.add(TextEditingController());
-
+    TextInputType.text;
+    TextInputAction.next;
     gender.add(1);
     name.add("");
     profileImage.add("");
@@ -1340,7 +1355,7 @@ class SignupFamilyPageState extends BaseState<SignupFamilyPage> {
                                   child: Center(
                                     child: Image.asset(
                                       index == 0 ? "assets/group_19977.png" : "assets/group_20021.png",
-                                      fit: BoxFit.fill,
+                                      fit: BoxFit.cover,
                                     ),
                                   )),
                               Visibility(
@@ -1349,7 +1364,7 @@ class SignupFamilyPageState extends BaseState<SignupFamilyPage> {
                                   profileImage[index],
                                   width: 100,
                                   height: 100,
-                                  fit: BoxFit.fill,
+                                  fit: BoxFit.cover,
                                   cache: true,
                                   shape: BoxShape.circle,
                                 ),
@@ -1634,7 +1649,7 @@ class SignupFamilyPageState extends BaseState<SignupFamilyPage> {
               const SizedBox(height: 35),
               H16(text: LanguageService.trans("child_past_medical_history"), weight: FW.medium, color: AppColor_BlackText),
               const SizedBox(height: 5),
-              H14(text: "과거 병력이 없다면 체크하지 않아도 돼요", weight: FW.medium, color: AppColor_BlackText.withOpacity(0.3)),
+              H14(text: "과거 병력이 없다면 체크하지 않아도 돼요.", weight: FW.medium, color: AppColor_BlackText.withOpacity(0.3)),
               const SizedBox(height: 20),
               GridView.builder(
                   shrinkWrap: true,

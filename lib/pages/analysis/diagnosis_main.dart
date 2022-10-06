@@ -70,6 +70,8 @@ class DiagnosisMainPageState extends BaseState<DiagnosisMainPage> {
   List<String> timeList2 = []; //분
   List<String> timeList3 = []; //밤잠 시간
 
+  ScrollController _controller = ScrollController();
+
   @override
   void initState() {
     super.initState();
@@ -208,6 +210,11 @@ class DiagnosisMainPageState extends BaseState<DiagnosisMainPage> {
     }
   }
 
+  scrollDown() {
+    _controller.animateTo(_controller.position.maxScrollExtent + 50,
+        duration: const Duration(milliseconds: 200), curve: Curves.easeInOut);
+    setState(() {});
+  }
   void onSkip() {
     showModalBottomSheet(
         backgroundColor: Colors.transparent,
@@ -619,6 +626,7 @@ class DiagnosisMainPageState extends BaseState<DiagnosisMainPage> {
                                         setState(() {
                                           sleep_launch_hour = selectedCategory!;
                                           checkValid();
+                                          scrollDown();
                                           //getDistrictList();
                                         });
                                       },
@@ -634,6 +642,7 @@ class DiagnosisMainPageState extends BaseState<DiagnosisMainPage> {
                                         setState(() {
                                           sleep_launch_min = selectedCategory!;
                                           checkValid();
+                                          scrollDown();
                                           //getDistrictList();
                                         });
                                       },
@@ -655,6 +664,7 @@ class DiagnosisMainPageState extends BaseState<DiagnosisMainPage> {
                                         setState(() {
                                           sleep_night_hour = selectedCategory!;
                                           checkValid();
+                                          scrollDown();
                                           //getDistrictList();
                                         });
                                       },
@@ -670,6 +680,7 @@ class DiagnosisMainPageState extends BaseState<DiagnosisMainPage> {
                                         setState(() {
                                           sleep_night_min = selectedCategory!;
                                           checkValid();
+                                          scrollDown();
                                           //getDistrictList();
                                         });
                                       },

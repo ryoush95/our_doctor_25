@@ -118,11 +118,9 @@ class ItemProduct1State extends BaseState<ItemProduct1> {
                           productLike(widget.data.id!);
                         },
                         child: widget.data.liked! == "1"
-                            ? Image.asset('assets/ic_heart_on.png', width: 40)
-                            : Image.asset(
-                                'assets/ic_heart_off.png',
-                                width: 40,
-                              )),
+                            ? Icon(Icons.favorite, color: Colors.pinkAccent,)
+                            : Icon(Icons.favorite_border, color: Colors.black26),
+                           ),
                     right: 5,
                     top: 5),
               ]),

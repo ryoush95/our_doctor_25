@@ -294,7 +294,7 @@ class OrderExchangeRequestPageState extends BaseState<OrderExchangeRequestPage> 
                               ),
                               const SizedBox(height: 5),
                               Text(
-                                '안내문자를 발송 해드립니다',
+                                '안내문자를 발송 해드립니다.',
                                 style: AppTextStyle.PD(AppColor_Green, 16, weight: FW.bold),
                               ),
                             ],
@@ -361,7 +361,7 @@ class OrderExchangeRequestPageState extends BaseState<OrderExchangeRequestPage> 
                             ),
                             const SizedBox(height: 5),
                             Text(
-                              '안내문자를 발송 해드립니다',
+                              '안내문자를 발송 해드립니다.',
                               style: AppTextStyle.PD(AppColor_Green, 16, weight: FW.bold),
                             ),
                           ],

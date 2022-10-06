@@ -64,8 +64,8 @@ class ResultAreaState extends BaseState<ResultArea> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  widget.type == 0 ? H18(text: '자녀는 ${widget.diagnose!.result}이에요') : const SizedBox(),
-                  widget.type == 1 ? H18(text: '자녀가 ${widget.diagnose!.result}이에요') : const SizedBox(),
+                  widget.type == 0 ? H18(text: '자녀는 ${widget.diagnose!.result}이에요.') : const SizedBox(),
+                  widget.type == 1 ? H18(text: '자녀가 ${widget.diagnose!.result}이에요.') : const SizedBox(),
                   widget.type == 2 ? H18(text: LanguageService.trans("monitoring_lifestyle_0")) : const SizedBox(),
                   widget.type == 3 ? H18(text: LanguageService.trans("monitoring_disease_0")) : const SizedBox(),
                   widget.type == 4 ? H18(text: LanguageService.trans("monitoring_language_0")) : const SizedBox(),

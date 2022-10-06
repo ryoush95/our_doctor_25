@@ -129,7 +129,7 @@ class CommunityFragmenttState extends BaseState<CommunityFragment> {
                   setState(() {});
                 }
               } else {
-                showToast("작성자와 우아닥터 관리자만 확인 가능해요");
+                showToast("작성자와 우아닥터 관리자만 확인 가능해요.");
               }
             },
             child: Container(
@@ -144,7 +144,7 @@ class CommunityFragmenttState extends BaseState<CommunityFragment> {
                   const SizedBox(width: 18),
                   Image.asset('assets/ic_lock.png', width: 18),
                   const SizedBox(width: 5),
-                  H16(text: "비밀글입니다", weight: FW.semi_bold, color: AppColor_BlackText),
+                  H16(text: "비밀글입니다.", weight: FW.semi_bold, color: AppColor_BlackText),
                 ],
               ),
             ),
@@ -698,7 +698,7 @@ class CommunityFragmenttState extends BaseState<CommunityFragment> {
                   setState(() {});
                   getCommunityList();
                 },
-                placeholder: "필요한 키워드를 검색해보세요",
+                placeholder: "필요한 키워드를 검색해보세요.",
                 canClear: _canClear,
                 onChanged: (text){
                   _canClear = (searchController.text != "" && searchController.text != null);

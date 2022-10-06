@@ -96,7 +96,7 @@ class LaunchChartState extends BaseState<LaunchChart> {
                       children: [
                         H16(text: "수면시간이 ", color: AppColor_BlackText),
                         H16(text: " " + widget.data.monitoringSleep!.diagnose!.result!, color: getColorFromString(widget.data.monitoringSleep!.diagnose!.color!)),
-                        H16(text: "해요", color: AppColor_BlackText),
+                        H16(text: "해요.", color: AppColor_BlackText),
                         const SizedBox(width: 4),
                         Image.asset("assets/ic_icon2.png", width: 20),
                       ],
