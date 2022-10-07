@@ -7,7 +7,11 @@ class MoreMonitoring {
 }
 
 class MoreCommunityEvent {
-  MoreCommunityEvent();
+  int type;
+
+  MoreCommunityEvent({
+    required this.type,
+  });
 }
 
 class AddCommunityEvent {

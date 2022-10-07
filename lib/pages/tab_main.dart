@@ -38,6 +38,8 @@ import 'package:ourdoctor/pages/my/my_point.dart';
 import 'package:ourdoctor/pages/my/my_posts.dart';
 import 'package:ourdoctor/pages/my/order_complete.dart';
 import 'package:ourdoctor/pages/my/shopping_basket.dart';
+import 'package:ourdoctor/provider/convert_score_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:sprintf/sprintf.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'alarm/alarm.dart';
@@ -349,6 +351,7 @@ class TabMainPageState extends BaseState<TabMainPage>
 
     eventBus.on<MoreCommunityEvent>().listen((event) {
       if (mounted) {
+        Provider.of<ConvertScoreProvider>(context, listen: false).changeTab(event.type);
         changeTab(MainTab.community);
       }
     });

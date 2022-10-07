@@ -88,7 +88,7 @@ class NewsAreaState extends BaseState<NewsArea> {
               H20(text: LanguageService.trans('뉴스')),
               InkWell(
                 onTap: () {
-                  eventBus.fire(MoreCommunityEvent());
+                  eventBus.fire(MoreCommunityEvent(type: 1));
                 },
                 child:
                     H14(text: LanguageService.trans('more'), weight: FW.medium),

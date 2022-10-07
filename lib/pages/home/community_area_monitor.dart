@@ -85,7 +85,7 @@ class CommunityAreaState extends BaseState<CommunityArea2> {
               H20(text: LanguageService.trans('community')),
               InkWell(
                 onTap: () {
-                  eventBus.fire(MoreCommunityEvent());
+                  eventBus.fire(MoreCommunityEvent(type: 0));
                 },
                 child: H14(text: LanguageService.trans('more'), weight: FW.medium),
               ),

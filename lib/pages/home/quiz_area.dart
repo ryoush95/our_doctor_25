@@ -88,7 +88,7 @@ class QuizAreaState extends BaseState<QuizArea> {
               H20(text: LanguageService.trans('질문')),
               InkWell(
                 onTap: () {
-                  eventBus.fire(MoreCommunityEvent());
+                  eventBus.fire(MoreCommunityEvent(type: 4));
                 },
                 child:
                     H14(text: LanguageService.trans('more'), weight: FW.medium),

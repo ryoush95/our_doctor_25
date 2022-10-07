@@ -90,7 +90,7 @@ class TalkAreaState extends BaseState<TalkArea> {
               H20(text: LanguageService.trans('자유게시판')),
               InkWell(
                 onTap: () {
-                  eventBus.fire(MoreCommunityEvent());
+                  eventBus.fire(MoreCommunityEvent(type: 5));
                 },
                 child: H14(text: LanguageService.trans('more'), weight: FW.medium),
               ),

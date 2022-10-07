@@ -86,7 +86,7 @@ class SchoolAreaState extends BaseState<SchoolArea> {
               H20(text: LanguageService.trans('교육')),
               InkWell(
                 onTap: () {
-                  eventBus.fire(MoreCommunityEvent());
+                  eventBus.fire(MoreCommunityEvent(type: 2));
                 },
                 child: H14(text: LanguageService.trans('more'), weight: FW.medium),
               ),

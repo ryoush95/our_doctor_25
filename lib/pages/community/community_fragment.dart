@@ -21,6 +21,8 @@ import 'package:ourdoctor/pages/components/h20.dart';
 import 'package:ourdoctor/pages/components/noline_input.dart';
 import 'package:ourdoctor/pages/components/text_highlighting.dart';
 import 'package:ourdoctor/pages/intro/first.dart';
+import 'package:ourdoctor/provider/convert_score_provider.dart';
+import 'package:provider/provider.dart';
 
 class CommunityFragment extends StatefulWidget {
   @override
@@ -419,6 +421,7 @@ class CommunityFragmenttState extends BaseState<CommunityFragment> {
   Future<void> getCommunityList() async {
     setState(() {
       isLoading = true;
+      nTabIndex = Provider.of<ConvertScoreProvider>(context, listen: false).tab;
     });
     String topic = "";
     String age = "";
