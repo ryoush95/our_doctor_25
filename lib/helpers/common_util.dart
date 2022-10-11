@@ -524,9 +524,17 @@ String convertDate(String date) {
 }
 
 int getResFromString(String status) {
-  if (status == "Y") {
+  String s = status;
+  // if (status.contains('과신장') || status.contains('저체중')) {
+  //   s = "Y";
+  // } else if (status.contains('정상')) {
+  //   s = "";
+  // } else {
+  //   s = "R";
+  // }
+  if (s == "Y") {
     return 0;
-  } else if (status == "R") {
+  } else if (s == "R") {
     return 2;
   } else {
     return 1;

@@ -142,7 +142,7 @@ class AddCommunityPageState extends BaseState<AddCommunityPage> {
     showDialog(
         context: context,
         builder: (context) {
-          return PhotoDialog(onGallery: getGalleryImageAndCrop, onCamera: getCameraImageAndCrop, onprofileImage: getProfileImage,);;
+          return PhotoDialog(onGallery: getGalleryImageAndCrop, onCamera: getCameraImageAndCrop, onprofileImage: getProfileImage, code: 1);
         });
   }
 

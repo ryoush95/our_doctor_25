@@ -226,6 +226,7 @@ class CommunityDetailPageState extends BaseState<CommunityDetailPage> {
                   _prevContent = info.content!;
                   _editUid = info.commentUid!;
                   _editReply = true;
+                  replyFocusNode.requestFocus();
                   setState(() {});
                 });
           });
@@ -339,6 +340,7 @@ class CommunityDetailPageState extends BaseState<CommunityDetailPage> {
                   _prevContent = info.content!;
                   _editUid = info.commentUid!;
                   _editReply = true;
+                  replyFocusNode.requestFocus();
                   setState(() {});
                 });
           });
@@ -656,7 +658,7 @@ class CommunityDetailPageState extends BaseState<CommunityDetailPage> {
         },
         child: ExtendedImage.network(
           img,
-          fit: BoxFit.fill,
+          fit: BoxFit.contain,
           cache: true,
         ),
       ),

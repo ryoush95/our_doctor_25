@@ -20,10 +20,10 @@ const String vaccine_CALENDAR = "http://woorisoa.co.kr/bbs/board.php?bo_table=va
 const String HEALTH_URL1 = "https://nip.kdca.go.kr/irgd/index.html"; //예방 접종정보 확인하기
 const String HEALTH_URL2 = "https://www.nhis.or.kr/nhis/healthin/retrieveInfntExmdDtInq.do"; //영유아건강검진 정보 확인하기
 
-const String POLICY_URL = "https://wooadoctor.com/privacy"; //개인정보처리방침
-const String TERMS_URL = "https://wooadoctor.com/terms"; //서비스 이용약관
-const String HEALTH_URL = "https://wooadoctor.com/privacy2"; //고유식별정보 수집동의 및 처리방침
-const String AD_URL = "https://wooadoctor.com/privacy3"; //개인 민감(건강)정보 처리방침 동의
+const String POLICY_URL = "http://wooadoctor.com/privacy"; //개인정보처리방침
+const String TERMS_URL = "http://wooadoctor.com/terms"; //서비스 이용약관
+const String HEALTH_URL = "http://wooadoctor.com/privacy2"; //고유식별정보 수집동의 및 처리방침
+const String AD_URL = "http://wooadoctor.com/privacy3"; //개인 민감(건강)정보 처리방침 동의
 
 String gLangCode = "en";
 // List<AreaList>? gAreaList;

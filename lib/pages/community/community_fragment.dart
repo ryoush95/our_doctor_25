@@ -321,6 +321,7 @@ class CommunityFragmenttState extends BaseState<CommunityFragment> {
             nTabIndex = index;
             nSubTabIndex = 0;
             nPage = 0;
+            Provider.of<ConvertScoreProvider>(context, listen: false).changeTab(index);
             getCommunityList();
           });
         },

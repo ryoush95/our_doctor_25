@@ -13,7 +13,6 @@ class ConvertScoreProvider extends ChangeNotifier{
 
   void changeTab(int t) {
     _tab = t;
-    print(t);
     notifyListeners();
   }
 }

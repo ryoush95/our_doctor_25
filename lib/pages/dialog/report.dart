@@ -62,6 +62,7 @@ class _ReportPageState extends State<ReportPage> {
           Navigator.of(context).pop();
         } else {
           showToast(value.msg ?? "");
+          Navigator.of(context).pop();
           if (value.result == 106) {
             //token expired
             Navigator.pushReplacement(context, SlideRightTransRoute(builder: (context) => FirstPage()));

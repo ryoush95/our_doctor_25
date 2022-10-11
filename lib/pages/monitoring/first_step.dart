@@ -1558,7 +1558,7 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
                         onEditingComplete: () => node.nextFocus(),
                         placeholder: "증상을 입력해주세요.",
                         onChanged: (text) => {
-                          directInputController[index].text = text,
+                          // directInputController[index].text = text,
                           checkValid()
                         },
                       ),
