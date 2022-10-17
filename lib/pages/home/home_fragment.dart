@@ -14,8 +14,10 @@ import 'package:ourdoctor/pages/app_event.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
 import 'package:ourdoctor/pages/base/page_layout.dart';
 import 'package:ourdoctor/pages/care/product_show.dart';
+import 'package:ourdoctor/pages/community/community_search.dart';
 import 'package:ourdoctor/pages/components/h14.dart';
 import 'package:ourdoctor/pages/components/h20.dart';
+import 'package:ourdoctor/pages/components/noline_input.dart';
 import 'package:ourdoctor/pages/home/community_area.dart';
 import 'package:ourdoctor/pages/home/developmental_class_area.dart';
 import 'package:ourdoctor/pages/home/growth_store_area.dart';
@@ -46,6 +48,12 @@ class HomeFragmentState extends BaseState<HomeFragment> {
   List<PdtLikeDto>? arrLikeList = [];
   List<PdtLikeDto>? arrNewList = [];
   final tooltip = GlobalKey();
+
+  String keyword = "";
+  bool _isSearching = false;
+  var keywordController = TextEditingController();
+  final searchController = TextEditingController();
+  bool _canClear = false;
 
   void showMoreText() {
     ShowMoreTextPopup popup = ShowMoreTextPopup(context,
@@ -99,6 +107,71 @@ class HomeFragmentState extends BaseState<HomeFragment> {
       curCategory = index;
       category = index;
     });
+  }
+
+  Widget searchBar() {
+    var screenSize = MediaQuery.of(context).size;
+    return Row(
+      children: [
+        Container(
+            width: screenSize.width - 60,
+            height: 42,
+            margin: const EdgeInsets.only(left: 30, right: 30, bottom: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 18),
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(21),
+                border: Border.all(
+                  color: AppColor_Selector_Border,
+                )),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const SizedBox(width: 10),
+                SizedBox(
+                  width: screenSize.width - 150,
+                  // margin: const EdgeInsets.only(bottom: 3),
+                  child: NolineInput(
+                    controller: searchController,
+                    keyboardType: TextInputType.text,
+                    textInputAction: TextInputAction.search,
+                    borderColor: AppColor_Light_Gray,
+                    onEditingComplete: () {
+                      FocusScope.of(context).requestFocus(FocusNode());
+                      _isSearching = true;
+                      keyword = searchController.text.trim().toString();
+                      setState(() {});
+                      // getCommunityList();
+                    },
+                    placeholder: "커뮤니티 검색",
+                    canClear: _canClear,
+                    onChanged: (text){
+                      _canClear = (searchController.text != "" && searchController.text != null);
+                      setState(() {});
+                    },
+                    onClear: () {
+                      keyword = "";
+                      searchController.clear();
+                      _canClear = false;
+                      _isSearching = false;
+                      // getCommunityList();
+                      setState(() {});
+                    },
+                  ),
+                ),
+                const SizedBox(width: 20,),
+                InkWell(
+                  onTap: () {
+                    Navigator.push(context, SlideRightTransRoute(builder: (context) =>
+                      CommunitySearch()
+                    ));
+                  },
+                  child: Image.asset('assets/search_black_24dp.png', width: 20),
+                ),
+              ],
+            )),
+      ],
+    );
   }
 
   // Network functions
@@ -181,6 +254,8 @@ class HomeFragmentState extends BaseState<HomeFragment> {
                     TopArea(name: gSelChildInfo!.name!, type: 0),
 
                     const SizedBox(height: 30),
+                    // searchBar(),
+                    // const SizedBox(height: 30,),
                     QuizArea(),//질문
                     const SizedBox(height: 50),
                     TalkArea(),//게시판
