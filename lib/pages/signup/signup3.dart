@@ -600,7 +600,7 @@ class SignupHomePageState extends BaseState<SignupHomePage> {
                           color: AppColor_BlackText.withOpacity(0.5),
                         ),
                         const SizedBox(height: 10),
-                        Selector(
+                        SelectorBox(
                             selectedCategory: mCity[child],
                             categoryList: gCityList!,
                             onSelect: (selectedCategory) {
@@ -612,7 +612,7 @@ class SignupHomePageState extends BaseState<SignupHomePage> {
                             },
                             hint: "si"),
                         const SizedBox(height: 10),
-                        Selector(
+                        SelectorBox(
                             selectedCategory: mDistrict[child],
                             categoryList: districtList,
                             onSelect: (selectedCategory) {
@@ -625,7 +625,7 @@ class SignupHomePageState extends BaseState<SignupHomePage> {
                             },
                             hint: "gu"),
                         const SizedBox(height: 10),
-                        Selector(
+                        SelectorBox(
                             selectedCategory: mHospital[child],
                             categoryList: hospitalList,
                             onSelect: (selectedCategory) {

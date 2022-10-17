@@ -34,6 +34,7 @@ import 'package:ourdoctor/models/duplicate_res_model.dart';
 import 'package:ourdoctor/models/faq_res_model.dart';
 import 'package:ourdoctor/models/final_result_res_model.dart';
 import 'package:ourdoctor/models/find_id_res_model.dart';
+import 'package:ourdoctor/models/food_list_monitoring_model.dart';
 import 'package:ourdoctor/models/food_list_res_model.dart';
 import 'package:ourdoctor/models/free_test_res_model.dart';
 import 'package:ourdoctor/models/home_brain_res_model.dart';
@@ -1583,6 +1584,10 @@ class HttpService {
       'sociability': monitoringData!.sociability!,
       'work_out': monitoringData!.work_out!,
       'symptom_list': json.encode(monitoringData!.symptom_list!),
+      // 'breakfast': json.encode(monitoringData!.foodAddList1),
+      // 'lunch': json.encode(monitoringData!.foodAddList2),
+      // 'snack': json.encode(monitoringData!.foodAddList3),
+      // 'dinner': json.encode(monitoringData!.foodAddList4),
     };
     Uri myUri = Uri.parse(_url);
     final response = await http.post(myUri, body: body);
@@ -1707,6 +1712,24 @@ class HttpService {
     }
   }
 
+  Future<FoodListMonitorModel> foodSelectList(String date) async {
+    String _url = API_BASE_URL + "api/Monitor2/past_food_list";
+    Map<String, String> body = {
+      'patients_id': gSelChildInfo!.id!,
+      'date': date,
+    };
+    Uri myUri = Uri.parse(_url);
+    final response = await http.post(myUri, body: body);
+    if (response.statusCode == 200) {
+      return FoodListMonitorModel.fromJson(json.decode(response.body));
+    } else {
+      // If that call was not successful, throw an error.
+      print(response.statusCode);
+      showToast(LanguageService.trans("server_fail"));
+      throw Exception(LanguageService.trans("server_fail"));
+    }
+  }
+
   //장바구니 추가
   Future<BasketAddResModel> addBakset(String pid, String opt_list) async {
     String _url = API_BASE_URL + "api/Product/basket_put_in";
@@ -1746,7 +1769,7 @@ class HttpService {
   }
 
   //모니터링 기록
-  Future<MonitoringRecordResModel> monitoringRecord(String monitoring_time, String height, String weight, String nutrition, String sleep_at_night, String sleep_at_lunch, String symptom_list, String language, String sociability, String work_out, String uid) async {
+  Future<MonitoringRecordResModel> monitoringRecord(String monitoring_time, String height, String weight, String nutrition, String sleep_at_night, String sleep_at_lunch, String symptom_list, String language, String sociability, String work_out, String breakfast, String lunch, String snack, String dinner, String uid) async {
     String _url = API_BASE_URL + "api/Monitor2/save";
     if (uid == "") {
       Map<String, String> body = {
@@ -1761,6 +1784,10 @@ class HttpService {
         'language': language,
         'sociability': sociability,
         'work_out': work_out,
+        'breakfast' : breakfast,
+        'lunch' : lunch,
+        'snack' : snack,
+        'dinner' : dinner,
       };
       Uri myUri = Uri.parse(_url);
       final response = await http.post(myUri, body: body);
@@ -1784,6 +1811,10 @@ class HttpService {
         'language': language,
         'sociability': sociability,
         'work_out': work_out,
+        'breakfast' : breakfast,
+        'lunch' : lunch,
+        'snack' : snack,
+        'dinner' : dinner,
         'uid': uid,
       };
       Uri myUri = Uri.parse(_url);

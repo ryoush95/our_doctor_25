@@ -137,7 +137,7 @@ class ComponentsPageState extends BaseState<ComponentsPage> {
                 color: AppColor_Primary,
               ),
               const SizedBox(height: 10),
-              Selector(
+              SelectorBox(
                   selectedCategory: '',
                   categoryList: categoryList,
                   onSelect: (selectedCategory) {

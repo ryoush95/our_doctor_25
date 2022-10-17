@@ -56,9 +56,9 @@ class FoodDto {
   String? kcal;
   String? createdAt;
   String? updatedAt;
-  double count = 0.25;
+  double? count = 0.25;
 
-  FoodDto({this.id, this.category, this.subCategory, this.name, this.kcal, this.createdAt, this.updatedAt});
+  FoodDto({this.id, this.category, this.subCategory, this.name, this.kcal, this.createdAt, this.updatedAt, this.count});
 
   FoodDto.fromJson(Map<String, dynamic> json) {
     id = json['id'] ?? "";
@@ -68,6 +68,7 @@ class FoodDto {
     kcal = json['kcal'] ?? "";
     createdAt = json['created_at'] ?? "";
     updatedAt = json['updated_at'] ?? "";
+    count = json['count'] ?? 0.25;
   }
 
   Map<String, dynamic> toJson() {
@@ -79,6 +80,7 @@ class FoodDto {
     data['kcal'] = this.kcal;
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
+    data['count'] = this.count;
     return data;
   }
 }

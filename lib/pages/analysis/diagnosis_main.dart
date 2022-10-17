@@ -619,7 +619,7 @@ class DiagnosisMainPageState extends BaseState<DiagnosisMainPage> {
                               children: [
                                 SizedBox(
                                   width: (screenSize.width - 70) / 2,
-                                  child: Selector(
+                                  child: SelectorBox(
                                       selectedCategory: sleep_launch_hour,
                                       categoryList: timeList1,
                                       onSelect: (selectedCategory) {
@@ -635,7 +635,7 @@ class DiagnosisMainPageState extends BaseState<DiagnosisMainPage> {
                                 const SizedBox(width: 10),
                                 SizedBox(
                                   width: (screenSize.width - 70) / 2,
-                                  child: Selector(
+                                  child: SelectorBox(
                                       selectedCategory: sleep_launch_min,
                                       categoryList: timeList2,
                                       onSelect: (selectedCategory) {
@@ -657,7 +657,7 @@ class DiagnosisMainPageState extends BaseState<DiagnosisMainPage> {
                               children: [
                                 SizedBox(
                                   width: (screenSize.width - 70) / 2,
-                                  child: Selector(
+                                  child: SelectorBox(
                                       selectedCategory: sleep_night_hour,
                                       categoryList: timeList3,
                                       onSelect: (selectedCategory) {
@@ -673,7 +673,7 @@ class DiagnosisMainPageState extends BaseState<DiagnosisMainPage> {
                                 const SizedBox(width: 10),
                                 SizedBox(
                                   width: (screenSize.width - 70) / 2,
-                                  child: Selector(
+                                  child: SelectorBox(
                                       selectedCategory: sleep_night_min,
                                       categoryList: timeList2,
                                       onSelect: (selectedCategory) {

@@ -13,6 +13,7 @@ import 'package:ourdoctor/helpers/transition.dart';
 import 'package:ourdoctor/language/language_service.dart';
 import 'package:ourdoctor/models/brain_quiz_list_res_model.dart';
 import 'package:ourdoctor/models/default_res_model.dart';
+import 'package:ourdoctor/models/food_list_res_model.dart';
 import 'package:ourdoctor/models/monitoring_record_res_model.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
 import 'package:ourdoctor/pages/base/page_layout.dart';
@@ -25,6 +26,8 @@ import 'package:ourdoctor/pages/components/simple_header.dart';
 import 'package:ourdoctor/pages/intro/first.dart';
 import 'package:ourdoctor/pages/monitoring/monitoring_result.dart';
 import 'package:ourdoctor/pages/monitoring/monitoring_result1.dart';
+import 'package:ourdoctor/provider/old_food_list_provider.dart';
+import 'package:provider/provider.dart';
 
 class SecondStepPage extends StatefulWidget {
   SecondStepPage({Key? key, required this.selBrain, required this.hasDisease, required this.surgeryList, required this.hasphotoList, this.uid = ""}) : super(key: key);
@@ -380,6 +383,12 @@ class SecondStepPageState extends BaseState<SecondStepPage> {
     String sociability = ""; //사회성평가 json데이터
     String work_out = ""; //운동성평가 json데이터
 
+    final p = Provider.of<OldFoodListProvider>(context);
+    List<FoodDto> food1 = monitoringData == null ? [] : p.food1;
+    List<FoodDto> food2 = monitoringData == null ? [] : p.food2;
+    List<FoodDto> food3 = monitoringData == null ? [] : p.food3;
+    List<FoodDto> food4 = monitoringData == null ? [] : p.food4;
+
     //신체발달 관련
     if (widget.hasDisease == 1) {
       List<Map<String, String>> symptomList = [];
@@ -509,11 +518,31 @@ class SecondStepPageState extends BaseState<SecondStepPage> {
     };
     work_out = json.encode(info3);
 
+    String foodJson1 = json.encode(food1);
+    String foodJson2 = json.encode(food2);
+    String foodJson3 = json.encode(food3);
+    String foodJson4 = json.encode(food4);
+
     setState(() {
       isLoading = true;
     });
 
-    Future<MonitoringRecordResModel> info = httpService.monitoringRecord(monitoring_time, height, weight, nutrition, sleep_at_night, sleep_at_lunch, symptom_list, language, sociability, work_out, widget.uid!);
+    Future<MonitoringRecordResModel> info = httpService.monitoringRecord(
+        monitoring_time,
+        height,
+        weight,
+        nutrition,
+        sleep_at_night,
+        sleep_at_lunch,
+        symptom_list,
+        language,
+        sociability,
+        work_out,
+        foodJson1,
+        foodJson2,
+        foodJson3,
+        foodJson4,
+        widget.uid!);
     info.then((MonitoringRecordResModel value) async {
       setState(() {
         isLoading = false;

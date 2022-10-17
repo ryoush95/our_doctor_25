@@ -19,6 +19,8 @@ import 'package:ourdoctor/pages/components/selector.dart';
 import 'package:ourdoctor/pages/components/selector1.dart';
 import 'package:ourdoctor/pages/components/simple_header.dart';
 import 'package:ourdoctor/pages/intro/first.dart';
+import 'package:ourdoctor/provider/old_food_list_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:sprintf/sprintf.dart';
 
 class CaloriCalcPage extends StatefulWidget {
@@ -109,9 +111,7 @@ class CaloriCalcPageState extends BaseState<CaloriCalcPage> {
   void checkValid() {
     allKalori = 0;
     for (int i = 0; i < foodAddList.length; i++) {
-      allKalori = allKalori +
-          (double.parse(foodAddList.elementAt(i).kcal!) *
-              foodAddList.elementAt(i).count);
+      allKalori = allKalori + (double.parse(foodAddList.elementAt(i).kcal!) * foodAddList.elementAt(i).count!);
     }
     // isValid = foodAddList.isNotEmpty;
     setState(() {});
@@ -363,7 +363,7 @@ class CaloriCalcPageState extends BaseState<CaloriCalcPage> {
                                       dic.name = item.name;
                                       dic.kcal = item.kcal;
                                       dic.createdAt = item.createdAt;
-                                      dic.count = item.count;
+                                      dic.count = 0.25;
                                       foodAddList.add(dic);
                                       count.add("0.25인분");
                                     }
@@ -475,15 +475,22 @@ class CaloriCalcPageState extends BaseState<CaloriCalcPage> {
                     // if (!isValid) {
                     // return;
                     // }
+                    final p = Provider.of<OldFoodListProvider>(context,listen: false);
+                    p.changeList(widget.type!, foodAddList);
+                    p.changeKcalOne(widget.type!, "${allKalori.toStringAsFixed(1)}\nkcal");
 
                     if (widget.type == 0) {
                       monitoringData!.foodAddList1 = foodAddList;
+                      p.food1 = foodAddList;
                     } else if (widget.type == 1) {
                       monitoringData!.foodAddList2 = foodAddList;
+                      p.food2 = foodAddList;
                     } else if (widget.type == 2) {
                       monitoringData!.foodAddList3 = foodAddList;
+                      p.food3 = foodAddList;
                     } else if (widget.type == 3) {
                       monitoringData!.foodAddList4 = foodAddList;
+                      p.food4 = foodAddList;
                     }
 
                     Navigator.pop(context, allKalori.toStringAsFixed(1));
@@ -541,10 +548,7 @@ class CaloriCalcPageState extends BaseState<CaloriCalcPage> {
                     height: 48,
                     child: Center(
                       child: H14(
-                        text: convertScore(
-                                (double.parse(info.kcal!) * info.count)
-                                    .toString()) +
-                            " kcal",
+                        text: convertScore((double.parse(info.kcal!) * info.count!).toString()) + " kcal",
                         weight: FW.medium,
                         color: AppColor_BlackText,
                       ),
@@ -553,14 +557,13 @@ class CaloriCalcPageState extends BaseState<CaloriCalcPage> {
                   SizedBox(
                     width: 120,
                     height: 40,
-                    child: Selector(
+                    child: SelectorBox(
                         selectedCategory: count[index],
                         categoryList: countList,
                         onSelect: (selectedCategory) {
                           setState(() {
                             count[index] = selectedCategory!;
-                            double temp =
-                                double.parse(count[index].replaceAll("인분", ""));
+                            double temp = double.parse(count[index].replaceAll("인분", ""));
                             foodAddList[index].count = temp;
                             checkValid();
                           });

@@ -653,7 +653,7 @@ class ChildEditPageState extends BaseState<ChildEditPage> {
                     const SizedBox(height: 10),
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 30),
-                      child: Selector(
+                      child: SelectorBox(
                           selectedCategory: mCity,
                           categoryList: gCityList!,
                           onSelect: (selectedCategory) {
@@ -668,7 +668,7 @@ class ChildEditPageState extends BaseState<ChildEditPage> {
                     const SizedBox(height: 10),
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 30),
-                      child: Selector(
+                      child: SelectorBox(
                           selectedCategory: mDistrict,
                           categoryList: districtList,
                           onSelect: (selectedCategory) {
@@ -684,7 +684,7 @@ class ChildEditPageState extends BaseState<ChildEditPage> {
                     const SizedBox(height: 10),
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 30),
-                      child: Selector(
+                      child: SelectorBox(
                           selectedCategory: mHospital,
                           categoryList: hospitalList,
                           onSelect: (selectedCategory) {

@@ -6,8 +6,8 @@ import 'package:ourdoctor/global/app_styles.dart';
 
 import 'h16.dart';
 
-class Selector extends StatefulWidget {
-  Selector(
+class SelectorBox extends StatefulWidget {
+  SelectorBox(
       {Key? key,
       required this.selectedCategory,
       required this.categoryList,
@@ -23,10 +23,10 @@ class Selector extends StatefulWidget {
   final void Function(String? dropdownValue) onSelect;
 
   @override
-  SelectorState createState() => SelectorState();
+  SelectorBoxState createState() => SelectorBoxState();
 }
 
-class SelectorState extends State<Selector> {
+class SelectorBoxState extends State<SelectorBox> {
   @override
   void initState() {
     super.initState();

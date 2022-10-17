@@ -216,7 +216,7 @@ class OrderExchangePageState extends BaseState<OrderExchangePage> {
                       SizedBox(
                         width: 80,
                         height: 40,
-                        child: Selector(
+                        child: SelectorBox(
                             selectedCategory: getCountArray(int.parse(widget.order.productList![index].optionCnt!)).last,
                             categoryList: getCountArray(int.parse(widget.order.productList![index].optionCnt!)),
                             onSelect: (selectedCategory) {

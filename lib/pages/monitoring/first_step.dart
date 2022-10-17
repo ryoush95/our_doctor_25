@@ -14,6 +14,8 @@ import 'package:ourdoctor/global/local_service.dart';
 import 'package:ourdoctor/helpers/common_util.dart';
 import 'package:ourdoctor/helpers/transition.dart';
 import 'package:ourdoctor/language/language_service.dart';
+import 'package:ourdoctor/models/food_list_monitoring_model.dart';
+import 'package:ourdoctor/models/food_list_res_model.dart';
 import 'package:ourdoctor/models/home_monitor_res_model.dart';
 import 'package:ourdoctor/models/monitor_day_res_model.dart';
 import 'package:ourdoctor/models/monitoring_record_res_model.dart';
@@ -37,6 +39,8 @@ import 'package:ourdoctor/pages/intro/first.dart';
 import 'package:ourdoctor/pages/monitoring/calori_calc.dart';
 import 'package:ourdoctor/pages/monitoring/monitoring_result1.dart';
 import 'package:ourdoctor/pages/monitoring/second_step.dart';
+import 'package:ourdoctor/provider/old_food_list_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:show_more_text_popup/show_more_text_popup.dart';
 
 class FirstStepPage extends StatefulWidget {
@@ -119,6 +123,11 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
   List<List<String>> categoryList = [];
   List<String> initSymptomList = [];
   List<String> initCategoryList = [];
+
+  List<FoodDto> food1 = [];
+  List<FoodDto> food2 = [];
+  List<FoodDto> food3 = [];
+  List<FoodDto> food4 = [];
 
   final imagePicker = ImagePicker();
   int selSymtomidx = 0;
@@ -255,15 +264,6 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
         setState(() {});
       }
 
-      //재입력시 칼로리 비우기
-      if (monitoringData!.nutrition!.isNotEmpty) {
-        for (int i = 0; i < 4; i++) {
-          selNutrition.add(i);
-          nutritionalStatus1[i] =
-              '${monitoringData!.nutrition!.split(",")[i]}\nkcal';
-        }
-        setState(() {});
-      }
 
       // if (monitoringData!.foodAddList1!.isNotEmpty) {
       //   selNutrition.add(0);
@@ -374,6 +374,96 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
     });
   }
 
+  getFoodList() async{
+    DateTime dt = DateTime.now();
+    String curDate = dt.toString().substring(0,10);
+    Future<FoodListMonitorModel> info = httpService.foodSelectList(curDate);
+    var p = Provider.of<OldFoodListProvider>(context, listen: false);
+
+    // p.changeKcalList(nutritionalStatus);
+
+    info.then((value) async {
+      if(value.result == 0){
+        var v = value.data!;
+
+        if (v.breakfast != '' || v.lunch != '' || v.snack != '' || v.dinner != '') {
+          if(food1.isEmpty) {
+            insertFoodList(jsonDecode(v.breakfast!), monitoringData!.foodAddList1!);
+            p.changeList(0, monitoringData!.foodAddList1!);
+          }
+          if(food2.isEmpty) {
+            insertFoodList(jsonDecode(v.lunch!), monitoringData!.foodAddList2!);
+            p.changeList(1, monitoringData!.foodAddList2!);
+          }
+          if(food3.isEmpty) {
+            insertFoodList(jsonDecode(v.snack!), monitoringData!.foodAddList3!);
+            p.changeList(2, monitoringData!.foodAddList3!);
+          }
+          if(food4.isEmpty) {
+            insertFoodList(jsonDecode(v.dinner!), monitoringData!.foodAddList4!);
+            p.changeList(3, monitoringData!.foodAddList4!);
+          }
+          food1 = p.food1;
+          food2 = p.food2;
+          food3 = p.food3;
+          food4 = p.food4;
+          List n = [food1, food2, food3, food4];
+
+          for (int j = 0; j < 4; j++){
+            double allKalori = 0;
+            for (int i = 0; i < n[j].length; i++) {
+              List<FoodDto> f = n[j];
+              allKalori = allKalori + (double.parse(f.elementAt(i).kcal!) * f.elementAt(i).count!);
+            }
+
+            if (allKalori > 0) {
+              nutritionalStatus1[j] = '${allKalori}\nkcal';
+              p.changeKcalList(nutritionalStatus1);
+            } else {
+              nutritionalStatus1[j] = nutritionalStatus[j];
+              p.changeKcalList(nutritionalStatus1);
+            }
+          }
+        } else {
+          nutritionalStatus1 = nutritionalStatus;
+          p.changeKcalList(nutritionalStatus);
+        }
+      }// data if
+    });//info
+
+    //재입력시 칼로리 비우기
+    // for (int i = 0; i < 4; i++) {
+    //   selNutrition.add(i);
+    //   nutritionalStatus1[i] = '${monitoringData!.nutrition!.split(",")[i]}\nkcal';
+    // }
+  }
+
+
+
+  insertFoodList(List list,List<FoodDto> result) {
+    result.clear();
+    list.forEach((e) {
+      FoodDto a = FoodDto();
+      Map<String, dynamic> b;
+      List l = [];
+      b = e;
+      b.forEach((key, value) {
+        l.add(value);
+      });
+      a.id = l[0];
+      a.category = l[1];
+      a.subCategory = l[2];
+      a.name = l[3];
+      a.kcal = l[4];
+      a.createdAt = l[5];
+      a.updatedAt = l[6];
+      a.count = l[7];
+      result.add(a);
+    });
+  }
+
+
+
   void getSymtomList() {
     for (int i = 0; i < gSymptomList!.length; i++) {
       if (category[selSymtomidx] == gSymptomList![i].category) {
@@ -432,27 +522,27 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
     setState(() {});
   }
 
-  void onSelect(int type, int index, bool selected) {
-    String tmp = "";
-    switch (type) {
-      case 0:
-        if (selected) {
-          selNutrition.add(index);
-        } else {
-          selNutrition.remove(index);
-        }
-        break;
-    }
-    for (var i = 0; i < 4; i++) {
-      if (selNutrition.contains(i)) {
-        tmp += "1";
-      } else {
-        tmp += "0";
-      }
-    }
-    monitoringData!.nutrition = tmp;
-    setState(() {});
-  }
+  // void onSelect(int type, int index, bool selected) {
+  //   String tmp = "";
+  //   switch (type) {
+  //     case 0:
+  //       if (selected) {
+  //         selNutrition.add(index);
+  //       } else {
+  //         selNutrition.remove(index);
+  //       }
+  //       break;
+  //   }
+  //   for (var i = 0; i < 4; i++) {
+  //     if (selNutrition.contains(i)) {
+  //       tmp += "1";
+  //     } else {
+  //       tmp += "0";
+  //     }
+  //   }
+  //   monitoringData!.nutrition = tmp;
+  //   setState(() {});
+  // }
 
   void checkValid() {
     isValid = false;
@@ -715,18 +805,20 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
   //모니터링 기록
   Future<void> saveMonitoring() async {
     DateFormat dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss");
-    String monitoring_time =
-        dateFormat.format(DateTime.now()); //앱내 모니터링 날짜(yyyy-MM-dd HH:mm:ss)
+    String monitoring_time = dateFormat.format(DateTime.now()); //앱내 모니터링 날짜(yyyy-MM-dd HH:mm:ss)
     String height = monitoringData!.height!; //신장
     String weight = monitoringData!.weight!; //몸무게
-    String nutrition =
-        monitoringData!.nutrition!; //카로리(아침,점심,간식,저녁), 반점으로 구분, 없으면 0
+    String nutrition = monitoringData!.nutrition!; //카로리(아침,점심,간식,저녁), 반점으로 구분, 없으면 0
     String sleep_at_night = monitoringData!.sleep_at_night!; //밤잠
     String sleep_at_lunch = monitoringData!.sleep_at_lunch!; //낮잠
     String symptom_list = ""; //질병데이터 json 리스트(예시대로 올려야 함)
     String language = ""; //언어성평가 json데이터
     String sociability = ""; //사회성평가 json데이터
     String work_out = ""; //운동성평가 json데이터
+    food1 = monitoringData == null ? [] : monitoringData!.foodAddList1!;
+    food2 = monitoringData == null ? [] : monitoringData!.foodAddList2!;
+    food3 = monitoringData == null ? [] : monitoringData!.foodAddList3!;
+    food4 = monitoringData == null ? [] : monitoringData!.foodAddList4!;
 
     if (hasDisease == 1) {
       List<Map<String, String>> symptomList = [];
@@ -777,6 +869,11 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
       isLoading = true;
     });
 
+    String foodJson1 = json.encode(food1);
+    String foodJson2 = json.encode(food2);
+    String foodJson3 = json.encode(food3);
+    String foodJson4 = json.encode(food4);
+
     Future<MonitoringRecordResModel> info = httpService.monitoringRecord(
         monitoring_time,
         height,
@@ -788,6 +885,10 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
         language,
         sociability,
         work_out,
+        foodJson1,
+        foodJson2,
+        foodJson3,
+        foodJson4,
         uid);
     info.then((MonitoringRecordResModel value) async {
       setState(() {
@@ -944,6 +1045,9 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
   Widget build(BuildContext context) {
     final node = FocusScope.of(context);
     var screenSize = MediaQuery.of(context).size;
+    // final p = Provider.of<OldFoodListProvider>(context, listen: false);
+    getFoodList();
+
     return PageLayout(
         onBack: onBackPressed,
         isLoading: isLoading,
@@ -1149,12 +1253,12 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
                                           if (!selNutrition.contains(index)) {
                                             selNutrition.add(index);
                                           }
-                                          if (received != "0") {
-                                            nutritionalStatus1[index] =
-                                                received + "\nkcal";
-                                          } else {
-                                            nutritionalStatus1[index] = "";
-                                          }
+                                          // if (received != "0") {
+                                          //   nutritionalStatus1[index] =
+                                          //       received + "\nkcal";
+                                          // } else {
+                                          //   nutritionalStatus1[index] = "";
+                                          // }
                                           // nutritionalStatus1[index] = received + "\nkcal";
                                           var arr = monitoringData!.nutrition!
                                               .split(",");
@@ -1176,18 +1280,16 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
                                         decoration: BoxDecoration(
                                             borderRadius:
                                                 BorderRadius.circular(25.0),
-                                            color: selNutrition.contains(index)
+                                            color: Provider.of<OldFoodListProvider>(context).kcalList[index].contains('\nkcal')
                                                 ? AppColor_Primary
                                                 : AppColor_BlackText
                                                     .withOpacity(0.05)),
                                         child: Center(
                                           child: H18(
-                                            text: selNutrition.contains(index)
-                                                ? nutritionalStatus1[index]
-                                                : nutritionalStatus[index],
+                                            text: Provider.of<OldFoodListProvider>(context).kcalList[index],
                                             weight: FW.medium,
                                             maxLine: 3,
-                                            color: selNutrition.contains(index)
+                                            color: Provider.of<OldFoodListProvider>(context).kcalList[index].contains('kcal')
                                                 ? AppColor_White
                                                 : AppColor_BlackText
                                                     .withOpacity(0.5),
@@ -1225,7 +1327,7 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
                                 children: [
                                   SizedBox(
                                     width: (screenSize.width - 70) / 2,
-                                    child: Selector(
+                                    child: SelectorBox(
                                         selectedCategory: sleep_launch_hour,
                                         categoryList: timeList1,
                                         onSelect: (selectedCategory) {
@@ -1250,7 +1352,7 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
                                   const SizedBox(width: 10),
                                   SizedBox(
                                     width: (screenSize.width - 70) / 2,
-                                    child: Selector(
+                                    child: SelectorBox(
                                         selectedCategory: sleep_launch_min,
                                         categoryList: timeList2,
                                         onSelect: (selectedCategory) {
@@ -1276,7 +1378,7 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
                                 children: [
                                   SizedBox(
                                     width: (screenSize.width - 70) / 2,
-                                    child: Selector(
+                                    child: SelectorBox(
                                         selectedCategory: sleep_night_hour,
                                         categoryList: timeList3,
                                         onSelect: (selectedCategory) {
@@ -1293,7 +1395,7 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
                                   const SizedBox(width: 10),
                                   SizedBox(
                                     width: (screenSize.width - 70) / 2,
-                                    child: Selector(
+                                    child: SelectorBox(
                                         selectedCategory: sleep_night_min,
                                         categoryList: timeList2,
                                         onSelect: (selectedCategory) {
@@ -1429,19 +1531,19 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
                             ],
                           ),
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            H18(
-                              text: (1).toString(),
-                              weight: FW.bold,
-                            ),
-                            H18(
-                              text: ' / 2',
-                              weight: FW.regular,
-                            ),
-                          ],
-                        ),
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.center,
+                        //   children: [
+                        //     H18(
+                        //       text: (1).toString(),
+                        //       weight: FW.bold,
+                        //     ),
+                        //     H18(
+                        //       text: ' / 2',
+                        //       weight: FW.regular,
+                        //     ),
+                        //   ],
+                        // ),
                         const SizedBox(height: 40),
                       ],
                     ),
@@ -1512,7 +1614,7 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
                     ],
                   ),
                   const SizedBox(height: 10),
-                  Selector(
+                  SelectorBox(
                       selectedCategory: category[index],
                       categoryList: categoryList[index],
                       onSelect: (selectedCategory) {
@@ -1533,7 +1635,7 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
                   Visibility(
                     visible:
                         monitoringData!.symptom_list![index].category != "직접입력",
-                    child: Selector(
+                    child: SelectorBox(
                         selectedCategory: symptom[index],
                         categoryList: symptomList[index],
                         onSelect: (selectedCategory) {
