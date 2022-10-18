@@ -15,6 +15,7 @@ import 'package:ourdoctor/pages/components/h14.dart';
 import 'package:ourdoctor/pages/components/h16.dart';
 import 'package:ourdoctor/pages/components/h24_b.dart';
 import 'package:ourdoctor/pages/components/main_text_button.dart';
+import 'package:ourdoctor/pages/components/outline_input.dart';
 import 'package:ourdoctor/pages/components/selector.dart';
 import 'package:ourdoctor/pages/components/selector1.dart';
 import 'package:ourdoctor/pages/components/simple_header.dart';
@@ -40,7 +41,7 @@ class CaloriCalcPageState extends BaseState<CaloriCalcPage> {
 
   List<String> countList = [];
 
-  List<String> categoryList = [];
+  List<String> categoryList = ['한식', '양식', '중식', '일식', '분식', '패스트푸드', '제품', '과일', '직접입력'];
   List<SubCategoryList>? subAllCategoryList;
   List<String> subCategoryList = [];
   List<FoodDto> foodList = [];
@@ -53,6 +54,9 @@ class CaloriCalcPageState extends BaseState<CaloriCalcPage> {
   String food = "";
   List<String> count = [];
   double allKalori = 0;
+
+  final nameTxc = TextEditingController();
+  final kcalTxc = TextEditingController();
 
   @override
   void initState() {
@@ -90,7 +94,7 @@ class CaloriCalcPageState extends BaseState<CaloriCalcPage> {
   @override
   void dispose() {
     // Clean up the focus node when the Form is disposed.
-
+    FocusScope.of(context).unfocus();
     super.dispose();
   }
 
@@ -149,7 +153,7 @@ class CaloriCalcPageState extends BaseState<CaloriCalcPage> {
       });
       if (value.result == 0) {
         // categoryList = value.data!.categoryList!;
-        sortCategoryListByOrder(value.data!.categoryList!);
+        // sortCategoryListByOrder(value.data!.categoryList!);
         subAllCategoryList = value.data!.subCategoryList!;
         if (categoryList.isNotEmpty) {
           category = categoryList[0];
@@ -173,14 +177,14 @@ class CaloriCalcPageState extends BaseState<CaloriCalcPage> {
     });
   }
 
-  sortCategoryListByOrder(List<String> value) {
-    List<String> order = ['한식', '양식', '중식', '일식', '분식', '패스트푸드', '제품', '과일'];
-
-    for (int i = 0; i < value.length; i++) {
-      int idx = value.indexWhere((e) => e == order[i]);
-      categoryList.add(value[idx]);
-    }
-  }
+  // sortCategoryListByOrder(List<String> value) {
+  //   List<String> order = ['한식', '양식', '중식', '일식', '분식', '패스트푸드', '제품', '과일', '직접입력'];
+  //
+  //   for (int i = 0; i < value.length; i++) {
+  //     int idx = value.indexWhere((e) => e == order[i]);
+  //     categoryList.add(value[idx]);
+  //   }
+  // }
 
   // 모니터링 음식 리스트
   void getFoodList() {
@@ -270,7 +274,11 @@ class CaloriCalcPageState extends BaseState<CaloriCalcPage> {
                                 onSelect: (selectedCategory) {
                                   setState(() {
                                     category = selectedCategory!;
-                                    getSubCategoryList();
+                                    if(category == "직접입력"){
+                                      subCategory = "";
+                                    } else {
+                                      getSubCategoryList();
+                                    }
                                   });
                                 },
                                 hint: ""),
@@ -278,25 +286,7 @@ class CaloriCalcPageState extends BaseState<CaloriCalcPage> {
                         const SizedBox(height: 12),
                         SizedBox(
                           width: screenSize.width - 64,
-                          child:
-                          // DropdownButton2(
-                          //   dropdownMaxHeight: screenSize.height /2,
-                          //   isExpanded: true,
-                          //   value: subCategory,
-                          //   items: subCategoryList.map((String value) {
-                          //     return DropdownMenuItem(
-                          //         value: value,
-                          //         child: Center(
-                          //           child: Text(value),
-                          //         ));
-                          //   }).toList(),
-                          //   onChanged: (v) {
-                          //     setState(() {
-                          //       subCategory = v as String;
-                          //       getFoodList();
-                          //     });
-                          //   },
-                          // )
+                          child: category != "직접입력" ?
                           Selector1(
                               selectedCategory: subCategory,
                               categoryList: subCategoryList,
@@ -306,29 +296,22 @@ class CaloriCalcPageState extends BaseState<CaloriCalcPage> {
                                   getFoodList();
                                 });
                               },
-                              hint: "분류를 선택하세요."),
+                              hint: "분류를 선택하세요.")
+                              : SizedBox(
+                            height: 52,
+                            child: OutlineInput(
+                              controller: nameTxc,
+                              keyboardType: TextInputType.text,
+                              textInputAction: TextInputAction.next,
+                              onEditingComplete: () => node.nextFocus(),
+                              placeholder: "음식이름을 입력해주세요",
+                            ),
+                          ),
                         ),
                         const SizedBox(height: 12),
                         SizedBox(
                           width: screenSize.width - 64,
-                          child:
-                          // DropdownButton2(
-                          //   dropdownMaxHeight: screenSize.height /2,
-                          //   isExpanded: true,
-                          //   value: food,
-                          //   items: foodStrList.map((String value) {
-                          //     return DropdownMenuItem(
-                          //         value: value,
-                          //         child: Center(
-                          //           child: Text(value),
-                          //         ));
-                          //   }).toList(),
-                          //   onChanged: (v) {
-                          //     setState(() {
-                          //       food = v as String;
-                          //     });
-                          //   },
-                          // )
+                          child: category != "직접입력" ?
                           Selector1(
                               selectedCategory: food,
                               categoryList: foodStrList,
@@ -337,7 +320,17 @@ class CaloriCalcPageState extends BaseState<CaloriCalcPage> {
                                   food = selectedCategory!;
                                 });
                               },
-                              hint: "음식을 선택하세요."),
+                              hint: "음식을 선택하세요.")
+                          : SizedBox(
+                            height: 52,
+                            child: OutlineInput(
+                              controller: kcalTxc,
+                              keyboardType: TextInputType.number,
+                              textInputAction: TextInputAction.next,
+                              onEditingComplete: () => node.nextFocus(),
+                              placeholder: "칼로리를 입력해주세요(1인분 기준)",
+                            ),
+                          ),
                         ),
                         Container(
                             width: MediaQuery.of(context).size.width,
@@ -353,19 +346,38 @@ class CaloriCalcPageState extends BaseState<CaloriCalcPage> {
                                 width: 100,
                                 disableBackground: AppColor_Primary_Disable,
                                 onPressed: () {
-                                  for (int i = 0; i < foodList.length; i++) {
-                                    if (food == foodList.elementAt(i).name) {
-                                      FoodDto item = foodList.elementAt(i);
-                                      FoodDto dic = FoodDto();
-                                      dic.id = item.id;
-                                      dic.category = item.category;
-                                      dic.subCategory = item.subCategory;
-                                      dic.name = item.name;
-                                      dic.kcal = item.kcal;
-                                      dic.createdAt = item.createdAt;
-                                      dic.count = 0.25;
-                                      foodAddList.add(dic);
-                                      count.add("0.25인분");
+                                  if (category == "직접입력") {
+                                    if (nameTxc.text == "" || kcalTxc.text == ""){
+                                      showToast('음식명과 칼로리를 정확하게 입력해주세요');
+                                      return;
+                                    }
+                                    FoodDto dic = FoodDto();
+                                    dic.id = '0';
+                                    dic.category = category;
+                                    dic.subCategory = "";
+                                    dic.name = nameTxc.text;
+                                    dic.kcal = kcalTxc.text;
+                                    dic.createdAt = DateTime.now().toString();
+                                    dic.count = 0.25;
+                                    foodAddList.add(dic);
+                                    count.add('0.25인분');
+                                  } else {
+                                    for (int i = 0; i < foodList.length; i++) {
+                                      if (food == foodList
+                                          .elementAt(i)
+                                          .name) {
+                                        FoodDto item = foodList.elementAt(i);
+                                        FoodDto dic = FoodDto();
+                                        dic.id = item.id;
+                                        dic.category = item.category;
+                                        dic.subCategory = item.subCategory;
+                                        dic.name = item.name;
+                                        dic.kcal = item.kcal;
+                                        dic.createdAt = item.createdAt;
+                                        dic.count = 0.25;
+                                        foodAddList.add(dic);
+                                        count.add("0.25인분");
+                                      }
                                     }
                                   }
                                   checkValid();
@@ -477,7 +489,8 @@ class CaloriCalcPageState extends BaseState<CaloriCalcPage> {
                     // }
                     final p = Provider.of<OldFoodListProvider>(context,listen: false);
                     p.changeList(widget.type!, foodAddList);
-                    p.changeKcalOne(widget.type!, "${allKalori.toStringAsFixed(1)}\nkcal");
+                    String k = allKalori.toStringAsFixed(1);
+                    p.changeKcalOne(widget.type!, "$k\nkcal");
 
                     if (widget.type == 0) {
                       monitoringData!.foodAddList1 = foodAddList;

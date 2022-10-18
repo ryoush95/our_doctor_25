@@ -417,7 +417,7 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
             }
 
             if (allKalori > 0) {
-              nutritionalStatus1[j] = '${allKalori}\nkcal';
+              nutritionalStatus1[j] = '${allKalori.toStringAsFixed(1)}\nkcal';
               p.changeKcalList(nutritionalStatus1);
             } else {
               nutritionalStatus1[j] = nutritionalStatus[j];
