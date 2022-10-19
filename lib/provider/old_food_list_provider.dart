@@ -7,6 +7,8 @@ class OldFoodListProvider extends ChangeNotifier {
   List<FoodDto> food3 = [];
   List<FoodDto> food4 = [];
   List<String> kcalList = <String>["", "", "", ""];
+  List<FoodDto> allFoodList = [];
+  List<FoodDto> searchList = [];
 
   void changeList(int i, List<FoodDto> list) {
     switch (i) {
@@ -31,7 +33,7 @@ class OldFoodListProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void changeKcalOne(int i, String k){
+  void changeKcalOne(int i, String k) {
     kcalList[i] = k;
     notifyListeners();
   }
@@ -41,6 +43,19 @@ class OldFoodListProvider extends ChangeNotifier {
     food2.clear();
     food3.clear();
     food4.clear();
+    notifyListeners();
+  }
+
+  void changeAllFood(List<FoodDto> list) {
+    allFoodList = list;
+    notifyListeners();
+  }
+
+  void changeSearch(String s) {
+    searchList.clear();
+    allFoodList.where((e) => e.name!.contains(s)).forEach((element) {
+      searchList.add(element);
+    });
     notifyListeners();
   }
 }

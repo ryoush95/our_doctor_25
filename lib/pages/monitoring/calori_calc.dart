@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:ourdoctor/global/app_colors.dart';
 import 'package:ourdoctor/global/app_styles.dart';
@@ -15,6 +17,7 @@ import 'package:ourdoctor/pages/components/h14.dart';
 import 'package:ourdoctor/pages/components/h16.dart';
 import 'package:ourdoctor/pages/components/h24_b.dart';
 import 'package:ourdoctor/pages/components/main_text_button.dart';
+import 'package:ourdoctor/pages/components/noline_input.dart';
 import 'package:ourdoctor/pages/components/outline_input.dart';
 import 'package:ourdoctor/pages/components/selector.dart';
 import 'package:ourdoctor/pages/components/selector1.dart';
@@ -49,18 +52,40 @@ class CaloriCalcPageState extends BaseState<CaloriCalcPage> {
 
   List<FoodDto> foodAddList = [];
 
-  String category = "";
+  String category = "한식";
   String subCategory = "";
   String food = "";
   List<String> count = [];
   double allKalori = 0;
 
+  FocusNode focus = FocusNode();
   final nameTxc = TextEditingController();
   final kcalTxc = TextEditingController();
+  final searchTxc = TextEditingController();
+
+  final LayerLink _searchBarLink = LayerLink();
+  final GlobalKey _searchBarKey = GlobalKey();
+  OverlayEntry? entry;
+
+  String keyword = "";
+  bool _isSearching = false;
+  bool _canClear = false;
 
   @override
   void initState() {
     super.initState();
+
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) =>showSuggest() );
+    focus.addListener(() {
+      if (focus.hasFocus){
+        showSuggest();
+        insertEntry();
+      } else {
+        hideEntry();
+      }
+    });
+
+    getAllFood();
 
     for (double i = 0.25; i <= 3; i += 0.25) {
       String content = (i).toString();
@@ -94,7 +119,12 @@ class CaloriCalcPageState extends BaseState<CaloriCalcPage> {
   @override
   void dispose() {
     // Clean up the focus node when the Form is disposed.
-    FocusScope.of(context).unfocus();
+    focus.dispose();
+    nameTxc.dispose();
+    kcalTxc.dispose();
+    searchTxc.dispose();
+    entry!.remove();
+    entry!.dispose();
     super.dispose();
   }
 
@@ -186,13 +216,38 @@ class CaloriCalcPageState extends BaseState<CaloriCalcPage> {
   //   }
   // }
 
+  void getAllFood() async{
+    final p = Provider.of<OldFoodListProvider>(context, listen: false);
+    setState(() {
+      isLoading = true;
+    });
+
+    if (p.allFoodList.isEmpty) {
+      Future<FoodListResModel> getFoodAll = httpService.getFoodAll();
+      getFoodAll.then((value) {
+        setState(() {
+          isLoading = false;
+        });
+        print(p.allFoodList);
+        if (value.result == 0) {
+          foodList = value.data!.list!;
+          p.changeAllFood(foodList);
+        }
+      }).catchError((onError) {
+        setState(() {
+          isLoading = false;
+        });
+        showToast(onError);
+      });
+    }
+  }
+
   // 모니터링 음식 리스트
   void getFoodList() {
     setState(() {
       isLoading = true;
     });
-    Future<FoodListResModel> uploadInfo =
-        httpService.foodList(category, subCategory);
+    Future<FoodListResModel> uploadInfo = httpService.foodList(category, subCategory);
     uploadInfo.then((FoodListResModel value) {
       setState(() {
         isLoading = false;
@@ -225,6 +280,149 @@ class CaloriCalcPageState extends BaseState<CaloriCalcPage> {
     });
   }
 
+  //검색창
+  Widget searchBar() {
+    var screenSize = MediaQuery.of(context).size;
+    final p = context.read<OldFoodListProvider>();
+    return Row(
+      key: _searchBarKey,
+      children: [
+        Container(
+            width: screenSize.width - 60,
+            height: 42,
+            padding: const EdgeInsets.symmetric(horizontal: 18),
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(21),
+                border: Border.all(
+                  color: AppColor_Selector_Border,
+                )),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Image.asset('assets/search_black_24dp.png', width: 20),
+                const SizedBox(width: 10),
+                SizedBox(
+                  width: screenSize.width - 150,
+                  // margin: const EdgeInsets.only(bottom: 3),
+                  child: NolineInput(
+                    focus: focus,
+                    controller: searchTxc,
+                    keyboardType: TextInputType.text,
+                    textInputAction: TextInputAction.search,
+                    borderColor: AppColor_Light_Gray,
+                    onEditingComplete: () {
+                      FocusScope.of(context).requestFocus(FocusNode());
+                      _isSearching = true;
+                      keyword = searchTxc.text.trim().toString();
+                      setState(() {});
+                      // getCommunityList();
+                    },
+                    placeholder: "음식 검색",
+                    canClear: _canClear,
+                    onChanged: (text){
+                      _canClear = (searchTxc.text != "");
+                      p.changeSearch(searchTxc.text);
+                      setState(() {
+                        print(p.searchList.length);
+                        if(searchTxc.text != "") {
+                          hideEntry();
+                          insertEntry();
+                        } else {
+                          hideEntry();
+                        }
+                      });
+                    },
+                    onClear: () {
+                      keyword = "";
+                      searchTxc.clear();
+                      _canClear = false;
+                      _isSearching = false;
+                      setState(() {
+                        hideEntry();
+                      });
+                    },
+                  ),
+                ),
+                const SizedBox(width: 20,),
+              ],
+            )),
+      ],
+    );
+  }
+
+  void insertEntry() {
+    OverlayState? overlayState = Overlay.of(context);
+    if (mounted) {
+      overlayState?.insert(entry!);
+    }
+  }
+
+  void hideEntry() {
+    if(entry!.mounted) entry!.remove();
+  }
+
+  void showSuggest() {
+    final overlay = Overlay.of(context)!;
+    final renderBox = context.findRenderObject() as RenderBox;
+    final size = renderBox.size;
+
+    entry = OverlayEntry(
+        builder: (context){
+          return Positioned(
+            width: size.width-64,
+            height: 200,
+            child: CompositedTransformFollower(
+              link: _searchBarLink,
+              showWhenUnlinked: false,
+              offset: Offset(0, 40),
+              child: buildOverlay(),
+            ),
+          );
+        }
+    );
+  }
+
+  Widget buildOverlay() {
+    final p = Provider.of<OldFoodListProvider>(context);
+    return Container(
+      decoration: BoxDecoration(color: Colors.white, border: Border.all(color: AppColor_Selector_Border)),
+      width: MediaQuery.of(context).size.width - 64,
+      child: ListView.builder(
+        itemCount: p.searchList.length,
+        itemBuilder: searchItem,
+      ),
+    );
+  }
+
+  Widget searchItem(context, index) {
+    final p = Provider.of<OldFoodListProvider>(context);
+    return CupertinoButton(
+      padding: const EdgeInsets.symmetric(horizontal: 14),
+      borderRadius: BorderRadius.circular(0),
+      pressedOpacity: 1,
+      minSize: 0,
+      onPressed: () {
+        foodAddList.add(p.searchList[index]);
+        count.add('0.25인분');
+        FocusScope.of(context).unfocus();
+        hideEntry();
+      },
+      color: Colors.white,
+      child: SizedBox(
+        height: 40,
+        child: Align(
+          alignment: Alignment.centerLeft,
+          child:
+           Text(
+              p.searchList[index].name!,
+              style: AppTextStyle.PD(AppColor_BlackText, 16, weight: FW.semi_bold, height: 1.0),
+            ),
+          ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final node = FocusScope.of(context);
@@ -244,237 +442,240 @@ class CaloriCalcPageState extends BaseState<CaloriCalcPage> {
                 ),
                 Expanded(
                     child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30),
-                  child: SingleChildScrollView(
-                    controller: _controller,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 20),
-                        H24B(
-                            text: "칼로리 계산기",
-                            color: AppColor_BlackText,
-                            align: TextAlign.left,
-                            height: 1.5),
-                        const SizedBox(height: 8),
-                        H14(
-                          text: "먹은 음식을 선택해 영양상태를 효과적으로 기록해보세요.",
-                          weight: FW.medium,
-                          align: TextAlign.left,
-                          color: AppColor_BlackText,
-                          maxLine: 2,
-                        ),
-                        const SizedBox(height: 24),
-                        SizedBox(
-                            width: screenSize.width - 64,
-                            child:
-                            Selector1(
-                                selectedCategory: category,
-                                categoryList: categoryList,
-                                onSelect: (selectedCategory) {
-                                  setState(() {
-                                    category = selectedCategory!;
-                                    if(category == "직접입력"){
-                                      subCategory = "";
-                                    } else {
-                                      getSubCategoryList();
-                                    }
-                                  });
-                                },
-                                hint: ""),
+                      padding: const EdgeInsets.symmetric(horizontal: 30),
+                      child: SingleChildScrollView(
+                        controller: _controller,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(height: 20),
+                            H24B(
+                                text: "칼로리 계산기",
+                                color: AppColor_BlackText,
+                                align: TextAlign.left,
+                                height: 1.5),
+                            const SizedBox(height: 8),
+                            H14(
+                              text: "먹은 음식을 선택해 영양상태를 효과적으로 기록해보세요.",
+                              weight: FW.medium,
+                              align: TextAlign.left,
+                              color: AppColor_BlackText,
+                              maxLine: 2,
                             ),
-                        const SizedBox(height: 12),
-                        SizedBox(
-                          width: screenSize.width - 64,
-                          child: category != "직접입력" ?
-                          Selector1(
-                              selectedCategory: subCategory,
-                              categoryList: subCategoryList,
-                              onSelect: (selectedCategory) {
-                                setState(() {
-                                  subCategory = selectedCategory!;
-                                  getFoodList();
-                                });
-                              },
-                              hint: "분류를 선택하세요.")
-                              : SizedBox(
-                            height: 52,
-                            child: OutlineInput(
-                              controller: nameTxc,
-                              keyboardType: TextInputType.text,
-                              textInputAction: TextInputAction.next,
-                              onEditingComplete: () => node.nextFocus(),
-                              placeholder: "음식이름을 입력해주세요",
+                            const SizedBox(height: 24),
+                            CompositedTransformTarget(
+                                link: _searchBarLink,
+                                child: searchBar(),
                             ),
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-                        SizedBox(
-                          width: screenSize.width - 64,
-                          child: category != "직접입력" ?
-                          Selector1(
-                              selectedCategory: food,
-                              categoryList: foodStrList,
-                              onSelect: (selectedCategory) {
-                                setState(() {
-                                  food = selectedCategory!;
-                                });
-                              },
-                              hint: "음식을 선택하세요.")
-                          : SizedBox(
-                            height: 52,
-                            child: OutlineInput(
-                              controller: kcalTxc,
-                              keyboardType: TextInputType.number,
-                              textInputAction: TextInputAction.next,
-                              onEditingComplete: () => node.nextFocus(),
-                              placeholder: "칼로리를 입력해주세요(1인분 기준)",
+                            const SizedBox(height: 12),
+                            SizedBox(
+                              width: screenSize.width - 64,
+                              child:
+                              Selector1(
+                                  selectedCategory: category,
+                                  categoryList: categoryList,
+                                  onSelect: (selectedCategory) {
+                                    setState(() {
+                                      category = selectedCategory!;
+                                      if(category == "직접입력"){
+                                        subCategory = "";
+                                      } else {
+                                        getSubCategoryList();
+                                      }
+                                    });
+                                  },
+                                  hint: ""),
                             ),
-                          ),
-                        ),
-                        Container(
-                            width: MediaQuery.of(context).size.width,
-                            margin: const EdgeInsets.only(top: 20),
-                            child: Center(
-                              child: MainTextButton(
-                                text: "추가",
-                                backgroundColor: AppColor_Primary,
-                                style: AppTextStyle.PD(Colors.white, 18,
-                                    weight: FW.bold),
-                                radius: 20,
-                                height: 40,
-                                width: 100,
-                                disableBackground: AppColor_Primary_Disable,
-                                onPressed: () {
-                                  if (category == "직접입력") {
-                                    if (nameTxc.text == "" || kcalTxc.text == ""){
-                                      showToast('음식명과 칼로리를 정확하게 입력해주세요');
-                                      return;
-                                    }
-                                    FoodDto dic = FoodDto();
-                                    dic.id = '0';
-                                    dic.category = category;
-                                    dic.subCategory = "";
-                                    dic.name = nameTxc.text;
-                                    dic.kcal = kcalTxc.text;
-                                    dic.createdAt = DateTime.now().toString();
-                                    dic.count = 0.25;
-                                    foodAddList.add(dic);
-                                    count.add('0.25인분');
-                                  } else {
-                                    for (int i = 0; i < foodList.length; i++) {
-                                      if (food == foodList
-                                          .elementAt(i)
-                                          .name) {
-                                        FoodDto item = foodList.elementAt(i);
+                            const SizedBox(height: 12),
+                            SizedBox(
+                              width: screenSize.width - 64,
+                              child: category != "직접입력" ?
+                              Selector1(
+                                  selectedCategory: subCategory,
+                                  categoryList: subCategoryList,
+                                  onSelect: (selectedCategory) {
+                                    setState(() {
+                                      subCategory = selectedCategory!;
+                                      getFoodList();
+                                    });
+                                  },
+                                  hint: "분류를 선택하세요.")
+                                  : SizedBox(
+                                height: 52,
+                                child: OutlineInput(
+                                  controller: nameTxc,
+                                  keyboardType: TextInputType.text,
+                                  textInputAction: TextInputAction.next,
+                                  onEditingComplete: () => node.nextFocus(),
+                                  placeholder: "음식이름을 입력해주세요",
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+                            SizedBox(
+                              width: screenSize.width - 64,
+                              child: category != "직접입력" ?
+                              Selector1(
+                                  selectedCategory: food,
+                                  categoryList: foodStrList,
+                                  onSelect: (selectedCategory) {
+                                    setState(() {
+                                      food = selectedCategory!;
+                                    });
+                                  },
+                                  hint: "음식을 선택하세요.")
+                                  : SizedBox(
+                                height: 52,
+                                child: OutlineInput(
+                                  controller: kcalTxc,
+                                  keyboardType: TextInputType.number,
+                                  textInputAction: TextInputAction.next,
+                                  onEditingComplete: () => node.nextFocus(),
+                                  placeholder: "칼로리를 입력해주세요(1인분 기준)",
+                                  inputFomatter:[FilteringTextInputFormatter.allow(RegExp('[0-9]'))],
+                                ),
+                              ),
+                            ),
+                            Container(
+                                width: MediaQuery.of(context).size.width,
+                                margin: const EdgeInsets.only(top: 20),
+                                child: Center(
+                                  child: MainTextButton(
+                                    text: "추가",
+                                    backgroundColor: AppColor_Primary,
+                                    style: AppTextStyle.PD(Colors.white, 18,
+                                        weight: FW.bold),
+                                    radius: 20,
+                                    height: 40,
+                                    width: 100,
+                                    disableBackground: AppColor_Primary_Disable,
+                                    onPressed: () {
+                                      if (category == "직접입력") {
+                                        if (nameTxc.text == "" || kcalTxc.text == ""){
+                                          showToast('음식명과 칼로리를 정확하게 입력해주세요');
+                                          return;
+                                        }
                                         FoodDto dic = FoodDto();
-                                        dic.id = item.id;
-                                        dic.category = item.category;
-                                        dic.subCategory = item.subCategory;
-                                        dic.name = item.name;
-                                        dic.kcal = item.kcal;
-                                        dic.createdAt = item.createdAt;
+                                        dic.id = '0';
+                                        dic.category = category;
+                                        dic.subCategory = "";
+                                        dic.name = nameTxc.text;
+                                        dic.kcal = kcalTxc.text;
+                                        dic.createdAt = DateTime.now().toString();
                                         dic.count = 0.25;
                                         foodAddList.add(dic);
-                                        count.add("0.25인분");
+                                        count.add('0.25인분');
+                                      } else {
+                                        for (int i = 0; i < foodList.length; i++) {
+                                          if (food == foodList
+                                              .elementAt(i)
+                                              .name) {
+                                            FoodDto item = foodList.elementAt(i);
+                                            FoodDto dic = FoodDto();
+                                            dic.id = item.id;
+                                            dic.category = item.category;
+                                            dic.subCategory = item.subCategory;
+                                            dic.name = item.name;
+                                            dic.kcal = item.kcal;
+                                            dic.createdAt = item.createdAt;
+                                            dic.count = 0.25;
+                                            foodAddList.add(dic);
+                                            count.add("0.25인분");
+                                          }
+                                        }
                                       }
-                                    }
-                                  }
-                                  checkValid();
-                                  scrollDown();
-                                },
-                              ),
-                            )),
-                        const SizedBox(height: 60),
-                        H16(
-                          text: "계산 결과",
-                          weight: FW.bold,
-                          color: AppColor_BlackText,
-                        ),
-                        const SizedBox(height: 16),
-                        Container(
-                          height: 1,
-                          color: AppColor_BlackText,
-                        ),
-                        const SizedBox(height: 13),
-                        Stack(
-                          children: [
-                            Visibility(
-                              visible: foodAddList.isNotEmpty,
-                              child: Container(
-                                height: 48 * foodAddList.length.toDouble(),
-                                child: ListView.builder(
-                                  shrinkWrap: true,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  itemBuilder: _itemBuilder,
-                                  itemCount: foodAddList.length,
-                                ),
-                              ),
-                            ),
-                            Visibility(
-                              visible: foodAddList.isEmpty,
-                              child: SizedBox(
-                                height: 66,
-                                child: Center(
-                                  child: H14(
-                                    text: "음식을 선택해주세요.",
-                                    weight: FW.medium,
-                                    color: AppColor_BlackText,
+                                      checkValid();
+                                      scrollDown();
+                                    },
                                   ),
-                                ),
-                              ),
+                                )),
+                            const SizedBox(height: 60),
+                            H16(
+                              text: "계산 결과",
+                              weight: FW.bold,
+                              color: AppColor_BlackText,
                             ),
-                          ],
-                        ),
-                        const SizedBox(height: 5),
-                        Container(
-                          height: 1,
-                          color: AppColor_Selector_Border,
-                        ),
-                        Row(
-                          children: [
+                            const SizedBox(height: 16),
                             Container(
-                              width: (MediaQuery.of(context).size.width -
-                                      64 -
-                                      120) /
-                                  2,
-                              height: 48,
-                              child: Row(
-                                children: [
-                                  Flexible(
-                                    child: H14(
-                                      text: "섭취 칼로리",
-                                      weight: FW.bold,
-                                      color: AppColor_BlackText,
-                                      maxLine: 2,
+                              height: 1,
+                              color: AppColor_BlackText,
+                            ),
+                            const SizedBox(height: 13),
+                            Stack(
+                              children: [
+                                Visibility(
+                                  visible: foodAddList.isNotEmpty,
+                                  child: Container(
+                                    height: 48 * foodAddList.length.toDouble(),
+                                    child: ListView.builder(
+                                      shrinkWrap: true,
+                                      physics: const NeverScrollableScrollPhysics(),
+                                      itemBuilder: _itemBuilder,
+                                      itemCount: foodAddList.length,
                                     ),
                                   ),
-                                ],
-                              ),
+                                ),
+                                Visibility(
+                                  visible: foodAddList.isEmpty,
+                                  child: SizedBox(
+                                    height: 66,
+                                    child: Center(
+                                      child: H14(
+                                        text: "음식을 선택해주세요.",
+                                        weight: FW.medium,
+                                        color: AppColor_BlackText,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
+                            const SizedBox(height: 5),
                             Container(
-                              width: (MediaQuery.of(context).size.width -
+                              height: 1,
+                              color: AppColor_Selector_Border,
+                            ),
+                            Row(
+                              children: [
+                                Container(
+                                  width: (MediaQuery.of(context).size.width - 64 - 120) / 2,
+                                  height: 48,
+                                  child: Row(
+                                    children: [
+                                      Flexible(
+                                        child: H14(
+                                          text: "섭취 칼로리",
+                                          weight: FW.bold,
+                                          color: AppColor_BlackText,
+                                          maxLine: 2,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Container(
+                                  width: (MediaQuery.of(context).size.width -
                                       64 -
                                       120) /
-                                  2,
-                              height: 48,
-                              child: Center(
-                                child: H14(
-                                  text: convertScore(allKalori.toString()) +
-                                      " kcal",
-                                  weight: FW.bold,
-                                  color: AppColor_BlackText,
+                                      2,
+                                  height: 48,
+                                  child: Center(
+                                    child: H14(
+                                      text: convertScore(allKalori.toString()) +
+                                          " kcal",
+                                      weight: FW.bold,
+                                      color: AppColor_BlackText,
+                                    ),
+                                  ),
                                 ),
-                              ),
+                                const SizedBox(width: 92, height: 40),
+                              ],
                             ),
-                            const SizedBox(width: 92, height: 40),
+                            const SizedBox(height: 25),
                           ],
                         ),
-                        const SizedBox(height: 25),
-                      ],
-                    ),
-                  ),
-                )),
+                      ),
+                    )),
                 MainTextButton(
                   text: convertScore(allKalori.toString()) + " kcal 입력하기",
                   backgroundColor: AppColor_Primary,

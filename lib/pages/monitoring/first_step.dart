@@ -874,6 +874,16 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
     String foodJson3 = json.encode(food3);
     String foodJson4 = json.encode(food4);
 
+    var l = context.read<OldFoodListProvider>().kcalList;
+    String f1 = l[0].contains("\nkcal") ? l[0].substring(0,l[0].length-6) : "0";
+    String f2 = l[1].contains("\nkcal") ? l[1].substring(0,l[1].length-6) : "0";
+    String f3 = l[2].contains("\nkcal") ? l[2].substring(0,l[2].length-6) : "0";
+    String f4 = l[3].contains("\nkcal") ? l[3].substring(0,l[3].length-6) : "0";
+
+    nutrition = "$f1, $f2, $f3, $f4";
+
+
+
     Future<MonitoringRecordResModel> info = httpService.monitoringRecord(
         monitoring_time,
         height,

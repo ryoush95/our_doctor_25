@@ -877,7 +877,7 @@ class SecondStepPageState extends BaseState<SecondStepPage> {
                   ),
                 )),
                 MainTextButton(
-                  text: LanguageService.trans("view_monitoring_results"),
+                  text: "모니터링 결과보기",
                   backgroundColor: AppColor_Primary,
                   style: AppTextStyle.PD(Colors.white, 18, weight: FW.bold),
                   radius: 0,

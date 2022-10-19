@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:ourdoctor/global/app_colors.dart';
 import 'package:ourdoctor/global/app_styles.dart';
 
@@ -20,8 +21,9 @@ class OutlineInput extends StatelessWidget {
   final textAlign;
   FocusNode? focus;
   bool? readOnly;
+  List<TextInputFormatter>? inputFomatter;
 
-  OutlineInput({Key? key, this.controller, this.keyboardType, this.placeholder, this.textInputAction, this.onEditingComplete, this.onChanged, this.borderColor, this.hintColor, this.maxLine, this.maxLength, this.height, this.weight, this.size, this.textAlign, this.isSecure, this.focus, this.readOnly})
+  OutlineInput({Key? key, this.controller, this.keyboardType, this.placeholder, this.textInputAction, this.onEditingComplete, this.onChanged, this.borderColor, this.hintColor, this.maxLine, this.maxLength, this.height, this.weight, this.size, this.textAlign, this.isSecure, this.focus, this.readOnly, this.inputFomatter})
       : super(key: key) {
     isSecure ??= false;
     maxLine ??= 1;
@@ -29,6 +31,7 @@ class OutlineInput extends StatelessWidget {
     maxLength ??= -1;
     focus ??= FocusNode();
     readOnly ??= false;
+    inputFomatter ??= [];
   }
 
   @override
@@ -48,7 +51,8 @@ class OutlineInput extends StatelessWidget {
           textInputAction: textInputAction,
           maxLines: maxLine,
           readOnly: readOnly!,
-          // focusNode: focus,
+          inputFormatters: inputFomatter,
+          focusNode: focus,
           decoration: InputDecoration(
             counterText: "",
             enabledBorder: const OutlineInputBorder(

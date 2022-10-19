@@ -1712,6 +1712,23 @@ class HttpService {
     }
   }
 
+  Future<FoodListResModel> getFoodAll() async {
+    String _url = API_BASE_URL + "api/Monitor2/food_all_list";
+    Map<String, String> body = {
+      'category': "",
+      'sub_category': "",
+    };
+    Uri myUri = Uri.parse(_url);
+    final response = await http.post(myUri, body: body);
+    if (response.statusCode == 200) {
+      return FoodListResModel.fromJson(json.decode(response.body));
+    } else {
+      // If that call was not successful, throw an error.
+      showToast(LanguageService.trans("server_fail"));
+      throw Exception(LanguageService.trans("server_fail"));
+    }
+  }
+
   Future<FoodListMonitorModel> foodSelectList(String date) async {
     String _url = API_BASE_URL + "api/Monitor2/past_food_list";
     Map<String, String> body = {
