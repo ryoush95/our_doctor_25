@@ -7,6 +7,8 @@ import 'package:ourdoctor/global/http_service.dart';
 import 'package:ourdoctor/helpers/common_util.dart';
 import 'package:ourdoctor/helpers/transition.dart';
 import 'package:ourdoctor/language/language_service.dart';
+import 'package:ourdoctor/models/community_detail_res_model.dart';
+import 'package:ourdoctor/models/community_list_res_model.dart';
 import 'package:ourdoctor/models/home_data_res_model.dart';
 import 'package:ourdoctor/pages/app_event.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
@@ -25,12 +27,11 @@ class SchoolArea extends StatefulWidget {
 
   @override
   SchoolAreaState createState() => SchoolAreaState();
-  
 }
 
 class SchoolAreaState extends BaseState<SchoolArea> {
   final HttpService httpService = HttpService();
-  List<CommunityList>? arrCommunityList;
+  List<CommunityDto> arrSchoolList = [];
 
   @override
   void initState() {
@@ -47,19 +48,20 @@ class SchoolAreaState extends BaseState<SchoolArea> {
       isLoading = true;
     });
 
-    Future<HomeDataResModel> info = httpService.homeData(widget.curCategory == 0 ? "home" : "monitor");
-    info.then((HomeDataResModel value) async {
+    Future<CommunityListResModel> info =
+        httpService.communityList("", 0, "school", "recent", "");
+    info.then((CommunityListResModel value) async {
       setState(() {
         isLoading = false;
       });
       if (value.result == 0) {
-        arrCommunityList = value.data!.communityList;
-        setState(() {});
-      } else {
-        showToast(value.msg ?? "");
-        if (value.result == 106) {
-          //token expired
-          Navigator.pushReplacement(context, SlideRightTransRoute(builder: (context) => FirstPage()));
+        // arrNewsList.addAll(value.data!.contents!);
+        var l = value.data!.contents!;
+        for (var i in l) {
+          if (arrSchoolList.length >= 10) break;
+          if (i.topic == "school" && i.imgUrl != "") {
+            arrSchoolList.add(i);
+          }
         }
       }
     }).catchError((onError) {
@@ -72,8 +74,6 @@ class SchoolAreaState extends BaseState<SchoolArea> {
 
   @override
   Widget build(BuildContext context) {
-      final subArrCommunityList = arrCommunityList?.sublist(0, 15);
-
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 28),
       child: Column(
@@ -88,44 +88,40 @@ class SchoolAreaState extends BaseState<SchoolArea> {
                 onTap: () {
                   eventBus.fire(MoreCommunityEvent(type: 2));
                 },
-                child: H14(text: LanguageService.trans('more'), weight: FW.medium),
+                child:
+                    H14(text: LanguageService.trans('more'), weight: FW.medium),
               ),
             ],
           ),
           const SizedBox(height: 12),
-          subArrCommunityList != null && subArrCommunityList.length > 1
-          ? SizedBox(
-            width: double.infinity,
-            height: 220,
-            child: ListView.builder(
-                shrinkWrap: true,
-                scrollDirection: Axis.horizontal,
-                itemCount: subArrCommunityList.length,
-                itemBuilder: (BuildContext context, int index) {
-                  CommunityList info = subArrCommunityList.elementAt(index);
-                  return InkWell(
-                    child: ItemSchool(item: info),
-                    onTap: () {
-                      if(widget.curCategory == 0) {
-                        Navigator.push(context, SlideRightTransRoute(
-                        builder: (context) => CommunityDetailPage(
-                          uid: info.uid,
-                          videoUrl: info.blogUrl,
-                        )));
-                      } else {
-                        Navigator.push(context, SlideRightTransRoute(
-                        builder: (context) => CommunityDetailPage(
-                          uid: info.uid,
-                        )));
-                      }
-                    },
-                  );
-                }),
-          )
-          : const SizedBox(),
+          !isLoading
+              ? SizedBox(
+                  width: double.infinity,
+                  height: 220,
+                  child: ListView.builder(
+                      shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
+                      itemCount: arrSchoolList.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        CommunityDto info = arrSchoolList.elementAt(index);
+                        return InkWell(
+                          child: ItemSchool(item: info),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              SlideRightTransRoute(
+                                  builder: (context) => CommunityDetailPage(
+                                        uid: info.uid,
+                                        videoUrl: null,
+                                      )),
+                            );
+                          },
+                        );
+                      }),
+                )
+              : const SizedBox(),
         ],
       ),
     );
   }
-
 }

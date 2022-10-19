@@ -409,7 +409,11 @@ class ShoppingBasketPageState extends BaseState<ShoppingBasketPage> {
                                                   children: [
                                                     H18(text: sprintf("%s 원", [ValidPrice(basketList[index].price ?? "0")])),
                                                     const SizedBox(width: 16),
-                                                    H18(text: sprintf("%s%", [ValidPrice(basketList[index].discount ?? "0")]), color: AppColor_Red),
+                                                    Visibility(
+                                                      visible: basketList[index].discount != "0",
+                                                      child: H18(text: sprintf("%s%", [ValidPrice(basketList[index].discount ?? "0")]), color: AppColor_Red),
+                                                    ),
+
                                                   ],
                                                 ),
                                                 const SizedBox(height: 40),

@@ -7,6 +7,8 @@ import 'package:ourdoctor/global/http_service.dart';
 import 'package:ourdoctor/helpers/common_util.dart';
 import 'package:ourdoctor/helpers/transition.dart';
 import 'package:ourdoctor/language/language_service.dart';
+import 'package:ourdoctor/models/community_detail_res_model.dart';
+import 'package:ourdoctor/models/community_list_res_model.dart';
 import 'package:ourdoctor/models/home_data_res_model.dart';
 import 'package:ourdoctor/pages/app_event.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
@@ -25,9 +27,9 @@ class CommunityArea extends StatefulWidget {
   
 }
 
-class CommunityAreaState extends BaseState<CommunityArea> {
+class CommunityAreaState extends BaseState<CommunityArea>  {
   final HttpService httpService = HttpService();
-  List<CommunityList>? arrCommunityList;
+  List<CommunityDto> arrCommunityList = [];
 
   @override
   void initState() {
@@ -44,19 +46,19 @@ class CommunityAreaState extends BaseState<CommunityArea> {
       isLoading = true;
     });
 
-    Future<HomeDataResModel> info = httpService.homeData(widget.curCategory == 0 ? "home" : "monitor");
-    info.then((HomeDataResModel value) async {
+    Future<CommunityListResModel> info = httpService.communityList("", 0, "team", "recent", "");
+    info.then((CommunityListResModel value) async {
       setState(() {
         isLoading = false;
       });
       if (value.result == 0) {
-        arrCommunityList = value.data!.communityList;
-        setState(() {});
-      } else {
-        showToast(value.msg ?? "");
-        if (value.result == 106) {
-          //token expired
-          Navigator.pushReplacement(context, SlideRightTransRoute(builder: (context) => FirstPage()));
+        // arrNewsList.addAll(value.data!.contents!);
+        var l = value.data!.contents!;
+        for(var i in l){
+          if(arrCommunityList.length >= 10) break;
+          if(i.topic == "team" && i.imgUrl != ""){
+            arrCommunityList.add(i);
+          }
         }
       }
     }).catchError((onError) {
@@ -69,7 +71,6 @@ class CommunityAreaState extends BaseState<CommunityArea> {
 
   @override
   Widget build(BuildContext context) {
-      final subArrCommunityList = arrCommunityList?.sublist(0, 10);
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 28),
@@ -85,41 +86,39 @@ class CommunityAreaState extends BaseState<CommunityArea> {
                 onTap: () {
                   eventBus.fire(MoreCommunityEvent(type: 3));
                 },
-                child: H14(text: LanguageService.trans('more'), weight: FW.medium),
+                child:
+                H14(text: LanguageService.trans('more'), weight: FW.medium),
               ),
             ],
           ),
           const SizedBox(height: 12),
-          subArrCommunityList != null && subArrCommunityList.length > 1 
-          ? SizedBox(
+          !isLoading
+              ? SizedBox(
             width: double.infinity,
             height: 220,
             child: ListView.builder(
                 shrinkWrap: true,
                 scrollDirection: Axis.horizontal,
-                itemCount: subArrCommunityList.length,
+                itemCount: arrCommunityList.length,
                 itemBuilder: (BuildContext context, int index) {
-                  CommunityList info = subArrCommunityList.elementAt(index);
+                  CommunityDto info =
+                  arrCommunityList.elementAt(index);
                   return InkWell(
                     child: ItemCommunity(item: info),
                     onTap: () {
-                      if(widget.curCategory == 0) {
-                        Navigator.push(context, SlideRightTransRoute(
-                        builder: (context) => CommunityDetailPage(
-                          uid: info.uid,
-                          videoUrl: info.blogUrl,
-                        )));
-                      } else {
-                        Navigator.push(context, SlideRightTransRoute(
-                        builder: (context) => CommunityDetailPage(
-                          uid: info.uid,
-                        )));
-                      }
+                      Navigator.push(
+                        context,
+                        SlideRightTransRoute(
+                            builder: (context) => CommunityDetailPage(
+                              uid: info.uid,
+                              videoUrl: null,
+                            )),
+                      );
                     },
                   );
                 }),
           )
-          : const SizedBox(),
+              : const SizedBox(),
         ],
       ),
     );

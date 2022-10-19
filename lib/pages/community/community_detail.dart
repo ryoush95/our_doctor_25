@@ -1428,6 +1428,7 @@ class CommunityDetailPageState extends BaseState<CommunityDetailPage> {
         child: SizedBox(
           height: MediaQuery.of(context).size.height,
           child: TextField(
+            style: TextStyle(fontSize: 14),
             textAlignVertical: TextAlignVertical.center,
             focusNode: replyFocusNode,
             controller: replyController,

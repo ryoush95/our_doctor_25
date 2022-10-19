@@ -135,7 +135,7 @@ class ProductDetailtState extends BaseState<ProductDetail> {
         List.generate(basketList.length, (index) => checkStatus.add(false));
         for (int i = 0; i < basketList.length; i++) {
           var textEditingController =
-          TextEditingController(text: basketList[i].count.toString());
+              TextEditingController(text: basketList[i].count.toString());
           textEditingControllers.add(textEditingController);
         }
         setState(() {});
@@ -242,7 +242,7 @@ class ProductDetailtState extends BaseState<ProductDetail> {
   }
 
   Future<bool> goShoppingBasketPage() async {
-     Navigator.push(context,
+    Navigator.push(context,
         SlideRightTransRoute(builder: (context) => ShoppingBasketPage()));
     return true;
   }
@@ -260,7 +260,7 @@ class ProductDetailtState extends BaseState<ProductDetail> {
               title: mData.name != null ? mData.name : "",
               onBackPressed: onBackPressed,
               basket: goShoppingBasketPage,
-              basketList: basketList.length.toString() + "개",
+              basketList: basketList.length.toString(),
             ),
             Expanded(
               child: Container(

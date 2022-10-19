@@ -17,10 +17,12 @@ import 'package:ourdoctor/pages/base/page_layout.dart';
 import 'package:ourdoctor/pages/care/homecare_list.dart';
 import 'package:ourdoctor/pages/care/product_list.dart';
 import 'package:ourdoctor/pages/care/product_show.dart';
+import 'package:ourdoctor/pages/care/product_show1.dart';
 import 'package:ourdoctor/pages/components/h13.dart';
 import 'package:ourdoctor/pages/components/h14.dart';
 import 'package:ourdoctor/pages/components/h16.dart';
 import 'package:ourdoctor/pages/components/h18.dart';
+import 'package:ourdoctor/pages/components/h20.dart';
 import 'package:ourdoctor/pages/components/noline_input.dart';
 import 'package:ourdoctor/pages/intro/first.dart';
 
@@ -33,6 +35,11 @@ class CareFragmentState extends BaseState<CareFragment>
     with TickerProviderStateMixin {
   int tabIndex = 0;
   int category = 0;
+
+  List<String> CATEGORY = ["성장스토어", "발달클래스", "MBTI"];
+  ScrollController controller = ScrollController();
+  bool isLast = true;
+  int nPage = 0;
   String keyword = "";
   late TabController tabController;
   final searchController = TextEditingController();
@@ -55,11 +62,18 @@ class CareFragmentState extends BaseState<CareFragment>
     const Color(0xFF44C924)
   ];
 
+  List<Color>? MBTI_COLOR = [
+    const Color(0xFFA8E1AC),
+    const Color(0xFF9DD6FF),
+    const Color(0xFFB6DAE0),
+    const Color(0xFFC6B9F0)
+  ];
+
   @override
   void initState() {
     super.initState();
-
-    tabController = TabController(length: 2, vsync: this);
+    controller = new ScrollController()..addListener(_scrollListener);
+    tabController = TabController(length: 3, vsync: this);
     tabController.addListener(() {
       changeTab(tabController.index);
     });
@@ -77,10 +91,30 @@ class CareFragmentState extends BaseState<CareFragment>
     });
   }
 
+  void _scrollListener() {
+    if (!isLoading) {
+      if (controller.position.pixels == controller.position.maxScrollExtent) {
+        if (isLast) {
+          return;
+        }
+        nPage = nPage + 1;
+        getBannerList();
+        getHomeDataInfo();
+      }
+    }
+  }
+
   void changeTab(int tab) {
     setState(() {
       tabIndex = tab;
       tabController.index = tabIndex;
+    });
+  }
+
+
+  void moveScroll() {
+    Future.delayed(const Duration(milliseconds: 500), () {
+      controller.jumpTo(0);
     });
   }
 
@@ -100,16 +134,30 @@ class CareFragmentState extends BaseState<CareFragment>
     setState(() {
       isLoading = true;
     });
+    String category = "";
+    if (tabIndex == 0) {
+      category = "GROWTH";
+    } else if (tabIndex == 1) {
+      category = "DEVELOPMENT";
+    } else {
+      category = "GROWTH";
+    }
 
-    Future<HomeCareBannerResModel> info = httpService
-        .homecareBannerList(category == 0 ? "GROWTH" : "DEVELOPMENT");
+    Future<HomeCareBannerResModel> info =
+        httpService.homecareBannerList(category);
     info.then((HomeCareBannerResModel value) async {
       setState(() {
         isLoading = false;
       });
       if (value.result == 0) {
+        if (nPage == 0 && arrBannerList!.isNotEmpty) {
+          arrBannerList!.clear();
+        }
         arrBannerList = value.data!.list;
         setState(() {});
+        if (nPage == 0) {
+          moveScroll();
+        }
       } else {
         showToast(value.msg ?? "");
         if (value.result == 106) {
@@ -132,8 +180,16 @@ class CareFragmentState extends BaseState<CareFragment>
       isLoading = true;
     });
 
-    Future<HomeCareDataResModel> info =
-        httpService.homecareDataInfo(category == 0 ? "GROWTH" : "DEVELOPMENT");
+    String category = "";
+    if (tabIndex == 0) {
+      category = "GROWTH";
+    } else if (tabIndex == 1) {
+      category = "DEVELOPMENT";
+    } else {
+      category = "MBTI";
+    }
+
+    Future<HomeCareDataResModel> info = httpService.homecareDataInfo(category);
     info.then((HomeCareDataResModel value) async {
       setState(() {
         isLoading = false;
@@ -158,6 +214,39 @@ class CareFragmentState extends BaseState<CareFragment>
     });
   }
 
+  Widget getBannerTitle(int index) {
+    double mWidth = (MediaQuery.of(context).size.width) / 3;
+    return Container(
+        child: GestureDetector(
+      onTap: () {
+        setState(() {
+          tabIndex = index;
+          nPage = 0;
+          getBannerList();
+          getHomeDataInfo();
+        });
+      },
+      child: SizedBox(
+        width: mWidth,
+        child: Stack(
+          children: [
+            Center(
+              child: H18(
+                text: CATEGORY[index],
+                weight: FW.bold,
+                align: TextAlign.center,
+                maxLine: 1,
+                color: tabIndex == index
+                    ? AppColor_White
+                    : AppColor_BlackText.withOpacity(0.2),
+              ),
+            ),
+          ],
+        ),
+      ),
+    ));
+  }
+
   @override
   Widget build(BuildContext context) {
     return PageLayout(
@@ -174,74 +263,73 @@ class CareFragmentState extends BaseState<CareFragment>
                   const SizedBox(height: 28),
                   CategoryShow(),
                   SearchBar(),
+                  PersonalityType(),
                   const SizedBox(height: 60),
-                  category == 0
-                      ? ProductShow(
-                          category: category,
-                          title: LanguageService.trans("popular_item"),
-                          list: arrLikeList)
-                      : ProductShow(
-                          category: category,
-                          title: LanguageService.trans("popular_class"),
-                          list: arrLikeList),
-                  category == 0
-                      ? ProductShow(
-                          category: category,
-                          title: LanguageService.trans("new_products_miss"),
-                          list: arrNewList)
-                      : ProductShow(
-                          category: category,
-                          title: LanguageService.trans("new_class"),
-                          list: arrNewList),
+                  ProductListShow(),
                 ]))));
   }
 
+  Widget PersonalityType() => Visibility(
+        visible: tabIndex == 2,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              tabIndex == 2
+              ? ProductShow1(
+                category: category,
+                title: LanguageService.trans("인기 검사"),
+                list: arrLikeList,
+              ) : const SizedBox(),
+            ],
+          ),
+      );
+
+  Widget ProductListShow() => Visibility(
+        visible: tabIndex == 0 || tabIndex == 1,
+        child: Column(
+          children: [
+            tabIndex == 0
+                ? ProductShow(
+                    category: category,
+                    title: LanguageService.trans("popular_item"),
+                    list: arrLikeList)
+                : ProductShow(
+                    category: category,
+                    title: LanguageService.trans("popular_class"),
+                    list: arrLikeList),
+            tabIndex == 0
+                ? ProductShow(
+                    category: category,
+                    title: LanguageService.trans("new_products_miss"),
+                    list: arrNewList)
+                : ProductShow(
+                    category: category,
+                    title: LanguageService.trans("new_class"),
+                    list: arrNewList),
+          ],
+        ),
+      );
+
   Widget CareBanner() {
-    return Container(
+    return SizedBox(
         height: 260,
         child: Stack(children: [
           Container(
-              height: 110,
-              width: double.infinity,
-              padding: const EdgeInsets.all(30),
-              decoration: BoxDecoration(
-                  color: category == 0 ? AppColor_Primary : AppColor_Yellow),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                //mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  InkWell(
-                    onTap: () {
-                      setState(() {
-                        category = 1 - category;
-                        getBannerList();
-                        getHomeDataInfo();
-                      });
-                    },
-                    child: H18(
-                      text: LanguageService.trans("growth_store"),
-                      color: category == 0 ? Colors.white : AppColor_ffe166,
-                      weight: FW.semi_bold,
-                    ),
-                  ),
-                  const SizedBox(width: 30),
-                  InkWell(
-                    onTap: () {
-                      setState(() {
-                        category = 1 - category;
-                        getBannerList();
-                        getHomeDataInfo();
-                      });
-                    },
-                    child: H18(
-                      text: LanguageService.trans("development_class"),
-                      color:
-                          category == 1 ? Colors.white : AppColor_Banner_Hint,
-                      weight: FW.semi_bold,
-                    ),
-                  ),
-                ],
-              )),
+            height: 100,
+            decoration: BoxDecoration(
+                color: tabIndex == 0
+                    ? AppColor_Primary
+                    : (tabIndex == 2 ? AppColor_A497CC : AppColor_Yellow)),
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              shrinkWrap: true,
+              itemBuilder: (BuildContext context, int index) {
+                return getBannerTitle(index);
+              },
+              itemCount: CATEGORY.length,
+            ),
+          ),
           Positioned(
               child: SizedBox(
                 width: MediaQuery.of(context).size.width,
@@ -261,9 +349,11 @@ class CareFragmentState extends BaseState<CareFragment>
                             decoration: BoxDecoration(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(12.0)),
-                              color: category == 0
-                                  ? GROWTH_COLOR![index % 4]
-                                  : DEVELOPMENT_COLOR![index % 4],
+                              color: tabIndex == 2
+                                  ? MBTI_COLOR![index % 4]
+                                  : (tabIndex == 0
+                                      ? GROWTH_COLOR![index % 4]
+                                      : DEVELOPMENT_COLOR![index % 4]),
                             ),
                             child: Stack(
                               children: [
@@ -296,7 +386,8 @@ class CareFragmentState extends BaseState<CareFragment>
                                   ),
                                   right: 10,
                                   bottom: 10,
-                                )
+                                ),
+
                                 // Container(
                                 //   width: MediaQuery.of(context).size.width - 64 - 180,
                                 //   child: Column(
@@ -331,9 +422,6 @@ class CareFragmentState extends BaseState<CareFragment>
                                 // ),
                               ],
                             )),
-                        onTap: () {
-                          //Navigator.push(context, SlideRightTransRoute(builder: (context) => CommunityDetailPage(uid: info.uid)));
-                        },
                       );
                     }),
               ),
@@ -341,187 +429,189 @@ class CareFragmentState extends BaseState<CareFragment>
         ]));
   }
 
-  Widget CategoryShow() {
-    return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 5),
-        width: MediaQuery.of(context).size.width,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            InkWell(
-              onTap: () async {
-                String recv = await Navigator.push(
-                    context,
-                    SlideRightTransRoute(
-                        builder: (context) => ProductList(
-                            category:
-                                category == 0 ? "GROWTH" : "DEVELOPMENT")));
-                if (recv == "200") {
-                  getHomeDataInfo();
-                }
-              },
-              child: Container(
-                width: (MediaQuery.of(context).size.width - 10) / 4,
-                height: 70,
-                child: Column(
-                  children: [
-                    category == 0
-                        ? Image.asset('assets/cake_black_24dp.png',
-                            width: 40, height: 25)
-                        : Image.asset('assets/cake_black_24dp1.png',
-                            width: 40, height: 25),
-                    const SizedBox(height: 10),
-                    H13(text: "전체", weight: FW.medium),
-                  ],
+  Widget CategoryShow() => Visibility(
+        visible: tabIndex == 0 || tabIndex == 1,
+        child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 5),
+            width: MediaQuery.of(context).size.width,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                InkWell(
+                  onTap: () async {
+                    String recv = await Navigator.push(
+                        context,
+                        SlideRightTransRoute(
+                            builder: (context) => ProductList(
+                                category:
+                                    tabIndex == 0 ? "GROWTH" : "DEVELOPMENT")));
+                    if (recv == "200") {
+                      getHomeDataInfo();
+                    }
+                  },
+                  child: Container(
+                    width: (MediaQuery.of(context).size.width - 10) / 4,
+                    height: 70,
+                    child: Column(
+                      children: [
+                        tabIndex == 0
+                            ? Image.asset('assets/cake_black_24dp.png',
+                                width: 40, height: 25)
+                            : Image.asset('assets/cake_black_24dp1.png',
+                                width: 40, height: 25),
+                        const SizedBox(height: 10),
+                        H13(text: "전체", weight: FW.medium),
+                      ],
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            InkWell(
-              onTap: () async {
-                String recv = await Navigator.push(
-                    context,
-                    SlideRightTransRoute(
-                        builder: (context) => HomeCareListPage(
-                            category_1:
-                                category == 0 ? "GROWTH" : "DEVELOPMENT",
-                            category_2: "BODY")));
-                if (recv == "200") {
-                  getHomeDataInfo();
-                }
-              },
-              child: Container(
-                width: (MediaQuery.of(context).size.width - 10) / 4,
-                height: 70,
-                child: Column(
-                  children: [
-                    category == 0
-                        ? Image.asset(
-                            'assets/face_retouching_natural_black_24dp.png',
-                            width: 40,
-                            height: 25)
-                        : Image.asset(
-                            'assets/face_retouching_natural_black_24dp1.png',
-                            width: 40,
-                            height: 25),
-                    const SizedBox(height: 10),
-                    H13(text: "신체", weight: FW.medium),
-                  ],
+                InkWell(
+                  onTap: () async {
+                    String recv = await Navigator.push(
+                        context,
+                        SlideRightTransRoute(
+                            builder: (context) => HomeCareListPage(
+                                category_1:
+                                    tabIndex == 0 ? "GROWTH" : "DEVELOPMENT",
+                                category_2: "BODY")));
+                    if (recv == "200") {
+                      getHomeDataInfo();
+                    }
+                  },
+                  child: Container(
+                    width: (MediaQuery.of(context).size.width - 10) / 4,
+                    height: 70,
+                    child: Column(
+                      children: [
+                        tabIndex == 0
+                            ? Image.asset(
+                                'assets/face_retouching_natural_black_24dp.png',
+                                width: 40,
+                                height: 25)
+                            : Image.asset(
+                                'assets/face_retouching_natural_black_24dp1.png',
+                                width: 40,
+                                height: 25),
+                        const SizedBox(height: 10),
+                        H13(text: "신체", weight: FW.medium),
+                      ],
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            InkWell(
-              onTap: () async {
-                String recv = await Navigator.push(
-                    context,
-                    SlideRightTransRoute(
-                        builder: (context) => HomeCareListPage(
-                            category_1:
-                                category == 0 ? "GROWTH" : "DEVELOPMENT",
-                            category_2: "BRAIN")));
-                if (recv == "200") {
-                  getHomeDataInfo();
-                }
-              },
-              child: Container(
-                width: (MediaQuery.of(context).size.width - 10) / 4,
-                height: 70,
-                child: Column(
-                  children: [
-                    category == 0
-                        ? Image.asset('assets/psychology_black_24dp.png',
-                            width: 40, height: 25)
-                        : Image.asset('assets/psychology_black_24dp1.png',
-                            width: 40, height: 25),
-                    const SizedBox(height: 10),
-                    H13(text: "두뇌", weight: FW.medium),
-                  ],
+                InkWell(
+                  onTap: () async {
+                    String recv = await Navigator.push(
+                        context,
+                        SlideRightTransRoute(
+                            builder: (context) => HomeCareListPage(
+                                category_1:
+                                    tabIndex == 0 ? "GROWTH" : "DEVELOPMENT",
+                                category_2: "BRAIN")));
+                    if (recv == "200") {
+                      getHomeDataInfo();
+                    }
+                  },
+                  child: Container(
+                    width: (MediaQuery.of(context).size.width - 10) / 4,
+                    height: 70,
+                    child: Column(
+                      children: [
+                        tabIndex == 0
+                            ? Image.asset('assets/psychology_black_24dp.png',
+                                width: 40, height: 25)
+                            : Image.asset('assets/psychology_black_24dp1.png',
+                                width: 40, height: 25),
+                        const SizedBox(height: 10),
+                        H13(text: "두뇌", weight: FW.medium),
+                      ],
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            InkWell(
-              onTap: () async {
-                String recv = await Navigator.push(
-                    context,
-                    SlideRightTransRoute(
-                        builder: (context) => HomeCareListPage(
-                            category_1:
-                                category == 0 ? "GROWTH" : "DEVELOPMENT",
-                            category_2: "RECOMMEND")));
-                if (recv == "200") {
-                  getHomeDataInfo();
-                }
-              },
-              child: Container(
-                width: (MediaQuery.of(context).size.width - 10) / 4,
-                height: 70,
-                child: Column(
-                  children: [
-                    category == 0
-                        ? Image.asset(
-                            'assets/volunteer_activism_black_24dp.png',
-                            width: 40,
-                            height: 25)
-                        : Image.asset(
-                            'assets/volunteer_activism_black_24dp1.png',
-                            width: 40,
-                            height: 25),
-                    const SizedBox(height: 10),
-                    H13(text: "맞춤추천", weight: FW.medium),
-                  ],
-                ),
-              ),
-            )
-          ],
-        ));
-  }
+                InkWell(
+                  onTap: () async {
+                    String recv = await Navigator.push(
+                        context,
+                        SlideRightTransRoute(
+                            builder: (context) => HomeCareListPage(
+                                category_1:
+                                    category == 0 ? "GROWTH" : "DEVELOPMENT",
+                                category_2: "RECOMMEND")));
+                    if (recv == "200") {
+                      getHomeDataInfo();
+                    }
+                  },
+                  child: Container(
+                    width: (MediaQuery.of(context).size.width - 10) / 4,
+                    height: 70,
+                    child: Column(
+                      children: [
+                        tabIndex == 0
+                            ? Image.asset(
+                                'assets/volunteer_activism_black_24dp.png',
+                                width: 40,
+                                height: 25)
+                            : Image.asset(
+                                'assets/volunteer_activism_black_24dp1.png',
+                                width: 40,
+                                height: 25),
+                        const SizedBox(height: 10),
+                        H13(text: "맞춤추천", weight: FW.medium),
+                      ],
+                    ),
+                  ),
+                )
+              ],
+            )),
+      );
 
-  Widget SearchBar() {
-    var screenSize = MediaQuery.of(context).size;
-    return Container(
-        width: double.infinity,
-        height: 40,
-        margin: const EdgeInsets.symmetric(horizontal: 30),
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        decoration: BoxDecoration(
-            color: AppColor_Light_Gray,
-            borderRadius: BorderRadius.circular(20)),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Image.asset('assets/search_black_24dp.png', width: 20),
-            const SizedBox(width: 10),
-            Container(
-              width: screenSize.width - 130,
-              // margin: const EdgeInsets.only(bottom: 3),
-              child: NolineInput(
-                controller: searchController,
-                keyboardType: TextInputType.text,
-                textInputAction: TextInputAction.search,
-                borderColor: AppColor_Light_Gray,
-                onEditingComplete: () => {
-                  if (keyword == "")
-                    {
-                      showToast("검색어를 입력해 주세요."),
-                    }
-                  else
-                    {
-                      FocusScope.of(context).requestFocus(FocusNode()),
-                      Navigator.push(
-                          context,
-                          SlideRightTransRoute(
-                              builder: (context) => ProductList(
-                                  category:
-                                      category == 0 ? "GROWTH" : "DEVELOPMENT",
-                                  keyword: keyword))),
-                    }
-                },
-                placeholder: LanguageService.trans('search_hint'),
-                onChanged: (text) => {keyword = text},
-              ),
-            )
-          ],
-        ));
-  }
+  Widget SearchBar() => Visibility(
+        visible: tabIndex == 0 || tabIndex == 1,
+        child: Container(
+            width: double.infinity,
+            height: 40,
+            margin: const EdgeInsets.symmetric(horizontal: 30),
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            decoration: BoxDecoration(
+                color: AppColor_Light_Gray,
+                borderRadius: BorderRadius.circular(20)),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Image.asset('assets/search_black_24dp.png', width: 20),
+                const SizedBox(width: 10),
+                Container(
+                  width: MediaQuery.of(context).size.width - 130,
+                  // margin: const EdgeInsets.only(bottom: 3),
+                  child: NolineInput(
+                    controller: searchController,
+                    keyboardType: TextInputType.text,
+                    textInputAction: TextInputAction.search,
+                    borderColor: AppColor_Light_Gray,
+                    onEditingComplete: () => {
+                      if (keyword == "")
+                        {
+                          showToast("검색어를 입력해 주세요."),
+                        }
+                      else
+                        {
+                          FocusScope.of(context).requestFocus(FocusNode()),
+                          Navigator.push(
+                              context,
+                              SlideRightTransRoute(
+                                  builder: (context) => ProductList(
+                                      category: tabIndex == 0
+                                          ? "GROWTH"
+                                          : "DEVELOPMENT",
+                                      keyword: keyword))),
+                        }
+                    },
+                    placeholder: LanguageService.trans('search_hint'),
+                    onChanged: (text) => {keyword = text},
+                  ),
+                )
+              ],
+            )),
+      );
 
   Widget _buildTabHeaderItem(String tabText, int step) {
     return InkWell(
@@ -546,7 +636,7 @@ class CareFragmentState extends BaseState<CareFragment>
         ],
       ),
       onTap: () {
-        changeTab(step);
+        //changeTab(step);
       },
     );
   }

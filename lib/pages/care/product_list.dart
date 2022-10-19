@@ -115,7 +115,7 @@ class ProductListState extends BaseState<ProductList> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SimpleHeader(
-              title: widget.category == "GROWTH" ? "성장스토어" : "발달클래스",
+              title: widget.category == "GROWTH" ? "성장스토어" : (widget.category == "DEVELOPMENT" ? "발달클래스" : "MBTI"),
               onBackPressed: onBackPressed,
             ),
             prevHeader()

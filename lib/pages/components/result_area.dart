@@ -41,14 +41,20 @@ class ResultAreaState extends BaseState<ResultArea> {
     String status = widget.diagnose!.result!;
     if(status == '과신장') {
       exam = LanguageService.trans("minute_height_comment4");
-    } else if(status == "부모마음 저신장" || status == "의학적 저신장" || status == "저신장"){
+    } else if( status == "의학적 저신장" || status == "저신장"){
       exam = LanguageService.trans("minute_height_comment1");
-    } else if(status == "과체중" || status == "비만"){
+    } else if (status == "부모마음 저신장" ) {
+      exam = LanguageService.trans("minute_height_comment2");
+  } else if(status == "과체중" || status == "비만"){
       exam = LanguageService.trans("minute_weight_comment5");
-    } else if(status == "의학적 저체중" || status == "부모마음 저체중" || status == "저체중"){
+    } else if(status == "의학적 저체중" || status == "저체중"){
       exam = LanguageService.trans("minute_weight_comment1");
-    } else {
+    } else if (  status == "부모마음 저체중") {
+      exam = LanguageService.trans("minute_weight_comment2");
+    } else if (status == "정상 체중") {
       exam = LanguageService.trans("minute_weight_comment3");
+    }   else if (status == "정상 신장") {
+      exam = LanguageService.trans("minute_height_comment3");
     }
 
     return Container(

@@ -574,7 +574,7 @@ Color getColorFromString2(String status) {
 Color getColorFromHeight(String status) {
   if ( status == "과신장") {
     return const Color(0xFFFFCE20);
-  } else if (status == "의학적 저신장" || status == "부모마음 저신장") {
+  } else if (status == "의학적 저신장") {
     return const Color(0xFFFF3838);
   } else {
     return const Color(0xFF4B9EFF);
@@ -582,7 +582,7 @@ Color getColorFromHeight(String status) {
 }
 
 Color getColorFromWeight(String status) {
-  if (status == "의학적 저체중" || status == "부모마음 저체중") {
+  if (status == "의학적 저체중") {
     return const Color(0xFFFFCE20);
   } else if (status == "과체중" || status == "비만") {
     return const Color(0xFFFF3838);

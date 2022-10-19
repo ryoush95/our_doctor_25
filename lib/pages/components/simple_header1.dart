@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ourdoctor/global/app_colors.dart';
 import 'package:ourdoctor/global/app_styles.dart';
 import 'package:ourdoctor/models/basket_list_res_model.dart';
 import 'package:ourdoctor/pages/components/h10.dart';
@@ -24,60 +25,29 @@ class SimpleHeader1 extends StatelessWidget {
       height: 62,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
         children: [
           GestureDetector(
             behavior: HitTestBehavior.translucent,
             child: Container(
               height: 62,
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Image.asset('assets/path_12225.png', width: 10,),
+              child: Image.asset(
+                'assets/path_12225.png',
+                width: 10,
+              ),
             ),
             onTap: onBackPressed,
           ),
-         /* Align(
-              alignment: Alignment.centerLeft,
-              child: GestureDetector(
-                behavior: HitTestBehavior.translucent,
-                child: Container(
-                  height: 62,
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Image.asset('assets/path_12225.png', width: 10,),
-                ),
-                onTap: onBackPressed,
-              )),*/
           GestureDetector(
             child: Center(
               child: H18(text: title, weight: FW.medium, maxLine: 2),
-
             ),
           ),
-
-          basketButton(),
-          /*    Column(
-                children: [
-                  GestureDetector(
-                    behavior: HitTestBehavior.translucent,
-                    child: Container(
-                      height: 50,
-                      padding: const EdgeInsets.only(left: 20, right: 10),
-                      child: Image.asset(
-                          'assets/ic_basket.png',
-                          width: 24),
-
-                    ),
-                    onTap: basket,
-                  ),
-                   H10(
-                    text: sprintf(
-                        "%s 개", [(basketList.length.toString())]),
-                  )
-                ],
-              ),*/
-
-
+          GestureDetector(
+            child: basketButton(),
+            onTap: basket,
+          ),
         ],
-
       ),
     );
   }
@@ -86,19 +56,36 @@ class SimpleHeader1 extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        GestureDetector(
-          behavior: HitTestBehavior.translucent,
-
-          child: Container(
-            height: 30,
-            padding: const EdgeInsets.only(left: 10, right: 10),
-              child: Image.asset( 'assets/ic_basket.png',),
-          ),
-          onTap: basket,
-        ),
-        H12(text: basketList,  weight: FW.regular,),
-
-
+        Stack(
+          children: [
+            Positioned(
+              child: Container(
+                height: 38,
+                padding: const EdgeInsets.only(
+                    left: 10, top: 6, right: 20, bottom: 8),
+                child: Image.asset(
+                  'assets/ic_basket.png',
+                  color: AppColor_121215,
+                ),
+              ),
+            ),
+            Positioned(
+              bottom: 22,
+              right: 12,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                decoration: BoxDecoration(
+                  color: AppColor_c8ffff,
+                  borderRadius: BorderRadius.circular(100),
+                ),
+                child: H10(
+                  text: basketList,
+                  color: Colors.black45,
+                ),
+              ),
+            ),
+          ],
+        )
       ],
     );
   }

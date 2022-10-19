@@ -36,6 +36,7 @@ class AgreePageState extends BaseState<AgreePage> {
   bool isItem2 = false;
   bool isItem3 = false;
   bool isItem4 = false;
+  bool isItem5 = false;
 
   bool bDlgAgree = false;
   String? strAgreeTitle = "";
@@ -82,11 +83,14 @@ class AgreePageState extends BaseState<AgreePage> {
       strAgreeTitle = "고유식별정보 수집동의 및 처리방침";
       //strAgreeUrl = API_BASE_URL + "api/common/term?type=privacy1";
       strAgreeUrl = HEALTH_URL;
-    } else {
+    } else if(type == 4){
       strAgreeTitle = "개인 민감(건강)정보 처리방침";
       //strAgreeUrl = API_BASE_URL + "api/common/term?type=privacy2";
       strAgreeUrl = AD_URL;
+    } else if(type == 5) {
+      strAgreeTitle = "마케팅 수신 동의 처리방침";
     }
+
     bDlgAgree = true;
     setState(() {});
   }
@@ -142,6 +146,7 @@ class AgreePageState extends BaseState<AgreePage> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              //TODO: 마케팅 동의 선택
                               const SizedBox(height: 30),
                               H24B(text: LanguageService.trans("agree_description"), color: AppColor_BlackText, maxLine: 3, align: TextAlign.left, height: 1.5),
                               const SizedBox(height: 20),
@@ -156,11 +161,13 @@ class AgreePageState extends BaseState<AgreePage> {
                                           isItem2 = true;
                                           isItem3 = true;
                                           isItem4 = true;
+                                          isItem5 = true;
                                         } else {
                                           isItem1 = false;
                                           isItem2 = false;
                                           isItem3 = false;
                                           isItem4 = false;
+                                          isItem5 = false;
                                         }
                                         setState(() {});
                                       },
@@ -193,7 +200,7 @@ class AgreePageState extends BaseState<AgreePage> {
                                       InkWell(
                                         onTap: () {
                                           isItem1 = !isItem1;
-                                          if (isItem1 && isItem2 && isItem3 && isItem4) {
+                                          if (isItem1 && isItem2 && isItem3 && isItem4 && isItem5) {
                                             isAll = true;
                                           } else {
                                             isAll = false;
@@ -230,7 +237,7 @@ class AgreePageState extends BaseState<AgreePage> {
                                     InkWell(
                                       onTap: () {
                                         isItem2 = !isItem2;
-                                        if (isItem1 && isItem2 && isItem3 && isItem4) {
+                                        if (isItem1 && isItem2 && isItem3 && isItem4 && isItem5) {
                                           isAll = true;
                                         } else {
                                           isAll = false;
@@ -266,7 +273,7 @@ class AgreePageState extends BaseState<AgreePage> {
                                     InkWell(
                                       onTap: () {
                                         isItem3 = !isItem3;
-                                        if (isItem1 && isItem2 && isItem3 && isItem4) {
+                                        if (isItem1 && isItem2 && isItem3 && isItem4 && isItem5) {
                                           isAll = true;
                                         } else {
                                           isAll = false;
@@ -304,7 +311,7 @@ class AgreePageState extends BaseState<AgreePage> {
                                     InkWell(
                                       onTap: () {
                                         isItem4 = !isItem4;
-                                        if (isItem1 && isItem2 && isItem3 && isItem4) {
+                                        if (isItem1 && isItem2 && isItem3 && isItem4 && isItem5) {
                                           isAll = true;
                                         } else {
                                           isAll = false;
@@ -328,6 +335,43 @@ class AgreePageState extends BaseState<AgreePage> {
                                         height: 1.8,
                                         maxLine: 2,
                                         color: isItem4 ? AppColor_BlackText : AppColor_BlackText.withOpacity(0.2),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(height: 20),
+                              Container(
+                                width: double.infinity,
+                                child: Row(
+                                  children: [
+                                    InkWell(
+                                      onTap: () {
+                                        isItem5 = !isItem5;
+                                        if (isItem1 && isItem2 && isItem3 && isItem4 && isItem5) {
+                                          isAll = true;
+                                        } else {
+                                          isAll = false;
+                                        }
+                                        setState(() {});
+                                      },
+                                      child: Image.asset(
+                                        isItem5 ? 'assets/ic_rect_check_on.png' : 'assets/ic_rect_check_off.png',
+                                        width: 24,
+                                        height: 24,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 16),
+                                    InkWell(
+                                      onTap: () {
+                                        showAgreeDlg(5);
+                                      },
+                                      child: H16(
+                                        text: LanguageService.trans("[선택] 마케팅 수신 동의"),
+                                        weight: FW.regular,
+                                        height: 1.8,
+                                        maxLine: 2,
+                                        color: isItem5 ? AppColor_BlackText : AppColor_BlackText.withOpacity(0.2),
                                       ),
                                     ),
                                   ],

@@ -21,6 +21,7 @@ class ItemProduct extends StatefulWidget {
 
   final ProductDto data;
   final PdtLikeDto? info;
+
   @override
   ItemProductState createState() => ItemProductState();
 }
@@ -28,6 +29,7 @@ class ItemProduct extends StatefulWidget {
 class ItemProductState extends BaseState<ItemProduct> {
   //List<BannerList>? arrBannerList;
   final bool checkStatus = false;
+
   @override
   void initState() {
     super.initState();
@@ -103,7 +105,9 @@ class ItemProductState extends BaseState<ItemProduct> {
                       Visibility(
                         visible: widget.info!.mainImage!.isNotEmpty,
                         child: ClipPath(
-                          clipper: ShapeBorderClipper(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                          clipper: ShapeBorderClipper(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10))),
                           child: ExtendedImage.network(
                             widget.info!.mainImage!,
                             width: 150,
@@ -118,17 +122,20 @@ class ItemProductState extends BaseState<ItemProduct> {
                 ),
                 Positioned(
                     child: InkWell(
-                        onTap: () {
-                          productLike(widget.info!.id!);
-                        },
-                        child: widget.info!.liked! == "1"
-                            // ? Image.asset('assets/ic_heart_on.png', width: 40)
-                            // : Image.asset(
-                            //     'assets/ic_heart_off.png',
-                            //     width: 40,
-                            //   ),
-                            ? Icon(Icons.favorite, color: Colors.pinkAccent,)
-                            : Icon(Icons.favorite_border, color: Colors.black26),
+                      onTap: () {
+                        productLike(widget.info!.id!);
+                      },
+                      child: widget.info!.liked! == "1"
+                          // ? Image.asset('assets/ic_heart_on.png', width: 40)
+                          // : Image.asset(
+                          //     'assets/ic_heart_off.png',
+                          //     width: 40,
+                          //   ),
+                          ? Icon(
+                              Icons.favorite,
+                              color: Colors.pinkAccent,
+                            )
+                          : Icon(Icons.favorite_border, color: Colors.black26),
                     ),
                     right: 5,
                     top: 5),
@@ -160,44 +167,49 @@ class ItemProductState extends BaseState<ItemProduct> {
               const SizedBox(height: 10),
               //카테고리 부분
               widget.info!.tags == null
-              ? const SizedBox()
-              : Container(
-                margin: const EdgeInsets.only(right: 16),
-                width: 150,
-                height: 22,
-                child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: widget.info!.tags!.split(",").length,
-                    itemBuilder: (BuildContext context, int index) {
-                      String tag = widget.info!.tags!.split(",").length > index ? widget.info!.tags!.split(",")[index] : "";
-                      return Container(
-                        height: tag == "" ? 0 : 22,
-                        padding: const EdgeInsets.symmetric(horizontal: 5),
-                        margin: const EdgeInsets.only(right: 4.0),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(11.0),
-                          border: Border.all(color: AppColor_Selector_Border),
-                        ),
-                        child: Center(
-                          child: H14(
-                            text: tag,
-                            weight: FW.regular,
-                            color: AppColor_GrayText,
-                          ),
-                        ),
-                      );
-                    },
-                  // gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-                ),
-              ),
+                  ? const SizedBox()
+                  : Container(
+                      margin: const EdgeInsets.only(right: 16),
+                      width: 150,
+                      height: 22,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: widget.info!.tags!.split(",").length,
+                        itemBuilder: (BuildContext context, int index) {
+                          String tag =
+                              widget.info!.tags!.split(",").length > index
+                                  ? widget.info!.tags!.split(",")[index]
+                                  : "";
+                          return Container(
+                            height: tag == "" ? 0 : 22,
+                            padding: const EdgeInsets.symmetric(horizontal: 5),
+                            margin: const EdgeInsets.only(right: 4.0),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(11.0),
+                              border:
+                                  Border.all(color: AppColor_Selector_Border),
+                            ),
+                            child: Center(
+                              child: H14(
+                                text: tag,
+                                weight: FW.regular,
+                                color: AppColor_GrayText,
+                              ),
+                            ),
+                          );
+                        },
+                        // gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+                      ),
+                    ),
             ],
           )),
       onTap: () async {
         String recv = await Navigator.push(
-          context, 
-          SlideRightTransRoute(builder: (context) => ProductDetail(
-            pid: widget.info!.id!,
-          )));
+            context,
+            SlideRightTransRoute(
+                builder: (context) => ProductDetail(
+                      pid: widget.info!.id!,
+                    )));
         if (recv != "") {
           widget.info!.liked = recv;
           setState(() {});
@@ -208,34 +220,34 @@ class ItemProductState extends BaseState<ItemProduct> {
 
   Widget buildChip(String label) {
     return Chip(
-      side: BorderSide(
-          width: 1,
-          color: AppColor_Gray
+      side: BorderSide(width: 1, color: AppColor_Gray),
+      label: Text(
+        label,
+        style: TextStyle(
+          color: AppColor_GrayText,
+        ),
       ),
-      label: Text(label, style: TextStyle(
-        color: AppColor_GrayText,
-      ),),
       backgroundColor: Colors.white,
       padding: EdgeInsets.all(2),
     );
   }
 
-  // Widget buildtagItem(int index) {
-  //   String tag = widget.info!.tags!.split(",").length > index ? widget.info!.tags!.split(",")[index] : "";
-  //   return Container(
-  //     height: tag == "" ? 0 : 22,
-  //     padding: const EdgeInsets.symmetric(horizontal: 5),
-  //     decoration: BoxDecoration(
-  //       borderRadius: BorderRadius.circular(11.0),
-  //       border: Border.all(color: checkStatus ? AppColor_Primary : AppColor_Selector_Border),
-  //     ),
-  //     child: Center(
-  //       child: H14(
-  //         text: tag,
-  //         weight: FW.regular,
-  //         color: AppColor_GrayText,
-  //       ),
-  //     ),
-  //   );
-  // }
+// Widget buildtagItem(int index) {
+//   String tag = widget.info!.tags!.split(",").length > index ? widget.info!.tags!.split(",")[index] : "";
+//   return Container(
+//     height: tag == "" ? 0 : 22,
+//     padding: const EdgeInsets.symmetric(horizontal: 5),
+//     decoration: BoxDecoration(
+//       borderRadius: BorderRadius.circular(11.0),
+//       border: Border.all(color: checkStatus ? AppColor_Primary : AppColor_Selector_Border),
+//     ),
+//     child: Center(
+//       child: H14(
+//         text: tag,
+//         weight: FW.regular,
+//         color: AppColor_GrayText,
+//       ),
+//     ),
+//   );
+// }
 }
