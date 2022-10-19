@@ -93,9 +93,9 @@ class HeightReportState extends BaseState<HeightReport> {
             const SizedBox(height: 36),
             BMIBar1(
               weight: widget.data.monitoring!.value!,
-              res: widget.data.monitoring!.diagnose!.result!.contains("부모마음") ? getResFromString("")
+              res: widget.data.monitoring!.diagnose!.result!.startsWith("저신장") ? getResFromString("R")
                   : getResFromString(widget.data.monitoring!.diagnose!.color!),
-              color: widget.data.monitoring!.diagnose!.result!.contains("부모마음") ? getColorFromString("R")
+              color: widget.data.monitoring!.diagnose!.result!.startsWith("저신장") ? getColorFromString("R")
                   : getColorFromString(widget.data.monitoring!.diagnose!.color!),
               text: widget.data.monitoring!.diagnose!.result!,
               subtext: widget.data.monitoring!.diagnose!.result!.contains("정상") ? "" : (widget.data.diff! >= 0 ? "+" : "") + convertScore(widget.data.diff!.toStringAsFixed(1)) + "cm",

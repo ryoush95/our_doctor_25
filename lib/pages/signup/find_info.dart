@@ -658,7 +658,7 @@ class FindInfoPageState extends BaseState<FindInfoPage> {
                     !isIdValid ? AppColor_Primary_Disable : Colors.transparent,
                 onPressed: () {
                   if (!isIdValid) {
-                    showToast('정보를 확인해주세요');
+                    showToast('정보를 확인해주세요.');
                   }
                   focusNode.unfocus();
                   if (nIdStep == 2) {
@@ -691,7 +691,7 @@ class FindInfoPageState extends BaseState<FindInfoPage> {
                     : Colors.transparent,
                 onPressed: () {
                   if (!isPassValid) {
-                    showToast('정보를 확인해주세요');
+                    showToast('정보를 확인해주세요.');
                   }
                   focusNode.unfocus();
                   if (nPassStep == 3) {

@@ -717,7 +717,7 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
           return PhotoDialog(
               onGallery: getGalleryImageAndCrop,
               onCamera: getCameraImageAndCrop,
-              onprofileImage: getProfileImage);
+              onprofileImage: getProfileImage, code: 1);
         });
   }
 
@@ -785,6 +785,7 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
         askImage = value.data!.fileUrl!;
         monitoringData!.symptom_list![cur_symptom].medication = askImage;
         imageList[cur_symptom] = askImage;
+        imageList.add(value.data!.fileUrl!);
         setState(() {});
         checkValid();
       } else {
@@ -801,6 +802,15 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
       showToast(onError);
     });
   }
+
+  reorderPictures(int prevIdx, int currIdx) {
+    if(currIdx>prevIdx) {
+      currIdx-=1;
+    }
+    final items = imageList.removeAt(prevIdx);
+    imageList.insert(currIdx, items);
+  }
+
 
   //모니터링 기록
   Future<void> saveMonitoring() async {
@@ -1942,7 +1952,43 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
                             ),
                           ),
                         ),
+                        const SizedBox(height: 10),
                         Visibility(
+                          visible: imageList.isNotEmpty,
+                          child: Container(
+                            width: double.infinity,
+                            height: 150,
+                            child:
+                            ReorderableListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              shrinkWrap: true,
+                              itemBuilder: (BuildContext context, int index) {
+                                return Container(
+                                  key: ValueKey(imageList[index]),
+                                  margin: const EdgeInsets.only(right: 10),
+                                  height: 150,
+                                  width: 150,
+                                  child: Stack(
+                                    children: [
+                                      ClipPath(
+                                        clipper: ShapeBorderClipper(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))),
+                                        child: ExtendedImage(
+                                          image: NetworkImage(imageList[index]),
+                                          height: 150,
+                                          width: 150,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                              itemCount: imageList.length,
+                              onReorder: reorderPictures,
+                            ),
+                          ),
+                        ),
+                 /*       Visibility(
                           visible: imageList[index] != "",
                           child: Container(
                             width: double.infinity,
@@ -1963,7 +2009,7 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
                               ),
                             ),
                           ),
-                        )
+                        )*/
                       ])),
                   const SizedBox(height: 20)
                 ])));
