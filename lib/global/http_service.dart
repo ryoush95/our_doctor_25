@@ -50,6 +50,7 @@ import 'package:ourdoctor/models/homecare_list_res_model.dart';
 import 'package:ourdoctor/models/hosiptal_list_res_model.dart';
 import 'package:ourdoctor/models/live_res_model.dart';
 import 'package:ourdoctor/models/login_res_model.dart';
+import 'package:ourdoctor/models/mbti_quiz_list_res_model.dart';
 import 'package:ourdoctor/models/monitor_list_res_model.dart';
 import 'package:ourdoctor/models/monitor_result_res_model.dart';
 import 'package:ourdoctor/models/monitor_week_res_model.dart';
@@ -2193,6 +2194,43 @@ class HttpService {
     final response = await http.post(myUri, body: body);
     if (response.statusCode == 200) {
       return CheckChildQuizModel.fromJson(json.decode(response.body));
+    } else {
+      // If that call was not successful, throw an error.
+      showToast(LanguageService.trans("server_fail"));
+      throw Exception(LanguageService.trans("server_fail"));
+    }
+  }
+
+  //mbti 검사
+  Future<MbtiQuizListResModel> getMbtiQuizList() async {
+    String _url = API_BASE_URL + "api/Monitor2/mbti_quiz_list";
+    Map<String, String> body = {
+      'access_token': gUserInfo!.accessToken!,
+    };
+    Uri myUri = Uri.parse(_url);
+    final response = await http.post(myUri, body: body);
+    if (response.statusCode == 200) {
+      return MbtiQuizListResModel.fromJson(json.decode(response.body));
+    } else {
+      // If that call was not successful, throw an error.
+      showToast(LanguageService.trans("server_fail"));
+      throw Exception(LanguageService.trans("server_fail"));
+    }
+  }
+
+  //mbti 검사 결과 저장
+  Future<MbtiQuizListResModel> getMbtiSendResult(result_list, String mbti) async {
+    String _url = API_BASE_URL + "api/Monitor2/mtbi_quiz_result";
+    Map<String, String> body = {
+      'access_token': gUserInfo!.accessToken!,
+      'patient_id': gSelChildInfo!.id!,
+      'mbti_result_list' : result_list,
+      'mbti_result': mbti,
+    };
+    Uri myUri = Uri.parse(_url);
+    final response = await http.post(myUri, body: body);
+    if (response.statusCode == 200) {
+      return MbtiQuizListResModel.fromJson(json.decode(response.body));
     } else {
       // If that call was not successful, throw an error.
       showToast(LanguageService.trans("server_fail"));
