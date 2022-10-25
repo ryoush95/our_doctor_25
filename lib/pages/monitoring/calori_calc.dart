@@ -153,6 +153,7 @@ class CaloriCalcPageState extends BaseState<CaloriCalcPage> {
 
   Future<bool> onBackPressed() async {
     foodAddList.clear();
+    hideEntry();
     Navigator.pop(context, "");
     return true;
   }
@@ -407,6 +408,12 @@ class CaloriCalcPageState extends BaseState<CaloriCalcPage> {
         count.add('0.25인분');
         FocusScope.of(context).unfocus();
         hideEntry();
+        checkValid();
+        scrollDown();
+        keyword = "";
+        searchTxc.clear();
+        _canClear = false;
+        _isSearching = false;
       },
       color: Colors.white,
       child: SizedBox(

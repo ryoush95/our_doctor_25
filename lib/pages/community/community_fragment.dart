@@ -522,11 +522,11 @@ class CommunityFragmenttState extends BaseState<CommunityFragment> {
                                   },
                                   items: [
                                     DropdownMenuItem(
-                                      child: H14(text: "좋아요순"),
+                                      child: H14(text: "좋아요순",color: AppColor_Primary,),
                                       value: "좋아요순",
                                     ),
                                     DropdownMenuItem(
-                                      child: H14(text: "최신순"),
+                                      child: H14(text: "최신순",color: AppColor_Primary,),
                                       value: "최신순",
                                     ),
                                   ],

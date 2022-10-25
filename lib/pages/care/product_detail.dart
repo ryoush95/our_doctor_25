@@ -58,6 +58,7 @@ class ProductDetailtState extends BaseState<ProductDetail> {
   List<BasketDto> basketList = [];
   late PageController _pageController;
   late ScrollController _listController;
+  List _items = [];
 
   //리스트뷰 컨트롤러
   late ScrollController controller;
@@ -85,6 +86,8 @@ class ProductDetailtState extends BaseState<ProductDetail> {
       initialPage: currentPage,
       keepPage: false,
     );
+
+    _items = [mData.mainImage!, mData.mainImage!];
 
     eventBus.on<AddReviewEvent>().listen((event) {
       if (mounted) {
@@ -264,136 +267,160 @@ class ProductDetailtState extends BaseState<ProductDetail> {
             ),
             Expanded(
               child: Container(
-                  // height: MediaQuery.of(context).size.height - 164,
+                // height: MediaQuery.of(context).size.height - 164,
                   child: SingleChildScrollView(
                       child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    decoration: const BoxDecoration(color: AppColor_f4f5f7),
-                    child: Stack(
-                      children: [
-                        Visibility(
-                            visible: mData == null || mData.mainImage!.isEmpty,
-                            child: Container(
-                              width: MediaQuery.of(context).size.width,
-                              height: 360,
-                              decoration: BoxDecoration(
-                                color: AppColor_f4f5f7,
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                            )),
-                        Visibility(
-                          visible: mData == null && mData.mainImage!.isEmpty,
-                          child: ExtendedImage.network(
-                            mData == null ? "" : mData.mainImage!,
-                            width: MediaQuery.of(context).size.width,
-                            fit: BoxFit.fitWidth,
-                            cache: true,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  thumbnail(),
-                  Container(
-                      height: 59,
-                      decoration:
-                          const BoxDecoration(color: Colors.white, boxShadow: [
-                        BoxShadow(
-                          color: AppColor_f4f5f7,
-                          spreadRadius: 10,
-                          blurRadius: 7,
-                          offset: Offset(0, 1),
-                        )
-                      ]),
-                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          InkWell(
-                            onTap: () {
-                              setState(() {
-                                nTabIndex = 0;
-                              });
-                            },
-                            child: SizedBox(
-                              width: (MediaQuery.of(context).size.width) / 3,
-                              child: Stack(
+                          Container(
+                            decoration: const BoxDecoration(
+                                color: AppColor_f4f5f7),
+                            child: Stack(
+                              children: [
+                                Visibility(
+                                    visible: mData == null ||
+                                        mData.mainImage!.isEmpty,
+                                    child: Container(
+                                      width: MediaQuery
+                                          .of(context)
+                                          .size
+                                          .width,
+                                      height: 360,
+                                      decoration: BoxDecoration(
+                                        color: AppColor_f4f5f7,
+                                        borderRadius: BorderRadius.circular(
+                                            10.0),
+                                      ),
+                                    )),
+                                Visibility(
+                                  visible: mData == null &&
+                                      mData.mainImage!.isEmpty,
+                                  child: ExtendedImage.network(
+                                    mData == null ? "" : mData.mainImage!,
+                                    width: MediaQuery
+                                        .of(context)
+                                        .size
+                                        .width,
+                                    fit: BoxFit.fitWidth,
+                                    cache: true,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          thumbnail(),
+                          Container(
+                              height: 59,
+                              decoration:
+                              const BoxDecoration(
+                                  color: Colors.white, boxShadow: [
+                                BoxShadow(
+                                  color: AppColor_f4f5f7,
+                                  spreadRadius: 10,
+                                  blurRadius: 7,
+                                  offset: Offset(0, 1),
+                                )
+                              ]),
+                              child: Row(
                                 children: [
-                                  Center(
-                                    child: H16(
-                                      text: LanguageService.trans(
-                                          'Product_Descrition'),
-                                      weight: FW.semi_bold,
-                                      align: TextAlign.center,
-                                      color: nTabIndex == 0
-                                          ? AppColor_Primary
-                                          : AppColor_BlackText.withOpacity(0.2),
-                                      maxLine: 2,
+                                  InkWell(
+                                    onTap: () {
+                                      setState(() {
+                                        nTabIndex = 0;
+                                      });
+                                    },
+                                    child: SizedBox(
+                                      width: (MediaQuery
+                                          .of(context)
+                                          .size
+                                          .width) / 3,
+                                      child: Stack(
+                                        children: [
+                                          Center(
+                                            child: H16(
+                                              text: LanguageService.trans(
+                                                  'Product_Descrition'),
+                                              weight: FW.semi_bold,
+                                              align: TextAlign.center,
+                                              color: nTabIndex == 0
+                                                  ? AppColor_Primary
+                                                  : AppColor_BlackText
+                                                  .withOpacity(0.2),
+                                              maxLine: 2,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  InkWell(
+                                    onTap: () {
+                                      setState(() {
+                                        nTabIndex = 1;
+                                      });
+                                    },
+                                    child: SizedBox(
+                                      width: (MediaQuery
+                                          .of(context)
+                                          .size
+                                          .width) / 3,
+                                      child: Stack(
+                                        children: [
+                                          Center(
+                                            child: H16(
+                                              text: totalReviewCount > 100
+                                                  ? "후기 100+"
+                                                  : "후기 " +
+                                                  totalReviewCount.toString() +
+                                                  "+",
+                                              weight: FW.semi_bold,
+                                              align: TextAlign.left,
+                                              color: nTabIndex == 1
+                                                  ? AppColor_Primary
+                                                  : AppColor_BlackText
+                                                  .withOpacity(0.2),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  InkWell(
+                                    onTap: () {
+                                      setState(() {
+                                        nTabIndex = 2;
+                                      });
+                                    },
+                                    child: SizedBox(
+                                      width: (MediaQuery
+                                          .of(context)
+                                          .size
+                                          .width) / 3,
+                                      child: Stack(
+                                        children: [
+                                          Center(
+                                            child: H16(
+                                              text: LanguageService.trans(
+                                                  'notice1'),
+                                              weight: FW.semi_bold,
+                                              align: TextAlign.left,
+                                              color: nTabIndex == 2
+                                                  ? AppColor_Primary
+                                                  : AppColor_BlackText
+                                                  .withOpacity(0.2),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ],
-                              ),
-                            ),
-                          ),
-                          InkWell(
-                            onTap: () {
-                              setState(() {
-                                nTabIndex = 1;
-                              });
-                            },
-                            child: SizedBox(
-                              width: (MediaQuery.of(context).size.width) / 3,
-                              child: Stack(
-                                children: [
-                                  Center(
-                                    child: H16(
-                                      text: totalReviewCount > 100
-                                          ? "후기 100+"
-                                          : "후기 " +
-                                              totalReviewCount.toString() +
-                                              "+",
-                                      weight: FW.semi_bold,
-                                      align: TextAlign.left,
-                                      color: nTabIndex == 1
-                                          ? AppColor_Primary
-                                          : AppColor_BlackText.withOpacity(0.2),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          InkWell(
-                            onTap: () {
-                              setState(() {
-                                nTabIndex = 2;
-                              });
-                            },
-                            child: SizedBox(
-                              width: (MediaQuery.of(context).size.width) / 3,
-                              child: Stack(
-                                children: [
-                                  Center(
-                                    child: H16(
-                                      text: LanguageService.trans('notice1'),
-                                      weight: FW.semi_bold,
-                                      align: TextAlign.left,
-                                      color: nTabIndex == 2
-                                          ? AppColor_Primary
-                                          : AppColor_BlackText.withOpacity(0.2),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
+                              )),
+                          nTabIndex == 0 ? Detail1() : const SizedBox(),
+                          nTabIndex == 1 ? Detail2() : const SizedBox(),
+                          nTabIndex == 2 ? Detail3() : const SizedBox(),
                         ],
-                      )),
-                  nTabIndex == 0 ? Detail1() : const SizedBox(),
-                  nTabIndex == 1 ? Detail2() : const SizedBox(),
-                  nTabIndex == 2 ? Detail3() : const SizedBox(),
-                ],
-              ))),
+                      ))),
             ),
             InkWell(
               onTap: () {
@@ -530,11 +557,28 @@ class ProductDetailtState extends BaseState<ProductDetail> {
         decoration: BoxDecoration(color: AppColor_f4f5f7),
       ),
       Container(
-          padding: const EdgeInsets.all(30.0),
+          padding: const EdgeInsets.fromLTRB(10, 0, 10, 30),
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            H16(text: "상품정보", weight: FW.bold, align: TextAlign.start),
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: H16(text: "상품정보", weight: FW.bold, align: TextAlign.start),
+            ),
             const SizedBox(height: 20),
+            Container(
+              decoration: const BoxDecoration(color: AppColor_f4f5f7),
+              child: mData == null || mData.detailImage! == ""
+                  ? const Center(child: CircularProgressIndicator())
+                  : ExtendedImage.network(
+                mData.detailImage!,
+                width: MediaQuery
+                    .of(context)
+                    .size
+                    .width,
+                fit: BoxFit.fitWidth,
+              ),
+            ),
+            const SizedBox(height: 40),
             H14(
               text: (mData.description != null) ? mData.description! : "",
               weight: FW.regular,
@@ -542,17 +586,7 @@ class ProductDetailtState extends BaseState<ProductDetail> {
               height: 1.2,
               maxLine: 100,
             ),
-            const SizedBox(height: 40),
-            Container(
-              decoration: const BoxDecoration(color: AppColor_f4f5f7),
-              child: mData == null || mData.detailImage! == ""
-                  ? const Center(child: CircularProgressIndicator())
-                  : ExtendedImage.network(
-                      mData.detailImage!,
-                      width: MediaQuery.of(context).size.width,
-                      fit: BoxFit.fitWidth,
-                    ),
-            )
+
           ])),
     ]);
   }
@@ -791,35 +825,41 @@ class ProductDetailtState extends BaseState<ProductDetail> {
     return widgets;
   }
 
-  thumbnail() => Container(
-      width: double.infinity,
-      height: MediaQuery.of(context).size.height * .38,
-      child: mData.mainImage == "" || mData.mainImage == null
-          ? const Center(child: CircularProgressIndicator())
-          : Stack(children: [
-              PageView.builder(
-                itemCount: 2,
-                itemBuilder: (BuildContext context, int index) {
-                  List _items = [mData.mainImage!, mData.mainImage!];
-                  return ExtendedImage.network(
-                    mData.mainImage!,
-                    fit: BoxFit.fill,
-                    cache: true,
-                  );
-                },
-                onPageChanged: (i) {
-                  setState(() {
-                    position = i;
-                  });
-                },
-              ),
-              _dotIndicator(),
-            ])
-      // : ExtendedImage.network(
-      //   mData.mainImage!,
-      //   fit: BoxFit.fill,
-      //   cache: true,
-      // ),
+  thumbnail() =>
+      Container(
+          width: MediaQuery
+              .of(context)
+              .size
+              .width,
+          height: MediaQuery
+              .of(context)
+              .size
+              .width,
+          child: mData.mainImage == "" || mData.mainImage == null
+              ? const Center(child: CircularProgressIndicator())
+              : Stack(children: [
+            PageView.builder(
+              itemCount: _items.length,
+              itemBuilder: (BuildContext context, int index) {
+                return ExtendedImage.network(
+                  mData.mainImage!,
+                  fit: BoxFit.fill,
+                  cache: true,
+                );
+              },
+              onPageChanged: (i) {
+                setState(() {
+                  position = i;
+                });
+              },
+            ),
+            _dotIndicator(),
+          ])
+        // : ExtendedImage.network(
+        //   mData.mainImage!,
+        //   fit: BoxFit.fill,
+        //   cache: true,
+        // ),
       );
   int position = 0;
 
