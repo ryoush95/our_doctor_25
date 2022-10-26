@@ -64,7 +64,6 @@ class CustomMbtiInspectionMainPageState extends BaseState<CustomMbtiInspectionMa
       }
     });
     getQuiz();
-    checkMbtiResult();
   }
 
   Future<bool> onBackPressed() async {
@@ -152,39 +151,67 @@ class CustomMbtiInspectionMainPageState extends BaseState<CustomMbtiInspectionMa
     var count6 = value.where((c) => c.contains("j")).toList().length;
     var count7 = value.where((c) => c.contains("p")).toList().length;
 
-    if(count < count1 && count2 < count3 && count4 < count5 && count6 < count7) {
-      mbti = "infp";
-    } else if(count < count1 && count2 > count3 && count4 < count5 && count6 < count7) {
-      mbti = "isfp";
-    } else if(count < count1 && count2 < count3 && count4 > count5 && count6 < count7) {
-      mbti = "intp";
-    } else if(count < count1 && count2 < count3 && count4 < count5 && count6 > count7) {
-      mbti = "infj";
-    } else if(count > count1 && count2 < count3 && count4 < count5 && count6 < count7) {
-      mbti = "enfp";
-    } else if(count > count1 && count2 > count3 && count4 < count5 && count6 < count7) {
-      mbti = "esfp";
-    } else if(count > count1 && count2 < count3 && count4 > count5 && count6 < count7) {
-      mbti = "entp";
-    } else if(count > count1 && count2 < count3 && count4 < count5 && count6 > count7) {
-      mbti = "enfj";
-    } else if(count > count1 && count2 > count3 && count4 > count5 && count6 < count7) {
-      mbti = "estp";
-    } else if(count > count1 && count2 > count3 && count4 > count5 && count6 > count7) {
-      mbti = "estj";
-    } else if(count < count1 && count2 < count3 && count4 > count5 && count6 > count7) {
-      mbti = "intj";
-    } else if(count < count1 && count2 > count3 && count4 > count5 && count6 < count7) {
-      mbti = "istp";
-    } else if(count > count1 && count2 < count3 && count4 > count5 && count6 > count7) {
-      mbti = "entj";
-    } else if(count < count1 && count2 > count3 && count4 > count5 && count6 > count7) {
-      mbti = "istj";
-    } else if(count > count1 && count2 > count3 && count4 < count5 && count6 > count7) {
-      mbti = "esfj";
-    } else if(count < count1 && count2 > count3 && count4 < count5 && count6 > count7) {
-      mbti = "isfj";
+    String m = "";
+    if(count < count1 ){
+      m = "i";
+    } else {
+      m = "e";
     }
+
+    if(count2 < count3 ){
+      m = m + "n";
+    } else {
+      m = m + "s";
+    }
+
+    if(count4 < count5){
+      m = m + "f";
+    } else {
+      m = m + "t";
+    }
+
+    if(count6 < count7) {
+      m = m + "p";
+    } else {
+      m = m + "j";
+    }
+
+    mbti = m;
+
+
+    // if(count < count1 && count2 < count3 && count4 < count5 && count6 < count7) {
+    //   mbti = "infp";
+    // } else if(count < count1 && count2 > count3 && count4 < count5 && count6 < count7) {
+    //   mbti = "isfp";
+    // } else if(count < count1 && count2 < count3 && count4 > count5 && count6 < count7) {
+    //   mbti = "intp";
+    // } else if(count < count1 && count2 < count3 && count4 < count5 && count6 > count7) {
+    //   mbti = "infj";
+    // } else if(count > count1 && count2 < count3 && count4 < count5 && count6 < count7) {
+    //   mbti = "enfp";
+    // } else if(count > count1 && count2 > count3 && count4 < count5 && count6 < count7) {
+    //   mbti = "esfp";
+    // } else if(count > count1 && count2 < count3 && count4 > count5 && count6 < count7) {
+    //   mbti = "entp";
+    // } else if(count > count1 && count2 < count3 && count4 < count5 && count6 > count7) {
+    //   mbti = "enfj";
+    // } else if(count > count1 && count2 > count3 && count4 > count5 && count6 < count7) {
+    //   mbti = "estp";
+    // } else if(count > count1 && count2 > count3 && count4 > count5 && count6 > count7) {
+    //   mbti = "estj";
+    // } else if(count < count1 && count2 < count3 && count4 > count5 && count6 > count7) {
+    //   mbti = "intj";
+    // } else if(count < count1 && count2 > count3 && count4 > count5 && count6 < count7) {
+    //   mbti = "istp";
+    // } else if(count > count1 && count2 < count3 && count4 > count5 && count6 > count7) {
+    //   mbti = "entj";
+    // } else if(count < count1 && count2 > count3 && count4 > count5 && count6 > count7) {
+    //   mbti = "istj";
+    // } else if(count > count1 && count2 > count3 && count4 < count5 && count6 > count7) {
+    //   mbti = "esfj";
+    // } else if(count < count1 && count2 > count3 && count4 < count5 && count6 > count7) {
+    //   mbti = "isfj";
+    // }
 
     Future<MbtiQuizSendResModel> insert = httpService.getMbtiSendResult(mbti_info, mbti);
     insert.then((value) async {

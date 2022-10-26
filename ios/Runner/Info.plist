@@ -2,8 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-<key>NSPhotoLibraryAddUsageDescription</key>
-<string>This app need access to your gallery to save screenshots</string>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>
@@ -89,6 +87,8 @@
 	<string>media library use</string>
 	<key>NSCameraUsageDescription</key>
 	<string>프로필 이미지 변경을 위해 이용합니다.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>This app need access to your gallery to save screenshots</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>프로필 이미지 변경을 위해 이용합니다.</string>
 	<key>UILaunchStoryboardName</key>
