@@ -36,7 +36,7 @@ class CareFragmentState extends BaseState<CareFragment>
   int tabIndex = 0;
   int category = 0;
 
-  List<String> CATEGORY = ["성장스토어", "발달클래스", "MBTI"];
+  List<String> CATEGORY = ["성장스토어", "발달클래스", "테스트"];
   ScrollController controller = ScrollController();
   bool isLast = true;
   int nPage = 0;
@@ -346,7 +346,7 @@ class CareFragmentState extends BaseState<CareFragment>
                             height: 180,
                             // padding: const EdgeInsets.all(12),
                             margin: const EdgeInsets.only(left: 10),
-                            decoration: BoxDecoration(
+                            /*decoration: BoxDecoration(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(12.0)),
                               color: tabIndex == 2
@@ -354,7 +354,7 @@ class CareFragmentState extends BaseState<CareFragment>
                                   : (tabIndex == 0
                                       ? GROWTH_COLOR![index % 4]
                                       : DEVELOPMENT_COLOR![index % 4]),
-                            ),
+                            ),*/
                             child: Stack(
                               children: [
                                 Positioned(
@@ -375,6 +375,29 @@ class CareFragmentState extends BaseState<CareFragment>
                                   right: 5,
                                   bottom: 5,
                                 ),
+                                Visibility(
+                                visible: tabIndex == 2,
+                                    child: Stack(
+                                  children: [
+                                    Positioned(
+                                      child: Container(
+                                        width:
+                                        MediaQuery.of(context).size.width - 74,
+                                        height: 170,
+                                        decoration: const BoxDecoration(
+                                            color: AppColor_Selector_Border),
+                                        child: Image.asset(
+                                          "assets/mbti_banner_image.png",
+                                          width: 350,
+                                          height: 160,
+                                          fit: BoxFit.fill,
+                                        ),
+                                      ),
+                                      right: 5,
+                                      bottom: 5,
+                                    ),
+                                  ],
+                                )),
                                 Positioned(
                                   child: H16(
                                     text: "1 / " +
@@ -387,39 +410,6 @@ class CareFragmentState extends BaseState<CareFragment>
                                   right: 10,
                                   bottom: 10,
                                 ),
-
-                                // Container(
-                                //   width: MediaQuery.of(context).size.width - 64 - 180,
-                                //   child: Column(
-                                //     crossAxisAlignment: CrossAxisAlignment.start,
-                                //     children: [
-                                //       H18(
-                                //         text: info.title!,
-                                //         color: Colors.white,
-                                //         weight: FW.bold,
-                                //         align: TextAlign.start,
-                                //       ),
-                                //       Container(
-                                //         height: 8,
-                                //       ),
-                                //       H14(
-                                //         text: info.content!,
-                                //         color: Colors.white,
-                                //         weight: FW.medium,
-                                //         maxLine: 8,
-                                //         align: TextAlign.start,
-                                //         height: 1.2,
-                                //       ),
-                                //       // H12(
-                                //       //   text: "",
-                                //       //   color: Colors.white,
-                                //       //   weight: FW.regular,
-                                //       //   align: TextAlign.start,
-                                //       //   height: 1.6,
-                                //       // ),
-                                //     ],
-                                //   ),
-                                // ),
                               ],
                             )),
                       );

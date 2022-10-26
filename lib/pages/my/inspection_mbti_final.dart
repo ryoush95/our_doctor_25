@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:ourdoctor/global/app_colors.dart';
@@ -5,8 +7,10 @@ import 'package:ourdoctor/global/app_styles.dart';
 import 'package:ourdoctor/global/global.dart';
 import 'package:ourdoctor/global/http_service.dart';
 import 'package:ourdoctor/helpers/common_util.dart';
+import 'package:ourdoctor/helpers/transition.dart';
 import 'package:ourdoctor/language/language_service.dart';
 import 'package:ourdoctor/models/chat_quiz_list_res_model.dart';
+import 'package:ourdoctor/models/mbti_quiz_list_res_model.dart';
 import 'package:ourdoctor/models/product_list_res_model.dart';
 import 'package:ourdoctor/models/default_res_model.dart';
 import 'package:ourdoctor/pages/alarm/alarm.dart';
@@ -22,8 +26,10 @@ import 'package:ourdoctor/pages/components/main_text_button.dart';
 import 'package:ourdoctor/pages/components/simple_header.dart';
 import 'package:sprintf/sprintf.dart';
 
+import 'custom_mbti_inspection_result.dart';
+
 class InspectionMbtiFinalPage extends StatefulWidget {
-  final List<QuizDto> list;
+  final List<MbtiQuizDto> list;
 
   InspectionMbtiFinalPage({Key? key, required this.list}) : super(key: key);
 
@@ -59,8 +65,8 @@ class InspectionMbtiFinalPageState
 
   void goNext() {
     if (widget.list
-        .sublist(0, 7)
-        .where((element) => element.answer == 0)
+        .sublist(0, widget.list.length)
+        .where((element) => element.answer == "")
         .toList()
         .isNotEmpty) {
       showToast('모든 문항에 대한 답변이 필요합니다.');
@@ -71,8 +77,8 @@ class InspectionMbtiFinalPageState
 
   bool checkValid() {
     if (widget.list
-        .sublist(0, 7)
-        .where((element) => element.answer == 0)
+        .sublist(0, widget.list.length)
+        .where((element) => element.answer == "")
         .toList()
         .isNotEmpty) {
       return false;
@@ -96,12 +102,12 @@ class InspectionMbtiFinalPageState
                       text: TextSpan(
                         children: [
                           TextSpan(
-                            text: "우리 아이의 미래 직업!\n\n",
+                            text: "우리 아이 성격 테스트!\n\n",
                             style: AppTextStyle.PD(AppColor_Primary, 20,
                                 weight: FW.bold),
                           ),
                           TextSpan(
-                            text: "우리 아이 성격에 딱 맞는 직업은 \n뭐가 있을까?\n\n\n",
+                            text: "우리 아이 성격에 딱 맞는 유명인은 \n누가 있을까?\n\n\n",
                             style: AppTextStyle.PD(AppColor_BlackText, 18,
                                 weight: FW.regular),
                           ),
@@ -111,7 +117,7 @@ class InspectionMbtiFinalPageState
                                 weight: FW.bold),
                           ),
                           TextSpan(
-                            text: "2 / 4 ",
+                            text: "4 / 4 ",
                             style: AppTextStyle.PD(AppColor_Table_DateTime, 15,
                                 weight: FW.regular),
                           ),
@@ -126,14 +132,14 @@ class InspectionMbtiFinalPageState
                     ListView.builder(
                         shrinkWrap: true,
                         itemBuilder: _itemBuilder,
-                        itemCount: 7,
+                        itemCount: widget.list.length,
                         controller: _listController)
                   ],
                 ),
               ),
             ),
             MainTextButton(
-              text: LanguageService.trans("next"),
+              text: LanguageService.trans("결과 보기"),
               backgroundColor: AppColor_Primary,
               style: AppTextStyle.PD(Colors.white, 18, weight: FW.bold),
               radius: 0,
@@ -150,7 +156,7 @@ class InspectionMbtiFinalPageState
   }
 
   Widget _itemBuilder(BuildContext context, int idx) {
-    int index = idx + 21;
+    int index = idx ;
     return Container(
       child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -166,7 +172,7 @@ class InspectionMbtiFinalPageState
                   TextSpan(
                     text: widget.list[index].quiz!,
                     style:
-                    AppTextStyle.PD(AppColor_BlackText, 17, weight: FW.regular),
+                    AppTextStyle.PD(AppColor_BlackText, 17, weight: FW.regular, height: 1.4),
                   ),
                 ],
               ),
@@ -184,20 +190,33 @@ class InspectionMbtiFinalPageState
       children: [
         Row(
           children: [
-            widget.list[index].answer == 1
+            widget.list[index].answer == "1" || widget.list[index].answer == "2"
                 ? Container(
-                width: 80,
+                width: 90,
                 height: 30,
                 decoration: BoxDecoration(
                   color: AppColor_Primary,
                   border: Border.all(color: AppColor_Primary),
-                  borderRadius: const BorderRadius.all(Radius.circular(12)),
+                  borderRadius: const BorderRadius.all(Radius.circular(15)),
                 ),
                 child: Center(
-                  child: H16(
-                    text: LanguageService.trans("아니다"),
-                    weight: FW.medium,
-                    color: Colors.white,
+                  child: Row(
+                    children: [
+                      const SizedBox(width: 3),
+                      ClipRRect(
+                          borderRadius: BorderRadius.circular(300.0),
+                          child: Image.asset(
+                            "assets/check_icon.png",
+                          )),
+                      const SizedBox(width: 5),
+                      Expanded(
+                        child: H16(
+                          text: LanguageService.trans("아니다"),
+                          weight: FW.medium,
+                          color: Colors.white,
+                        ),
+                      )
+                    ],
                   ),
                 ))
                 : Container(
@@ -219,21 +238,31 @@ class InspectionMbtiFinalPageState
               InkWell(
                 onTap: () {
                   setState(() {
-                    widget.list[index].answer = 1;
+                    widget.list[index].answer = "1";
                   });
                 },
                 child: Row(
                   children: [
                     Image.asset(
-                      widget.list[index].answer == 1
+                      widget.list[index].answer == "1"
                           ? "assets/ic_option_on.png"
                           : "assets/ic_option_off.png",
-                      width: 30,
-                      height: 30,
+                      width: 35,
+                      height: 35,
                     ),
-                    const SizedBox(width: 40),
+                  ],
+                ),
+
+              ),InkWell(
+                onTap: () {
+                  setState(() {
+                    widget.list[index].answer = "2";
+                  });
+                },
+                child: Row(
+                  children: [
                     Image.asset(
-                      widget.list[index].answer == 1
+                      widget.list[index].answer == "2"
                           ? "assets/ic_option_on.png"
                           : "assets/ic_option_off.png",
                       width: 25,
@@ -242,29 +271,38 @@ class InspectionMbtiFinalPageState
                   ],
                 ),
               ),
-              const SizedBox(width: 30),
               InkWell(
                 onTap: () {
                   setState(() {
-                    widget.list[index].answer = 2;
+                    widget.list[index].answer = "3";
                   });
                 },
                 child: Row(
                   children: [
                     Image.asset(
-                      widget.list[index].answer == 2
+                      widget.list[index].answer == "3"
                           ? "assets/ic_option_on.png"
                           : "assets/ic_option_off.png",
                       width: 25,
                       height: 25,
                     ),
-                    const SizedBox(width: 40),
+                  ],
+                ),
+              ),
+              InkWell(
+                onTap: () {
+                  setState(() {
+                    widget.list[index].answer = "4";
+                  });
+                },
+                child: Row(
+                  children: [
                     Image.asset(
-                      widget.list[index].answer == 2
+                      widget.list[index].answer == "4"
                           ? "assets/ic_option_on.png"
                           : "assets/ic_option_off.png",
-                      width: 30,
-                      height: 30,
+                      width: 35,
+                      height: 35,
                     ),
                   ],
                 ),
@@ -276,27 +314,40 @@ class InspectionMbtiFinalPageState
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            widget.list[index].answer == 2
+            widget.list[index].answer == "3" || widget.list[index].answer == "4"
                 ? Container(
                 alignment: Alignment.bottomLeft,
-                width: 80,
+                width: 90,
                 height: 30,
                 decoration: BoxDecoration(
                   color: AppColor_Primary,
                   border: Border.all(color: AppColor_Primary),
-                  borderRadius: const BorderRadius.all(Radius.circular(12)),
+                  borderRadius: const BorderRadius.all(Radius.circular(15)),
                 ),
                 child: Center(
-                  child: H16(
-                    text: LanguageService.trans("그렇다"),
-                    weight: FW.medium,
-                    color: Colors.white,
+                  child: Row(
+                    children: [
+                      const SizedBox(width: 3),
+                      ClipRRect(
+                          borderRadius: BorderRadius.circular(300.0),
+                          child: Image.asset(
+                            "assets/check_icon.png",
+                          )),
+                      const SizedBox(width: 5),
+                      Expanded(
+                        child: H16(
+                          text: LanguageService.trans("그렇다"),
+                          weight: FW.medium,
+                          color: Colors.white,
+                        ),
+                      )
+                    ],
                   ),
                 ))
                 : Container(
-              width: 80,
-              height: 30,
-              child: H16(
+                width: 80,
+                height: 30,
+                child: H16(
                 text: LanguageService.trans("그렇다"),
                 weight: FW.medium,
                 color: AppColor_BlackText,

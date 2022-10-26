@@ -70,6 +70,7 @@ import 'package:ourdoctor/models/product_like_res_model.dart';
 import 'package:ourdoctor/models/product_list_res_model.dart';
 import 'package:ourdoctor/models/product_review_list_res_model.dart';
 import 'package:ourdoctor/models/product_review_write_res_model.dart';
+import 'package:ourdoctor/models/res/mbti_quiz_list_res_model.dart';
 import 'package:ourdoctor/models/review_detail_res_model.dart';
 import 'package:ourdoctor/models/review_list_res_model.dart';
 import 'package:ourdoctor/models/signup_parent_model.dart';
@@ -2219,7 +2220,7 @@ class HttpService {
   }
 
   //mbti 검사 결과 저장
-  Future<MbtiQuizListResModel> getMbtiSendResult(result_list, String mbti) async {
+  Future<MbtiQuizSendResModel> getMbtiSendResult(result_list, String mbti) async {
     String _url = API_BASE_URL + "api/Monitor2/mtbi_quiz_result";
     Map<String, String> body = {
       'access_token': gUserInfo!.accessToken!,
@@ -2230,7 +2231,7 @@ class HttpService {
     Uri myUri = Uri.parse(_url);
     final response = await http.post(myUri, body: body);
     if (response.statusCode == 200) {
-      return MbtiQuizListResModel.fromJson(json.decode(response.body));
+      return MbtiQuizSendResModel.fromJson(json.decode(response.body));
     } else {
       // If that call was not successful, throw an error.
       showToast(LanguageService.trans("server_fail"));

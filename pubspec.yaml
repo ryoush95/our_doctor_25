@@ -93,7 +93,9 @@ dependencies:
   provider: ^6.0.3
   dropdown_button2: ^1.4.0
   keyboard_actions: ^3.4.7
-
+  flutter_dash: ^0.0.1
+  screenshot: ^1.2.3
+  image_gallery_saver: ^1.7.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
