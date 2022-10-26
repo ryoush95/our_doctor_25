@@ -71,6 +71,7 @@ import 'package:ourdoctor/models/product_like_res_model.dart';
 import 'package:ourdoctor/models/product_list_res_model.dart';
 import 'package:ourdoctor/models/product_review_list_res_model.dart';
 import 'package:ourdoctor/models/product_review_write_res_model.dart';
+import 'package:ourdoctor/models/res/mbti_quiz_list_res_model.dart';
 import 'package:ourdoctor/models/review_detail_res_model.dart';
 import 'package:ourdoctor/models/review_list_res_model.dart';
 import 'package:ourdoctor/models/signup_parent_model.dart';

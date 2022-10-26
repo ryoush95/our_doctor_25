@@ -1,9 +1,16 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:ourdoctor/global/global.dart';
+import 'package:ourdoctor/global/http_service.dart';
+import 'package:ourdoctor/helpers/common_util.dart';
 import 'package:ourdoctor/helpers/transition.dart';
 import 'package:ourdoctor/language/language_service.dart';
 import 'package:ourdoctor/models/homecare_data_res_model.dart';
+import 'package:ourdoctor/models/mbti_quiz_list_res_model.dart';
+import 'package:ourdoctor/models/product_detail_res_model.dart';
 import 'package:ourdoctor/models/product_list_res_model.dart';
+import 'package:ourdoctor/models/res/mbti_quiz_list_res_model.dart';
 import 'package:ourdoctor/pages/app_event.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
 import 'package:ourdoctor/pages/care/item_product.dart';
@@ -28,16 +35,6 @@ class ProductShow1 extends StatefulWidget {
 class ProductShow1State extends BaseState<ProductShow1> {
   //List<BannerList>? arrBannerList;
 
-  // String? id;
-  // String? category;
-  // String? name;
-  // String? option;
-  // String? price;
-  // String? tags;
-  // String? add_time;
-  // String? liked;
-  // String? mainImage;
-  // String? discount;
   ProductDto info = ProductDto();
   @override
   void initState() {
@@ -65,24 +62,6 @@ class ProductShow1State extends BaseState<ProductShow1> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 H18(text: widget.title),
-                InkWell(
-                  onTap: () async {
-                    String recv = await Navigator.push(
-                        context,
-                        SlideRightTransRoute(
-                            builder: (context) => ProductList(
-                                  category: widget.category == 2 ? "MBTI" : "",
-                                  order: widget.title == "인기 상품" ? "like" : "new",
-                                )));
-                    if (recv == "200") {
-                      eventBus.fire(HomeCareTabEvent(type: widget.category));
-                    }
-                  },
-                  child: Container(
-                    margin: const EdgeInsets.only(right: 30),
-                    child: H14(text: LanguageService.trans("view_more")),
-                  ),
-                ),
               ],
             ),
             const SizedBox(height: 20),

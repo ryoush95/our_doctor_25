@@ -35,7 +35,6 @@ class ItemMbtiProduct extends StatefulWidget {
 
 class ItemMbtiProductState extends BaseState<ItemMbtiProduct> {
   //List<BannerList>? arrBannerList;
-  final bool checkStatus = false;
   ProductDetailDto mData = ProductDetailDto();
   @override
   void initState() {
@@ -111,9 +110,12 @@ class ItemMbtiProductState extends BaseState<ItemMbtiProduct> {
                     children: [
                       Visibility(
                           visible: widget.info!.mainImage!.isEmpty,
-                          child: Center(
+                          child: ClipPath(
+                            clipper: ShapeBorderClipper(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10))),
                             child: Image.asset(
-                              "assets/img_test1.png",
+                              "assets/mbti_image_test.png",
                               fit: BoxFit.fill,
                               width: 150,
                               height: 150,
@@ -143,11 +145,6 @@ class ItemMbtiProductState extends BaseState<ItemMbtiProduct> {
                         productLike(widget.info!.id!);
                       },
                       child: widget.info!.liked! == "1"
-                          // ? Image.asset('assets/ic_heart_on.png', width: 40)
-                          // : Image.asset(
-                          //     'assets/ic_heart_off.png',
-                          //     width: 40,
-                          //   ),
                           ? Icon(
                               Icons.favorite,
                               color: Colors.pinkAccent,
@@ -227,18 +224,11 @@ class ItemMbtiProductState extends BaseState<ItemMbtiProduct> {
   }
 
   void showReviewDialog() async {
-    List<ProductDto> orderProduct = [];
-    List<int> productCount = [];
-    double amount = 0;
-
-    OrderInfo orderInfo = OrderInfo(orderProduct, productCount, amount, 0, 0,"");
-
     showModalBottomSheet(
         backgroundColor: Colors.transparent,
         context: context,
         builder: (context) {
-          //Navigator.push(context, SlideRightTransRoute(builder: (context) => PointBuyingDialog(orderInfo: orderInfo)));
-          return PointBuyingDialog(orderInfo: orderInfo);
+          return PointBuyingDialog( pid: widget.info!.id!);
         });
   }
 
@@ -255,23 +245,4 @@ class ItemMbtiProductState extends BaseState<ItemMbtiProduct> {
       padding: EdgeInsets.all(2),
     );
   }
-
-// Widget buildtagItem(int index) {
-//   String tag = widget.info!.tags!.split(",").length > index ? widget.info!.tags!.split(",")[index] : "";
-//   return Container(
-//     height: tag == "" ? 0 : 22,
-//     padding: const EdgeInsets.symmetric(horizontal: 5),
-//     decoration: BoxDecoration(
-//       borderRadius: BorderRadius.circular(11.0),
-//       border: Border.all(color: checkStatus ? AppColor_Primary : AppColor_Selector_Border),
-//     ),
-//     child: Center(
-//       child: H14(
-//         text: tag,
-//         weight: FW.regular,
-//         color: AppColor_GrayText,
-//       ),
-//     ),
-//   );
-// }
 }
