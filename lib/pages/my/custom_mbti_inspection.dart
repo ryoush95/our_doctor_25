@@ -11,7 +11,7 @@ import 'package:ourdoctor/models/chat_quiz_list_res_model.dart';
 import 'package:ourdoctor/models/check_chat_res_model.dart';
 import 'package:ourdoctor/models/child_quiz_list_res_model.dart';
 import 'package:ourdoctor/models/mbti_quiz_list_res_model.dart';
-import 'package:ourdoctor/models/res/mbti_quiz_list_res_model.dart';
+import 'package:ourdoctor/models/res/mbti_quiz_send_res_model.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
 import 'package:ourdoctor/pages/base/page_layout.dart';
 import 'package:ourdoctor/pages/components/h12.dart';

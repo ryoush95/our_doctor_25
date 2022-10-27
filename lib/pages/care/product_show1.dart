@@ -10,7 +10,7 @@ import 'package:ourdoctor/models/homecare_data_res_model.dart';
 import 'package:ourdoctor/models/mbti_quiz_list_res_model.dart';
 import 'package:ourdoctor/models/product_detail_res_model.dart';
 import 'package:ourdoctor/models/product_list_res_model.dart';
-import 'package:ourdoctor/models/res/mbti_quiz_list_res_model.dart';
+import 'package:ourdoctor/models/res/mbti_quiz_send_res_model.dart';
 import 'package:ourdoctor/pages/app_event.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
 import 'package:ourdoctor/pages/care/item_product.dart';
