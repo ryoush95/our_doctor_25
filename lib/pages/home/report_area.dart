@@ -496,30 +496,33 @@ class ReportAreaState extends BaseState<ReportArea> with TickerProviderStateMixi
                         ),
                       ],
                     )
-                  : Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        const SizedBox(width: 28),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            H18(text: LanguageService.trans('than_last_month'), weight: FW.regular),
-                            RichText(
-                              softWrap: true,
-                              textAlign: TextAlign.start,
-                              text: TextSpan(children: [
-                              
-                                TextSpan(text: sprintf(LanguageService.trans('%.1fcm '), [dicHomeGraphTallInfo!.heightPrevDiff]), style: AppTextStyle.PD(AppColor_BlackText, 18, height: 1.8)),
-                                TextSpan(text: dicHomeGraphTallInfo!.heightPrevDiff! >= 0.0 ? '더 늘어났어요.' : '줄어들었어요.', style: AppTextStyle.PD(AppColor_BlackText, 18, weight: FW.regular)),
-                              ]),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(width: 5),
-                        Image.asset('assets/ic_smile2.png', width: 20, height: 20),
-                      ],
-                    ),
+                  : Visibility(
+                    visible: dicHomeGraphTallInfo!.heightPrevDiff! > 0.0,
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          const SizedBox(width: 28),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              H18(text: LanguageService.trans('than_last_month'), weight: FW.regular),
+                              RichText(
+                                softWrap: true,
+                                textAlign: TextAlign.start,
+                                text: TextSpan(children: [
+
+                                  TextSpan(text: sprintf(LanguageService.trans('%.1fcm '), [dicHomeGraphTallInfo!.heightPrevDiff]), style: AppTextStyle.PD(AppColor_BlackText, 18, height: 1.8)),
+                                  TextSpan(text: dicHomeGraphTallInfo!.heightPrevDiff! >= 0.0 ? '더 늘어났어요.' : '줄어들었어요.', style: AppTextStyle.PD(AppColor_BlackText, 18, weight: FW.regular)),
+                                ]),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(width: 5),
+                          Image.asset('assets/ic_smile2.png', width: 20, height: 20),
+                        ],
+                      ),
+                  ),
               const SizedBox(height: 18),
               Container(padding: const EdgeInsets.symmetric(horizontal: 30), child: HeightReport(data: dicHomeGraphTallInfo!, result: widget.result)),
             ],
@@ -546,30 +549,33 @@ class ReportAreaState extends BaseState<ReportArea> with TickerProviderStateMixi
                         ),
                       ],
                     )
-                  : Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        const SizedBox(width: 28),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            H18(text: LanguageService.trans('than_last_month'), weight: FW.regular),
-                            RichText(
-                              softWrap: true,
-                              textAlign: TextAlign.start,
-                              text: TextSpan(children: [
-                                TextSpan(text: sprintf(LanguageService.trans('%.1fkg '), [dicHomeGraphWeightInfo!.weightPrevDiff]), style: AppTextStyle.PD(AppColor_BlackText, 18, height: 1.8)),
-                                TextSpan(text: dicHomeGraphWeightInfo!.weightPrevDiff! >= 0.0 ? '더 늘어났어요.' : '줄어들었어요.', style: AppTextStyle.PD(AppColor_BlackText, 18, weight: FW.regular)),
-                              ]),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(width: 5),
-                        Image.asset('assets/ic_smile2.png', width: 20, height: 20),
-                      ],
-                    ),
+                  : Visibility(
+                visible: dicHomeGraphTallInfo!.heightPrevDiff! > 0.0,
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          const SizedBox(width: 28),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              H18(text: LanguageService.trans('than_last_month'), weight: FW.regular),
+                              RichText(
+                                softWrap: true,
+                                textAlign: TextAlign.start,
+                                text: TextSpan(children: [
+                                  TextSpan(text: sprintf(LanguageService.trans('%.1fkg '), [dicHomeGraphWeightInfo!.weightPrevDiff]), style: AppTextStyle.PD(AppColor_BlackText, 18, height: 1.8)),
+                                  TextSpan(text: dicHomeGraphWeightInfo!.weightPrevDiff! >= 0.0 ? '더 늘어났어요.' : '줄어들었어요.', style: AppTextStyle.PD(AppColor_BlackText, 18, weight: FW.regular)),
+                                ]),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(width: 5),
+                          Image.asset('assets/ic_smile2.png', width: 20, height: 20),
+                        ],
+                      ),
+                  ),
               const SizedBox(height: 18),
               Container(padding: const EdgeInsets.symmetric(horizontal: 30), child: WeightReport(data: dicHomeGraphWeightInfo!, result: widget.result)),
             ],

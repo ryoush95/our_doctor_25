@@ -315,8 +315,9 @@ class CaloriCalcPageState extends BaseState<CaloriCalcPage> {
                     onEditingComplete: () {
                       FocusScope.of(context).requestFocus(FocusNode());
                       _isSearching = true;
-                      keyword = searchTxc.text.trim().toString();
-                      setState(() {});
+                      setState(() {
+                        keyword = searchTxc.text.trim().toString();
+                      });
                       // getCommunityList();
                     },
                     placeholder: "음식 검색",
@@ -325,9 +326,7 @@ class CaloriCalcPageState extends BaseState<CaloriCalcPage> {
                       _canClear = (searchTxc.text != "");
                       p.changeSearch(searchTxc.text);
                       setState(() {
-                        print(p.searchList.length);
                         if(searchTxc.text != "") {
-                          hideEntry();
                           insertEntry();
                         } else {
                           hideEntry();

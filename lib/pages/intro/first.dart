@@ -3,9 +3,10 @@ import 'dart:io';
 // import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // import 'package:flutter_kakao_login/flutter_kakao_login.dart';
-import 'package:flutter_kakao_login/flutter_kakao_login.dart';
+// import 'package:flutter_kakao_login/flutter_kakao_login.dart';
 import 'package:flutter_naver_login/flutter_naver_login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 // import 'package:flutter_naver_login/flutter_naver_login.dart';
 import 'package:ourdoctor/global/app_colors.dart';
 import 'package:ourdoctor/global/app_styles.dart';
@@ -42,7 +43,7 @@ class FirstPageState extends BaseState<FirstPage> {
   int backButtonTimestamp = 0;
   final HttpService httpService = HttpService();
 
-  static final FlutterKakaoLogin kakaoSignIn = FlutterKakaoLogin();
+  // static final FlutterKakaoLogin kakaoSignIn = FlutterKakaoLogin();
   String signupType = 'normal';
   late String id = "";
   late String password = "";
@@ -52,7 +53,7 @@ class FirstPageState extends BaseState<FirstPage> {
   void initState() {
     super.initState();
     googleSignIn = GoogleSignIn();
-    load();
+    // load();
   }
 
   void onSnsLogin(String type) {
@@ -89,29 +90,71 @@ class FirstPageState extends BaseState<FirstPage> {
         }
         id = res.account.id;
         password = res.account.id;
-
-        FlutterNaverLogin.logOut();
         reqLogin();
       });
     } else if (signupType == "kakao") {
-      try {
-        final result = await kakaoSignIn.logIn();
+      // try {
+      //   final result = await kakaoSignIn.logIn();
+      //
+      //   final result1 = await kakaoSignIn.getUserMe();
+      //   final KakaoAccountResult? account = result1.account;
+      //
+      //   if (account != null) {
+      //     if (account.userID == "") {
+      //       showToast("카카오 로그인 실패되었습니다.");
+      //       return;
+      //     }
+      //     id = account.userID!;
+      //     password = account.userID!;
+      //     kakaoSignIn.logOut();
+      //     reqLogin();
+      //   }
+      // } on PlatformException catch (e) {
+      //   print("${e.code} ${e.message}");
+      // }
+      if (await isKakaoTalkInstalled()){
+        try {
+          await UserApi.instance.loginWithKakaoAccount();
 
-        final result1 = await kakaoSignIn.getUserMe();
-        final KakaoAccountResult? account = result1.account;
+          var user = await UserApi.instance.me();
+          id = user.id.toString();
+          password = id;
+          reqLogin();
+          showToast('카카오톡으로 로그인 성공');
+        } catch (error) {
+          showToast('카카오톡으로 로그인 실패 $error');
 
-        if (account != null) {
-          if (account.userID == "") {
-            showToast("카카오 로그인 실패되었습니다.");
+          // 사용자가 카카오톡 설치 후 디바이스 권한 요청 화면에서 로그인을 취소한 경우,
+          // 의도적인 로그인 취소로 보고 카카오계정으로 로그인 시도 없이 로그인 취소로 처리 (예: 뒤로 가기)
+          if (error is PlatformException && error.code == 'CANCELED') {
             return;
           }
-          id = account.userID!;
-          password = account.userID!;
-          kakaoSignIn.logOut();
-          reqLogin();
+          // 카카오톡에 연결된 카카오계정이 없는 경우, 카카오계정으로 로그인
+          try {
+            await UserApi.instance.loginWithKakaoAccount();
+
+            var user = await UserApi.instance.me();
+            id = user.id.toString();
+            password = id;
+            await UserApi.instance.logout();
+            reqLogin();
+            showToast('카카오계정으로 로그인 성공');
+          } catch (error) {
+            showToast('카카오계정으로 로그인 실패 $error');
+          }
         }
-      } on PlatformException catch (e) {
-        print("${e.code} ${e.message}");
+      } else {
+        try {
+          await UserApi.instance.loginWithKakaoAccount();
+          var user = await UserApi.instance.me();
+          id = user.id.toString();
+          password = id;
+          await UserApi.instance.logout();
+          reqLogin();
+          showToast('카카오계정으로 로그인 성공');
+        } catch (error) {
+          showToast('카카오계정으로 로그인 실패 $error');
+        }
       }
     } else if (signupType == "google") {
       GoogleSignInAccount? account = await googleSignIn.signIn();
@@ -130,7 +173,7 @@ class FirstPageState extends BaseState<FirstPage> {
 
   void load() async {
     // Kakao SDK Init (Set NATIVE_APP_KEY)
-    await kakaoSignIn.init('66bed5a0bb50d14d57e723a72ec24ce8');
+    return;
   }
 
   Future<bool> onBackPressed() async {

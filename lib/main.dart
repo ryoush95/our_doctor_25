@@ -3,12 +3,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:ourdoctor/global/app_colors.dart';
 import 'package:ourdoctor/global/app_get_it.dart';
 import 'package:ourdoctor/helpers/fcm.dart';
 import 'package:ourdoctor/pages/splash/splash.dart';
 import 'package:ourdoctor/provider/old_food_list_provider.dart';
-import 'package:ourdoctor/provider/child_quiz_provider.dart';
 import 'package:ourdoctor/provider/convert_score_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -18,6 +18,7 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   setupLocator();
   initFcm();
+  initKakao();
 
   runApp(MultiProvider(
     providers: [
@@ -70,6 +71,12 @@ class MyApp extends StatelessWidget {
       home: SplashPage(),
     );
   }
+}
+
+void initKakao() async {
+  await KakaoSdk.init(
+      nativeAppKey: '66bed5a0bb50d14d57e723a72ec24ce8',
+      javaScriptAppKey: 'ad0b797bd5112488cbd498ec3c9f6ce1');
 }
 
 class CupertinoLocalisationsDelegate
