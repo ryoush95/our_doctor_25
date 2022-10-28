@@ -248,17 +248,17 @@ class PointBuyingDialogState extends State<PointBuyingDialog> {
                         ? AppColor_Primary_Disable
                         : Colors.transparent,
                     onPressed: () {
-                      if(double.parse(mData.price!) > int.parse(gUserInfo!.point ?? "0")) {
+                     /* if(double.parse(mData.price!) > int.parse(gUserInfo!.point ?? "0")) {
                         showToast("우아 포인트가 부족합니다.");
                       } else {
                         //showToast("포인트가 차감됩니다.");
 
-                       Navigator.push(
-                           context,
-                           SlideRightTransRoute(
-                               builder: (context) =>   CustomMbtiInspectionMainPage()));
-                      }
 
+                      }*/
+                      Navigator.push(
+                          context,
+                          SlideRightTransRoute(
+                              builder: (context) =>   CustomMbtiInspectionMainPage()));
 
                       // const CustomMbtiInspectionMainPage();
                     },

@@ -18,6 +18,7 @@ import 'package:ourdoctor/pages/care/homecare_list.dart';
 import 'package:ourdoctor/pages/care/product_list.dart';
 import 'package:ourdoctor/pages/care/product_show.dart';
 import 'package:ourdoctor/pages/care/product_show1.dart';
+import 'package:ourdoctor/pages/components/h12.dart';
 import 'package:ourdoctor/pages/components/h13.dart';
 import 'package:ourdoctor/pages/components/h14.dart';
 import 'package:ourdoctor/pages/components/h16.dart';
@@ -36,13 +37,18 @@ class CareFragmentState extends BaseState<CareFragment>
   int tabIndex = 0;
   int category = 0;
 
-  List<String> CATEGORY = ["성장스토어", "발달클래스", "테스트"];
+  List<String> CATEGORY = ["성장스토어", "발달클래스", "우아테스트"];
   ScrollController controller = ScrollController();
   bool isLast = true;
   int nPage = 0;
   String keyword = "";
   late TabController tabController;
   final searchController = TextEditingController();
+  var currPageValue = 0.0;
+  PageController pageController = PageController(viewportFraction: 0.85,);
+  double scaleFactor = 0.8;
+  double height = 100.0;
+
 
   static const platform = MethodChannel('doctor.flutter.dev');
   final HttpService httpService = HttpService();
@@ -78,6 +84,11 @@ class CareFragmentState extends BaseState<CareFragment>
       changeTab(tabController.index);
     });
 
+    pageController.addListener(() {
+      setState(() {
+        currPageValue = pageController.page!;
+      });
+    });
     tabController.index = faqFromSide ? 1 : 0;
     getBannerList();
     getHomeDataInfo();
@@ -331,92 +342,79 @@ class CareFragmentState extends BaseState<CareFragment>
             ),
           ),
           Positioned(
-              child: SizedBox(
-                width: MediaQuery.of(context).size.width,
-                height: 180,
-                child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    // itemCount: arrBannerList == null ? 0 : arrBannerList!.length,
-                    itemCount: arrBannerList!.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      HomeCareBannerDto info = arrBannerList!.elementAt(index);
-                      return InkWell(
-                        child: Container(
-                            width: MediaQuery.of(context).size.width - 64,
-                            height: 180,
-                            // padding: const EdgeInsets.all(12),
-                            margin: const EdgeInsets.only(left: 10),
-                            /*decoration: BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(12.0)),
-                              color: tabIndex == 2
-                                  ? MBTI_COLOR![index % 4]
-                                  : (tabIndex == 0
-                                      ? GROWTH_COLOR![index % 4]
-                                      : DEVELOPMENT_COLOR![index % 4]),
-                            ),*/
-                            child: Stack(
-                              children: [
-                                Positioned(
-                                  child: Container(
-                                    width:
-                                        MediaQuery.of(context).size.width - 74,
-                                    height: 170,
-                                    decoration: const BoxDecoration(
-                                        color: AppColor_Selector_Border),
-                                    child: ExtendedImage.network(
-                                      info.image!,
-                                      width: 350,
-                                      height: 160,
-                                      fit: BoxFit.fill,
-                                      cache: true,
-                                    ),
-                                  ),
-                                  right: 5,
-                                  bottom: 5,
-                                ),
-                                Visibility(
-                                visible: tabIndex == 2,
-                                    child: Stack(
-                                  children: [
-                                    Positioned(
-                                      child: Container(
-                                        width:
-                                        MediaQuery.of(context).size.width - 74,
-                                        height: 170,
-                                        decoration: const BoxDecoration(
-                                            color: AppColor_Selector_Border),
-                                        child: Image.asset(
-                                          "assets/mbti_banner_image.png",
-                                          width: 350,
-                                          height: 160,
-                                          fit: BoxFit.fill,
-                                        ),
-                                      ),
-                                      right: 5,
-                                      bottom: 5,
-                                    ),
-                                  ],
-                                )),
-                                Positioned(
-                                  child: H16(
-                                    text: "1 / " +
-                                        arrBannerList!.length.toString(),
-                                    color: Colors.white,
-                                    weight: FW.semi_bold,
-                                    align: TextAlign.start,
-                                    height: 1.6,
-                                  ),
-                                  right: 10,
-                                  bottom: 10,
-                                ),
-                              ],
-                            )),
-                      );
-                    }),
-              ),
-              top: 70),
+              child: Container(
+            width: MediaQuery.of(context).size.width,
+            height: 250,
+            child: Stack(
+              children: [
+                Center(
+                  child: Container(
+                      margin: const EdgeInsets.only(top: 70),
+                      height: 160,
+                      decoration: const BoxDecoration(color: Colors.white),
+                      child: PageView.builder(
+                        controller: pageController,
+                        physics: const BouncingScrollPhysics(),
+                        itemCount: arrBannerList!.length,
+                        itemBuilder: (context, index) {
+                          return getBannerImage(index);
+                        },
+                        /*onPageChanged: (i) {
+                          setState(() {
+                            position = i;
+                          });
+                        },*/
+                      )),
+                ),
+              ],
+            ),
+          )),
         ]));
+  }
+
+
+  getBannerImage(int index) {
+    Matrix4 matrix = new Matrix4.identity();
+    if (index == currPageValue.floor()) {
+      var currScale = 1 - (currPageValue - index) * (1 - scaleFactor);
+      var currTrans = height * (1 - currScale) / 2;
+      matrix = Matrix4.diagonal3Values(1.0, currScale, 1.0)
+        ..setTranslationRaw(0, currTrans, 0);
+    } else if (index == currPageValue.floor() + 1) {
+      var currScale =
+          scaleFactor + (currPageValue - index + 1) * (1 - scaleFactor);
+      var currTrans = height * (1 - currScale) / 2;
+      matrix = Matrix4.diagonal3Values(1.0, currScale, 1.0)
+        ..setTranslationRaw(0, currTrans, 0);
+    } else if (index == currPageValue.floor() - 1) {
+      var currScale = 1 - (currPageValue - index) * (1 - scaleFactor);
+      var currTrans = height * (1 - currScale) / 2;
+      matrix = Matrix4.diagonal3Values(1.0, currScale, 1.0)
+        ..setTranslationRaw(0, currTrans, 0);
+    } else {
+      var currScale = 0.8;
+      matrix = Matrix4.diagonal3Values(1.0, currScale, 1.0)
+        ..setTranslationRaw(0, height * (1 - scaleFactor) / 2, 0);
+    }
+
+    HomeCareBannerDto info = arrBannerList!.elementAt(index);
+
+    return Transform(
+      transform: matrix,
+      child: Container(
+        padding: const EdgeInsets.only(left: 5, right: 5, top: 10),
+        child: ClipRRect(
+            borderRadius: BorderRadius.circular(20.0),
+            child:ExtendedImage.network(
+              info.image!,
+              width: 320,
+              height: 160,
+              fit: BoxFit.fill,
+              cache: true,
+            ),
+        ),
+      ),
+    );
   }
 
   Widget CategoryShow() => Visibility(

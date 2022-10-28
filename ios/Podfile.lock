@@ -146,6 +146,8 @@ PODS:
   - image_cropper (0.0.4):
     - Flutter
     - TOCropViewController (~> 2.6.0)
+  - image_gallery_saver (1.5.0):
+    - Flutter
   - image_picker (0.0.1):
     - Flutter
   - KakaoSDKAuth (2.7.1):
@@ -208,6 +210,7 @@ DEPENDENCIES:
   - iamport_flutter (from `.symlinks/plugins/iamport_flutter/ios`)
   - iamport_webview_flutter (from `.symlinks/plugins/iamport_webview_flutter/ios`)
   - image_cropper (from `.symlinks/plugins/image_cropper/ios`)
+  - image_gallery_saver (from `.symlinks/plugins/image_gallery_saver/ios`)
   - image_picker (from `.symlinks/plugins/image_picker/ios`)
   - package_info (from `.symlinks/plugins/package_info/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
@@ -274,6 +277,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/iamport_webview_flutter/ios"
   image_cropper:
     :path: ".symlinks/plugins/image_cropper/ios"
+  image_gallery_saver:
+    :path: ".symlinks/plugins/image_gallery_saver/ios"
   image_picker:
     :path: ".symlinks/plugins/image_picker/ios"
   package_info:
@@ -327,6 +332,7 @@ SPEC CHECKSUMS:
   iamport_flutter: f698983444b7c0f83e356407631cfeec77a776bf
   iamport_webview_flutter: 70dbc31045e4cf7a0c829b76c6f8319dc94b299e
   image_cropper: f1668dd8d2cad2d357955caad15a40547856edcb
+  image_gallery_saver: 259eab68fb271cfd57d599904f7acdc7832e7ef2
   image_picker: 9aa50e1d8cdacdbed739e925b7eea16d014367e6
   KakaoSDKAuth: 70cfb1e4e60f543fd5f0ece2995c3b0e879c532e
   KakaoSDKCommon: 48fe293e8970a8db8d10d5ca63600a7a8cc5f74c

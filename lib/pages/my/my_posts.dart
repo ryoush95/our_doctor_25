@@ -137,7 +137,11 @@ class _MyPostsPageState extends State<MyPostsPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 6),
-              H18(text: post.title ?? ''),
+              Container(
+                alignment: Alignment.topLeft,
+                width: imgUrl == "" ? MediaQuery.of(context).size.width - 80 : MediaQuery.of(context).size.width - 160,
+                child: H18(text: post.title ?? ''),
+              ),
               const SizedBox(height: 6),
               H12(
                 text: '${diffTime(post.regTime!)}・좋아요 ${post.likeCnt}・댓글 ${post.commentCnt}', 
