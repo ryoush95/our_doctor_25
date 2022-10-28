@@ -1,13 +1,10 @@
 import 'dart:io';
 
-// import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart'; // import 'package:flutter_kakao_login/flutter_kakao_login.dart';
-// import 'package:flutter_kakao_login/flutter_kakao_login.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_naver_login/flutter_naver_login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
-// import 'package:flutter_naver_login/flutter_naver_login.dart';
 import 'package:ourdoctor/global/app_colors.dart';
 import 'package:ourdoctor/global/app_styles.dart';
 import 'package:ourdoctor/global/global.dart';
@@ -26,7 +23,6 @@ import 'package:ourdoctor/pages/intro/login1.dart';
 import 'package:ourdoctor/pages/signup/agree.dart';
 import 'package:ourdoctor/pages/tab_main.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
-// import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class FirstPage extends StatefulWidget {
   FirstPage({Key? key, this.dadHeight = "", this.momHeight = "", this.childHeight = "", this.childWeight = ""}) : super(key: key);

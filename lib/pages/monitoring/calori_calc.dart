@@ -70,6 +70,7 @@ class CaloriCalcPageState extends BaseState<CaloriCalcPage> {
   String keyword = "";
   bool _isSearching = false;
   bool _canClear = false;
+  bool _show = true;
 
   @override
   void initState() {
@@ -77,12 +78,12 @@ class CaloriCalcPageState extends BaseState<CaloriCalcPage> {
 
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) =>showSuggest() );
     focus.addListener(() {
-      if (focus.hasFocus){
+      // if (focus.hasFocus){
         showSuggest();
         insertEntry();
-      } else {
-        hideEntry();
-      }
+      // } else {
+      //   hideEntry();
+      // }
     });
 
     getAllFood();
@@ -315,6 +316,7 @@ class CaloriCalcPageState extends BaseState<CaloriCalcPage> {
                     onEditingComplete: () {
                       FocusScope.of(context).requestFocus(FocusNode());
                       _isSearching = true;
+                      _show = true;
                       setState(() {
                         keyword = searchTxc.text.trim().toString();
                       });
@@ -326,10 +328,12 @@ class CaloriCalcPageState extends BaseState<CaloriCalcPage> {
                       _canClear = (searchTxc.text != "");
                       p.changeSearch(searchTxc.text);
                       setState(() {
-                        if(searchTxc.text != "") {
-                          insertEntry();
+                        showSuggest();
+                        insertEntry();
+                        if(p.searchList.isNotEmpty) {
+                          _show = true;
                         } else {
-                          hideEntry();
+                          _show = false;
                         }
                       });
                     },
@@ -340,6 +344,7 @@ class CaloriCalcPageState extends BaseState<CaloriCalcPage> {
                       _isSearching = false;
                       setState(() {
                         hideEntry();
+                        _show = false;
                       });
                     },
                   ),
@@ -354,7 +359,7 @@ class CaloriCalcPageState extends BaseState<CaloriCalcPage> {
   void insertEntry() {
     OverlayState? overlayState = Overlay.of(context);
     if (mounted) {
-      overlayState?.insert(entry!);
+      overlayState!.insert(entry!);
     }
   }
 
@@ -376,22 +381,20 @@ class CaloriCalcPageState extends BaseState<CaloriCalcPage> {
               link: _searchBarLink,
               showWhenUnlinked: false,
               offset: Offset(0, 40),
-              child: buildOverlay(),
+              child: Visibility(
+                visible: _show,
+                child: Container(
+                  decoration: BoxDecoration(color: Colors.white, border: Border.all(color: AppColor_Selector_Border)),
+                  width: double.infinity - 64,
+                  child: ListView.builder(
+                    itemCount: context.read<OldFoodListProvider>().searchList.length,
+                    itemBuilder: searchItem,
+                  ),
+                ),
+              ),
             ),
           );
         }
-    );
-  }
-
-  Widget buildOverlay() {
-    final p = Provider.of<OldFoodListProvider>(context);
-    return Container(
-      decoration: BoxDecoration(color: Colors.white, border: Border.all(color: AppColor_Selector_Border)),
-      width: MediaQuery.of(context).size.width - 64,
-      child: ListView.builder(
-        itemCount: p.searchList.length,
-        itemBuilder: searchItem,
-      ),
     );
   }
 
@@ -413,6 +416,7 @@ class CaloriCalcPageState extends BaseState<CaloriCalcPage> {
         searchTxc.clear();
         _canClear = false;
         _isSearching = false;
+        _show = false;
       },
       color: Colors.white,
       child: SizedBox(
@@ -752,6 +756,7 @@ class CaloriCalcPageState extends BaseState<CaloriCalcPage> {
                             foodAddList.removeAt(index);
                             count.removeAt(index);
                             checkValid();
+                            hideEntry();
                             setState(() {});
                           },
                           child: Image.asset(
