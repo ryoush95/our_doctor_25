@@ -45,9 +45,10 @@ class CareFragmentState extends BaseState<CareFragment>
   late TabController tabController;
   final searchController = TextEditingController();
   var currPageValue = 0.0;
-  PageController pageController = PageController(viewportFraction: 0.85,);
+  PageController pageController = PageController(viewportFraction: 0.85, initialPage: 500);
   double scaleFactor = 0.8;
   double height = 100.0;
+
 
 
   static const platform = MethodChannel('doctor.flutter.dev');
@@ -89,6 +90,7 @@ class CareFragmentState extends BaseState<CareFragment>
         currPageValue = pageController.page!;
       });
     });
+
     tabController.index = faqFromSide ? 1 : 0;
     getBannerList();
     getHomeDataInfo();
@@ -355,15 +357,10 @@ class CareFragmentState extends BaseState<CareFragment>
                       child: PageView.builder(
                         controller: pageController,
                         physics: const BouncingScrollPhysics(),
-                        itemCount: arrBannerList!.length,
+                        //itemCount: arrBannerList!.length,
                         itemBuilder: (context, index) {
                           return getBannerImage(index);
                         },
-                        /*onPageChanged: (i) {
-                          setState(() {
-                            position = i;
-                          });
-                        },*/
                       )),
                 ),
               ],
@@ -372,9 +369,8 @@ class CareFragmentState extends BaseState<CareFragment>
         ]));
   }
 
-
   getBannerImage(int index) {
-    Matrix4 matrix = new Matrix4.identity();
+    Matrix4 matrix = Matrix4.identity();
     if (index == currPageValue.floor()) {
       var currScale = 1 - (currPageValue - index) * (1 - scaleFactor);
       var currTrans = height * (1 - currScale) / 2;
@@ -397,14 +393,14 @@ class CareFragmentState extends BaseState<CareFragment>
         ..setTranslationRaw(0, height * (1 - scaleFactor) / 2, 0);
     }
 
-    HomeCareBannerDto info = arrBannerList!.elementAt(index);
+    HomeCareBannerDto info = arrBannerList!.elementAt(index % arrBannerList!.length);
 
     return Transform(
       transform: matrix,
       child: Container(
         padding: const EdgeInsets.only(left: 5, right: 5, top: 10),
         child: ClipRRect(
-            borderRadius: BorderRadius.circular(20.0),
+            borderRadius: BorderRadius.circular(16.0),
             child:ExtendedImage.network(
               info.image!,
               width: 320,
