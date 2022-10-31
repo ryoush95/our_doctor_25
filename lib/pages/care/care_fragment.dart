@@ -44,10 +44,11 @@ class CareFragmentState extends BaseState<CareFragment>
   String keyword = "";
   late TabController tabController;
   final searchController = TextEditingController();
-  var currPageValue = 0.0;
-  PageController pageController = PageController(viewportFraction: 0.85, initialPage: 500);
+  var currPageValue = 100.0;
+  PageController pageController = PageController(viewportFraction: 0.85, initialPage: 100);
   double scaleFactor = 0.8;
   double height = 100.0;
+  List bannerList = [];
 
 
 
@@ -127,7 +128,7 @@ class CareFragmentState extends BaseState<CareFragment>
 
   void moveScroll() {
     Future.delayed(const Duration(milliseconds: 500), () {
-      controller.jumpTo(0);
+      controller.jumpTo(50);
     });
   }
 
@@ -167,10 +168,18 @@ class CareFragmentState extends BaseState<CareFragment>
           arrBannerList!.clear();
         }
         arrBannerList = value.data!.list;
-        setState(() {});
         if (nPage == 0) {
-          moveScroll();
+          for(int i = 0; i < arrBannerList!.length; i++){
+            bannerList.add(ExtendedImage.network(
+              arrBannerList![i].image!,
+              width: 320,
+              height: 160,
+              fit: BoxFit.fill,
+              cache: true,
+            ),);
+          }
         }
+        setState(() {});
       } else {
         showToast(value.msg ?? "");
         if (value.result == 106) {
@@ -357,7 +366,7 @@ class CareFragmentState extends BaseState<CareFragment>
                       child: PageView.builder(
                         controller: pageController,
                         physics: const BouncingScrollPhysics(),
-                        //itemCount: arrBannerList!.length,
+                        itemCount: 200,
                         itemBuilder: (context, index) {
                           return getBannerImage(index);
                         },
@@ -393,7 +402,7 @@ class CareFragmentState extends BaseState<CareFragment>
         ..setTranslationRaw(0, height * (1 - scaleFactor) / 2, 0);
     }
 
-    HomeCareBannerDto info = arrBannerList!.elementAt(index % arrBannerList!.length);
+    // HomeCareBannerDto info = arrBannerList!.elementAt(index % arrBannerList!.length);
 
     return Transform(
       transform: matrix,
@@ -401,15 +410,9 @@ class CareFragmentState extends BaseState<CareFragment>
         padding: const EdgeInsets.only(left: 5, right: 5, top: 10),
         child: ClipRRect(
             borderRadius: BorderRadius.circular(16.0),
-            child:ExtendedImage.network(
-              info.image!,
-              width: 320,
-              height: 160,
-              fit: BoxFit.fill,
-              cache: true,
+            child:bannerList[index %arrBannerList!.length],
             ),
         ),
-      ),
     );
   }
 
