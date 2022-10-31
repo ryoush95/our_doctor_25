@@ -110,7 +110,7 @@ class FirstPageState extends BaseState<FirstPage> {
       // }
       if (await isKakaoTalkInstalled()){
         try {
-          await UserApi.instance.loginWithKakaoAccount();
+          await UserApi.instance.loginWithKakaoTalk();
 
           var user = await UserApi.instance.me();
           id = user.id.toString();

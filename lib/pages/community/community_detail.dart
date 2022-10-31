@@ -30,6 +30,7 @@ import 'package:ourdoctor/pages/dialog/report.dart';
 import 'package:ourdoctor/pages/intro/first.dart';
 import 'package:ourdoctor/pages/my/photo_view.dart';
 import 'package:ourdoctor/pages/woo_story_webview.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 class CommunityDetailPage extends StatefulWidget {
@@ -227,6 +228,7 @@ class CommunityDetailPageState extends BaseState<CommunityDetailPage> {
                   _editUid = info.commentUid!;
                   _editReply = true;
                   replyFocusNode.requestFocus();
+                  replyController.text = _prevContent;
                   setState(() {});
                 });
           });
@@ -341,6 +343,7 @@ class CommunityDetailPageState extends BaseState<CommunityDetailPage> {
                   _editUid = info.commentUid!;
                   _editReply = true;
                   replyFocusNode.requestFocus();
+                  replyController.text = _prevContent;
                   setState(() {});
                 });
           });
@@ -1129,12 +1132,23 @@ class CommunityDetailPageState extends BaseState<CommunityDetailPage> {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 25),
                               margin: EdgeInsets.only(top: 25),
-                              child: H14(
-                                  text: dicDetailInfo?.content ?? "",
-                                  maxLine: 150,
-                                  weight: FW.regular,
-                                  align: TextAlign.start,
-                                  height: 1.3),
+                              child:
+                              // H14(
+                              //     text: dicDetailInfo?.content ?? "",
+                              //     maxLine: 150,
+                              //     weight: FW.regular,
+                              //     align: TextAlign.start,
+                              //     height: 1.3),
+                              Linkify(text: dicDetailInfo?.content ?? "",
+                              maxLines: 150,
+                              textAlign: TextAlign.start,
+                              onOpen: (link) async {
+                                if (await canLaunch(link.url)) {
+                                  await launch(link.url);
+                                } else {
+                                  throw 'Could not launch $link';
+                                }
+                              },),
                             ),
 
                             // Container(

@@ -1,5 +1,7 @@
 import Flutter
 import KakaoSDKAuth
+import KakaoSDKUser
+import KakaoSDKCommon
 import NaverThirdPartyLogin
 import UIKit
 
@@ -26,14 +28,34 @@ import UIKit
         }
 
         GeneratedPluginRegistrant.register(with: self)
+//         if let appKey = Bundle.main.object(forInfoDictionaryKey: "66bed5a0bb50d14d57e723a72ec24ce8") as? String {
+//                             KakaoSDKCommon.initSDK(appKey: appKey)
+//                     }
+        KakaoSDK.initSDK(appKey: "${66bed5a0bb50d14d57e723a72ec24ce8}")
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)
     }
     
     override func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
-        if url.absoluteString.hasPrefix("kakao") { //if AuthApi.isKakaoTalkLoginUrl(url) {
-            return AuthController.handleOpenUrl(url: url)
+//         if url.absoluteString.hasPrefix("kakao") { //if AuthApi.isKakaoTalkLoginUrl(url) {
+//             return AuthController.handleOpenUrl(url: url)
+//         }
+//         if (AuthApi.isKakaoTalkLoginUrl(url)) {
+//             return AuthController.handleOpenUrl(url: url)
+//         }
+//         return NaverThirdPartyLoginConnection.getSharedInstance().application(app, open: url, options: options)
+        var result = false
+
+        NSLog("URL = \(url.absoluteString)");
+
+        if url.absoluteString.hasPrefix("kakao"){
+            result = super.application(app, open: url, options: options)
+                }
+        if !result {
+            result = NaverThirdPartyLoginConnection.getSharedInstance().application(app, open: url, options: options)
+            
         }
-        return NaverThirdPartyLoginConnection.getSharedInstance().application(app, open: url, options: options)
+        return result
+
     }
 
 }

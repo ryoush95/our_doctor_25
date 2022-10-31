@@ -136,6 +136,16 @@ class HeightReportState extends BaseState<HeightReport> {
                 cur_value: widget.data.monitoring!.value!),
             widget.result == 1 ? const SizedBox(height: 40) : const SizedBox(),
             widget.result == 1 ? ResultArea(type: 0, result: 2, diagnose: widget.data.monitoring!.diagnose!) : const SizedBox(),
+            const SizedBox(height: 15,),
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16.0)
+              ),
+              width: double.infinity,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(16),
+                  child: Image.network('https://mingles-dev.s3.ap-northeast-2.amazonaws.com/uploads/banner/image_object/15/detail_%E1%84%8F%E1%85%B5%E1%84%8C%E1%85%B3_%E1%84%90%E1%85%B3%E1%86%AB%E1%84%90%E1%85%B3%E1%86%AB%E1%84%8C%E1%85%A6%E1%86%AF%E1%84%85%E1%85%B5_%E1%84%8B%E1%85%A1%E1%84%8B%E1%85%A7%E1%86%AB_3%E1%84%8E%E1%85%A1%E1%84%8B%E1%85%AA%E1%86%AB%E1%84%85%E1%85%AD.png')),
+            )
           ],
         ));
   }
