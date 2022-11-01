@@ -44,7 +44,6 @@ class HeightReportState extends BaseState<HeightReport> {
   void initState() {
     // TODO: implement initState
     getBannerList();
-    rnum = Random().nextInt(7);
     super.initState();
   }
 
@@ -97,6 +96,7 @@ class HeightReportState extends BaseState<HeightReport> {
           arrBannerList.clear();
         }
         arrBannerList = value.data!.list!;
+        rnum = Random().nextInt(arrBannerList.length);
       } else {
         showToast(value.msg ?? "");
         if (value.result == 106) {
@@ -192,7 +192,8 @@ class HeightReportState extends BaseState<HeightReport> {
                 borderRadius: BorderRadius.circular(16.0)
               ),
               width: double.infinity,
-              child: ClipRRect(
+              child: arrBannerList.isEmpty ? Container() :
+              ClipRRect(
                 borderRadius: BorderRadius.circular(16),
                   child: Image.network(
                       arrBannerList[rnum].image!

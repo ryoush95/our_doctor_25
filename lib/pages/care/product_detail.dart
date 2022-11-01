@@ -558,7 +558,7 @@ class ProductDetailtState extends BaseState<ProductDetail> {
         decoration: BoxDecoration(color: AppColor_f4f5f7),
       ),
       Container(
-          padding: const EdgeInsets.fromLTRB(10, 0, 10, 30),
+          padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             InkWell(

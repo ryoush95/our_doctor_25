@@ -1,16 +1,22 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:ourdoctor/global/app_colors.dart';
 import 'package:ourdoctor/global/app_styles.dart';
 import 'package:ourdoctor/global/global.dart';
+import 'package:ourdoctor/global/http_service.dart';
 import 'package:ourdoctor/helpers/common_util.dart';
+import 'package:ourdoctor/helpers/transition.dart';
 import 'package:ourdoctor/language/language_service.dart';
 import 'package:ourdoctor/models/home_grapth_res_model.dart';
+import 'package:ourdoctor/models/homecare_banner_res_model.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
 import 'package:ourdoctor/pages/components/h18.dart';
 import 'package:ourdoctor/pages/components/result_area.dart';
 import 'package:ourdoctor/pages/home/bmi_bar.dart';
 import 'package:ourdoctor/pages/home/range_show.dart';
 import 'package:ourdoctor/pages/home/weight_line_chart.dart';
+import 'package:ourdoctor/pages/intro/first.dart';
 import 'package:show_more_text_popup/show_more_text_popup.dart';
 
 class WeightReport extends StatefulWidget {
@@ -25,9 +31,19 @@ class WeightReport extends StatefulWidget {
 
 class WeightReportState extends BaseState<WeightReport> {
   DateTime now = DateTime.now();
+  final HttpService httpService = HttpService();
+  List<HomeCareBannerDto> arrBannerList = [];
 
   final tooltip = GlobalKey();
   final tooltip1 = GlobalKey();
+  int rnum = 0;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    getBannerList();
+    super.initState();
+  }
 
   void showMoreText() {
     ShowMoreTextPopup popup = ShowMoreTextPopup(context,
@@ -43,6 +59,40 @@ class WeightReportState extends BaseState<WeightReport> {
     popup.show(
       widgetKey: tooltip1,
     );
+  }
+
+  Future<void> getBannerList() async {
+    setState(() {
+      isLoading = true;
+    });
+    String category = "MONITORING";
+
+    Future<HomeCareBannerResModel> info =
+    httpService.homecareBannerList(category);
+    info.then((HomeCareBannerResModel value) async {
+      setState(() {
+        isLoading = false;
+      });
+      if (value.result == 0) {
+        if (arrBannerList.isNotEmpty) {
+          arrBannerList.clear();
+        }
+        arrBannerList = value.data!.list!;
+        rnum = Random().nextInt(arrBannerList.length);
+      } else {
+        showToast(value.msg ?? "");
+        if (value.result == 106) {
+          //token expired
+          Navigator.pushReplacement(
+              context, SlideRightTransRoute(builder: (context) => FirstPage()));
+        }
+      }
+    }).catchError((onError) {
+      setState(() {
+        isLoading = false;
+      });
+      showToast(onError);
+    });
   }
 
   @override
@@ -98,7 +148,22 @@ class WeightReportState extends BaseState<WeightReport> {
                 color: getColorFromString(widget.data.monitoring!.diagnose!.color!),
                 cur_value: widget.data.monitoring!.value!),
             widget.result == 1 ? const SizedBox(height: 40) : const SizedBox(),
-            widget.result == 1 ? ResultArea(type: 1, result: 2, diagnose: widget.data.monitoring!.diagnose!) : const SizedBox(),
+            widget.result == 1 ? ResultArea(type: 1, result: 2, diagnose: widget.data.monitoring!.diagnose!)
+                : const SizedBox(),
+            const SizedBox(height: 15,),
+            Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16.0)
+              ),
+              width: double.infinity,
+              child: arrBannerList.isEmpty ? Container() :
+              ClipRRect(
+                borderRadius: BorderRadius.circular(16),
+                child: Image.network(
+                    arrBannerList[rnum].image!
+                ),
+              ),
+            )
           ],
         ));
   }

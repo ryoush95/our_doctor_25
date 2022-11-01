@@ -283,7 +283,6 @@ class FindInfoPageState extends BaseState<FindInfoPage> {
                                 child: UnderlineInput(
                                   controller: codeInputController,
                                   keyboardType: TextInputType.phone,
-                                  isSecure: true,
                                   textInputAction: TextInputAction.done,
                                   onEditingComplete: () => node.nextFocus(),
                                   placeholder:

@@ -99,8 +99,8 @@ class CareFragmentState extends BaseState<CareFragment>
     eventBus.on<HomeCareTabEvent>().listen((event) {
       if (mounted) {
         category = event.type;
-        getBannerList();
-        getHomeDataInfo();
+        // getBannerList();
+        // getHomeDataInfo();
       }
     });
   }
@@ -166,6 +166,7 @@ class CareFragmentState extends BaseState<CareFragment>
       if (value.result == 0) {
         if (nPage == 0 && arrBannerList!.isNotEmpty) {
           arrBannerList!.clear();
+          bannerList.clear();
         }
         arrBannerList = value.data!.list;
         if (nPage == 0) {
@@ -406,7 +407,8 @@ class CareFragmentState extends BaseState<CareFragment>
 
     return Transform(
       transform: matrix,
-      child: Container(
+      child: bannerList.isEmpty ? Container()
+      :Container(
         padding: const EdgeInsets.only(left: 5, right: 5, top: 10),
         child: ClipRRect(
             borderRadius: BorderRadius.circular(16.0),
