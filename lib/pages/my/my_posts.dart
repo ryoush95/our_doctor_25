@@ -140,7 +140,7 @@ class _MyPostsPageState extends State<MyPostsPage> {
               Container(
                 alignment: Alignment.topLeft,
                 width: imgUrl == "" ? MediaQuery.of(context).size.width - 80 : MediaQuery.of(context).size.width - 160,
-                  child: H18(text: post.title ?? ''),
+                child: H18(text: post.title ?? ''),
               ),
               const SizedBox(height: 6),
               H12(

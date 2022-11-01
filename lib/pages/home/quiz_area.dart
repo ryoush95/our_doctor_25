@@ -59,10 +59,13 @@ class QuizAreaState extends BaseState<QuizArea> {
         // arrNewsList.addAll(value.data!.contents!);
         var l = value.data!.contents!;
         for(var i in l){
+          if(arrNewsList.length >= 10) break;
           if(i.topic == "faq"){
             arrNewsList.add(i);
           }
-
+          if (i.title!.contains("소아 청소년 전문의에게")){
+            arrNewsList.remove(i);
+          }
         }
       }
     }).catchError((onError) {
@@ -75,7 +78,6 @@ class QuizAreaState extends BaseState<QuizArea> {
 
   @override
   Widget build(BuildContext context) {
-    final subArrNewsList = arrNewsList.sublist(1, 6);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 28),
       child: Column(
@@ -96,18 +98,18 @@ class QuizAreaState extends BaseState<QuizArea> {
             ],
           ),
           const SizedBox(height: 12),
-          subArrNewsList != null && subArrNewsList.length > 1
+          !isLoading
               ? SizedBox(
                   width: double.infinity,
                   height: 163,
                   child: ListView.builder(
                       //shrinkWrap: true,
                       //scrollDirection: Axis.vertical,
-                      itemCount: subArrNewsList.length,
+                      itemCount: arrNewsList.length,
                       physics: const NeverScrollableScrollPhysics(),
                       itemBuilder: (BuildContext context, int index) {
                         CommunityDto info =
-                            subArrNewsList.elementAt(index);
+                        arrNewsList.elementAt(index);
                         return InkWell(
                           child: ItemQuiz(item: info),
                           onTap: () async {

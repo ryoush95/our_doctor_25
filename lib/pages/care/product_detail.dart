@@ -52,6 +52,7 @@ class ProductDetailtState extends BaseState<ProductDetail> {
   int shipping_fee = 0;
   var textEditingControllers = <TextEditingController>[];
   int currentPage = 0;
+  bool showProduct = false;
   ProductDetailDto mData = ProductDetailDto();
   List<ProductDto> arrProductList = [];
   List<ProductReviewDto> reviewList = [];
@@ -560,34 +561,46 @@ class ProductDetailtState extends BaseState<ProductDetail> {
           padding: const EdgeInsets.fromLTRB(10, 0, 10, 30),
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: H16(text: "상품정보", weight: FW.bold, align: TextAlign.start),
+            InkWell(
+              onTap: () {
+                showProduct = !showProduct;
+                setState(() {});
+              },
+              child: Row(
+                children: [
+                  H16(text: "상품정보", weight: FW.bold, align: TextAlign.start),
+                  Expanded(child: Container()),
+                  Image.asset(
+                      showProduct
+                          ? 'assets/group_20046.png'
+                          : 'assets/Down-Small.png',
+                      width: 15),
+                  const SizedBox(height: 20),
+                ],
+              ),
             ),
-            const SizedBox(height: 20),
-            Container(
-              decoration: const BoxDecoration(color: AppColor_f4f5f7),
-              child: mData == null || mData.detailImage! == ""
-                  ? const Center(child: CircularProgressIndicator())
-                  : ExtendedImage.network(
-                mData.detailImage!,
-                width: MediaQuery
-                    .of(context)
-                    .size
-                    .width,
-                fit: BoxFit.fitWidth,
+            Visibility(
+              visible: showProduct,
+              child: H14(
+                text: (mData.description != null) ? mData.description! : "",
+                weight: FW.regular,
+                align: TextAlign.start,
+                height: 1.2,
+                maxLine: 100,
               ),
             ),
             const SizedBox(height: 40),
-            H14(
-              text: (mData.description != null) ? mData.description! : "",
-              weight: FW.regular,
-              align: TextAlign.start,
-              height: 1.2,
-              maxLine: 100,
-            ),
-
           ])),
+      Container(
+        decoration: const BoxDecoration(color: AppColor_f4f5f7),
+        child: mData == null || mData.detailImage! == ""
+            ? const Center(child: CircularProgressIndicator())
+            : ExtendedImage.network(
+                mData.detailImage!,
+                width: MediaQuery.of(context).size.width,
+                fit: BoxFit.fitWidth,
+              ),
+      )
     ]);
   }
 

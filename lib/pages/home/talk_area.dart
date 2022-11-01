@@ -59,12 +59,16 @@ class TalkAreaState extends BaseState<TalkArea> {
       if (value.result == 0) {
         // arrNewsList.addAll(value.data!.contents!);
         var l = value.data!.contents!;
-        for(var i in l){
-          if(i.topic == "talk"){
-            arrNewsList.add(i);
+        for(var i in l) {
+            if(arrNewsList.length >= 10) break;
+            if(i.topic == "talk"){
+              arrNewsList.add(i);
+            }
+            if(i.title!.contains("자유롭게") ){
+              arrNewsList.remove(i);
+            }
           }
 
-        }
       }
     }).catchError((onError) {
       setState(() {
@@ -76,8 +80,7 @@ class TalkAreaState extends BaseState<TalkArea> {
 
   @override
   Widget build(BuildContext context) {
-    final subArrNewsList = arrNewsList.sublist(1, 6);
-
+   // arrNewsList.sublist(1, 6);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 28),
       child: Column(
@@ -97,18 +100,18 @@ class TalkAreaState extends BaseState<TalkArea> {
             ],
           ),
           const SizedBox(height: 12),
-          subArrNewsList != null && subArrNewsList.length > 1
+          !isLoading
               ? SizedBox(
                   width: double.infinity,
                   height: 163,
             child: ListView.builder(
               //shrinkWrap: true,
               //scrollDirection: Axis.vertical,
-              itemCount: subArrNewsList.length,
+              itemCount: arrNewsList.length,
               physics: const NeverScrollableScrollPhysics(),
               itemBuilder: (BuildContext context, int index) {
                 CommunityDto info =
-                subArrNewsList.elementAt(index);
+                arrNewsList.elementAt(index);
                 return InkWell(
                     child: ItemQuiz(item: info),
                     onTap: () {

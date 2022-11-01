@@ -16,6 +16,7 @@ import 'package:ourdoctor/models/mbti_quiz_list_res_model.dart';
 import 'package:ourdoctor/pages/app_event.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
 import 'package:ourdoctor/pages/base/page_layout.dart';
+import 'package:ourdoctor/pages/components/h14.dart';
 import 'package:ourdoctor/pages/components/h16.dart';
 import 'package:ourdoctor/pages/components/h18.dart';
 import 'package:ourdoctor/pages/components/h20.dart';
@@ -108,7 +109,7 @@ class CustomMbtiInspectionResultPageState
                         children: [
                           childRecommendation(),
                           Container(
-                            height: 880,
+                            height: 862,
                             width: double.infinity,
                             color: AppColor_Banner_Count,
                             child: Column(
@@ -206,7 +207,7 @@ class CustomMbtiInspectionResultPageState
           ),
           Container(
             color: Colors.white,
-            height: 410,
+            height: 470,
             padding: const EdgeInsets.only(left: 25, right: 25),
             child: Stack(
               children: [
@@ -992,15 +993,7 @@ class CustomMbtiInspectionResultPageState
           children: [
             SizedBox(
               child: Image.asset(
-                  "assets/mbti_background_icon.png"),
-            ),
-            Container(
-              margin: const EdgeInsets.only(left: 200),
-              child: Image.asset(
-                "assets/mbti_background_icon1.png",
-                width: 80,
-                height: 110,
-              ),
+                  "assets/mbti_background_change_image.png"),
             ),
             Positioned(
                 top: 210,
@@ -1016,7 +1009,7 @@ class CustomMbtiInspectionResultPageState
                         .size
                         .width -
                         70),
-                    height: 58,
+                    height: 56,
                     disableBackground:
                     AppColor_Primary_Disable,
                     onPressed: () {
@@ -1028,6 +1021,17 @@ class CustomMbtiInspectionResultPageState
                       // const CustomMbtiInspectionMainPage();
                     },
                   ),
+                )),
+           Positioned(
+                top: 280,
+                child: Center(
+                  child: Row(
+                    children: [
+                      H14(text: "© 2021. mingling Inc.All rights reserved.\n 모든 저작권은 (주)밍글링에 있습니다. ",
+                        maxLine: 2,
+                      color: Colors.black45,height: 1.2,)
+                    ],
+                  )
                 )),
             const SizedBox(height: 30),
           ],
@@ -1312,7 +1316,7 @@ class CustomMbtiInspectionResultPageState
                     bottom: Radius.circular(15)),
               ),
               child: Container(
-                  padding: const EdgeInsets.only(left: 23, right: 23),
+                  padding: const EdgeInsets.only(left: 18, right: 18),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
