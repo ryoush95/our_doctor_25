@@ -45,8 +45,6 @@ import UIKit
 //         return NaverThirdPartyLoginConnection.getSharedInstance().application(app, open: url, options: options)
         var result = false
 
-        NSLog("URL = \(url.absoluteString)");
-
         if url.absoluteString.hasPrefix("kakao"){
             result = super.application(app, open: url, options: options)
                 }
