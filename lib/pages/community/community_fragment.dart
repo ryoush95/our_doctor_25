@@ -48,6 +48,8 @@ class CommunityFragmenttState extends BaseState<CommunityFragment> {
   List<String> subCategories = ["0-12개월", "13-36개월", "37-72개월", "초1-3학년", "초4-6학년"];
   String? _selection = "최신순";
 
+  int age = 0;
+
   @override
   void initState() {
     super.initState();
@@ -72,6 +74,27 @@ class CommunityFragmenttState extends BaseState<CommunityFragment> {
     eventBus.on<SelectChildEvent>().listen((event) {
       if (mounted) {
         refresh();
+      }
+    });
+
+    final now = DateTime.now();
+    int nowy = now.year;
+    int nowm = now.month;
+    final birth = DateTime.parse(gSelChildInfo!.birth!);
+    int birthy = birth.year;
+    int birthm = birth.month;
+    age = ((nowy-birthy) * 12) + (nowm - birthm);
+    setState(() {
+      if(age <= 12){
+        nSubTabIndex = 0;
+      } else if(age > 12 || 36 >= age){
+        nSubTabIndex = 1;
+      }else if(age > 37 || 72 >= age){
+        nSubTabIndex = 2;
+      }else if(age > 73 || 108 >= age){
+        nSubTabIndex = 3;
+      }else {
+        nSubTabIndex = 4;
       }
     });
   }
@@ -319,7 +342,20 @@ class CommunityFragmenttState extends BaseState<CommunityFragment> {
             _isSearching = false;
             searchController.clear();
             nTabIndex = index;
-            nSubTabIndex = 0;
+            // nSubTabIndex = 0;
+            setState(() {
+              if(age <= 12){
+                nSubTabIndex = 0;
+              } else if(age > 12 && 36 >= age){
+                nSubTabIndex = 1;
+              }else if(age > 37 && 72 >= age){
+                nSubTabIndex = 2;
+              }else if(age > 73 && 108 >= age){
+                nSubTabIndex = 3;
+              }else {
+                nSubTabIndex = 4;
+              }
+            });
             nPage = 0;
             Provider.of<ConvertScoreProvider>(context, listen: false).changeTab(index);
             getCommunityList();

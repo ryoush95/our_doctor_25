@@ -1,10 +1,15 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:ourdoctor/global/app_colors.dart';
 import 'package:ourdoctor/global/app_styles.dart';
 import 'package:ourdoctor/global/global.dart';
+import 'package:ourdoctor/global/http_service.dart';
 import 'package:ourdoctor/helpers/common_util.dart';
+import 'package:ourdoctor/helpers/transition.dart';
 import 'package:ourdoctor/language/language_service.dart';
 import 'package:ourdoctor/models/home_grapth_res_model.dart';
+import 'package:ourdoctor/models/homecare_banner_res_model.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
 import 'package:ourdoctor/pages/components/h18.dart';
 import 'package:ourdoctor/pages/components/h32_b.dart';
@@ -12,6 +17,7 @@ import 'package:ourdoctor/pages/components/result_area.dart';
 import 'package:ourdoctor/pages/home/bmi_bar1.dart';
 import 'package:ourdoctor/pages/home/height_line_chart.dart';
 import 'package:ourdoctor/pages/home/range_show.dart';
+import 'package:ourdoctor/pages/intro/first.dart';
 import 'package:show_more_text_popup/show_more_text_popup.dart';
 import 'package:sprintf/sprintf.dart';
 
@@ -27,9 +33,20 @@ class HeightReport extends StatefulWidget {
 
 class HeightReportState extends BaseState<HeightReport> {
   DateTime now = DateTime.now();
+  final HttpService httpService = HttpService();
+  List<HomeCareBannerDto> arrBannerList = [];
 
   final tooltip = GlobalKey();
   final tooltip1 = GlobalKey();
+  int rnum = 0;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    getBannerList();
+    rnum = Random().nextInt(7);
+    super.initState();
+  }
 
   void showMoreText() {
     ShowMoreTextPopup popup = ShowMoreTextPopup(context,
@@ -61,6 +78,39 @@ class HeightReportState extends BaseState<HeightReport> {
     popup.show(
       widgetKey: tooltip1,
     );
+  }
+
+  Future<void> getBannerList() async {
+    setState(() {
+      isLoading = true;
+    });
+    String category = "MONITORING";
+
+    Future<HomeCareBannerResModel> info =
+    httpService.homecareBannerList(category);
+    info.then((HomeCareBannerResModel value) async {
+      setState(() {
+        isLoading = false;
+      });
+      if (value.result == 0) {
+        if (arrBannerList.isNotEmpty) {
+          arrBannerList.clear();
+        }
+        arrBannerList = value.data!.list!;
+      } else {
+        showToast(value.msg ?? "");
+        if (value.result == 106) {
+          //token expired
+          Navigator.pushReplacement(
+              context, SlideRightTransRoute(builder: (context) => FirstPage()));
+        }
+      }
+    }).catchError((onError) {
+      setState(() {
+        isLoading = false;
+      });
+      showToast(onError);
+    });
   }
 
   @override
@@ -144,7 +194,10 @@ class HeightReportState extends BaseState<HeightReport> {
               width: double.infinity,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(16),
-                  child: Image.network('https://mingles-dev.s3.ap-northeast-2.amazonaws.com/uploads/banner/image_object/15/detail_%E1%84%8F%E1%85%B5%E1%84%8C%E1%85%B3_%E1%84%90%E1%85%B3%E1%86%AB%E1%84%90%E1%85%B3%E1%86%AB%E1%84%8C%E1%85%A6%E1%86%AF%E1%84%85%E1%85%B5_%E1%84%8B%E1%85%A1%E1%84%8B%E1%85%A7%E1%86%AB_3%E1%84%8E%E1%85%A1%E1%84%8B%E1%85%AA%E1%86%AB%E1%84%85%E1%85%AD.png')),
+                  child: Image.network(
+                      arrBannerList[rnum].image!
+                  ),
+              ),
             )
           ],
         ));
