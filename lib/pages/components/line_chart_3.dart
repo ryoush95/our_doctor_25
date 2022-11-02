@@ -526,14 +526,14 @@ class _LineChart3WidgetState extends State<LineChart3Widget> {
     if (widget.type == 'height') {
       for (var report in widget.data1!.graph!) {
         if (report.child! != '' && double.parse(report.child!) != 0.0) {
-          spotList.add(FlSpot(i, double.parse(report.child!)));
+          spotList.add(FlSpot(i, double.parse(report.child!).roundToDouble()));
         }
         i += 1;
       }
     } else if (widget.type == 'weight') {
       for (var report in widget.data2!.graph!) {
         if (report.child! != '' && double.parse(report.child!) != 0.0) {
-          spotList.add(FlSpot(i, double.parse(report.child!)));
+          spotList.add(FlSpot(i, double.parse(report.child!).roundToDouble()));
         }
         i += 1;
       }

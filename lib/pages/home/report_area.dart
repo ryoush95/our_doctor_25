@@ -512,7 +512,7 @@ class ReportAreaState extends BaseState<ReportArea> with TickerProviderStateMixi
                                 textAlign: TextAlign.start,
                                 text: TextSpan(children: [
 
-                                  TextSpan(text: sprintf(LanguageService.trans('%.1fcm '), [dicHomeGraphTallInfo!.heightPrevDiff]), style: AppTextStyle.PD(AppColor_BlackText, 18, height: 1.8)),
+                                  TextSpan(text: sprintf(LanguageService.trans('%.1fcm '), [(dicHomeGraphTallInfo!.heightPrevDiff)!.abs()]), style: AppTextStyle.PD(AppColor_BlackText, 18, height: 1.8)),
                                   TextSpan(text: dicHomeGraphTallInfo!.heightPrevDiff! >= 0.0 ? '더 늘어났어요.' : '줄어들었어요.', style: AppTextStyle.PD(AppColor_BlackText, 18, weight: FW.regular)),
                                 ]),
                               ),
@@ -565,7 +565,7 @@ class ReportAreaState extends BaseState<ReportArea> with TickerProviderStateMixi
                                 softWrap: true,
                                 textAlign: TextAlign.start,
                                 text: TextSpan(children: [
-                                  TextSpan(text: sprintf(LanguageService.trans('%.1fkg '), [dicHomeGraphWeightInfo!.weightPrevDiff]), style: AppTextStyle.PD(AppColor_BlackText, 18, height: 1.8)),
+                                  TextSpan(text: sprintf(LanguageService.trans('%.1fkg '), [(dicHomeGraphWeightInfo!.weightPrevDiff)!.abs()]), style: AppTextStyle.PD(AppColor_BlackText, 18, height: 1.8)),
                                   TextSpan(text: dicHomeGraphWeightInfo!.weightPrevDiff! >= 0.0 ? '더 늘어났어요.' : '줄어들었어요.', style: AppTextStyle.PD(AppColor_BlackText, 18, weight: FW.regular)),
                                 ]),
                               ),

@@ -399,15 +399,32 @@ class CommunityDetailPageState extends BaseState<CommunityDetailPage> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      H14(
+                      // H14(
+                      //   text: info.delYn == "y"
+                      //       ? LanguageService.trans("deleted_comment")
+                      //       : info.content!,
+                      //   weight: FW.regular,
+                      //   maxLine: 100,
+                      //   color: AppColor_BlackText,
+                      //   align: TextAlign.left,
+                      //   height: 1.3,
+                      // ),
+                      Linkify(
                         text: info.delYn == "y"
                             ? LanguageService.trans("deleted_comment")
                             : info.content!,
-                        weight: FW.regular,
-                        maxLine: 100,
-                        color: AppColor_BlackText,
-                        align: TextAlign.left,
-                        height: 1.3,
+                        maxLines: 150,
+                        style: TextStyle(
+                          fontSize: 14,
+                        ),
+                        textAlign: TextAlign.left,
+                        onOpen: (link) async {
+                          if (await canLaunch(link.url)) {
+                            await launch(link.url);
+                          } else {
+                            throw 'Could not launch $link';
+                          }
+                        },
                       ),
                       const SizedBox(height: 10),
                       Row(
