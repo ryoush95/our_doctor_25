@@ -60,11 +60,8 @@ class QuizAreaState extends BaseState<QuizArea> {
         var l = value.data!.contents!;
         for(var i in l){
           if(arrNewsList.length >= 10) break;
-          if(i.topic == "faq"){
+          if(i.topic == "faq" && i.admin == "0"){
             arrNewsList.add(i);
-          }
-          if (i.title!.contains("소아 청소년 전문의에게")){
-            arrNewsList.remove(i);
           }
         }
       }
@@ -97,7 +94,7 @@ class QuizAreaState extends BaseState<QuizArea> {
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 22),
           !isLoading
               ? SizedBox(
                   width: double.infinity,
@@ -105,7 +102,7 @@ class QuizAreaState extends BaseState<QuizArea> {
                   child: ListView.builder(
                       //shrinkWrap: true,
                       //scrollDirection: Axis.vertical,
-                      itemCount: arrNewsList.length,
+                      itemCount: 4,
                       physics: const NeverScrollableScrollPhysics(),
                       itemBuilder: (BuildContext context, int index) {
                         CommunityDto info =

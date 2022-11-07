@@ -30,6 +30,7 @@ import 'package:ourdoctor/pages/intro/first.dart';
 import 'package:ourdoctor/pages/my/review_fragment.dart';
 import 'package:ourdoctor/pages/my/shopping_basket.dart';
 import 'package:sprintf/sprintf.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProductDetail extends StatefulWidget {
   ProductDetail({
@@ -60,6 +61,7 @@ class ProductDetailtState extends BaseState<ProductDetail> {
   late PageController _pageController;
   late ScrollController _listController;
   List _items = [];
+  final _url = 'https://wooadoctor.com/store/products/';
 
   //리스트뷰 컨트롤러
   late ScrollController controller;
@@ -424,8 +426,9 @@ class ProductDetailtState extends BaseState<ProductDetail> {
                       ))),
             ),
             InkWell(
-              onTap: () {
-                showReviewDialog();
+              onTap: () async {
+                // showReviewDialog();
+                await launch(_url + mData.id!);
               },
               child: Container(
                 height: 58,

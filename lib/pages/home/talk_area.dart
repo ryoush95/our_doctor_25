@@ -62,10 +62,12 @@ class TalkAreaState extends BaseState<TalkArea> {
         for(var i in l) {
             if(arrNewsList.length >= 10) break;
             if(i.topic == "talk"){
-              arrNewsList.add(i);
-            }
-            if(i.title!.contains("자유롭게") ){
-              arrNewsList.remove(i);
+              if(arrNewsList.isEmpty && i.admin == "1") {
+                arrNewsList.add(i);
+              }
+              if(i.admin == "0") {
+                arrNewsList.add(i);
+              }
             }
           }
 
@@ -83,7 +85,7 @@ class TalkAreaState extends BaseState<TalkArea> {
    // arrNewsList.sublist(1, 6);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 28),
-      child: Column(
+      child: !isLoading ? Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -100,18 +102,39 @@ class TalkAreaState extends BaseState<TalkArea> {
             ],
           ),
           const SizedBox(height: 12),
+          arrNewsList[0].imgUrl == "" ? Container() :
+          InkWell(
+            onTap: (){
+              if(widget.curCategory == 0) {
+                Navigator.push(context, SlideRightTransRoute(
+                    builder: (context) => CommunityDetailPage(
+                      uid: arrNewsList.elementAt(0).uid,
+                      videoUrl: arrNewsList.elementAt(0).blogUrl,
+                    )));
+              } else {
+                Navigator.push(context, SlideRightTransRoute(
+                    builder: (context) => CommunityDetailPage(
+                      uid: arrNewsList.elementAt(0).uid,
+                    )));
+              }
+            },
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(16),
+                  child: Image.network(arrNewsList.elementAt(0).imgUrl!)),
+          ),
+          const SizedBox(height: 22),
           !isLoading
               ? SizedBox(
                   width: double.infinity,
-                  height: 163,
+                  height: 123,
             child: ListView.builder(
               //shrinkWrap: true,
               //scrollDirection: Axis.vertical,
-              itemCount: arrNewsList.length,
+              itemCount: 3,
               physics: const NeverScrollableScrollPhysics(),
               itemBuilder: (BuildContext context, int index) {
                 CommunityDto info =
-                arrNewsList.elementAt(index);
+                arrNewsList.elementAt(index+1);
                 return InkWell(
                     child: ItemQuiz(item: info),
                     onTap: () {
@@ -134,7 +157,7 @@ class TalkAreaState extends BaseState<TalkArea> {
           )
               : const SizedBox(),
         ],
-      ),
+      ): Container(),
     );
   }
 }

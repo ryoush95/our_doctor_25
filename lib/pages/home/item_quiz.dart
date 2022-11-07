@@ -59,12 +59,6 @@ class ItemQuizState extends BaseState<ItemQuiz> {
               child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              const Divider(
-                height: 1,
-                color: Colors.black26,
-                thickness: 1,
-              ),
-              const SizedBox(height: 10),
               Row(
                 children: [
                   const SizedBox(width: 7),
@@ -98,6 +92,12 @@ class ItemQuizState extends BaseState<ItemQuiz> {
                     ),
                   ),
                 ],
+              ),
+              const SizedBox(height: 10),
+              const Divider(
+                height: 1,
+                color: Colors.black26,
+                thickness: 1,
               ),
             ],
           ),

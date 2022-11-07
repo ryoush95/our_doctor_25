@@ -150,7 +150,7 @@ class WeightReportState extends BaseState<WeightReport> {
             widget.result == 1 ? const SizedBox(height: 40) : const SizedBox(),
             widget.result == 1 ? ResultArea(type: 1, result: 2, diagnose: widget.data.monitoring!.diagnose!)
                 : const SizedBox(),
-            const SizedBox(height: 15,),
+            const SizedBox(height: 30,),
             Container(
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(16.0)

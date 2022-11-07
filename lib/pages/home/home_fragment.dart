@@ -190,9 +190,9 @@ class HomeFragmentState extends BaseState<HomeFragment> {
                     const SizedBox(height: 30),
                     // searchBar(),
                     // const SizedBox(height: 30,),
-                    QuizArea(),//질문
-                    const SizedBox(height: 50),
                     TalkArea(),//게시판
+                    const SizedBox(height: 50),
+                    QuizArea(),//질문
                     const SizedBox(height: 50),
                     NewsArea(curCategory: 1),//뉴스
                     const SizedBox(height: 50),

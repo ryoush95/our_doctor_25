@@ -97,6 +97,7 @@ class HeightReportState extends BaseState<HeightReport> {
         }
         arrBannerList = value.data!.list!;
         rnum = Random().nextInt(arrBannerList.length);
+        setState(() {});
       } else {
         showToast(value.msg ?? "");
         if (value.result == 106) {
@@ -186,7 +187,7 @@ class HeightReportState extends BaseState<HeightReport> {
                 cur_value: widget.data.monitoring!.value!),
             widget.result == 1 ? const SizedBox(height: 40) : const SizedBox(),
             widget.result == 1 ? ResultArea(type: 0, result: 2, diagnose: widget.data.monitoring!.diagnose!) : const SizedBox(),
-            const SizedBox(height: 15,),
+            const SizedBox(height: 30,),
             Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16.0)
