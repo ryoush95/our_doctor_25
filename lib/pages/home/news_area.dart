@@ -15,6 +15,7 @@ import 'package:ourdoctor/pages/community/community_detail.dart';
 import 'package:ourdoctor/pages/components/h14.dart';
 import 'package:ourdoctor/pages/components/h20.dart';
 import 'package:ourdoctor/pages/home/item_news.dart';
+import 'package:ourdoctor/pages/home/test_store_area.dart';
 import 'package:ourdoctor/pages/intro/first.dart';
 import 'package:ourdoctor/pages/app_event.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
@@ -85,7 +86,7 @@ class NewsAreaState extends BaseState<NewsArea> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              H20(text: LanguageService.trans('뉴스')),
+              H20(text: "우아테스트"),
               InkWell(
                 onTap: () {
                   eventBus.fire(MoreCommunityEvent(type: 1));
@@ -96,14 +97,16 @@ class NewsAreaState extends BaseState<NewsArea> {
             ],
           ),
           const SizedBox(height: 12),
+          TestStoreArea(),
+          const SizedBox(height: 12),
           !isLoading
               ? SizedBox(
                   width: double.infinity,
-                  height: 220,
+                  height: 120,
                   child: ListView.builder(
                       shrinkWrap: true,
-                      scrollDirection: Axis.horizontal,
-                      itemCount: arrNewsList.length,
+                      itemCount: 3,
+                      physics: NeverScrollableScrollPhysics(),
                       itemBuilder: (BuildContext context, int index) {
                         CommunityDto info =
                              arrNewsList.elementAt(index);

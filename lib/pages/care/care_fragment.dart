@@ -15,6 +15,7 @@ import 'package:ourdoctor/pages/app_event.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
 import 'package:ourdoctor/pages/base/page_layout.dart';
 import 'package:ourdoctor/pages/care/homecare_list.dart';
+import 'package:ourdoctor/pages/care/product_detail.dart';
 import 'package:ourdoctor/pages/care/product_list.dart';
 import 'package:ourdoctor/pages/care/product_show.dart';
 import 'package:ourdoctor/pages/care/product_show1.dart';
@@ -209,7 +210,7 @@ class CareFragmentState extends BaseState<CareFragment>
     } else if (tabIndex == 1) {
       category = "DEVELOPMENT";
     } else {
-      category = "MBTI";
+      category = "TEST";
     }
 
     Future<HomeCareDataResModel> info = httpService.homecareDataInfo(category);
@@ -410,10 +411,22 @@ class CareFragmentState extends BaseState<CareFragment>
       child: bannerList.isEmpty ? Container()
       :Container(
         padding: const EdgeInsets.only(left: 5, right: 5, top: 10),
-        child: ClipRRect(
-            borderRadius: BorderRadius.circular(16.0),
-            child:bannerList[index %arrBannerList!.length],
-            ),
+        child: InkWell(
+          onTap: () {
+            if (arrBannerList!.isNotEmpty) {
+              Navigator.push(
+                  context, SlideRightTransRoute(builder: (context) =>
+                  ProductDetail(
+                    pid: arrBannerList![index % arrBannerList!.length].url!,
+                  )));
+
+            }
+          },
+          child: ClipRRect(
+              borderRadius: BorderRadius.circular(16.0),
+              child: bannerList[index % arrBannerList!.length],
+              ),
+        ),
         ),
     );
   }

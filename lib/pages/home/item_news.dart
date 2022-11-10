@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:ourdoctor/global/app_colors.dart';
@@ -13,102 +14,105 @@ class ItemNews extends StatefulWidget {
   const ItemNews({Key? key, required this.item}) : super(key: key);
 
   final CommunityDto item;
+
   @override
   ItemNewsState createState() => ItemNewsState();
 }
 
 class ItemNewsState extends BaseState<ItemNews> {
   CommunityDetailDto? dicDetailInfo;
-
+  List<CommunityDto> arrCommunityList = [];
 
   String getTopicName(String topic) {
-      String result = "";
-      if (topic == "notice") {
-        result = "공지/이벤트";
-      } else if (topic == "treatment") {
-        result = "뉴스";
-      } else if (topic == "school") {
-        result = "교육";
-      } else if (topic == "faq") {
-        result = "질문";
-      } else if (topic == "talk") {
-        result = "자유게시판";
-      } else {
-        result = "우아팁";
-      }
-      return result;
-
+    String result = "";
+    if (topic == "notice") {
+      result = "공지/이벤트";
+    } else if (topic == "treatment") {
+      result = "뉴스";
+    } else if (topic == "school") {
+      result = "교육";
+    } else if (topic == "faq") {
+      result = "질문";
+    } else if (topic == "talk") {
+      result = "자유게시판";
+    } else {
+      result = "우아팁";
+    }
+    return result;
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 190,
-      height: 190,
+      width: MediaQuery.of(context).size.width * .7,
+      height: 40,
       margin: const EdgeInsets.only(right: 10),
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-      decoration: BoxDecoration(
+      //padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+
+      /* decoration: BoxDecoration(
         color: Colors.white,
         border: Border.all(color: AppColor_Selector_Border),
         borderRadius: const BorderRadius.all(Radius.circular(8)),
-      ),
+      ),*/
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Row(
             children: [
-              //H14(text: dicDetailInfo == null ? "treatment" : getTopicName(dicDetailInfo!.topic!),),
-              H14(text: "[" + getTopicName(widget.item.topic!) + "]", weight: FW.semi_bold, color: AppColor_Primary),
-              const SizedBox(width: 5),
-              // Expanded(
-              //   child: Text(
-              //     widget.item.title!,
-              //     textAlign: TextAlign.start,
-              //     style: const TextStyle(
-              //       fontWeight: FontWeight.w600,
-              //       color: AppColor_BlackText,
-              //     ),
-              //     maxLines: 1,
-              //   )
-              // ),
+              const SizedBox(width: 7),
+              H14(
+                  text: "[" + getTopicName(widget.item.topic!) + "]",
+                  weight: FW.semi_bold,
+                  color: AppColor_Primary),
+              const SizedBox(width: 7),
               Expanded(
                 child: H14(
                   text: widget.item.title!,
                   weight: FW.semi_bold,
-                  align: TextAlign.start,
+                  align: TextAlign.left,
                   color: AppColor_BlackText,
                   ellipsis: false,
                 ),
               ),
-            ],
-          ),
-          Visibility(
-              visible: widget.item.imgUrl! != "",
-              child: Container(
-                margin: const EdgeInsets.only(top: 10,bottom: 8),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(8.0),
-                  child: ExtendedImage.network(
-                    widget.item.imgUrl!,
-
-                    height: 158,
-                    fit: BoxFit.fill,
+              Container(
+                width: 70,
+                child: AutoSizeText(
+                  getcontent(widget.item),
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    color: AppColor_BlackText.withOpacity(.4),
+                    fontSize: 10,
                   ),
+                  maxLines: 1,
+                  maxFontSize: 12,
+                  minFontSize: 8,
+                  textAlign: TextAlign.right,
                 ),
               ),
-            ),
-          // H12(
-          //   text: widget.item.content!,
-          //   weight: FW.medium,
-          //   color: AppColor_GrayText,
-          //   height: 1.5,
-          //   align: TextAlign.start,
-          //   maxLine: widget.item.imgUrl! != "" ? 4 : 16,
-          // ),
-          // const SizedBox(height: 8),
-          // H12(text: LanguageService.trans('more'), color: AppColor_Primary),
+            ],
+          ),
+          const SizedBox(height: 10),
+          const Divider(
+            height: 1,
+            color: Colors.black26,
+            thickness: 1,
+          ),
         ],
       ),
     );
+  }
+
+  String getcontent(CommunityDto info) {
+    String result = "";
+
+    if (info.topic! != "") {
+      result = ""
+              //diffTime(info.regTime!) +
+              "좋아요 " +
+          info.likeCnt.toString() +
+          "·댓글 " +
+          info.commentCnt.toString();
+    }
+    return result;
   }
 }

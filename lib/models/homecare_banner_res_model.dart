@@ -54,6 +54,7 @@ class HomeCareBannerDto {
   String? title;
   String? content;
   String? image;
+  String? url;
 
   HomeCareBannerDto({this.id, this.category, this.title, this.content, this.image});
 
@@ -63,6 +64,7 @@ class HomeCareBannerDto {
     title = json['title'];
     content = json['content'];
     image = json['image'];
+    url = json['url'] ?? "";
   }
 
   Map<String, dynamic> toJson() {
@@ -72,6 +74,7 @@ class HomeCareBannerDto {
     data['title'] = this.title;
     data['content'] = this.content;
     data['image'] = this.image;
+    data['url'] = this.url;
     return data;
   }
 }

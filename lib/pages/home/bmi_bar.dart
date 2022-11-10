@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ourdoctor/global/app_colors.dart';
 import 'package:ourdoctor/global/app_styles.dart';
@@ -33,7 +34,7 @@ class BMIBarState extends BaseState<BMIBar> {
         text: widget.tiptext,
         textStyle: AppTextStyle.PD(AppColor_BlackText, 14, height: 1.2),
         height: 55,
-        width: 205,
+        width: 215,
         backgroundColor: Colors.white,
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         borderRadius: BorderRadius.circular(
@@ -43,6 +44,71 @@ class BMIBarState extends BaseState<BMIBar> {
     popup.show(
       widgetKey: tooltip,
     );
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    hideEntry();
+    super.dispose();
+  }
+
+  final tip = GlobalKey();
+  OverlayEntry? entry;
+  final LayerLink _link = LayerLink();
+  bool _tipShow = false;
+
+  void showTip() {
+    final overlay = Overlay.of(context)!;
+    final renderBox = context.findRenderObject() as RenderBox;
+    // final size = renderBox.size;
+
+    entry = OverlayEntry(builder: (context) {
+      return Positioned(
+        width: 205,
+        height: 65,
+        child: CompositedTransformFollower(
+          link: _link,
+          showWhenUnlinked: false,
+          offset: Offset(-100, 40),
+          child: Container(
+            decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(color: AppColor_Selector_Border)),
+            child: CupertinoButton(
+                child: Text(widget.tiptext, style: AppTextStyle.PD(AppColor_BlackText, 14, height: 1.2)),
+                onPressed: () {
+                  // hideEntry();
+                  setState(() {
+                    if(_tipShow || entry == null){
+                      showTip();
+                      insertEntry();
+                      _tipShow = false;
+                    } else if (!_tipShow && entry != null){
+                      hideEntry();
+                      _tipShow = true;
+                    } else {
+                      _tipShow = !_tipShow;
+                    }
+                  });
+                }),
+          ),
+        ),
+      );
+    });
+  }
+
+  void insertEntry() {
+    final overlayState = Overlay.of(context);
+    if (mounted) {
+      overlayState!.insert(entry!);
+    }
+  }
+
+  void hideEntry() {
+    if (mounted) {
+      entry!.remove();
+    }
   }
 
   @override
@@ -62,11 +128,27 @@ class BMIBarState extends BaseState<BMIBar> {
                   visible: widget.type == 1,
                   child: InkWell(
                     key: const Key('show_more_ink_well'),
-                    child: Container(
-                      key: tooltip,
-                      child: Image.asset('assets/question_mark_black_24dp.png', width: 22),
+                    child: CompositedTransformTarget(
+                      link: _link,
+                      child: Container(
+                        key: tip,
+                        child: Image.asset('assets/question_mark_black_24dp.png', width: 22),
+                      ),
                     ),
-                    onTap: showMoreText,
+                    onTap: () {
+                      setState(() {
+                        if(_tipShow || entry == null){
+                          showTip();
+                          insertEntry();
+                          _tipShow = false;
+                        } else if (!_tipShow && entry != null){
+                          hideEntry();
+                          _tipShow = true;
+                        } else {
+                          _tipShow = !_tipShow;
+                        }
+                      });
+                    },
                   ),
                 ),
                 Visibility(

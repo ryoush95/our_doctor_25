@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ourdoctor/global/app_colors.dart';
 import 'package:ourdoctor/global/app_styles.dart';
@@ -11,6 +12,7 @@ import 'package:ourdoctor/language/language_service.dart';
 import 'package:ourdoctor/models/home_grapth_res_model.dart';
 import 'package:ourdoctor/models/homecare_banner_res_model.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
+import 'package:ourdoctor/pages/care/product_detail.dart';
 import 'package:ourdoctor/pages/components/h18.dart';
 import 'package:ourdoctor/pages/components/result_area.dart';
 import 'package:ourdoctor/pages/home/bmi_bar.dart';
@@ -45,6 +47,14 @@ class WeightReportState extends BaseState<WeightReport> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    hideEntry();
+    entry = null;
+    super.dispose();
+  }
+
   void showMoreText() {
     ShowMoreTextPopup popup = ShowMoreTextPopup(context,
         text: LanguageService.trans("report_guie"), textStyle: AppTextStyle.PD(AppColor_BlackText, 12), height: 87, width: 200, backgroundColor: Colors.white, padding: EdgeInsets.symmetric(horizontal: 4, vertical: 10), borderRadius: BorderRadius.circular(10.0), onDismiss: () {});
@@ -59,6 +69,64 @@ class WeightReportState extends BaseState<WeightReport> {
     popup.show(
       widgetKey: tooltip1,
     );
+  }
+
+  final tip = GlobalKey();
+  OverlayEntry? entry;
+  final LayerLink _link = LayerLink();
+  bool _tipShow = false;
+
+  void showTip() {
+    final overlay = Overlay.of(context)!;
+    final renderBox = context.findRenderObject() as RenderBox;
+    // final size = renderBox.size;
+
+    entry = OverlayEntry(builder: (context) {
+      return Positioned(
+        width: 205,
+        height: 65,
+        child: CompositedTransformFollower(
+          link: _link,
+          showWhenUnlinked: false,
+          offset: Offset(-100, 40),
+          child: Container(
+            decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(color: AppColor_Selector_Border)),
+            child: CupertinoButton(
+                child: Text("보건복지부 및 대한소아과학회\n소아청소년 성장도표 기준", style: AppTextStyle.PD(AppColor_BlackText, 14, height: 1.2)),
+                onPressed: () {
+                  // hideEntry();
+                  setState(() {
+                    if(_tipShow || entry == null){
+                      showTip();
+                      insertEntry();
+                      _tipShow = false;
+                    } else if (!_tipShow && entry != null){
+                      hideEntry();
+                      _tipShow = true;
+                    } else {
+                      _tipShow = !_tipShow;
+                    }
+                  });
+                }),
+          ),
+        ),
+      );
+    });
+  }
+
+  void insertEntry() {
+    OverlayState? overlayState = Overlay.of(context);
+    if (mounted) {
+      overlayState!.insert(entry!);
+    }
+  }
+
+  void hideEntry() {
+    if (mounted) {
+      entry!.remove();
+    }
   }
 
   Future<void> getBannerList() async {
@@ -126,11 +194,27 @@ class WeightReportState extends BaseState<WeightReport> {
                   const SizedBox(width: 5),
                   InkWell(
                     key: const Key('show_more_ink_well'),
-                    child: Container(
-                      key: tooltip1,
-                      child: Image.asset('assets/question_mark_black_24dp.png', width: 22),
+                    child: CompositedTransformTarget(
+                      link: _link,
+                      child: Container(
+                        key: tip,
+                        child: Image.asset('assets/question_mark_black_24dp.png', width: 22),
+                      ),
                     ),
-                    onTap: showMoreText1,
+                    onTap: () {
+                      setState(() {
+                        if(_tipShow || entry == null){
+                          showTip();
+                          insertEntry();
+                          _tipShow = false;
+                        } else if (!_tipShow && entry != null){
+                          hideEntry();
+                          _tipShow = true;
+                        } else {
+                          _tipShow = !_tipShow;
+                        }
+                      });
+                    },
                   ),
                 ],
               ),
@@ -151,13 +235,18 @@ class WeightReportState extends BaseState<WeightReport> {
             widget.result == 1 ? ResultArea(type: 1, result: 2, diagnose: widget.data.monitoring!.diagnose!)
                 : const SizedBox(),
             const SizedBox(height: 30,),
-            Container(
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16.0)
-              ),
-              width: double.infinity,
-              child: arrBannerList.isEmpty ? Container() :
-              ClipRRect(
+            arrBannerList.isEmpty ? Container() :
+            InkWell(
+              onTap:(){
+                if(arrBannerList[rnum].url! != "") {
+                  Navigator.push(
+                      context, SlideRightTransRoute(builder: (context) =>
+                      ProductDetail(
+                        pid: arrBannerList[rnum].url!,
+                      )));
+                }
+              },
+              child: ClipRRect(
                 borderRadius: BorderRadius.circular(16),
                 child: Image.network(
                     arrBannerList[rnum].image!

@@ -86,6 +86,8 @@ class ProfileEditPageState extends BaseState<ProfileEditPage> {
 
   String relationship_direct = "";
   var relationshipInputController = TextEditingController();
+  bool onAlarm = true;
+  String alarmYn = "y";
 
   int nDuplicatedNickname = 0;
   String mValidNickname = ""; //중복 확인한 닉네임
@@ -125,6 +127,11 @@ class ProfileEditPageState extends BaseState<ProfileEditPage> {
     dadweightController.text = dad_weight;
     momheightController.text = mom_height;
     momweightController.text = mom_weight;
+
+    setState(() {
+      alarmYn = gUserInfo!.alarmYn!;
+      if (alarmYn != 'y') onAlarm = false;
+    });
 
     for (int i = 0; i < gRelationList!.length; i++) {
       relationshipList.add(gRelationList![i].relationship!);
@@ -247,7 +254,7 @@ class ProfileEditPageState extends BaseState<ProfileEditPage> {
       isLoading = true;
     });
 
-    Future<DefaultResModel> offerInfo = httpService.changeParentProfile(pwd, name, birth, phone, postcode, address1, address2, dad_height, dad_weight, mom_height, mom_weight, relationship != "기타 입력" ? relationship : relationship_direct, nickname);
+    Future<DefaultResModel> offerInfo = httpService.changeParentProfile(pwd, name, birth, phone, postcode, address1, address2, dad_height, dad_weight, mom_height, mom_weight, relationship != "기타 입력" ? relationship : relationship_direct, nickname, alarmYn);
     offerInfo.then((DefaultResModel value) async {
       setState(() {
         isLoading = false;
@@ -862,11 +869,48 @@ class ProfileEditPageState extends BaseState<ProfileEditPage> {
                                     ),
                                   ],
                                 ),
-                              )
+                              ),
                             ],
                           ),
                         ),
                       ],
+                    ),
+                    const SizedBox(height: 30),
+                    Container(
+                      height: 60,
+                      // margin: const EdgeInsets.symmetric(horizontal: 30),
+                      // decoration: const BoxDecoration(
+                      //   border: Border(
+                      //     bottom: BorderSide(
+                      //       color: AppColor_Divider,
+                      //       width: 1,
+                      //     ),
+                      //   ),
+                      // ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          // Container(
+                          //     width: 25,
+                          //     child: Image.asset('assets/${category.icon}', width: 25)
+                          // ),
+                          // const SizedBox(width: 18),
+                          H16(
+                            text: '광고/마케팅 알림',
+                            weight: FW.medium,
+                            color: AppColor_BlackText,
+                          ),
+                          Switch(
+                            value: onAlarm,
+                            onChanged: (bool value) {
+                              setState(() {
+                                onAlarm = value;
+                                onAlarm ? alarmYn = 'y' : alarmYn = 'n';
+                              });
+                            },
+                          )
+                        ],
+                      ),
                     ),
                     const SizedBox(height: 50),
                     MainTextButton(
@@ -918,7 +962,7 @@ class ProfileEditPageState extends BaseState<ProfileEditPage> {
         checkValid();
       },
     ),
-    pwdController.text.length > 0 
+    pwdController.text.isNotEmpty
       ? Container(
         margin: const EdgeInsets.only(top: 9),
         child: H12(
@@ -949,7 +993,7 @@ class ProfileEditPageState extends BaseState<ProfileEditPage> {
           checkValid();
         },
       ),
-      _rePwdController.text.length > 0
+      _rePwdController.text.isNotEmpty
       ? Container(
         margin: const EdgeInsets.only(top: 9),
         child: H12(

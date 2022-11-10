@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ourdoctor/global/app_colors.dart';
 import 'package:ourdoctor/global/app_styles.dart';
@@ -11,6 +12,7 @@ import 'package:ourdoctor/language/language_service.dart';
 import 'package:ourdoctor/models/home_grapth_res_model.dart';
 import 'package:ourdoctor/models/homecare_banner_res_model.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
+import 'package:ourdoctor/pages/care/product_detail.dart';
 import 'package:ourdoctor/pages/components/h18.dart';
 import 'package:ourdoctor/pages/components/h32_b.dart';
 import 'package:ourdoctor/pages/components/result_area.dart';
@@ -20,6 +22,7 @@ import 'package:ourdoctor/pages/home/range_show.dart';
 import 'package:ourdoctor/pages/intro/first.dart';
 import 'package:show_more_text_popup/show_more_text_popup.dart';
 import 'package:sprintf/sprintf.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HeightReport extends StatefulWidget {
   HeightReport({Key? key, required this.data, this.result = 0}) : super(key: key);
@@ -40,11 +43,28 @@ class HeightReportState extends BaseState<HeightReport> {
   final tooltip1 = GlobalKey();
   int rnum = 0;
 
+  final tip = GlobalKey();
+  final tip2 = GlobalKey();
+  OverlayEntry? entry;
+  OverlayEntry? entry2;
+  final LayerLink _link = LayerLink();
+  final LayerLink _link2 = LayerLink();
+  bool _tipShow = false;
+  bool _tipShow2 = false;
+
   @override
   void initState() {
     // TODO: implement initState
     getBannerList();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    hideEntry();
+    hideEntry2();
+    super.dispose();
   }
 
   void showMoreText() {
@@ -114,6 +134,113 @@ class HeightReportState extends BaseState<HeightReport> {
     });
   }
 
+  void showTip() {
+    final overlay = Overlay.of(context)!;
+    final renderBox = context.findRenderObject() as RenderBox;
+    // final size = renderBox.size;
+
+    entry = OverlayEntry(builder: (context) {
+      return Positioned(
+        width: 205,
+        height: 115,
+        child: CompositedTransformFollower(
+          link: _link,
+          showWhenUnlinked: false,
+          offset: Offset(-100, 40),
+          child: Container(
+            decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(color: AppColor_Selector_Border)),
+            child: CupertinoButton(
+                child: Text("부모의 신장으로 예측한 우리아이의 미래 예측키로써 영양상태 및 각종 외부환경 영향으로 변경될 수 있습니다.", style: AppTextStyle.PD(AppColor_BlackText, 14, height: 1.2)),
+                onPressed: () {
+                  // hideEntry();
+                  setState(() {
+                    if(_tipShow || entry == null){
+                      showTip();
+                      insertEntry();
+                      _tipShow = false;
+                    } else if (!_tipShow && entry != null){
+                      hideEntry();
+                      _tipShow = true;
+                    } else {
+                      _tipShow = !_tipShow;
+                    }
+                  });
+                }),
+          ),
+        ),
+      );
+    });
+  }
+
+  void showTip2() {
+    final overlay = Overlay.of(context)!;
+    final renderBox = context.findRenderObject() as RenderBox;
+    // final size = renderBox.size;
+
+    entry2 = OverlayEntry(builder: (context) {
+      return Positioned(
+        width: 205,
+        height: 65,
+        child: CompositedTransformFollower(
+          link: _link2,
+          showWhenUnlinked: false,
+          offset: Offset(-100, 40),
+          child: Container(
+            decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(color: AppColor_Selector_Border)),
+            child: CupertinoButton(
+                child: Text("보건복지부 및 대한소아과학회\n소아청소년 성장도표 기준", style: AppTextStyle.PD(AppColor_BlackText, 14, height: 1.2)),
+                onPressed: () {
+                  setState(() {
+                    if(_tipShow2 || entry2 == null){
+                      showTip2();
+                      insertEntry2();
+                      _tipShow2 = false;
+                    } else if (!_tipShow2 && entry2 != null){
+                      hideEntry2();
+                      _tipShow2 = true;
+                    } else {
+                      _tipShow2 = !_tipShow2;
+                    }
+                  });
+                }),
+          ),
+        ),
+      );
+    });
+  }
+
+  void insertEntry() {
+    final overlayState = Overlay.of(context);
+    if (mounted) {
+      overlayState!.insert(entry!);
+    }
+  }
+
+  void hideEntry() {
+    if (mounted) {
+      entry!.remove();
+      // entry = null;
+    }
+  }
+
+  void insertEntry2() {
+    final overlayState = Overlay.of(context);
+    if (mounted) {
+      overlayState!.insert(entry2!);
+    }
+  }
+
+  void hideEntry2() {
+    if (mounted) {
+      entry2!.remove();
+      // entry = null;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -129,11 +256,27 @@ class HeightReportState extends BaseState<HeightReport> {
                 const SizedBox(width: 5),
                 InkWell(
                   key: const Key('show_more_ink_well'),
-                  child: Container(
-                    key: tooltip,
-                    child: Image.asset('assets/question_mark_black_24dp.png', width: 22),
+                  child: CompositedTransformTarget(
+                    link: _link,
+                    child: Container(
+                      key: tip,
+                      child: Image.asset('assets/question_mark_black_24dp.png', width: 22),
+                    ),
                   ),
-                  onTap: showMoreText,
+                  onTap: () {
+                    setState(() {
+                      if(_tipShow || entry == null){
+                        showTip();
+                        insertEntry();
+                        _tipShow = false;
+                      } else if (!_tipShow && entry != null){
+                        hideEntry();
+                        _tipShow = true;
+                      } else {
+                        _tipShow = !_tipShow;
+                      }
+                    });
+                  },
                 ),
               ],
             ),
@@ -164,11 +307,27 @@ class HeightReportState extends BaseState<HeightReport> {
                   const SizedBox(width: 5),
                   InkWell(
                     key: const Key('show_more_ink_well'),
-                    child: Container(
-                      key: tooltip1,
-                      child: Image.asset('assets/question_mark_black_24dp.png', width: 22),
+                    child: CompositedTransformTarget(
+                      link: _link2,
+                      child: Container(
+                        key: tip2,
+                        child: Image.asset('assets/question_mark_black_24dp.png', width: 22),
+                      ),
                     ),
-                    onTap: showMoreText1,
+                    onTap: () {
+                      setState(() {
+                        if(_tipShow2 || entry2 == null){
+                          showTip2();
+                          insertEntry2();
+                          _tipShow2 = false;
+                        } else if (!_tipShow2 && entry2 != null){
+                          hideEntry2();
+                          _tipShow2 = true;
+                        } else {
+                          _tipShow2 = !_tipShow2;
+                        }
+                      });
+                    },
                   ),
                 ],
               ),
@@ -188,11 +347,16 @@ class HeightReportState extends BaseState<HeightReport> {
             widget.result == 1 ? const SizedBox(height: 40) : const SizedBox(),
             widget.result == 1 ? ResultArea(type: 0, result: 2, diagnose: widget.data.monitoring!.diagnose!) : const SizedBox(),
             const SizedBox(height: 30,),
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16.0)
-              ),
-              width: double.infinity,
+            InkWell(
+              onTap:(){
+                if(arrBannerList[rnum].url != "") {
+                  Navigator.push(
+                      context, SlideRightTransRoute(builder: (context) =>
+                      ProductDetail(
+                        pid: arrBannerList[rnum].url!,
+                      )));
+                }
+              },
               child: arrBannerList.isEmpty ? Container() :
               ClipRRect(
                 borderRadius: BorderRadius.circular(16),

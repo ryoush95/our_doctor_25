@@ -34,12 +34,11 @@ class CircularProgressState extends BaseState<CircularProgress> {
   final tooltip = GlobalKey();
   HomeMonitorDto? dicHomeDataInfo;
   final HttpService httpService = HttpService();
+  String content = "";
+  double fWidth = 0;
+  double fHeight = 0;
 
   void showMoreText() {
-    String content = "";
-    double fWidth = 0;
-    double fHeight = 0;
-
     if (widget.type == 0) {
       content = "신체 및 두뇌발달을\n종합적으로 판단한 스코어입니다.\n\n더 높은 스코어를 획득할 수 있도록\n우아닥터와 함께 해주세요.";
       fWidth = 230;
@@ -48,25 +47,25 @@ class CircularProgressState extends BaseState<CircularProgress> {
       if (widget.subType == 0) {
         content = "신체 - 신장/체중/생활습관/질병 모니터링 결과를\n종합적으로 판단한 스코어입니다.\n\n더 높은 스코어를 획득할 수 있도록\n우아닥터와 함께 해주세요.";
         fWidth = 290;
-        fHeight = 105;
+        fHeight = 125;
       } else if(widget.subType == 1) {
         content = "두뇌 - 언어/운동/사회성/맞춤검사 모니터링 결과를\n종합적으로 판단한 스코어입니다.\n\n더 높은 스코어를 획득할 수 있도록\n우아닥터와 함께 해주세요.";
         fWidth = 300;
-        fHeight = 105;
+        fHeight = 125;
 
       }
     }
 
-    ShowMoreTextPopup popup = ShowMoreTextPopup(context,
-        text: content, textStyle: AppTextStyle.PD(AppColor_BlackText, 14, height: 1.2), height: fHeight, width: fWidth, backgroundColor: Colors.white, padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10), borderRadius: BorderRadius.circular(5.0), onDismiss: () {
-      // ScaffoldMessenger.of(context)
-      //     .showSnackBar(SnackBar(content: Text("Dismiss callback!")));
-    });
-
-    /// show the popup for specific widget
-    popup.show(
-      widgetKey: tooltip,
-    );
+    // ShowMoreTextPopup popup = ShowMoreTextPopup(context,
+    //     text: content, textStyle: AppTextStyle.PD(AppColor_BlackText, 14, height: 1.2), height: fHeight, width: fWidth, backgroundColor: Colors.white, padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10), borderRadius: BorderRadius.circular(5.0), onDismiss: () {
+    //   // ScaffoldMessenger.of(context)
+    //   //     .showSnackBar(SnackBar(content: Text("Dismiss callback!")));
+    // });
+    //
+    // /// show the popup for specific widget
+    // popup.show(
+    //   widgetKey: tooltip,
+    // );
   }
 
   double showScore() {
@@ -147,6 +146,74 @@ class CircularProgressState extends BaseState<CircularProgress> {
     });
   }
 
+  final tip = GlobalKey();
+  OverlayEntry? entry;
+  final LayerLink _link = LayerLink();
+  bool _tipShow = false;
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    hideEntry();
+    entry = null;
+    super.dispose();
+  }
+
+  void showTip() {
+    final overlay = Overlay.of(context)!;
+    final renderBox = context.findRenderObject() as RenderBox;
+    // final size = renderBox.size;
+    showMoreText();
+
+    entry = OverlayEntry(builder: (context) {
+      return Positioned(
+        width: fWidth,
+        height: fHeight,
+        child: CompositedTransformFollower(
+          link: _link,
+          showWhenUnlinked: false,
+          offset: widget.subType == 0 ? Offset(-140, 30) : Offset(-290, 30),
+          child: Container(
+            decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(color: AppColor_Selector_Border)),
+            child: CupertinoButton(
+                child: Text(content, style: AppTextStyle.PD(AppColor_BlackText, 14, height: 1.2)),
+                onPressed: () {
+                  // hideEntry();
+                  setState(() {
+                    if(_tipShow || entry == null){
+                      showTip();
+                      insertEntry();
+                      _tipShow = false;
+                    } else if (!_tipShow && entry != null){
+                      hideEntry();
+                      _tipShow = true;
+                    } else {
+                      _tipShow = !_tipShow;
+                    }
+                  });
+                }),
+          ),
+        ),
+      );
+    });
+  }
+
+  void insertEntry() {
+    OverlayState? overlayState = Overlay.of(context);
+    if (mounted) {
+      overlayState!.insert(entry!);
+    }
+  }
+
+  void hideEntry() {
+    if (mounted) {
+      entry!.remove();
+      entry = null;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -185,12 +252,28 @@ class CircularProgressState extends BaseState<CircularProgress> {
               Align(
                 alignment: Alignment.bottomRight,
                 child: InkWell(
-                  key: const Key('show_more_ink_well'),
-                  child: Container(
-                    key: tooltip,
-                    child: Image.asset('assets/question_mark_black_24dp.png', width: 22),
+                  key:const Key('show_more_ink_well'),
+                  child: CompositedTransformTarget(
+                    link: _link,
+                    child: Container(
+                      key: tip,
+                      child: Image.asset('assets/question_mark_black_24dp.png', width: 22),
+                    ),
                   ),
-                  onTap: showMoreText,
+                  onTap: () {
+                    setState(() {
+                      if(_tipShow || entry ==null){
+                        showTip();
+                        insertEntry();
+                        _tipShow =false;
+                      }else if(!_tipShow && entry !=null){
+                        hideEntry();
+                        _tipShow =true;
+                      }else{
+                        _tipShow = !_tipShow;
+                      }
+                    });
+                  },
                 ),
               )
             ],

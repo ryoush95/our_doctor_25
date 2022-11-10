@@ -1295,7 +1295,6 @@ class HttpService {
       'child_uid': child_uid,
     };
     Uri myUri = Uri.parse(_url);
-    print(myUri);
     final response = await http.post(myUri, body: body);
     if (response.statusCode == 200) {
       return ChildInfoResModel.fromJson(json.decode(response.body));
@@ -1313,7 +1312,6 @@ class HttpService {
       'child_uid': child_uid,
     };
     Uri myUri = Uri.parse(_url);
-    print(myUri);
     final response = await http.post(myUri, body: body);
     if (response.statusCode == 200) {
       return ChildInfoResModel.fromJson(json.decode(response.body));
@@ -1372,7 +1370,7 @@ class HttpService {
   }
 
   //회원정보수정-부모정보수정
-  Future<DefaultResModel> changeParentProfile(String pwd, String name, String birth, String phone, String postcode, String address, String address_detail, String dad_height, String dad_weight, String mom_kidney, String mom_weight, String relation, String nickname) async {
+  Future<DefaultResModel> changeParentProfile(String pwd, String name, String birth, String phone, String postcode, String address, String address_detail, String dad_height, String dad_weight, String mom_kidney, String mom_weight, String relation, String nickname, String alarm) async {
     String _url = API_BASE_URL + "api/user/change_profile3";
 
     Map<String, String> body = {
@@ -1389,7 +1387,8 @@ class HttpService {
       'mom_height': mom_kidney,
       'mom_weight': mom_weight,
       'relation': relation,
-      'nickname': nickname
+      'nickname': nickname,
+      'alarm' : alarm,
     };
     Uri myUri = Uri.parse(_url);
     final response = await http.post(myUri, body: body);

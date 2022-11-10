@@ -39,19 +39,49 @@ class PointHistoryItem extends StatelessWidget {
     } else if (item.type == "review_text") {
       icon = 'assets/ic_point3.png';
       inOut = item.point! >= 0 ? LanguageService.trans("earn") : LanguageService.trans("use");
-      typeText = "리뷰텍스트 " + inOut!;
+      typeText = "후기작성 " + inOut!;
       point = (item.point! >= 0 ? (item.point == 0 ? "" : "+") : "-") + formatAmount(item.point!.abs()) + " " + LanguageService.trans("p");
       color_val = item.point! >= 0 ? AppColor_Primary : AppColor_Red;
     } else if (item.type == "review_image") {
       icon = 'assets/ic_point3.png';
       inOut = item.point! >= 0 ? LanguageService.trans("earn") : LanguageService.trans("use");
-      typeText = "리뷰이미지 " + inOut!;
+      typeText = "이미지리뷰 " + inOut!;
       point = (item.point! >= 0 ? (item.point == 0 ? "" : "+") : "-") + formatAmount(item.point!.abs()) + " " + LanguageService.trans("p");
       color_val = item.point! >= 0 ? AppColor_Primary : AppColor_Red;
     } else if (item.type == "payment") {
       icon = 'assets/ic_point2.png';
       inOut = item.point! >= 0 ? LanguageService.trans("earn") : LanguageService.trans("use");
       typeText = "결제금액 " + inOut!;
+      point = (item.point! >= 0 ? (item.point == 0 ? "" : "+") : "-") + formatAmount(item.point!.abs()) + " " + LanguageService.trans("p");
+      color_val = item.point! >= 0 ? AppColor_Primary : AppColor_Red;
+    } else if (item.type == "attendance"){
+      icon = 'assets/ic_point2.png';
+      inOut = item.point! >= 0 ? LanguageService.trans("earn") : LanguageService.trans("use");
+      typeText = "출석체크 " + inOut!;
+      point = (item.point! >= 0 ? (item.point == 0 ? "" : "+") : "-") + formatAmount(item.point!.abs()) + " " + LanguageService.trans("p");
+      color_val = item.point! >= 0 ? AppColor_Primary : AppColor_Red;
+    } else if (item.type == "comment"){
+      icon = 'assets/ic_point2.png';
+      inOut = item.point! >= 0 ? LanguageService.trans("earn") : LanguageService.trans("use");
+      typeText = '댓글작성 ' + inOut!;
+      point = (item.point! >= 0 ? (item.point == 0 ? "" : "+") : "-") + formatAmount(item.point!.abs()) + " " + LanguageService.trans("p");
+      color_val = item.point! >= 0 ? AppColor_Primary : AppColor_Red;
+    } else if (item.type == "award"){
+      icon = 'assets/ic_point2.png';
+      inOut = item.point! >= 0 ? LanguageService.trans("earn") : LanguageService.trans("use");
+      typeText = '좋아요 1위 달성 ' + inOut!;
+      point = (item.point! >= 0 ? (item.point == 0 ? "" : "+") : "-") + formatAmount(item.point!.abs()) + " " + LanguageService.trans("p");
+      color_val = item.point! >= 0 ? AppColor_Primary : AppColor_Red;
+    } else if (item.type == "monitoring"){
+      icon = 'assets/ic_point2.png';
+      inOut = item.point! >= 0 ? LanguageService.trans("earn") : LanguageService.trans("use");
+      typeText = '모니터링 ' + inOut!;
+      point = (item.point! >= 0 ? (item.point == 0 ? "" : "+") : "-") + formatAmount(item.point!.abs()) + " " + LanguageService.trans("p");
+      color_val = item.point! >= 0 ? AppColor_Primary : AppColor_Red;
+    } else {
+      icon = 'assets/ic_point2.png';
+      inOut = item.point! >= 0 ? LanguageService.trans("earn") : LanguageService.trans("use");
+      typeText = '기타 ' + inOut!;
       point = (item.point! >= 0 ? (item.point == 0 ? "" : "+") : "-") + formatAmount(item.point!.abs()) + " " + LanguageService.trans("p");
       color_val = item.point! >= 0 ? AppColor_Primary : AppColor_Red;
     }
@@ -86,9 +116,7 @@ class PointHistoryItem extends StatelessWidget {
                     align: TextAlign.left,
                     color: AppColor_BlackText,
                   ),
-                  SizedBox(
-                    height: 6,
-                  ),
+                  const SizedBox(height: 6),
                   H12(
                     text: getDateFormatString(DateTime.parse(item.createdAt!), "MM.dd(EEEE) HH:mm ") + inOut!,
                     weight: FW.medium,
