@@ -1,7 +1,5 @@
 import 'dart:async';
-import 'dart:convert';
 
-import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:ourdoctor/global/app_colors.dart';
@@ -11,35 +9,17 @@ import 'package:ourdoctor/global/http_service.dart';
 import 'package:ourdoctor/helpers/common_util.dart';
 import 'package:ourdoctor/helpers/transition.dart';
 import 'package:ourdoctor/language/language_service.dart';
-import 'package:ourdoctor/models/basket_add_res_model.dart';
-import 'package:ourdoctor/models/homecare_data_res_model.dart';
 import 'package:ourdoctor/models/order_start_res_model.dart';
 import 'package:ourdoctor/models/product_detail_res_model.dart';
-import 'package:ourdoctor/models/product_list_res_model.dart';
-import 'package:ourdoctor/pages/care/product_dialog.dart';
-import 'package:ourdoctor/pages/components/h14.dart';
 import 'package:ourdoctor/pages/components/h16.dart';
 import 'package:ourdoctor/pages/components/h18.dart';
-import 'package:ourdoctor/pages/components/h20.dart';
-import 'package:ourdoctor/pages/components/h24_b.dart';
 import 'package:ourdoctor/pages/components/main_text_button.dart';
-import 'package:ourdoctor/pages/components/outline_input.dart';
-import 'package:ourdoctor/pages/intro/first.dart';
 import 'package:ourdoctor/pages/my/custom_mbti_inspection.dart';
-import 'package:ourdoctor/pages/my/custom_mbti_inspection_result.dart';
-import 'package:ourdoctor/pages/my/inspection_mbti_first.dart';
-import 'package:ourdoctor/pages/my/order.dart';
-import 'package:ourdoctor/pages/my/order_complete.dart';
-import 'package:ourdoctor/pages/my/payment.dart';
+import 'package:ourdoctor/pages/my/inspection_first2.dart';
 import 'package:sprintf/sprintf.dart';
 
 class PointBuyingDialog extends StatefulWidget {
-  PointBuyingDialog({
-    Key? key,
-
-    required this.pid
-  }) : super(key: key);
-
+  PointBuyingDialog({Key? key, required this.pid}) : super(key: key);
 
   String? pid;
   @override
@@ -49,12 +29,12 @@ class PointBuyingDialog extends StatefulWidget {
 class PointBuyingDialogState extends State<PointBuyingDialog> {
   bool isLoading = false;
 
-  BuyingDialogState() {}
   final HttpService httpService = HttpService();
   var pointInputController = TextEditingController();
-  bool isValid = false;
+  bool isValid = true;
   bool showProduct = false;
   ProductDetailDto mData = ProductDetailDto();
+  String calPrice = "";
 
 
   @override
@@ -80,9 +60,12 @@ class PointBuyingDialogState extends State<PointBuyingDialog> {
   }
 
   checkValid() {
-    setState(() {
-      isValid = true;
-    });
+    int dis = int.parse(calPrice);
+    if (int.parse(gUserInfo!.point!) > dis){
+      setState(() {
+        isValid = false;
+      });
+    }
   }
 
   Future<bool> onBackPressed() async {
@@ -109,8 +92,11 @@ class PointBuyingDialogState extends State<PointBuyingDialog> {
       });
       if (value.result == 0) {
         mData = value.data!;
-       // getReviewList();
-        setState(() {});
+        double dis = double.parse(mData.price!) * ((100 - int.parse(mData.discount!)) / 100);
+        setState(() {
+          calPrice = dis.round().toString();
+          checkValid();
+        });
       } else {
         showToast(value.msg ?? "");
       }
@@ -121,13 +107,29 @@ class PointBuyingDialogState extends State<PointBuyingDialog> {
     });
   }
 
+  void savePoint() async{
+    Future<OrderStartResModel> info = httpService.pointChange('ordered',"-" + calPrice);
+    info.then((value) async {
+      setState(() {
+        isLoading = false;
+      });
+      if (value.result == 0) {
+        showToast('결제가 완료되었습니다.');
+        int myp = int.parse(gUserInfo!.point!) - int.parse(calPrice);
+        gUserInfo!.point = myp.toString();
+      }
+    }).catchError((onError) {
+      print(onError.toString());
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
         child: ModalProgressHUD(
           inAsyncCall: isLoading,
           child: Container(
-            height: MediaQuery.of(context).size.height * 0.7 - 50,
+            height: MediaQuery.of(context).size.height * 0.5,
             padding: const EdgeInsets.symmetric(horizontal: 30),
             decoration: const BoxDecoration(
                 color: Colors.white,
@@ -214,10 +216,7 @@ class PointBuyingDialogState extends State<PointBuyingDialog> {
                       H18(
                         text: mData.price != null
                             ? ValidPrice(mData.discount != ""
-                            ? (double.parse(mData.price!) *
-                            (100 - int.parse(mData.discount!)) /
-                            100)
-                            .toString()
+                            ? calPrice
                             : mData.price!)
                             : "0",
                         align: TextAlign.start,
@@ -234,7 +233,7 @@ class PointBuyingDialogState extends State<PointBuyingDialog> {
 
                 ],
               ),
-              const SizedBox(height: 30),
+              const SizedBox(height: 50),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -244,22 +243,46 @@ class PointBuyingDialogState extends State<PointBuyingDialog> {
                     style: AppTextStyle.PD(Colors.white, 18, weight: FW.bold),
                     width: (MediaQuery.of(context).size.width - 70),
                     height: 58,
-                    disableBackground: isValid
-                        ? AppColor_Primary_Disable
-                        : Colors.transparent,
+                    disableBackground: AppColor_Primary_Disable,
+                    disable: isValid,
                     onPressed: () {
-                     /* if(double.parse(mData.price!) > int.parse(gUserInfo!.point ?? "0")) {
-                        showToast("우아 포인트가 부족합니다.");
-                      } else {
-                        //showToast("포인트가 차감됩니다.");
-
-
-                      }*/
-                      Navigator.push(
-                          context,
-                          SlideRightTransRoute(
-                              builder: (context) =>   CustomMbtiInspectionMainPage()));
-
+                      if(isValid){
+                        showToast('포인트가 부족합니다.');
+                        return;
+                      }
+                      showDialog<String>(
+                        context: context,
+                        builder: (BuildContext context) => AlertDialog(
+                          title: const Text('검사 시작'),
+                          titleTextStyle: AppTextStyle.PD(Colors.black, 18, weight: FW.semi_bold),
+                          content: Text('${calPrice} 포인트가 차감됩니다.\n검사를 시작할까요?'),
+                          contentTextStyle: AppTextStyle.PD(Colors.black, 18, weight: FW.regular),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () => Navigator.pop(context, 'Cancel'),
+                              child: const Text('아니오'),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                savePoint();
+                                Navigator.pop(context);
+                                Navigator.push(
+                                  context,
+                                  SlideRightTransRoute(
+                                      builder: (context) {
+                                        if (widget.pid == '36') {
+                                          return CustomMbtiInspectionMainPage();
+                                        }
+                                        if (widget.pid == ''){}
+                                        return InspectionFirstPage2(list: []);
+                                      }),
+                                );
+                              },
+                              child: const Text('네'),
+                            ),
+                          ],
+                        ),
+                      );
                       // const CustomMbtiInspectionMainPage();
                     },
                   ),

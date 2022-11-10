@@ -33,7 +33,7 @@ class PointHistoryItem extends StatelessWidget {
     } else if (item.type == "ordered") {
       icon = 'assets/ic_point2.png';
       inOut = item.point! >= 0 ? LanguageService.trans("earn") : LanguageService.trans("use");
-      typeText = "결제금액 0.5% " + inOut!;
+      typeText = item.point! >= 0 ? "결제금액 0.5% " + inOut! : "상품구매 " + inOut!;
       point = (item.point! >= 0 ? (item.point == 0 ? "" : "+") : "-") + formatAmount(item.point!.abs()) + " " + LanguageService.trans("p");
       color_val = item.point! >= 0 ? AppColor_Primary : AppColor_Red;
     } else if (item.type == "review_text") {

@@ -114,8 +114,8 @@ class ItemMbtiProductState extends BaseState<ItemMbtiProduct> {
                             clipper: ShapeBorderClipper(
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10))),
-                            child: Image.asset(
-                              "assets/mbti_image_test.png",
+                            child: Image.network(
+                              widget.info!.mainImage!,
                               fit: BoxFit.fill,
                               width: 150,
                               height: 150,

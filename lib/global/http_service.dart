@@ -2014,6 +2014,25 @@ class HttpService {
     }
   }
 
+  //포인트 추가 삭제
+  Future<OrderStartResModel> pointChange(String type, String point) async {
+    String _url = API_BASE_URL + "api/User/add_point";
+    Map<String, String> body = {
+      'access_token': gUserInfo!.accessToken!,
+      'type' : type,
+      'point' : point,
+    };
+    Uri myUri = Uri.parse(_url);
+    final response = await http.post(myUri, body: body);
+    if (response.statusCode == 200) {
+      return OrderStartResModel.fromJson(json.decode(response.body));
+    } else {
+      // If that call was not successful, throw an error.
+      showToast(LanguageService.trans("server_fail"));
+      throw Exception(LanguageService.trans("server_fail"));
+    }
+  }
+
   //order추가 - 주문하기
   Future<OrderStartResModel> orderStart(String pdt_info, String point, String pay_method, String deliver_address) async {
     String _url = API_BASE_URL + "api/Order/start";

@@ -797,42 +797,42 @@ class DiseaseReportState extends BaseState<DiseaseReport> {
                             ),*/
                           ])),
                   const SizedBox(height: 20),
-                  Container(
-                      width: MediaQuery.of(context).size.width - 64,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(18.0),
-                          color: AppColor_Light_Gray),
-                      // padding: const EdgeInsets.all(30),
-                      child: Column(children: [
-                        const SizedBox(height: 30),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            const SizedBox(width: 30),
-                            H16(text: "시기별 유행성 질환 Tip "),
-                            Image.asset(
-                              "assets/ic_disease_tip.png",
-                              width: 21,
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 24),
-                        Container(
-                          width: MediaQuery.of(context).size.width - 64,
-                          decoration: const BoxDecoration(
-                              color: AppColor_Selector_Border),
-                          margin: const EdgeInsets.only(right: 30, left: 30),
-                          child: ExtendedImage.network(
-                            dicVaccineInfo == null
-                                ? ""
-                                : dicVaccineInfo!.tipImage!,
-                            width: MediaQuery.of(context).size.width - 64 - 60,
-                            fit: BoxFit.fitWidth,
-                            cache: true,
-                          ),
-                        ),
-                        const SizedBox(height: 30),
-                      ])),
+                  // Container(
+                  //     width: MediaQuery.of(context).size.width - 64,
+                  //     decoration: BoxDecoration(
+                  //         borderRadius: BorderRadius.circular(18.0),
+                  //         color: AppColor_Light_Gray),
+                  //     // padding: const EdgeInsets.all(30),
+                  //     child: Column(children: [
+                  //       const SizedBox(height: 30),
+                  //       Row(
+                  //         mainAxisAlignment: MainAxisAlignment.start,
+                  //         children: [
+                  //           const SizedBox(width: 30),
+                  //           H16(text: "시기별 유행성 질환 Tip "),
+                  //           Image.asset(
+                  //             "assets/ic_disease_tip.png",
+                  //             width: 21,
+                  //           ),
+                  //         ],
+                  //       ),
+                  //       const SizedBox(height: 24),
+                  //       Container(
+                  //         width: MediaQuery.of(context).size.width - 64,
+                  //         decoration: const BoxDecoration(
+                  //             color: AppColor_Selector_Border),
+                  //         margin: const EdgeInsets.only(right: 30, left: 30),
+                  //         child: ExtendedImage.network(
+                  //           dicVaccineInfo == null
+                  //               ? ""
+                  //               : dicVaccineInfo!.tipImage!,
+                  //           width: MediaQuery.of(context).size.width - 64 - 60,
+                  //           fit: BoxFit.fitWidth,
+                  //           cache: true,
+                  //         ),
+                  //       ),
+                  //       const SizedBox(height: 30),
+                  //     ])),
                   // widget.result == 1 ? const SizedBox(height: 40) : const SizedBox(),
                   // widget.result == 1 ? ResultArea(type: 3, result: 2) : const SizedBox(),
                 ],

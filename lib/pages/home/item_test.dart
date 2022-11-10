@@ -114,8 +114,7 @@ class ItemTestState extends BaseState<ItemTest> {
             width: 150,
             child: H16(
               text: ValidPrice(
-                      sprintf("%.0f", [double.parse(widget.info!.price!)])) +
-                  "원",
+                      sprintf("%.0f", [double.parse(widget.info!.price!)])) + "P",
               weight: FW.bold,
               maxLine: 1,
               align: TextAlign.start,

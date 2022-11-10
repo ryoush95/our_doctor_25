@@ -525,7 +525,7 @@ class DiagnosisResult1PageState extends BaseState<DiagnosisResult1Page> {
                                     crossAxisAlignment: CrossAxisAlignment.center,
                                     children: [
                                       H18(
-                                        text: widget.data!.sLEEP!.diagnose!.result! == "부족" ? "수면시간이 부족해요. 😞" : "수면시간이 충분해요. 😆",
+                                        text: widget.data!.sLEEP!.diagnose!.result! == "부족" ? "수면시간이 부족해요. 😞" : "수면시간이 충분해요. 😊",
                                         maxLine: 2,
                                         height: 1.2,
                                       ),
