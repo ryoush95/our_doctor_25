@@ -200,7 +200,7 @@ class AgreePageState extends BaseState<AgreePage> {
                                       InkWell(
                                         onTap: () {
                                           isItem1 = !isItem1;
-                                          if (isItem1 && isItem2 && isItem3 && isItem4 && isItem5) {
+                                          if (isItem1 && isItem2 && isItem3 && isItem4) {
                                             isAll = true;
                                           } else {
                                             isAll = false;
@@ -237,7 +237,7 @@ class AgreePageState extends BaseState<AgreePage> {
                                     InkWell(
                                       onTap: () {
                                         isItem2 = !isItem2;
-                                        if (isItem1 && isItem2 && isItem3 && isItem4 && isItem5) {
+                                        if (isItem1 && isItem2 && isItem3 && isItem4) {
                                           isAll = true;
                                         } else {
                                           isAll = false;
@@ -273,7 +273,7 @@ class AgreePageState extends BaseState<AgreePage> {
                                     InkWell(
                                       onTap: () {
                                         isItem3 = !isItem3;
-                                        if (isItem1 && isItem2 && isItem3 && isItem4 && isItem5) {
+                                        if (isItem1 && isItem2 && isItem3 && isItem4) {
                                           isAll = true;
                                         } else {
                                           isAll = false;
@@ -311,7 +311,7 @@ class AgreePageState extends BaseState<AgreePage> {
                                     InkWell(
                                       onTap: () {
                                         isItem4 = !isItem4;
-                                        if (isItem1 && isItem2 && isItem3 && isItem4 && isItem5) {
+                                        if (isItem1 && isItem2 && isItem3 && isItem4) {
                                           isAll = true;
                                         } else {
                                           isAll = false;
@@ -348,11 +348,11 @@ class AgreePageState extends BaseState<AgreePage> {
                                     InkWell(
                                       onTap: () {
                                         isItem5 = !isItem5;
-                                        if (isItem1 && isItem2 && isItem3 && isItem4 && isItem5) {
-                                          isAll = true;
-                                        } else {
-                                          isAll = false;
-                                        }
+                                        // if (isItem5) {
+                                        //   Provider.of<GlobalProvider>(context, listen: false).changeSignupAlarm(isItem5);
+                                        // } else {
+                                        //   Provider.of<GlobalProvider>(context, listen: false).changeSignupAlarm(isItem5);
+                                        // }
                                         setState(() {});
                                       },
                                       child: Image.asset(
@@ -402,7 +402,9 @@ class AgreePageState extends BaseState<AgreePage> {
                                                   momHeight: widget.momHeight,
                                                   childHeight: widget.childHeight,
                                                   childWeight: widget.childWeight,
-                                                )));
+                                                  alarm: isItem5 ? "y" : "n",
+                                                )),
+                                    );
                                   },
                                 ),
                               ),

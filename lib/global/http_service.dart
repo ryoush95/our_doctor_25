@@ -672,8 +672,8 @@ class HttpService {
     }
   }
 
-  //회원가입
-  Future<SignupParentResModel> signup2(String id, String pwd, String type, String token, String name, String birth, String phone, String code, String addr1, String addr2, String dad_height, String mom_height, String family_history, String child_list, String realtion) async {
+  //회원가입 사용안함
+  Future<SignupParentResModel> signup2(String id, String pwd, String type, String token, String name, String birth, String phone, String code, String addr1, String addr2, String dad_height, String mom_height, String family_history, String child_list, String realtion, String alarm) async {
     String _url = API_BASE_URL + "api/user/signup2";
     String devtype = "";
     if (Platform.isAndroid) {
@@ -699,7 +699,8 @@ class HttpService {
       // 'mom_weight': mom_weight,
       'family_history': family_history,
       'child_list': child_list,
-      'relation': realtion
+      'relation': realtion,
+      'alarm_yn': alarm,
     };
     Uri myUri = Uri.parse(_url);
     final response = await http.post(myUri, body: body);
@@ -712,8 +713,8 @@ class HttpService {
     }
   }
 
-  //회원가입
-  Future<SignupParentResModel> signup3(String id, String pwd, String type, String token, String name, String birth, String phone, String code, String addr1, String addr2, String dad_height, String mom_height, String family_history, String child_list, String realtion, String nickname) async {
+  //회원가입 부모회원가입 적용
+  Future<SignupParentResModel> signup3(String id, String pwd, String type, String token, String name, String birth, String phone, String code, String addr1, String addr2, String dad_height, String mom_height, String family_history, String child_list, String realtion, String nickname, String alarm) async {
     String _url = API_BASE_URL + "api/user/signup2";
     String devtype = "";
     if (Platform.isAndroid) {
@@ -741,6 +742,7 @@ class HttpService {
       'family_history': family_history,
       'child_list': child_list,
       'nickname': nickname,
+      'alarm_yn' : alarm,
     };
     Uri myUri = Uri.parse(_url);
     final response = await http.post(myUri, body: body);

@@ -9,10 +9,13 @@ import 'package:ourdoctor/models/home_data_res_model.dart';
 import 'package:ourdoctor/pages/app_event.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
 import 'package:ourdoctor/pages/care/product_detail.dart';
+import 'package:ourdoctor/pages/care/product_list.dart';
 import 'package:ourdoctor/pages/components/h14.dart';
 import 'package:ourdoctor/pages/components/h20.dart';
 import 'package:ourdoctor/pages/home/item_growth.dart';
 import 'package:ourdoctor/pages/intro/first.dart';
+import 'package:ourdoctor/provider/convert_score_provider.dart';
+import 'package:provider/provider.dart';
 
 import 'item_test.dart';
 
@@ -48,7 +51,6 @@ class TestStoreAreaState extends BaseState<TestStoreArea> {
       setState(() {
         isLoading = false;
       });
-      print(value.data!.testList!.length);
       if (value.result == 0) {
         arrTestList = value.data!.testList;
         setState(() {});
@@ -82,13 +84,8 @@ class TestStoreAreaState extends BaseState<TestStoreArea> {
                 return InkWell(
                   child: ItemTest(info: arrTestList!.elementAt(index)),
                   onTap: () async {
-                    // String recv = await Navigator.push(context, SlideRightTransRoute(builder: (context) => ProductDetail(
-                    //     pid: arrTestList!.elementAt(index).id!,
-                    //   )));
-                    // if (recv != "") {
-                    //   arrTestList!.elementAt(index).liked = recv;
-                    //   setState(() {});
-                    // }
+                    Provider.of<ConvertScoreProvider>(context, listen: false).changeCareTab(2);
+                    eventBus.fire(MoreHomeCareEvent(type: 0));
                   },
                 );
               }),

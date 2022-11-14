@@ -32,13 +32,14 @@ import 'package:ourdoctor/pages/signup/signup3.dart';
 import 'back_confirm_dialog.dart';
 
 class SignUpParentPage extends StatefulWidget {
-  SignUpParentPage({Key? key, required this.snsid, required this.type, this.dadHeight = "", this.momHeight = "", this.childHeight = "", this.childWeight = ""}) : super(key: key);
+  SignUpParentPage({Key? key, required this.snsid, required this.type, this.dadHeight = "", this.momHeight = "", this.childHeight = "", this.childWeight = "", required this.alarm}) : super(key: key);
   String? snsid;
   String? type;
   String? dadHeight;
   String? momHeight;
   String? childHeight;
   String? childWeight;
+  String? alarm;
 
   @override
   SignUpParentPageState createState() => SignUpParentPageState();
@@ -148,8 +149,8 @@ class SignUpParentPageState extends BaseState<SignUpParentPage> {
       idInputController.text
      );
     } else {
-      return RegExp(r"^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*\W).{8,16}$")
-          .hasMatch(
+      // return true;
+      return RegExp(r"^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*\W).{8,16}$").hasMatch(
         pwdInputController.text,
       );
     }
@@ -230,7 +231,7 @@ class SignUpParentPageState extends BaseState<SignUpParentPage> {
 
   void goNext() {
     FocusScope.of(context).requestFocus(FocusNode());
-    SignupParentInfo info = SignupParentInfo(id, pwd, name, birth, phone, address1, address2, address3, isSame, relationship != "기타 입력" ? relationship : relationship_direct, int.parse(number_child), dad_height, mom_height, widget.type!, nickname);
+    SignupParentInfo info = SignupParentInfo(id, pwd, name, birth, phone, address1, address2, address3, isSame, relationship != "기타 입력" ? relationship : relationship_direct, int.parse(number_child), dad_height, mom_height, widget.type!, nickname, widget.alarm!);
     Navigator.push(context, SlideRightTransRoute(builder: (context) => SignupFamilyPage(info: info, childHeight: widget.childHeight, childWeight: widget.childWeight)));
   }
 

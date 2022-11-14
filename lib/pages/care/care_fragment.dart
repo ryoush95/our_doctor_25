@@ -27,6 +27,8 @@ import 'package:ourdoctor/pages/components/h18.dart';
 import 'package:ourdoctor/pages/components/h20.dart';
 import 'package:ourdoctor/pages/components/noline_input.dart';
 import 'package:ourdoctor/pages/intro/first.dart';
+import 'package:ourdoctor/provider/convert_score_provider.dart';
+import 'package:provider/provider.dart';
 
 class CareFragment extends StatefulWidget {
   @override
@@ -86,6 +88,7 @@ class CareFragmentState extends BaseState<CareFragment>
     tabController.addListener(() {
       changeTab(tabController.index);
     });
+    tabIndex = Provider.of<ConvertScoreProvider>(context, listen: false).careTab;
 
     pageController.addListener(() {
       setState(() {
@@ -120,6 +123,7 @@ class CareFragmentState extends BaseState<CareFragment>
   }
 
   void changeTab(int tab) {
+    Provider.of<ConvertScoreProvider>(context, listen: true).changeCareTab(tab);
     setState(() {
       tabIndex = tab;
       tabController.index = tabIndex;

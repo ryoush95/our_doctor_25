@@ -41,8 +41,9 @@ class SignupParentInfo {
   // final String mom_weight;
   final String type;
   final String nickname;
+  final String alarm;
 
-  SignupParentInfo(this.id, this.pwd, this.name, this.birth, this.phone, this.code, this.addr1, this.addr2, this.same_addr, this.relationship, this.child_number, this.dad_height, this.mom_height, this.type, this.nickname);
+  SignupParentInfo(this.id, this.pwd, this.name, this.birth, this.phone, this.code, this.addr1, this.addr2, this.same_addr, this.relationship, this.child_number, this.dad_height, this.mom_height, this.type, this.nickname, this.alarm);
 }
 
 class SignupChildInfo {
@@ -265,13 +266,12 @@ class SignupHomePageState extends BaseState<SignupHomePage> {
     print(family_history);
     print(childInfo!.history_direct.length);
     Future<SignupParentResModel> offInfo =
-        httpService.signup2(parentInfo!.id, parentInfo!.pwd, parentInfo!.type, token, parentInfo!.name, parentInfo!.birth, parentInfo!.phone, parentInfo!.code, parentInfo!.addr1, parentInfo!.addr2, parentInfo!.dad_height, parentInfo!.mom_height, family_history, "", "");
+        httpService.signup2(parentInfo!.id, parentInfo!.pwd, parentInfo!.type, token, parentInfo!.name, parentInfo!.birth, parentInfo!.phone, parentInfo!.code, parentInfo!.addr1, parentInfo!.addr2, parentInfo!.dad_height, parentInfo!.mom_height, family_history, "", "", widget.parentInfo.alarm);
     offInfo.then((SignupParentResModel value) async {
       setState(() {
         isLoading = false;
       });
       if (value.result == 0) {
-        print("aaaaaaaaaaaa");
         for (int i = 0; i < childInfo!.child_count; i++) {
           String medical_history = "";
           List<int> symptom = childInfo!.symptoms[i];

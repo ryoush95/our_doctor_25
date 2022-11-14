@@ -13,6 +13,8 @@ import 'package:ourdoctor/pages/components/h14.dart';
 import 'package:ourdoctor/pages/components/h20.dart';
 import 'package:ourdoctor/pages/home/item_growth.dart';
 import 'package:ourdoctor/pages/intro/first.dart';
+import 'package:ourdoctor/provider/convert_score_provider.dart';
+import 'package:provider/provider.dart';
 
 class GrowthStoreArea extends StatefulWidget {
   GrowthStoreArea({Key? key, this.curCategory = 0}) : super(key: key);
@@ -77,6 +79,7 @@ class GrowthStoreAreaState extends BaseState<GrowthStoreArea> {
               H20(text: LanguageService.trans('growth_store_home')),
               InkWell(
                   onTap: () {
+                    Provider.of<ConvertScoreProvider>(context, listen: false).changeCareTab(0);
                     eventBus.fire(MoreHomeCareEvent(type: 0));
                   },
                   child: H14(

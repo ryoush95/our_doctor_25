@@ -95,7 +95,7 @@ class CommunityAreaState extends BaseState<CommunityArea>  {
           !isLoading
               ? SizedBox(
             width: double.infinity,
-            height: 220,
+            height: 180,
             child: ListView.builder(
                 shrinkWrap: true,
                 scrollDirection: Axis.horizontal,

@@ -6,6 +6,9 @@ class ConvertScoreProvider extends ChangeNotifier{
   int _tab = 0;
   int get tab => _tab;
 
+  int _careTab = 0;
+  int get careTab => _careTab;
+
   void changeScore(double s) {
     _score = s;
     notifyListeners();
@@ -14,5 +17,9 @@ class ConvertScoreProvider extends ChangeNotifier{
   void changeTab(int t) {
     _tab = t;
     notifyListeners();
+  }
+
+  void changeCareTab(int t) {
+    _careTab = t;
   }
 }

@@ -726,7 +726,7 @@ class SignupFamilyPageState extends BaseState<SignupFamilyPage> {
     });
 
     Future<SignupParentResModel> offInfo = httpService.signup3(widget.info!.id, widget.info!.pwd, widget.info!.type, token, widget.info!.name, widget.info!.birth, widget.info!.phone, widget.info!.code, widget.info!.addr1, widget.info!.addr2, widget.info!.dad_height, widget.info!.mom_height,
-        family_history, child_list, widget.info!.relationship, widget.info!.nickname);
+        family_history, child_list, widget.info!.relationship, widget.info!.nickname, widget.info!.alarm);
     offInfo.then((SignupParentResModel value) async {
       setState(() {
         isLoading = false;

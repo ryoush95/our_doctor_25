@@ -8,6 +8,7 @@ import 'package:ourdoctor/global/app_colors.dart';
 import 'package:ourdoctor/global/app_get_it.dart';
 import 'package:ourdoctor/helpers/fcm.dart';
 import 'package:ourdoctor/pages/splash/splash.dart';
+import 'package:ourdoctor/provider/global_provider.dart';
 import 'package:ourdoctor/provider/old_food_list_provider.dart';
 import 'package:ourdoctor/provider/convert_score_provider.dart';
 import 'package:provider/provider.dart';
@@ -24,6 +25,7 @@ void main() {
     providers: [
       ChangeNotifierProvider(create: (_) => ConvertScoreProvider()),
       ChangeNotifierProvider(create: (_) => OldFoodListProvider()),
+      ChangeNotifierProvider(create: (_) => GlobalProvider()),
       // ChangeNotifierProvider(create: (_) => ChildQuizProvider()),
     ],
     child: MyApp(),
