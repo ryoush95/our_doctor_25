@@ -75,6 +75,7 @@ import 'package:ourdoctor/models/review_detail_res_model.dart';
 import 'package:ourdoctor/models/review_list_res_model.dart';
 import 'package:ourdoctor/models/signup_parent_model.dart';
 import 'package:ourdoctor/models/story_res_model.dart';
+import 'package:ourdoctor/models/test2_quiz_list_model.dart';
 import 'package:ourdoctor/models/upload_res_model.dart';
 import 'package:ourdoctor/models/userinfo_res_model.dart';
 import 'package:path/path.dart';
@@ -199,6 +200,29 @@ class HttpService {
     final response = await http.post(myUri, body: body);
     if (response.statusCode == 200) {
       return DefaultResModel.fromJson(json.decode(response.body));
+    } else {
+      // If that call was not successful, throw an error.
+      showToast(LanguageService.trans("server_fail"));
+      throw Exception(LanguageService.trans("server_fail"));
+    }
+  }
+
+  Future<String> getVersion() async {
+    String _url = API_BASE_URL + "api/user/get_ver";
+    String devtype = "";
+    if (Platform.isAndroid) {
+      devtype = "android";
+    } else {
+      devtype = "ios";
+    }
+
+    Map<String, String> body = {
+      'platform' : devtype,
+    };
+    Uri myUri = Uri.parse(_url);
+    final response = await http.post(myUri, body: body);
+    if (response.statusCode == 200) {
+      return response.body;
     } else {
       // If that call was not successful, throw an error.
       showToast(LanguageService.trans("server_fail"));
@@ -876,11 +900,14 @@ class HttpService {
   }
 
   //인증번호 요청
-  Future<DefaultResModel> authKey(String phone) async {
+  Future<DefaultResModel> authKey(String name,String phone,String type,String loginId) async {
     String _url = API_BASE_URL + "api/user/request_auth_key";
 
     Map<String, String> body = {
+      'name' : name,
       'phone': phone,
+      'type' : type,
+      'login_id' : loginId,
     };
     Uri myUri = Uri.parse(_url);
     final response = await http.post(myUri, body: body);
@@ -2252,6 +2279,24 @@ class HttpService {
     final response = await http.post(myUri, body: body);
     if (response.statusCode == 200) {
       return MbtiQuizSendResModel.fromJson(json.decode(response.body));
+    } else {
+      // If that call was not successful, throw an error.
+      showToast(LanguageService.trans("server_fail"));
+      throw Exception(LanguageService.trans("server_fail"));
+    }
+  }
+
+  //test2 퀴즈 불러오기
+  Future<Test2QuizListModel> getTest2QuizList(String quizName) async {
+    String _url = API_BASE_URL + "api/Monitor2/test2_quiz_list";
+    Map<String, String> body = {
+      'access_token': gUserInfo!.accessToken!,
+      'quiz_id' : quizName,
+    };
+    Uri myUri = Uri.parse(_url);
+    final response = await http.post(myUri, body: body);
+    if (response.statusCode == 200) {
+      return Test2QuizListModel.fromJson(json.decode(response.body));
     } else {
       // If that call was not successful, throw an error.
       showToast(LanguageService.trans("server_fail"));

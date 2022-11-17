@@ -97,6 +97,10 @@ dependencies:
   flutter_dash: ^0.0.1
   screenshot: ^1.2.3
   image_gallery_saver: ^1.7.1
+  package_info_plus: ^1.0.4
+
+
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -151,12 +155,11 @@ flutter:
           weight: 600
         - asset: fonts/Pretendard-Bold.otf
           weight: 700
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
+#  fonts:
+    - family: Recipekorea
+      fonts:
+        - asset: fonts/Recipekorea.ttf
+          weight: 400
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf

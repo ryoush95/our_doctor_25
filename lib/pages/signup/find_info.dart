@@ -519,9 +519,45 @@ class FindInfoPageState extends BaseState<FindInfoPage> {
       isLoading = true;
     });
 
+    String name = nameInputController.text;
     String phone = pageType == 1 ? idPhone : passPhone;
 
-    Future<DefaultResModel> offerInfo = httpService.authKey(phone);
+    Future<DefaultResModel> offerInfo = httpService.authKey(name,phone,"id","");
+    offerInfo.then((DefaultResModel value) async {
+      setState(() {
+        isLoading = false;
+      });
+      if (value.result == 0) {
+        showToast(LanguageService.trans('send_code_success'));
+        if (pageType == 1) {
+          nIdStep = nIdStep + 1;
+          checkIdValid();
+        } else {
+          nPassStep = nPassStep + 1;
+          checkPassValid();
+        }
+      } else {
+        showToast(value.msg ?? "");
+      }
+    }).catchError((onError) {
+      setState(() {
+        isLoading = false;
+      });
+      showToast(onError);
+    });
+  }
+
+  //인증번호 요청
+  Future<void> reqPwSendCode() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    String name = nameInputController.text;
+    String id = passIdInputController.text;
+    String phone = pageType == 1 ? idPhone : passPhone;
+
+    Future<DefaultResModel> offerInfo = httpService.authKey(name,phone,"pw",id);
     offerInfo.then((DefaultResModel value) async {
       setState(() {
         isLoading = false;
@@ -697,7 +733,7 @@ class FindInfoPageState extends BaseState<FindInfoPage> {
                     onBackPressed();
                   } else {
                     if (nPassStep == 0) {
-                      reqSendCode();
+                      reqPwSendCode();
                     } else if (nPassStep == 1) {
                       reqFindPwd();
                     } else if (nPassStep == 2) {

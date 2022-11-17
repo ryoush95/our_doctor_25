@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 // import 'package:firebase_messaging/firebase_messaging.dart';
@@ -19,6 +20,7 @@ import 'package:ourdoctor/pages/intro/intro1.dart';
 import 'package:ourdoctor/pages/tab_main.dart';
 import 'package:package_info/package_info.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SplashPage extends StatefulWidget {
   @override
@@ -34,15 +36,11 @@ class SplashPageState extends BaseState<SplashPage> {
   void initState() {
     super.initState();
 
-    PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
-      gAppVer = packageInfo.version;
-    });
+    checkVersion();
 
-    if (Platform.isAndroid) {
-      checkPermission();
-    } else {
-      startApp();
-    }
+    // PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
+    //   gAppVer = packageInfo.version;
+    // });
   }
 
   Future<bool> onBackPressed() async {
@@ -54,6 +52,67 @@ class SplashPageState extends BaseState<SplashPage> {
     }
     backButtonTimestamp = now;
     return false;
+  }
+
+  void checkVersion() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+
+    String myVer = packageInfo.version;
+    String appName = packageInfo.appName;
+    String packageName = packageInfo.packageName;
+    String updateVer = "";
+
+    gAppVer = packageInfo.version;
+
+    Future<String> data = httpService.getVersion();
+    data.then((value) async {
+      Map<String, dynamic> map = jsonDecode(value);
+      if(map['result'] == 0) {
+        updateVer = map['data']['version'];
+        print(updateVer);
+
+        if (myVer != updateVer) {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text('필수 업데이트가 있습니다'),
+                content: Text('${updateVer} 버전으로 업데이트 하시겠습니까?'),
+                actions: [
+                  TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: Text('취소')),
+                  TextButton(
+                      onPressed: () {
+                        if (Platform.isAndroid) {
+                          launch("https://play.google.com/store/apps/details?id=$packageName");
+                        }
+                        if (Platform.isIOS) {
+                          launch("https://apps.apple.com/kr/app/$appName/id1626735427");
+                        }
+                      },
+                      child: Text('업데이트'))
+                ],
+              );
+            },
+          );
+        } else {
+          if (Platform.isAndroid) {
+            checkPermission();
+          } else {
+            startApp();
+          }
+        }
+      }
+    }).catchError((onError) {
+      setState(() {
+        isLoading = false;
+      });
+      showToast('서버와의 연결이 원활하지 않습니다.');
+      Navigator.pushReplacement(context, SlideRightTransRoute(builder: (context) => FirstPage()));
+    });
   }
 
   void startApp() async {

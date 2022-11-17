@@ -11,12 +11,16 @@ import 'package:ourdoctor/helpers/transition.dart';
 import 'package:ourdoctor/language/language_service.dart';
 import 'package:ourdoctor/models/order_start_res_model.dart';
 import 'package:ourdoctor/models/product_detail_res_model.dart';
+import 'package:ourdoctor/models/test2_quiz_list_model.dart';
+import 'package:ourdoctor/pages/care/inspection_test2_answer.dart';
 import 'package:ourdoctor/pages/components/h16.dart';
 import 'package:ourdoctor/pages/components/h18.dart';
 import 'package:ourdoctor/pages/components/main_text_button.dart';
 import 'package:ourdoctor/pages/my/custom_mbti_inspection.dart';
 import 'package:ourdoctor/pages/my/inspection_first2.dart';
 import 'package:sprintf/sprintf.dart';
+
+import 'inspection_test2_first.dart';
 
 class PointBuyingDialog extends StatefulWidget {
   PointBuyingDialog({Key? key, required this.pid}) : super(key: key);
@@ -45,6 +49,7 @@ class PointBuyingDialogState extends State<PointBuyingDialog> {
   @override
   void initState() {
     super.initState();
+    print('PointBuyingDialogState');
     getProductDetail();
     mData.name = "";
     mData.mainImage = "";
@@ -56,6 +61,8 @@ class PointBuyingDialogState extends State<PointBuyingDialog> {
     mData.liked = "0";
     mData.notice = "";
     mData.tags = "";
+    mData.category2 = "";
+    mData.category3 = "";
     setState(() {});
   }
 
@@ -273,7 +280,9 @@ class PointBuyingDialogState extends State<PointBuyingDialog> {
                                         if (widget.pid == '36') {
                                           return CustomMbtiInspectionMainPage();
                                         }
-                                        if (widget.pid == ''){}
+                                        if (mData.category2 == 'TEST2'){
+                                          return InspectionTest2FirstPage(data: mData,);
+                                        }
                                         return InspectionFirstPage2(list: []);
                                       }),
                                 );

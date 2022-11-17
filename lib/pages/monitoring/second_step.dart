@@ -383,7 +383,7 @@ class SecondStepPageState extends BaseState<SecondStepPage> {
     String sociability = ""; //사회성평가 json데이터
     String work_out = ""; //운동성평가 json데이터
 
-    final p = Provider.of<OldFoodListProvider>(context);
+    final p = Provider.of<OldFoodListProvider>(context, listen: false);
     List<FoodDto> food1 = monitoringData == null ? [] : p.food1;
     List<FoodDto> food2 = monitoringData == null ? [] : p.food2;
     List<FoodDto> food3 = monitoringData == null ? [] : p.food3;

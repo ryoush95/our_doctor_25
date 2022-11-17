@@ -18,7 +18,7 @@ import 'package:ourdoctor/pages/care/product_list.dart';
 import 'package:ourdoctor/pages/components/h14.dart';
 import 'package:ourdoctor/pages/components/h18.dart';
 
-import 'item_mbti_product.dart';
+import 'item_test_product.dart';
 
 
 class ProductShow1 extends StatefulWidget {
@@ -76,7 +76,7 @@ class ProductShow1State extends BaseState<ProductShow1> {
                     //BannerList info = arrBannerList!.elementAt(index);
                     return Container(
                       padding: const EdgeInsets.only(right: 20),
-                      child: ItemMbtiProduct(data: info, info: widget.list!.elementAt(index)),
+                      child: ItemTestProduct(data: info, likeInfo: widget.list!.elementAt(index)),
                     );
                   }),
             )

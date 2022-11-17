@@ -17,27 +17,24 @@ import 'package:ourdoctor/pages/care/point_buying_dialog.dart';
 import 'package:ourdoctor/pages/care/product_detail.dart';
 import 'package:ourdoctor/pages/components/h14.dart';
 import 'package:ourdoctor/pages/components/h16.dart';
-import 'package:ourdoctor/pages/my/custom_mbti_inspection.dart';
-import 'package:ourdoctor/pages/my/order.dart';
 import 'package:sprintf/sprintf.dart';
 
-import 'buying_dialog.dart';
-
-class ItemMbtiProduct extends StatefulWidget {
-  ItemMbtiProduct({Key? key, required this.data, this.info}) : super(key: key);
+class ItemTestProduct extends StatefulWidget {
+  ItemTestProduct({Key? key, required this.data, this.likeInfo}) : super(key: key);
 
   final ProductDto data;
-  final PdtLikeDto? info;
+  final PdtLikeDto? likeInfo;
 
   @override
-  ItemMbtiProductState createState() => ItemMbtiProductState();
+  ItemTestProductState createState() => ItemTestProductState();
 }
 
-class ItemMbtiProductState extends BaseState<ItemMbtiProduct> {
+class ItemTestProductState extends BaseState<ItemTestProduct> {
   //List<BannerList>? arrBannerList;
   ProductDetailDto mData = ProductDetailDto();
   @override
   void initState() {
+    print('ItemTestProductState');
     super.initState();
   }
 
@@ -56,10 +53,10 @@ class ItemMbtiProductState extends BaseState<ItemMbtiProduct> {
       });
       if (value.result == 0) {
         setState(() {
-          if (widget.info!.liked! == "0") {
-            widget.info!.liked = "1";
+          if (widget.likeInfo!.liked! == "0") {
+            widget.likeInfo!.liked = "1";
           } else {
-            widget.info!.liked = "0";
+            widget.likeInfo!.liked = "0";
           }
         });
       } else {
@@ -109,26 +106,26 @@ class ItemMbtiProductState extends BaseState<ItemMbtiProduct> {
                   child: Stack(
                     children: [
                       Visibility(
-                          visible: widget.info!.mainImage!.isEmpty,
+                          visible: widget.likeInfo!.mainImage!.isEmpty,
                           child: ClipPath(
                             clipper: ShapeBorderClipper(
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10))),
                             child: Image.network(
-                              widget.info!.mainImage!,
+                              widget.likeInfo!.mainImage!,
                               fit: BoxFit.fill,
                               width: 150,
                               height: 150,
                             ),
                           )),
                       Visibility(
-                        visible: widget.info!.mainImage!.isNotEmpty,
+                        visible: widget.likeInfo!.mainImage!.isNotEmpty,
                         child: ClipPath(
                           clipper: ShapeBorderClipper(
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10))),
                           child: ExtendedImage.network(
-                            widget.info!.mainImage!,
+                            widget.likeInfo!.mainImage!,
                             width: 150,
                             height: 150,
                             fit: BoxFit.fill,
@@ -142,10 +139,10 @@ class ItemMbtiProductState extends BaseState<ItemMbtiProduct> {
                 Positioned(
                     child: InkWell(
                       onTap: () {
-                        productLike(widget.info!.id!);
+                        productLike(widget.likeInfo!.id!);
                       },
-                      child: widget.info!.liked! == "1"
-                          ? Icon(
+                      child: widget.likeInfo!.liked! == "1"
+                          ? const Icon(
                               Icons.favorite,
                               color: Colors.pinkAccent,
                             )
@@ -158,7 +155,7 @@ class ItemMbtiProductState extends BaseState<ItemMbtiProduct> {
               Container(
                 width: 150,
                 child: H14(
-                  text: widget.info!.name!,
+                  text: widget.likeInfo!.name!,
                   weight: FW.regular,
                   maxLine: 1,
                   align: TextAlign.start,
@@ -170,7 +167,7 @@ class ItemMbtiProductState extends BaseState<ItemMbtiProduct> {
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: H16(
-                    text: ValidPrice(sprintf("%.0f", [double.parse(widget.info!.price!)])) + "P",
+                    text: ValidPrice(sprintf("%.0f", [double.parse(widget.likeInfo!.price!)])) + "P",
                     weight: FW.bold,
                     maxLine: 1,
                     align: TextAlign.left,
@@ -180,7 +177,7 @@ class ItemMbtiProductState extends BaseState<ItemMbtiProduct> {
               ),
               const SizedBox(height: 10),
               //카테고리 부분
-              widget.info!.tags == null
+              widget.likeInfo!.tags == null
                   ? const SizedBox()
                   : Container(
                       margin: const EdgeInsets.only(right: 16),
@@ -188,11 +185,11 @@ class ItemMbtiProductState extends BaseState<ItemMbtiProduct> {
                       height: 22,
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
-                        itemCount: widget.info!.tags!.split(",").length,
+                        itemCount: widget.likeInfo!.tags!.split(",").length,
                         itemBuilder: (BuildContext context, int index) {
                           String tag =
-                              widget.info!.tags!.split(",").length > index
-                                  ? widget.info!.tags!.split(",")[index]
+                              widget.likeInfo!.tags!.split(",").length > index
+                                  ? widget.likeInfo!.tags!.split(",")[index]
                                   : "";
                           return Container(
                             height: tag == "" ? 0 : 22,
@@ -228,7 +225,7 @@ class ItemMbtiProductState extends BaseState<ItemMbtiProduct> {
         backgroundColor: Colors.transparent,
         context: context,
         builder: (context) {
-          return PointBuyingDialog( pid: widget.info!.id!);
+          return PointBuyingDialog( pid: widget.likeInfo!.id!);
         });
   }
 
