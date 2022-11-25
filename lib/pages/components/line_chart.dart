@@ -23,25 +23,27 @@ class LineChartWidget extends StatefulWidget {
 class _LineChartWidgetState extends State<LineChartWidget> {
   List<Color> gradientColors = [];
 
-  String getBottomTitle(int value) {
+  Widget getBottomTitle(int value, TitleMeta meta) {
+    String title = '';
+    final style = AppTextStyle.PD(const Color(0xff585859), 11, weight: FW.medium);
+
     if (widget.data.isNotEmpty) {
-      String title = '';
       if (value % 2 == 0) {
         title = widget.data[(value / 2).floor()].morning_time.substring(8, 10) + LanguageService.trans("M");
       } else {
         title = widget.data[(value / 2).floor()].afternoon_time.substring(8, 10) + LanguageService.trans("M");
       }
-      return title;
+      // return title;
     } else if (widget.data1 != null) {
       if (widget.type == 'food') {
-        return widget.data1!.graphFood![value].date!.substring(8, 10) + '일';
+        title = widget.data1!.graphFood![value].date!.substring(8, 10) + '일';
       } else if (widget.type == 'night') {
-        return widget.data1!.graphSleep![value].date!.substring(8, 10) + '일';
+        title = widget.data1!.graphSleep![value].date!.substring(8, 10) + '일';
       } else if (widget.type == 'launch') {
-        return widget.data1!.graphSleep![value].date!.substring(8, 10) + '일';
+        title = widget.data1!.graphSleep![value].date!.substring(8, 10) + '일';
       }
     }
-    return '';
+    return SideTitleWidget(child: Text(title, style: style), axisSide: meta.axisSide);
   }
 
   @override
@@ -139,34 +141,42 @@ class _LineChartWidgetState extends State<LineChartWidget> {
       ),
       titlesData: FlTitlesData(
         show: true,
-        leftTitles: SideTitles(showTitles: false),
-        topTitles: SideTitles(showTitles: false),
-        bottomTitles: SideTitles(
-          showTitles: true,
-          reservedSize: 22,
-          //interval: ((maxY - minY) / 4) == 0 ? 1 : ((maxY - minY) / 4).ceil().toDouble(),
-          interval: ((getMaxY() - getMinY()) / 4) == 0 ? 1 : 1,
-          getTextStyles: (context, value) => AppTextStyle.PD(const Color(0xff585859), 11, weight: FW.medium),
-          getTitles: (value) {
-            return getBottomTitle(value.toInt());
-          },
-          margin: 10,
+        leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+        topTitles:  AxisTitles(sideTitles: SideTitles(showTitles: false)),
+        bottomTitles: AxisTitles(
+          sideTitles: SideTitles(
+            showTitles: true,
+            reservedSize: 22,
+            //interval: ((maxY - minY) / 4) == 0 ? 1 : ((maxY - minY) / 4).ceil().toDouble(),
+            interval: ((getMaxY() - getMinY()) / 4) == 0 ? 1 : 1,
+            getTitlesWidget: (value, meta) {
+              return getBottomTitle(value.toInt(), meta);
+            },
+            // margin: 10,
+          ),
         ),
-        rightTitles: SideTitles(
-          showTitles: true,
-          // interval: 10,
-          getTextStyles: (context, value) => AppTextStyle.PD(const Color(0xffa0a0a0), 11, weight: FW.medium),
-          getTitles: (value) {
-            if (widget.type == 'food') {
-              return sprintf("%.0f", [value]);
-            } else if (widget.type == 'night' || widget.type == 'launch') {
-              return sprintf("%.1f", [value / 60.0]);
-            }
-            return value.toString();
-          },
-          reservedSize: 32,
-          // margin: 12,
-        ),
+        rightTitles: AxisTitles(
+          sideTitles: SideTitles(
+            showTitles: true,
+            // interval: 10,
+            getTitlesWidget: (value, meta) {
+              String title = '';
+              final style = AppTextStyle.PD(const Color(0xff585859), 11, weight: FW.medium);
+              if (widget.type == 'food') {
+                title = sprintf("%.0f", [value]);
+              } else if (widget.type == 'night' || widget.type == 'launch') {
+                title = sprintf("%.1f", [value / 60.0]);
+              } else {
+                title = value.toString();
+              }
+
+              return SideTitleWidget(child: Text(title, style: style), axisSide: meta.axisSide);
+            },
+            reservedSize: 32,
+            // margin: 12,
+          ),
+        )
+
       ),
       borderData: FlBorderData(show: false),
       minX: 0,
@@ -177,11 +187,18 @@ class _LineChartWidgetState extends State<LineChartWidget> {
         LineChartBarData(
           spots: spotList(),
           isCurved: false,
-          colors: [widget.gradientColor],
+          color: widget.gradientColor,
           barWidth: 2,
           isStrokeCapRound: true,
           dotData: FlDotData(show: true, getDotPainter: customDotPainter),
-          belowBarData: BarAreaData(show: true, colors: gradientColors.map((color) => color.withOpacity(0.8)).toList(), gradientFrom: const Offset(0, 0), gradientTo: const Offset(0, 1)),
+          belowBarData: BarAreaData(
+              show: true,
+              gradient: LinearGradient(colors: gradientColors.map((color) => color.withOpacity(0.8)).toList(),),
+              // colors: gradientColors.map((color) => color.withOpacity(0.8)).toList(),
+              // gradientFrom: const Offset(0, 0),
+              // gradientTo: const Offset(0, 1),
+              // cutOffY:
+          ),
         ),
       ],
     );

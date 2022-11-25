@@ -35,9 +35,11 @@ class _LineChart3WidgetState extends State<LineChart3Widget> {
 
   String getBottomTitle(int value) {
     if (widget.type == 'height') {
-      return widget.data1!.graph![value].date!.substring(5, 7) + LanguageService.trans("M");
+      return widget.data1!.graph![value].date!.substring(5, 7) +
+          LanguageService.trans("M");
     } else if (widget.type == 'weight') {
-      return widget.data2!.graph![value].date!.substring(5, 7) + LanguageService.trans("M");
+      return widget.data2!.graph![value].date!.substring(5, 7) +
+          LanguageService.trans("M");
     }
     return '';
   }
@@ -70,20 +72,21 @@ class _LineChart3WidgetState extends State<LineChart3Widget> {
           ),
           color: Colors.white),
       child: Padding(
-          padding: const EdgeInsets.only(right: 0.0, left: 16.0, top: 12, bottom: 12),
+          padding: const EdgeInsets.only(
+              right: 0.0, left: 16.0, top: 12, bottom: 12),
           child: Stack(
             children: [
-              // LineChart(
-              //   mainData(),
-              // ),
-              // LineChart(
-              //   mainData1(),
-              // ),
-              // widget.type == 'height'
-              //     ? LineChart(
-              //         mainData2(),
-              //       )
-              //     : Container(),
+              LineChart(
+                mainData(),
+              ),
+              LineChart(
+                mainData1(),
+              ),
+              widget.type == 'height'
+                  ? LineChart(
+                      mainData2(),
+                    )
+                  : Container(),
               LineChart(
                 allData(),
               )
@@ -108,33 +111,45 @@ class _LineChart3WidgetState extends State<LineChart3Widget> {
       ),
       titlesData: FlTitlesData(
         show: true,
-        leftTitles: SideTitles(showTitles: false),
-        topTitles: SideTitles(showTitles: false),
-        bottomTitles: SideTitles(
-          showTitles: true,
-          reservedSize: 22,
-          //interval: ((maxY - minY) / 4) == 0 ? 1 : ((maxY - minY) / 4).ceil().toDouble(),
-          interval: ((getMaxY() - getMinY()) / 4) == 0 ? 1 : 1,
-          getTextStyles: (context, value) => AppTextStyle.PD(const Color(0xff585859), 11, weight: FW.medium),
-          getTitles: (value) {
-            return getBottomTitle(value.toInt());
-          },
-          margin: 10,
+        leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+        topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+        bottomTitles: AxisTitles(
+          sideTitles: SideTitles(
+            showTitles: true,
+            reservedSize: 22,
+            //interval: ((maxY - minY) / 4) == 0 ? 1 : ((maxY - minY) / 4).ceil().toDouble(),
+            interval: ((getMaxY() - getMinY()) / 4) == 0 ? 1 : 1,
+            getTitlesWidget: (value, meta) {
+              String title = getBottomTitle(value.toInt()).toString();
+              final style = AppTextStyle.PD(const Color(0xff585859), 11,
+                  weight: FW.medium);
+              return SideTitleWidget(
+                  child: Text(title, style: style), axisSide: meta.axisSide);
+            },
+            // margin: 10,
+          ),
         ),
-        rightTitles: SideTitles(
-          showTitles: true,
-          // interval: ((maxY - minY) / 3).floor().toDouble(),
-          getTextStyles: (context, value) => AppTextStyle.PD(const Color(0xffa0a0a0), 11, weight: FW.medium),
-          getTitles: (value) {
-            return value.toString();
-          },
-          reservedSize: 32,
-          // margin: 12,
+        rightTitles: AxisTitles(
+          sideTitles: SideTitles(
+            showTitles: true,
+            // interval: ((maxY - minY) / 3).floor().toDouble(),
+            getTitlesWidget: (value, meta) {
+              String title = value.toInt().toString();
+              final style = AppTextStyle.PD(const Color(0xffa0a0a0), 11,
+                  weight: FW.medium);
+              return SideTitleWidget(
+                  child: Text(title, style: style), axisSide: meta.axisSide);
+            },
+            reservedSize: 32,
+            // margin: 12,
+          ),
         ),
       ),
       borderData: FlBorderData(show: false),
       minX: 0,
-      maxX: widget.type == 'height' ? widget.data1!.graph!.length.toDouble() - 1 : widget.data2!.graph!.length.toDouble() - 1,
+      maxX: widget.type == 'height'
+          ? widget.data1!.graph!.length.toDouble() - 1
+          : widget.data2!.graph!.length.toDouble() - 1,
       minY: getMinY().floor() - 1.0,
       maxY: getMaxY().ceil() + 1.0,
       lineBarsData: widget.type == 'height'
@@ -142,7 +157,7 @@ class _LineChart3WidgetState extends State<LineChart3Widget> {
               LineChartBarData(
                 spots: spotList(),
                 isCurved: false,
-                colors: [widget.gradientColor],
+                color: widget.gradientColor,
                 barWidth: 2,
                 isStrokeCapRound: true,
                 dotData: FlDotData(show: true, getDotPainter: customDotPainter),
@@ -151,19 +166,21 @@ class _LineChart3WidgetState extends State<LineChart3Widget> {
               LineChartBarData(
                 spots: spotList1(),
                 isCurved: false,
-                colors: [widget.gradientColor1],
+                color: widget.gradientColor1,
                 barWidth: 2,
                 isStrokeCapRound: true,
-                dotData: FlDotData(show: true, getDotPainter: customDotPainter1),
+                dotData:
+                    FlDotData(show: true, getDotPainter: customDotPainter1),
                 //belowBarData: BarAreaData(show: true, colors: gradientColors.map((color) => this.widget.gradientflag ? color.withOpacity(0.8) : Colors.white).toList(), gradientFrom: const Offset(0, 0), gradientTo: const Offset(0, 1)),
               ),
               LineChartBarData(
                 spots: spotList2(),
                 isCurved: false,
-                colors: [widget.gradientColor2],
+                color: widget.gradientColor2,
                 barWidth: 2,
                 isStrokeCapRound: true,
-                dotData: FlDotData(show: true, getDotPainter: customDotPainter2),
+                dotData:
+                    FlDotData(show: true, getDotPainter: customDotPainter2),
                 //belowBarData: BarAreaData(show: true, colors: gradientColors.map((color) => this.widget.gradientflag ? color.withOpacity(0.8) : Colors.white).toList(), gradientFrom: const Offset(0, 0), gradientTo: const Offset(0, 1)),
               ),
             ]
@@ -171,7 +188,7 @@ class _LineChart3WidgetState extends State<LineChart3Widget> {
               LineChartBarData(
                 spots: spotList(),
                 isCurved: false,
-                colors: [widget.gradientColor],
+                color: widget.gradientColor,
                 barWidth: 2,
                 isStrokeCapRound: true,
                 dotData: FlDotData(show: true, getDotPainter: customDotPainter),
@@ -180,10 +197,11 @@ class _LineChart3WidgetState extends State<LineChart3Widget> {
               LineChartBarData(
                 spots: spotList1(),
                 isCurved: false,
-                colors: [widget.gradientColor1],
+                color: widget.gradientColor1,
                 barWidth: 2,
                 isStrokeCapRound: true,
-                dotData: FlDotData(show: true, getDotPainter: customDotPainter1),
+                dotData:
+                    FlDotData(show: true, getDotPainter: customDotPainter1),
                 //belowBarData: BarAreaData(show: true, colors: gradientColors.map((color) => this.widget.gradientflag ? color.withOpacity(0.8) : Colors.white).toList(), gradientFrom: const Offset(0, 0), gradientTo: const Offset(0, 1)),
               ),
             ],
@@ -204,40 +222,52 @@ class _LineChart3WidgetState extends State<LineChart3Widget> {
       ),
       titlesData: FlTitlesData(
         show: true,
-        leftTitles: SideTitles(showTitles: false),
-        topTitles: SideTitles(showTitles: false),
-        bottomTitles: SideTitles(
-          showTitles: true,
-          reservedSize: 22,
-          //interval: ((maxY - minY) / 4) == 0 ? 1 : ((maxY - minY) / 4).ceil().toDouble(),
-          interval: ((getMaxY() - getMinY()) / 4) == 0 ? 1 : 1,
-          getTextStyles: (context, value) => AppTextStyle.PD(const Color(0xff585859), 11, weight: FW.medium),
-          getTitles: (value) {
-            return getBottomTitle(value.toInt());
-          },
-          margin: 10,
+        leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+        topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+        bottomTitles: AxisTitles(
+          sideTitles: SideTitles(
+            showTitles: true,
+            reservedSize: 22,
+            //interval: ((maxY - minY) / 4) == 0 ? 1 : ((maxY - minY) / 4).ceil().toDouble(),
+            getTitlesWidget: (value, meta) {
+              String title = getBottomTitle(value.toInt());
+              final style = AppTextStyle.PD(const Color(0xff585859), 11,
+                  weight: FW.medium);
+
+              return SideTitleWidget(
+                  child: Text(title, style: style), axisSide: meta.axisSide);
+            },
+            interval: ((getMaxY() - getMinY()) / 4) == 0 ? 1 : 1,
+          ),
         ),
-        rightTitles: SideTitles(
-          showTitles: true,
-          // interval: ((maxY - minY) / 3).floor().toDouble(),
-          getTextStyles: (context, value) => AppTextStyle.PD(const Color(0xffa0a0a0), 11, weight: FW.medium),
-          getTitles: (value) {
-            return value.toString();
-          },
-          reservedSize: 32,
-          // margin: 12,
+        rightTitles: AxisTitles(
+          sideTitles: SideTitles(
+            showTitles: true,
+            // interval: ((maxY - minY) / 3).floor().toDouble(),
+            getTitlesWidget: (value, meta) {
+              String title = value.toInt().toString();
+              final style = AppTextStyle.PD(const Color(0xffa0a0a0), 11,
+                  weight: FW.medium);
+              return SideTitleWidget(
+                  child: Text(title, style: style), axisSide: meta.axisSide);
+            },
+            reservedSize: 32,
+            // margin: 12,
+          ),
         ),
       ),
       borderData: FlBorderData(show: false),
       minX: 0,
-      maxX: widget.type == 'height' ? widget.data1!.graph!.length.toDouble() - 1 : widget.data2!.graph!.length.toDouble() - 1,
+      maxX: widget.type == 'height'
+          ? widget.data1!.graph!.length.toDouble() - 1
+          : widget.data2!.graph!.length.toDouble() - 1,
       minY: getMinY().floor() - 1.0,
       maxY: getMaxY().ceil() + 1.0,
       lineBarsData: [
         LineChartBarData(
           spots: spotList(),
           isCurved: false,
-          colors: [widget.gradientColor],
+          color: widget.gradientColor,
           barWidth: 2,
           isStrokeCapRound: true,
           dotData: FlDotData(show: true, getDotPainter: customDotPainter),
@@ -261,40 +291,52 @@ class _LineChart3WidgetState extends State<LineChart3Widget> {
       ),
       titlesData: FlTitlesData(
         show: true,
-        leftTitles: SideTitles(showTitles: false),
-        topTitles: SideTitles(showTitles: false),
-        bottomTitles: SideTitles(
-          showTitles: true,
-          reservedSize: 22,
-          //interval: ((maxY - minY) / 4) == 0 ? 1 : ((maxY - minY) / 4).ceil().toDouble(),
-          interval: ((getMaxY() - getMinY()) / 4) == 0 ? 1 : 1,
-          getTextStyles: (context, value) => AppTextStyle.PD(const Color(0xff585859), 11, weight: FW.medium),
-          getTitles: (value) {
-            return getBottomTitle(value.toInt());
-          },
-          margin: 10,
+        leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+        topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+        bottomTitles: AxisTitles(
+          sideTitles: SideTitles(
+            showTitles: true,
+            reservedSize: 22,
+            //interval: ((maxY - minY) / 4) == 0 ? 1 : ((maxY - minY) / 4).ceil().toDouble(),
+            interval: ((getMaxY() - getMinY()) / 4) == 0 ? 1 : 1,
+            getTitlesWidget: (value, meta) {
+              String title = getBottomTitle(value.toInt());
+              final style = AppTextStyle.PD(const Color(0xff585859), 11,
+                  weight: FW.medium);
+              return SideTitleWidget(
+                  child: Text(title, style: style), axisSide: meta.axisSide);
+            },
+            // margin: 10,
+          ),
         ),
-        rightTitles: SideTitles(
-          showTitles: true,
-          // interval: ((maxY - minY) / 3).floor().toDouble(),
-          getTextStyles: (context, value) => AppTextStyle.PD(const Color(0xffa0a0a0), 11, weight: FW.medium),
-          getTitles: (value) {
-            return value.toString();
-          },
-          reservedSize: 32,
-          // margin: 12,
+        rightTitles: AxisTitles(
+          sideTitles: SideTitles(
+            showTitles: true,
+            // interval: ((maxY - minY) / 3).floor().toDouble(),
+            getTitlesWidget: (value, meta) {
+              String title = value.toInt().toString();
+              final style = AppTextStyle.PD(const Color(0xffa0a0a0), 11,
+                  weight: FW.medium);
+              return SideTitleWidget(
+                  child: Text(title, style: style), axisSide: meta.axisSide);
+            },
+            reservedSize: 32,
+            // margin: 12,
+          ),
         ),
       ),
       borderData: FlBorderData(show: false),
       minX: 0,
-      maxX: widget.type == 'height' ? widget.data1!.graph!.length.toDouble() - 1 : widget.data2!.graph!.length.toDouble() - 1,
+      maxX: widget.type == 'height'
+          ? widget.data1!.graph!.length.toDouble() - 1
+          : widget.data2!.graph!.length.toDouble() - 1,
       minY: getMinY().floor() - 1.0,
       maxY: getMaxY().ceil() + 1.0,
       lineBarsData: [
         LineChartBarData(
           spots: spotList1(),
           isCurved: false,
-          colors: [widget.gradientColor1],
+          color: widget.gradientColor1,
           barWidth: 2,
           isStrokeCapRound: true,
           dotData: FlDotData(show: true, getDotPainter: customDotPainter1),
@@ -318,28 +360,38 @@ class _LineChart3WidgetState extends State<LineChart3Widget> {
       ),
       titlesData: FlTitlesData(
         show: true,
-        leftTitles: SideTitles(showTitles: false),
-        topTitles: SideTitles(showTitles: false),
-        bottomTitles: SideTitles(
-          showTitles: true,
-          reservedSize: 22,
-          //interval: ((maxY - minY) / 4) == 0 ? 1 : ((maxY - minY) / 4).ceil().toDouble(),
-          interval: ((getMaxY() - getMinY()) / 4) == 0 ? 1 : 1,
-          getTextStyles: (context, value) => AppTextStyle.PD(const Color(0xff585859), 11, weight: FW.medium),
-          getTitles: (value) {
-            return getBottomTitle(value.toInt());
-          },
-          margin: 10,
+        leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+        topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+        bottomTitles: AxisTitles(
+          sideTitles: SideTitles(
+            showTitles: true,
+            reservedSize: 22,
+            //interval: ((maxY - minY) / 4) == 0 ? 1 : ((maxY - minY) / 4).ceil().toDouble(),
+            interval: ((getMaxY() - getMinY()) / 4) == 0 ? 1 : 1,
+            getTitlesWidget: (value, meta) {
+              String title = getBottomTitle(value.toInt());
+              final style = AppTextStyle.PD(const Color(0xff585859), 11,
+                  weight: FW.medium);
+              return SideTitleWidget(
+                  child: Text(title, style: style), axisSide: meta.axisSide);
+            },
+            // margin: 10,
+          ),
         ),
-        rightTitles: SideTitles(
-          showTitles: true,
-          // interval: ((maxY - minY) / 3).floor().toDouble(),
-          getTextStyles: (context, value) => AppTextStyle.PD(const Color(0xffa0a0a0), 11, weight: FW.medium),
-          getTitles: (value) {
-            return value.toString();
-          },
-          reservedSize: 32,
-          // margin: 12,
+        rightTitles: AxisTitles(
+          sideTitles: SideTitles(
+            showTitles: true,
+            // interval: ((maxY - minY) / 3).floor().toDouble(),
+            getTitlesWidget: (value, meta) {
+              String title = value.toInt().toString();
+              final style = AppTextStyle.PD(const Color(0xffa0a0a0), 11,
+                  weight: FW.medium);
+              return SideTitleWidget(
+                  child: Text(title, style: style), axisSide: meta.axisSide);
+            },
+            reservedSize: 32,
+            // margin: 12,
+          ),
         ),
       ),
       borderData: FlBorderData(show: false),
@@ -351,7 +403,7 @@ class _LineChart3WidgetState extends State<LineChart3Widget> {
         LineChartBarData(
           spots: spotList2(),
           isCurved: false,
-          colors: [widget.gradientColor2],
+          color: widget.gradientColor2,
           barWidth: 2,
           isStrokeCapRound: true,
           dotData: FlDotData(show: true, getDotPainter: customDotPainter2),
@@ -361,16 +413,34 @@ class _LineChart3WidgetState extends State<LineChart3Widget> {
     );
   }
 
-  FlDotPainter customDotPainter(FlSpot spot, double xPercentage, LineChartBarData bar, int index, {double? size}) {
-    return FlDotCirclePainter(radius: 3.0, color: widget.gradientColor, strokeColor: Colors.white, strokeWidth: 1);
+  FlDotPainter customDotPainter(
+      FlSpot spot, double xPercentage, LineChartBarData bar, int index,
+      {double? size}) {
+    return FlDotCirclePainter(
+        radius: 3.0,
+        color: widget.gradientColor,
+        strokeColor: Colors.white,
+        strokeWidth: 1);
   }
 
-  FlDotPainter customDotPainter1(FlSpot spot, double xPercentage, LineChartBarData bar, int index, {double? size}) {
-    return FlDotCirclePainter(radius: 3.0, color: widget.gradientColor1, strokeColor: Colors.white, strokeWidth: 1);
+  FlDotPainter customDotPainter1(
+      FlSpot spot, double xPercentage, LineChartBarData bar, int index,
+      {double? size}) {
+    return FlDotCirclePainter(
+        radius: 3.0,
+        color: widget.gradientColor1,
+        strokeColor: Colors.white,
+        strokeWidth: 1);
   }
 
-  FlDotPainter customDotPainter2(FlSpot spot, double xPercentage, LineChartBarData bar, int index, {double? size}) {
-    return FlDotCirclePainter(radius: 3.0, color: widget.gradientColor2, strokeColor: Colors.white, strokeWidth: 1);
+  FlDotPainter customDotPainter2(
+      FlSpot spot, double xPercentage, LineChartBarData bar, int index,
+      {double? size}) {
+    return FlDotCirclePainter(
+        radius: 3.0,
+        color: widget.gradientColor2,
+        strokeColor: Colors.white,
+        strokeWidth: 1);
   }
 
   double getMinY() {

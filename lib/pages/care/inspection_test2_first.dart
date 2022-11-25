@@ -1,4 +1,5 @@
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:ourdoctor/global/app_colors.dart';
 import 'package:ourdoctor/global/app_styles.dart';
@@ -92,7 +93,8 @@ class InspectionTest2FirstPageState
                 title: widget.data.name,
                 onBackPressed: onBackPressed,
               ),
-              Image.network(widget.data.detailImage!),
+              CachedNetworkImage(imageUrl: widget.data.detailImage!),
+              // Image.network(widget.data.detailImage!),
               Container(
                 padding: EdgeInsets.all(30),
                 child: MainTextButton(
