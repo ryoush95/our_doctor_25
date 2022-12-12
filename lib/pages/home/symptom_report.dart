@@ -8,6 +8,7 @@ import 'package:ourdoctor/pages/base/base_state.dart';
 import 'package:ourdoctor/pages/components/h10.dart';
 import 'package:ourdoctor/pages/components/h11.dart';
 import 'package:ourdoctor/pages/components/h14.dart';
+import 'package:ourdoctor/pages/components/main_text_button.dart';
 import 'package:ourdoctor/pages/components/round_container.dart';
 
 class SymptomReport extends StatefulWidget {
@@ -285,7 +286,7 @@ class SymptomReportState extends BaseState<SymptomReport> {
               ],
             ),
           ),
-        )
+        ),
       ],
     );
   }

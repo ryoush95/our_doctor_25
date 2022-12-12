@@ -15,6 +15,8 @@ import 'package:ourdoctor/pages/base/base_state.dart';
 import 'package:ourdoctor/pages/care/product_detail.dart';
 import 'package:ourdoctor/pages/components/h18.dart';
 import 'package:ourdoctor/pages/components/h32_b.dart';
+import 'package:ourdoctor/pages/components/line_chart_test_3.dart';
+import 'package:ourdoctor/pages/components/price_point.dart';
 import 'package:ourdoctor/pages/components/result_area.dart';
 import 'package:ourdoctor/pages/home/bmi_bar1.dart';
 import 'package:ourdoctor/pages/home/height_line_chart.dart';
@@ -248,6 +250,7 @@ class HeightReportState extends BaseState<HeightReport> {
         child: Column(
           children: [
             HeightLineChart(data: widget.data),
+            LineChartSample1(points: pricePoints, points2 : pricePoints2),
             const SizedBox(height: 50),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,

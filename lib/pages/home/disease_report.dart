@@ -22,6 +22,7 @@ import 'package:ourdoctor/pages/components/main_text_button.dart';
 import 'package:ourdoctor/pages/components/result_area.dart';
 import 'package:ourdoctor/pages/dialog/dlg_common.dart';
 import 'package:ourdoctor/pages/home/symptom_report.dart';
+import 'package:ourdoctor/pages/home/symtom_paper.dart';
 import 'package:ourdoctor/pages/intro/first.dart';
 import 'package:ourdoctor/pages/my/photo_view.dart';
 import 'package:sprintf/sprintf.dart';
@@ -853,10 +854,28 @@ class DiseaseReportState extends BaseState<DiseaseReport> {
                 const SizedBox(height: 12),
                 Container(
                   width: double.infinity,
-                  height: 300,
+                  height: 360,
                   decoration: BoxDecoration(borderRadius: BorderRadius.circular(18.0), color: AppColor_Light_Gray),
                   padding: const EdgeInsets.all(30),
-                  child: SymptomReport(data: dicDiseaseInfo!),
+                  child: Column(
+                    children: [
+                      Container(
+                          height: 240,
+                          child: SymptomReport(data: dicDiseaseInfo!)),
+                      const SizedBox(height: 20,),
+                      MainTextButton(
+                        text: '처방전 더보기',
+                        style: AppTextStyle.PD(Colors.white, 14, weight: FW.semi_bold),
+                        width: 120,
+                        height: 40,
+                        onPressed: (){
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => SymtomPaperList(),
+                          ));
+                        },
+                      ),
+                    ],
+                  ),
                 ),
                 // const SizedBox(height: 12),
                 // Container(
