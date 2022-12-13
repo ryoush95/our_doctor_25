@@ -105,7 +105,7 @@ class MonitoringResultPageState extends BaseState<MonitoringResultPage> {
     LanguageService.trans('december'),
   ];
   var weekday = DateTime.now().weekday - 1;
-  int month = DateTime.now().month;
+  int month = DateTime.now().month - 1;
   String day = DateTime.now().day.toString();
   String noon = DateTime.now().hour > 12 ? LanguageService.trans("afternoon") : LanguageService.trans("morning");
   String dateStr = "";
@@ -284,6 +284,7 @@ class MonitoringResultPageState extends BaseState<MonitoringResultPage> {
     for (int i = 0; i < dicInfo!.sYMPTOM!.data!.length; i++) {
       SymptomDto info = dicInfo!.sYMPTOM!.data!.elementAt(i);
       if (info.medicationUrl!.isNotEmpty) {
+        print(info.medicationUrl);
         imgs.add(info.medicationUrl!);
       }
     }

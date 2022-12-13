@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:ourdoctor/global/app_colors.dart';
 import 'package:ourdoctor/global/app_styles.dart';
@@ -12,7 +13,9 @@ import 'package:ourdoctor/models/home_monitor_res_model.dart';
 import 'package:ourdoctor/pages/app_event.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
 import 'package:ourdoctor/pages/components/h14.dart';
+import 'package:ourdoctor/pages/components/h16.dart';
 import 'package:ourdoctor/pages/components/main_text_button.dart';
+import 'package:ourdoctor/pages/components/round_container.dart';
 import 'package:ourdoctor/pages/intro/first.dart';
 import 'package:ourdoctor/pages/monitoring/monitoring_result.dart';
 import 'package:ourdoctor/pages/monitoring/monitoring_start.dart';
@@ -287,118 +290,213 @@ class TopAreaState extends BaseState<TopArea> {
 
   @override
   Widget build(BuildContext context) {
-    // double topScore = Provider.of<ConvertScoreProvider>(context).score;
     return !isLoading
         ? Container(
-      height: 190,
-      padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-      decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(23.0),
-              bottomRight: Radius.circular(23.0)),
-          boxShadow: [
-            BoxShadow(
-              color: AppColor_Gray,
-              blurRadius: 5.0, // soften the shadow
-              spreadRadius: 2.0, //extend the shadow
-              offset: Offset(
-                5.0, // Move to right 10  horizontally
-                5.0, // Move to bottom 5 Vertically
-              ),
-            )
-          ]),
-      child: Stack(
-        children: [
-          Positioned(
-            top: 25,
-            right: 4,
-            child: Image.asset(
-                (dicHomeDataInfo == null ||
-                        dicHomeDataInfo!.todayResult == null)
-                    ? 'assets/ic_child_search.png'
-                    : 'assets/ic_child_search1.png',
-                width: 114,
-                height: 104),
-          ),
-          Align(
-              alignment: Alignment.centerLeft,
-              child: Container(
-                width: double.infinity,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    H14(
-                        text: month +
-                            LanguageService.trans('month') +
-                            ' ' +
-                            day +
-                            LanguageService.trans('day') +
-                            ' ' +
-                            days[weekday % 7]),
-                    const SizedBox(height: 20),
-                    RichText(
-                      softWrap: true,
-                      textAlign: TextAlign.start,
-                      text: TextSpan(children: [
-                        TextSpan(
-                            text: widget.name + ' ',
-                            style: AppTextStyle.PD(AppColor_Primary, 16,
-                                weight: FW.bold)),
-                        TextSpan(
-                            text: dicHomeDataInfo!.totalScore != 0
-                                ? titleMsg
-                                : "어린이는 아직 \n모니터링 기록이 없어요.",
-                            style: AppTextStyle.PD(AppColor_BlackText, 16,
-                                weight: FW.regular,)),
-                        TextSpan(
-                            text: dicHomeDataInfo!.totalScore != 0
-                                ?   "${dicHomeDataInfo!.totalScore}"
-                                : "",
-                            style: AppTextStyle.PD(AppColor_BlackText, 16,
-                                weight: FW.bold, height: 1.5)),
-                        TextSpan(
-                            text: dicHomeDataInfo!.totalScore != 0
-                                ?   " 점!!"
-                                : "",
-                            style: AppTextStyle.PD(AppColor_BlackText, 16,
-                                weight: FW.regular, height: 1.5)),
-
-                      ]),
+            height: 290,
+            padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+            decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(23.0),
+                    bottomRight: Radius.circular(23.0)),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColor_Gray,
+                    blurRadius: 5.0, // soften the shadow
+                    spreadRadius: 2.0, //extend the shadow
+                    offset: Offset(
+                      5.0, // Move to right 10  horizontally
+                      5.0, // Move to bottom 5 Vertically
                     ),
-                    const SizedBox(height: 35),
-                    SizedBox(
-                        width: double.infinity,
-                        child: Center(
-                          child: Container(
-                            width: 284,
-                            child: Stack(
-                              children: [
-                                Center(
-                                  child: MainTextButton(
-                                    text: getButtonName(),
-                                    style: AppTextStyle.PD(Colors.white, 16,
-                                        weight: FW.medium),
-                                    width: 200,
-                                    height: 40,
-                                    radius: 20,
-                                    onPressed: () {
-                                      goMonitorStart();
-                                    },
+                  )
+                ]),
+            child: Column(
+              children: [
+                Align(
+                    alignment: Alignment.centerLeft,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        H14(
+                            text: month +
+                                LanguageService.trans('month') +
+                                ' ' +
+                                day +
+                                LanguageService.trans('day') +
+                                ' ' +
+                                days[weekday % 7]),
+                        const SizedBox(height: 20),
+                        Row(
+                          children: [
+                            dicHomeDataInfo!.profileImgUrl != null
+                                ? CachedNetworkImage(
+                                    alignment: Alignment.center,
+                                    fit: BoxFit.cover,
+                                    imageUrl: dicHomeDataInfo!.profileImgUrl!,
+                                    imageBuilder: (context, image) =>
+                                        CircleAvatar(
+                                      backgroundColor: Colors.white,
+                                      backgroundImage: image,
+                                      radius: 42,
+                                    ),
+                                  )
+                                : RoundContainer(
+                                    width: 84.0,
+                                    height: 84.0,
+                                    bgColor: Colors.white,
+                                    child: Center(
+                                      child: Image.asset(
+                                          (dicHomeDataInfo == null ||
+                                                  dicHomeDataInfo!.gender ==
+                                                      1)
+                                              ? 'assets/ic_default_male.png'
+                                              : 'assets/ic_default_female.png',
+                                          width: 45),
+                                    ),
                                   ),
-                                ),
-                              ],
+                            const SizedBox(width: 20),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  RichText(
+                                      text: TextSpan(children: [
+                                        TextSpan(
+                                            text: "100",
+                                            style: AppTextStyle.PD(
+                                                AppColor_Primary, 16,
+                                                weight: FW.bold)),
+                                        TextSpan(
+                                            text: " 일째",
+                                            style: AppTextStyle.PD(
+                                              AppColor_BlackText,
+                                              16,
+                                              weight: FW.regular,
+                                            )),
+                                      ])),
+                                  H16(
+                                    text: "우아 어린이는 폭풍성장중!!",
+                                    weight: FW.regular,
+                                  ),
+                                  const SizedBox(height: 30),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      H16(
+                                        text: "키",
+                                        weight: FW.regular,
+                                      ),
+                                      // Expanded(child: SizedBox()),
+                                      RichText(
+                                          text: TextSpan(children: [
+                                        TextSpan(
+                                            text: "100",
+                                            style: AppTextStyle.PD(
+                                                AppColor_Primary, 16,
+                                                weight: FW.bold)),
+                                        TextSpan(
+                                            text: " cm",
+                                            style: AppTextStyle.PD(
+                                              AppColor_BlackText,
+                                              16,
+                                              weight: FW.regular,
+                                            )),
+                                      ])),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 20),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      H16(
+                                        text: "체중",
+                                        weight: FW.regular,
+                                      ),
+                                      RichText(
+                                          text: TextSpan(children: [
+                                        TextSpan(
+                                            text: "100",
+                                            style: AppTextStyle.PD(
+                                                AppColor_Primary, 16,
+                                                weight: FW.bold)),
+                                        TextSpan(
+                                            text: " kg",
+                                            style: AppTextStyle.PD(
+                                              AppColor_BlackText,
+                                              16,
+                                              weight: FW.regular,
+                                            )),
+                                      ])),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                        ))
-                  ],
-                ),
-              )),
-        ],
-      ),
-    )
-    : const Center(
-      child: CircularProgressIndicator(),
-    );
+                          ],
+                        ),
+                        const SizedBox(height: 15),
+                        RichText(text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text: "생활 ",
+                              style: AppTextStyle.PD(
+                                  AppColor_Primary, 16,
+                                  weight: FW.bold)),
+                            TextSpan(
+                                text: "모니터링을 기록한지 ",
+                                style: AppTextStyle.PD(
+                                  AppColor_BlackText,
+                                  16,
+                                  weight: FW.regular,
+                                )),
+                            TextSpan(
+                                text: "12일 ",
+                                style: AppTextStyle.PD(
+                                  AppColor_BlackText,
+                                  16,
+                                )),
+                            TextSpan(
+                              text: "지났어요.",
+                              style: AppTextStyle.PD(
+                              AppColor_BlackText,
+                              16,
+                              weight: FW.regular,
+                            )),
+                          ]
+                        )),
+                        const SizedBox(height: 25),
+                        SizedBox(
+                            width: double.infinity,
+                            child: Center(
+                              child: Container(
+                                width: 284,
+                                child: Stack(
+                                  children: [
+                                    Center(
+                                      child: MainTextButton(
+                                        text: getButtonName(),
+                                        style: AppTextStyle.PD(
+                                            Colors.white, 16,
+                                            weight: FW.medium),
+                                        width: 200,
+                                        height: 40,
+                                        radius: 20,
+                                        onPressed: () {
+                                          goMonitorStart();
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ))
+                      ],
+                    )),
+              ],
+            ),
+          )
+        : const Center(
+            child: CircularProgressIndicator(),
+          );
   }
 }

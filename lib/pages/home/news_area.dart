@@ -86,7 +86,7 @@ class NewsAreaState extends BaseState<NewsArea> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              H20(text: "우아테스트"),
+              H20(text: "우아 테스트"),
               InkWell(
                 onTap: () {
                   eventBus.fire(MoreCommunityEvent(type: 1));
@@ -98,34 +98,34 @@ class NewsAreaState extends BaseState<NewsArea> {
           ),
           const SizedBox(height: 12),
           TestStoreArea(),
-          const SizedBox(height: 12),
-          !isLoading
-              ? SizedBox(
-                  width: double.infinity,
-                  height: 120,
-                  child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: 3,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemBuilder: (BuildContext context, int index) {
-                        CommunityDto info =
-                             arrNewsList.elementAt(index);
-                        return InkWell(
-                          child: ItemNews(item: info),
-                          onTap: () {
-                              Navigator.push(
-                                  context,
-                                  SlideRightTransRoute(
-                                      builder: (context) => CommunityDetailPage(
-                                            uid: info.uid,
-                                            videoUrl: null,
-                                          )),
-                              );
-                          },
-                        );
-                      }),
-                )
-              : const SizedBox(),
+          // const SizedBox(height: 12),
+          // !isLoading
+          //     ? SizedBox(
+          //         width: double.infinity,
+          //         height: 120,
+          //         child: ListView.builder(
+          //             shrinkWrap: true,
+          //             itemCount: 3,
+          //             physics: NeverScrollableScrollPhysics(),
+          //             itemBuilder: (BuildContext context, int index) {
+          //               CommunityDto info =
+          //                    arrNewsList.elementAt(index);
+          //               return InkWell(
+          //                 child: ItemNews(item: info),
+          //                 onTap: () {
+          //                     Navigator.push(
+          //                         context,
+          //                         SlideRightTransRoute(
+          //                             builder: (context) => CommunityDetailPage(
+          //                                   uid: info.uid,
+          //                                   videoUrl: null,
+          //                                 )),
+          //                     );
+          //                 },
+          //               );
+          //             }),
+          //       )
+          //     : const SizedBox(),
         ],
       ),
     );

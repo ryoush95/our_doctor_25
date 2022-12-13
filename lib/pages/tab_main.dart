@@ -301,6 +301,11 @@ class TabMainPageState extends BaseState<TabMainPage>
     if (keyboardIsVisible(context)) {
       FocusScope.of(context).requestFocus(FocusNode());
     }
+    if (currentTab != MainTab.home) {
+      changeTab(MainTab.home);
+      setState(() {});
+      return false;
+    }
     int now = DateTime.now().millisecondsSinceEpoch;
     if (now - backButtonTimestamp < 2000) {
       exit(0);

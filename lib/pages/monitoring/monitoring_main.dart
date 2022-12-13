@@ -54,6 +54,7 @@ class MonitoringMainPageState extends BaseState<MonitoringMainPage> with TickerP
   @override
   void initState() {
     super.initState();
+    print("MonitoringMainPage");
     tabIndex = widget.page;
     tabController = TabController(length: 2, vsync: this);
     tabController.addListener(() {

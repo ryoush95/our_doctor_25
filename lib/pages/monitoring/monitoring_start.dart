@@ -18,6 +18,7 @@ import 'package:ourdoctor/pages/components/main_text_button.dart';
 import 'package:ourdoctor/pages/components/simple_header.dart';
 import 'package:ourdoctor/pages/intro/first.dart';
 import 'package:ourdoctor/pages/monitoring/first_step.dart';
+import 'package:ourdoctor/pages/monitoring/monitoring_v2.dart';
 import 'package:ourdoctor/pages/monitoring/second_step.dart';
 import 'package:sprintf/sprintf.dart';
 
@@ -64,7 +65,7 @@ class MonitoringStartPageState extends BaseState<MonitoringStartPage> {
   @override
   void initState() {
     super.initState();
-
+    print("MonitoringStartPageState");
     getMonitor2HomeDataInfo();
   }
 
@@ -341,6 +342,17 @@ class MonitoringStartPageState extends BaseState<MonitoringStartPage> {
                                 )
                                 // Image.asset("assets/ic_icon4.png", width: 270)
                               ],
+                            ),
+                          ),
+                          Center(
+                            child: MainTextButton(
+                              text: LanguageService.trans("ㄴㄴㄴㄴ"),
+                              backgroundColor: AppColor_Primary,
+                              style: AppTextStyle.PD(Colors.white, 18, weight: FW.bold),
+                              width: screenSize.width - 60,
+                              onPressed: () {
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => MonitoringMain2(),));
+                              },
                             ),
                           ),
                           const SizedBox(height: 30),
