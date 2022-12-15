@@ -28,6 +28,7 @@ import 'package:ourdoctor/pages/home/review_dialog.dart';
 import 'package:ourdoctor/pages/home/school_area.dart';
 import 'package:ourdoctor/pages/home/talk_area.dart';
 import 'package:ourdoctor/pages/home/top_area.dart';
+import 'package:ourdoctor/pages/home/weather_area.dart';
 import 'package:ourdoctor/pages/intro/first.dart';
 import 'package:show_more_text_popup/show_more_text_popup.dart';
 
@@ -190,7 +191,7 @@ class HomeFragmentState extends BaseState<HomeFragment> {
                     const SizedBox(height: 30),
                     // searchBar(),
                     // const SizedBox(height: 30,),
-                    const Text("오늘의 건강 정보"),
+                    WeatherArea(),
                     const SizedBox(height: 50),
                     TalkArea(),//게시판
                     const SizedBox(height: 50),

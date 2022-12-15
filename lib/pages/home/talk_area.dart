@@ -242,12 +242,12 @@ class TalkAreaState extends BaseState<TalkArea> {
                                               crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
                                                 Row(children: [
-                                                  H16(
+                                                  H14(
                                                     text: a.nickname!,
                                                     color: const Color(0xffA0A0A0),
                                                   ),
                                                   const Spacer(),
-                                                  H16(
+                                                  H14(
                                                     text: convertDate(a.regTime!),
                                                     color: const Color(0xffA0A0A0),
                                                     weight: FW.regular,
@@ -288,18 +288,16 @@ class TalkAreaState extends BaseState<TalkArea> {
                                               ],
                                             ),
                                           ),
-                                          Visibility(
-                                            visible: a.imgUrls != "",
-                                            child: ClipRRect(
-                                              borderRadius: BorderRadius.circular(8.0),
-                                              child: CachedNetworkImage(
-                                                imageUrl: a.imgUrls!,
-                                                width: 84,
-                                                height: 84,
-                                                fit: BoxFit.fill,
-                                              ),
+                                          a.imgUrls != "" ?
+                                          ClipRRect(
+                                            borderRadius: BorderRadius.circular(8.0),
+                                            child: CachedNetworkImage(
+                                              imageUrl: a.imgUrls!,
+                                              width: 84,
+                                              height: 84,
+                                              fit: BoxFit.fill,
                                             ),
-                                          ),
+                                          ) : const SizedBox(width: 84),
                                         ],
                                       ),
                                     ),

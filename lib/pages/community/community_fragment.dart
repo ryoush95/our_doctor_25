@@ -1,5 +1,6 @@
 import 'dart:developer' as developer;
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:ourdoctor/global/app_colors.dart';
 import 'package:ourdoctor/global/app_styles.dart';
@@ -44,7 +45,7 @@ class CommunityFragmenttState extends BaseState<CommunityFragment> {
 
   //리스트뷰 컨트롤러
   ScrollController controller = ScrollController();
-  List<String> CATEGORYS = ["공지\n이벤트", "뉴스", "교육", "우아팁", "질문", "자유\n게시판"];
+  List<String> CATEGORYS = ["공지", "뉴스", "교육", "우아팁", "질문", "자유게시판"];
   List<String> subCategories = ["0-12개월", "13-36개월", "37-72개월", "초1-3학년", "초4-6학년"];
   String? _selection = "최신순";
 
@@ -158,18 +159,50 @@ class CommunityFragmenttState extends BaseState<CommunityFragment> {
               }
             },
             child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 25),
-              margin: const EdgeInsets.symmetric(horizontal: 30),
+              margin: const EdgeInsets.fromLTRB(25, 0, 25, 0),
+              padding: const EdgeInsets.all(20.0),
               decoration: const BoxDecoration(
-                color: AppColor_Light_Gray,
-                borderRadius: BorderRadius.all(Radius.circular(16)),
-              ),
-              child: Row(
+                  color: AppColor_White,
+                  borderRadius: BorderRadius.all(
+                      Radius.circular(14)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColor_Gray,
+                      blurRadius: 5.0, // soften the shadow
+                      spreadRadius: 5.0, //extend the shadow
+                    )
+                  ]),
+              child: Column(
                 children: [
-                  const SizedBox(width: 18),
-                  Image.asset('assets/ic_lock.png', width: 18),
-                  const SizedBox(width: 5),
-                  H16(text: "비밀글입니다.", weight: FW.semi_bold, color: AppColor_BlackText),
+                  Row(children: [
+                    Visibility(
+                      visible: info.admin == "1",
+                      child: Image.asset('assets/ic_answer.png', width: 12),
+                    ),
+                    Visibility(
+                      visible: info.admin == "1",
+                      child: const SizedBox(width: 2),
+                    ),
+                    H14(
+                      text: info.nickname!,
+                      color: const Color(0xffA0A0A0),
+                    ),
+                    const Spacer(),
+                    H14(
+                      text: convertDate(info.regTime!),
+                      color: const Color(0xffA0A0A0),
+                      weight: FW.regular,
+                    ),
+                    const SizedBox(width: 10),
+                  ]),
+                  const SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Image.asset('assets/ic_lock.png', width: 18),
+                      const SizedBox(width: 5),
+                      H16(text: "비밀글입니다.", weight: FW.semi_bold, color: AppColor_BlackText),
+                    ],
+                  ),
                 ],
               ),
             ),
@@ -225,100 +258,95 @@ class CommunityFragmenttState extends BaseState<CommunityFragment> {
               }
             },
             child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              margin: const EdgeInsets.symmetric(horizontal: 25),
+              margin: const EdgeInsets.fromLTRB(25, 0, 25, 0),
+              padding: const EdgeInsets.all(20.0),
               decoration: BoxDecoration(
-                color: (info.topic! == "notice" || info.fixed == "1") ? AppColor_Primary.withOpacity(0.05) : AppColor_Light_Gray,
-                borderRadius: const BorderRadius.all(Radius.circular(16)),
-              ),
+                  color: (info.topic! == "notice" || info.fixed == "1") ? AppColor_Primary : AppColor_White,
+                  borderRadius: const BorderRadius.all(
+                      Radius.circular(14)),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: AppColor_Gray,
+                      blurRadius: 5.0, // soften the shadow
+                      spreadRadius: 5.0, //extend the shadow
+                    )
+                  ]),
               child: Row(
                 children: [
                   Expanded(
-                    child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      margin: const EdgeInsets.only(left: 20, right: 10),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _isSearching
-                          ? DynamicTextHighlighting(
-                            text: info.topic! == "notice" 
-                              ? ("[공지/이벤트]" + info.title!) 
-                              : info.title!, 
-                            highlights: [keyword],
-                            style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              color: (info.topic! == "notice" || info.fixed == "1") 
-                                ? AppColor_Primary 
-                                : AppColor_BlackText,
-                              height: 1.1,
-                              fontSize: 14,
-                            ),
-                            maxLines: 2,
-                            color: AppColor_Yellow,
-                          )
-                          : _noticeTitle(info),
-                          const SizedBox(height: 5),
-                          Row(
-                            children: [
-                              Visibility(
-                                visible: info.admin == "1",
-                                child: Image.asset('assets/ic_answer.png', width: 12),
-                              ),
-                              Visibility(
-                                visible: info.admin == "1",
-                                child: const SizedBox(width: 2),
-                              ),
-                              Expanded(
-                                child: AutoSizeText(
-                                  getcontent(info),
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    color: AppColor_BlackText.withOpacity(.4),
-                                    fontSize: 10,
-                                  ),
-                                  maxLines: 1,
-                                  maxFontSize: 12,
-                                  minFontSize: 8,
-                                  textAlign: TextAlign.left,
-                                ),
-                              ),
-                            ],
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(children: [
+                          Visibility(
+                            visible: info.admin == "1",
+                            child: Image.asset('assets/ic_answer.png', width: 12),
                           ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Visibility(
-                    visible: img == "" ? false : true,
-                    child: Container(
-                      // width: img == "" ? 0 : 100,
-                      width: img != "" && info.topic == "team"
-                        ? 90 
-                        : img == ""
-                          ? 0 
-                          : 60,
-                      height: img == "" ? 0 : 60,
-                      margin: const EdgeInsets.only(right: 20),
-                      decoration: const BoxDecoration(
-                        color: Colors.transparent,
-                        borderRadius: BorderRadius.all(Radius.circular(8)),
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8.0),
-                        child: Image.network(
-                          img,
-                          width: img == "" ? 0 : 60,
-                          height: img == "" ? 0 : 60,
-                          fit: BoxFit.fill,
+                          Visibility(
+                            visible: info.admin == "1",
+                            child: const SizedBox(width: 2),
+                          ),
+                          H14(
+                            text: info.nickname!,
+                            color: const Color(0xffA0A0A0),
+                          ),
+                          const Spacer(),
+                          H14(
+                            text: convertDate(info.regTime!),
+                            color: const Color(0xffA0A0A0),
+                            weight: FW.regular,
+                          ),
+                          const SizedBox(width: 10),
+                        ]),
+                        const SizedBox(height: 10),
+                        H16(
+                          text: info.title!,
+                          align: TextAlign.start,
+                          color: (info.topic! == "notice" || info.fixed == "1") ? AppColor_White : Colors.black,
                         ),
-                      ),
+                        const SizedBox(height: 10),
+                        Row(
+                          children: [
+                            const Icon(
+                              Icons.favorite_border_outlined,
+                              color: Color(0xffFF5252),
+                              size: 18,
+                            ),
+                            H16(
+                              text: " " + info.likeCnt!,
+                              color: (info.topic! == "notice" || info.fixed == "1") ? AppColor_White : Color(0xffA0A0A0),
+                              weight: FW.regular,
+                            ),
+                            const SizedBox(width: 20),
+                            const Icon(
+                              Icons.chat_bubble_outline,
+                              color: Colors.black,
+                              size: 18,
+                            ),
+                            H16(
+                              text: " " + info.commentCnt!,
+                              color: (info.topic! == "notice" || info.fixed == "1") ? AppColor_White : Color(0xffA0A0A0),
+                              weight: FW.regular,
+                            ),
+                          ],
+                        )
+                      ],
                     ),
                   ),
+                  info.imgUrls != "" ?
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(8.0),
+                    child: CachedNetworkImage(
+                      imageUrl: info.imgUrls!,
+                      width: 84,
+                      height: 84,
+                      fit: BoxFit.fill,
+                    ),
+                  ) : const SizedBox(width: 84),
                 ],
               ),
             ),
+
           ),
           Container(
             height: 10,
@@ -332,61 +360,43 @@ class CommunityFragmenttState extends BaseState<CommunityFragment> {
   }
 
   Widget _getTiles1(int index) {
-    double mWidth = (MediaQuery.of(context).size.width - 60) / 6;
-    return Container(
-      child: GestureDetector(
-        behavior: HitTestBehavior.translucent,
-        onTap: () {
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onTap: () {
+        setState(() {
+          keyword = '';
+          _isSearching = false;
+          searchController.clear();
+          nTabIndex = index;
+          // nSubTabIndex = 0;
           setState(() {
-            keyword = '';
-            _isSearching = false;
-            searchController.clear();
-            nTabIndex = index;
-            // nSubTabIndex = 0;
-            setState(() {
-              if(age <= 12){
-                nSubTabIndex = 0;
-              } else if(age > 12 && 36 >= age){
-                nSubTabIndex = 1;
-              }else if(age > 37 && 72 >= age){
-                nSubTabIndex = 2;
-              }else if(age > 73 && 108 >= age){
-                nSubTabIndex = 3;
-              }else {
-                nSubTabIndex = 4;
-              }
-            });
-            nPage = 0;
-            Provider.of<ConvertScoreProvider>(context, listen: false).changeTab(index);
-            getCommunityList();
+            if(age <= 12){
+              nSubTabIndex = 0;
+            } else if(age > 12 && 36 >= age){
+              nSubTabIndex = 1;
+            }else if(age > 37 && 72 >= age){
+              nSubTabIndex = 2;
+            }else if(age > 73 && 108 >= age){
+              nSubTabIndex = 3;
+            }else {
+              nSubTabIndex = 4;
+            }
           });
-        },
-        child: SizedBox(
-          width: mWidth,
-          height: MediaQuery.of(context).size.height,
-          child: Stack(
-            children: [
-              Center(
-                child: H14(
-                  text: CATEGORYS[index],
-                  weight: FW.medium,
-                  align: TextAlign.center,
-                  maxLine: 2,
-                  color: nTabIndex == index ? AppColor_BlackText : AppColor_BlackText.withOpacity(0.2),
-                ),
-              ),
-              Positioned(
-                child: SizedBox(
-                    width: mWidth,
-                    height: 2,
-                    child: Container(
-                      width: 80,
-                      height: MediaQuery.of(context).size.width,
-                      color: nTabIndex == index ? AppColor_BlackText : AppColor_BlackText.withOpacity(0.1),
-                    )),
-                bottom: 0,
-              )
-            ],
+          nPage = 0;
+          Provider.of<ConvertScoreProvider>(context, listen: false).changeTab(index);
+          getCommunityList();
+        });
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 8),
+        margin: const EdgeInsets.only(right: 8),
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(18), color: nTabIndex == index ? AppColor_Primary : AppColor_f4f5f7),
+        child: Center(
+          child: H14(
+            text: CATEGORYS[index],
+            weight: FW.bold,
+            align: TextAlign.center,
+            color: nTabIndex == index ? Colors.white : AppColor_BlackText.withOpacity(0.2),
           ),
         ),
       ),
@@ -572,67 +582,28 @@ class CommunityFragmenttState extends BaseState<CommunityFragment> {
                           ],
                         ),
                         Container(
-                          height: 50,
+                          width: MediaQuery.of(context).size.width - 64,
+                          height: 80,
                           margin: const EdgeInsets.only(top: 16),
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            shrinkWrap: true,
+                          child: GridView.builder(
+                            // scrollDirection: Axis.horizontal,
+                            // shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
                             itemBuilder: (BuildContext context, int index) {
                               return _getTiles1(index);
                             },
                             itemCount: CATEGORYS.length,
+                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 3,
+                              childAspectRatio: 3 / 1,
+                              crossAxisSpacing: 10,
+                              mainAxisSpacing: 10
+                            ),
                           ),
                         ),
-                        
                       ],
                     ),
                   ),
-                  // searchBar(),
-                  // Container(
-                  //   height: 42,
-                  //   margin: const EdgeInsets.only(left: 30, right: 30, top: 16),
-                  //   decoration: BoxDecoration(borderRadius: BorderRadius.circular(16), color: AppColor_Light_Gray),
-                  //   child: Row(
-                  //     mainAxisAlignment: MainAxisAlignment.start,
-                  //     crossAxisAlignment: CrossAxisAlignment.center,
-                  //     children: [
-                  //       IconButton(
-                  //         padding: const EdgeInsets.only(left: 20),
-                  //         icon: const Icon(Icons.search_rounded, color: AppColor_Icon),
-                  //         onPressed: () => {},
-                  //       ),
-                  //       Expanded(
-                  //           child: Container(
-                  //         padding: const EdgeInsets.only(bottom: 5),
-                  //         child: TextField(
-                  //           style: AppTextStyle.PD(Colors.black, 14, weight: FW.regular),
-                  //           maxLength: 100,
-                  //           controller: keywordController,
-                  //           onEditingComplete: () {
-                  //             setState(() {
-                  //               nPage = 0;
-                  //               getCommunityList();
-                  //             });
-                  //           },
-                  //           keyboardType: TextInputType.text,
-                  //           textInputAction: TextInputAction.search,
-                  //           maxLines: 1,
-                  //           decoration: InputDecoration(
-                  //             counterText: "",
-                  //             hintText: LanguageService.trans("faq_search_hint"),
-                  //             hintStyle: AppTextStyle.PD(AppColor_GrayText, 14, weight: FW.medium),
-                  //             border: InputBorder.none,
-                  //           ),
-                  //           onChanged: (text) {
-                  //             keyword = text;
-                  //           },
-                  //         ),
-                  //       )),
-                  //     ],
-                  //   ),
-                  // ),
-                  // const SizedBox(height: 10),
                   Expanded(
                     child: Container(
                       margin: const EdgeInsets.only(top: 16.0),

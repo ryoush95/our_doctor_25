@@ -116,7 +116,7 @@ class TopAreaState extends BaseState<TopArea> {
     }
     return result;
 
-    if (dicInfo == null || dicInfo!.regtime! == "") {
+/*    if (dicInfo == null || dicInfo!.regtime! == "") {
       result = LanguageService.trans(isMorning()
           ? 'home_start_am_monitoring'
           : 'home_start_pm_monitoring');
@@ -150,7 +150,7 @@ class TopAreaState extends BaseState<TopArea> {
       }
     }
 
-    return result;
+    return result;*/
   }
 
   void goMonitorStart() {
@@ -374,10 +374,21 @@ class TopAreaState extends BaseState<TopArea> {
                                               weight: FW.regular,
                                             )),
                                       ])),
-                                  H16(
-                                    text: "우아 어린이는 폭풍성장중!!",
-                                    weight: FW.regular,
-                                  ),
+                                  RichText(
+                                      text: TextSpan(children: [
+                                        TextSpan(
+                                            text: widget.name,
+                                            style: AppTextStyle.PD(
+                                                AppColor_Primary, 16,
+                                                weight: FW.bold)),
+                                        TextSpan(
+                                            text: " 어린이는 폭풍성장중!!",
+                                            style: AppTextStyle.PD(
+                                              AppColor_BlackText,
+                                              16,
+                                              weight: FW.regular,
+                                            )),
+                                      ])),
                                   const SizedBox(height: 30),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -435,35 +446,49 @@ class TopAreaState extends BaseState<TopArea> {
                           ],
                         ),
                         const SizedBox(height: 15),
-                        RichText(text: TextSpan(
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            TextSpan(
-                              text: "생활 ",
-                              style: AppTextStyle.PD(
-                                  AppColor_Primary, 16,
-                                  weight: FW.bold)),
-                            TextSpan(
-                                text: "모니터링을 기록한지 ",
-                                style: AppTextStyle.PD(
-                                  AppColor_BlackText,
-                                  16,
-                                  weight: FW.regular,
-                                )),
-                            TextSpan(
-                                text: "12일 ",
-                                style: AppTextStyle.PD(
-                                  AppColor_BlackText,
-                                  16,
-                                )),
-                            TextSpan(
-                              text: "지났어요.",
-                              style: AppTextStyle.PD(
-                              AppColor_BlackText,
-                              16,
-                              weight: FW.regular,
+                            RichText(text: TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: "생활 ",
+                                  style: AppTextStyle.PD(
+                                      AppColor_Primary, 16,
+                                      weight: FW.bold)),
+                                TextSpan(
+                                    text: "모니터링 기록 ",
+                                    style: AppTextStyle.PD(
+                                      AppColor_BlackText,
+                                      16,
+                                      weight: FW.regular,
+                                    )),
+                                TextSpan(
+                                    text: "+12일 ",
+                                    style: AppTextStyle.PD(
+                                      AppColor_BlackText,
+                                      16,
+                                    )),
+                              ]
                             )),
-                          ]
-                        )),
+                            RichText(text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                      text: "다음검사 ",
+                                      style: AppTextStyle.PD(
+                                        AppColor_BlackText,
+                                        16,
+                                        weight: FW.regular,
+                                      )),
+                                  TextSpan(
+                                      text: " 40일 후",
+                                      style: AppTextStyle.PD(
+                                          AppColor_Primary, 16,
+                                          weight: FW.bold)),
+                                ]
+                            )),
+                          ],
+                        ),
                         const SizedBox(height: 25),
                         SizedBox(
                             width: double.infinity,

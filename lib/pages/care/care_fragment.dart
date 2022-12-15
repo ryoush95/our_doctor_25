@@ -1,3 +1,5 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dots_indicator/dots_indicator.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -47,11 +49,12 @@ class CareFragmentState extends BaseState<CareFragment>
   String keyword = "";
   late TabController tabController;
   final searchController = TextEditingController();
-  var currPageValue = 100.0;
-  PageController pageController = PageController(viewportFraction: 0.85, initialPage: 100);
+  PageController pageController = PageController();
   double scaleFactor = 0.8;
   double height = 100.0;
-  List bannerList = [];
+  List<String> bannerList = [];
+  int position = 0;
+
 
 
 
@@ -89,12 +92,6 @@ class CareFragmentState extends BaseState<CareFragment>
       changeTab(tabController.index);
     });
     tabIndex = Provider.of<ConvertScoreProvider>(context, listen: false).careTab;
-
-    pageController.addListener(() {
-      setState(() {
-        currPageValue = pageController.page!;
-      });
-    });
 
     tabController.index = faqFromSide ? 1 : 0;
     getBannerList();
@@ -176,13 +173,9 @@ class CareFragmentState extends BaseState<CareFragment>
         arrBannerList = value.data!.list;
         if (nPage == 0) {
           for(int i = 0; i < arrBannerList!.length; i++){
-            bannerList.add(ExtendedImage.network(
+            bannerList.add(
               arrBannerList![i].image!,
-              width: 320,
-              height: 160,
-              fit: BoxFit.fill,
-              cache: true,
-            ),);
+            );
           }
         }
         setState(() {});
@@ -243,36 +236,41 @@ class CareFragmentState extends BaseState<CareFragment>
   }
 
   Widget getBannerTitle(int index) {
-    double mWidth = (MediaQuery.of(context).size.width) / 3;
     return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 8),
+        margin: const EdgeInsets.only(right: 8),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(18),
+            color: tabIndex == index ? AppColor_Primary : AppColor_f4f5f7),
         child: GestureDetector(
-      onTap: () {
-        setState(() {
-          tabIndex = index;
-          nPage = 0;
-          getBannerList();
-          getHomeDataInfo();
-        });
-      },
-      child: SizedBox(
-        width: mWidth,
-        child: Stack(
-          children: [
-            Center(
-              child: H18(
-                text: CATEGORY[index],
-                weight: FW.bold,
-                align: TextAlign.center,
-                maxLine: 1,
-                color: tabIndex == index
-                    ? AppColor_White
-                    : AppColor_BlackText.withOpacity(0.2),
-              ),
+          onTap: () {
+            setState(() {
+              tabIndex = index;
+              nPage = 0;
+              position = 0;
+              getBannerList();
+              getHomeDataInfo();
+              pageController.jumpToPage(0);
+            });
+          },
+          child: SizedBox(
+            child: Stack(
+              children: [
+                Center(
+                  child: H14(
+                    text: CATEGORY[index],
+                    weight: FW.bold,
+                    align: TextAlign.center,
+                    maxLine: 1,
+                    color: tabIndex == index
+                        ? AppColor_White
+                        : AppColor_BlackText.withOpacity(0.2),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
-    ));
+          ),
+        ));
   }
 
   @override
@@ -287,7 +285,7 @@ class CareFragmentState extends BaseState<CareFragment>
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                  CareBanner(),
+                  bannerList.isNotEmpty ? CareBanner() : const CircularProgressIndicator(),
                   const SizedBox(height: 28),
                   CategoryShow(),
                   SearchBar(),
@@ -341,97 +339,78 @@ class CareFragmentState extends BaseState<CareFragment>
 
   Widget CareBanner() {
     return SizedBox(
+      width: double.infinity,
         height: 260,
         child: Stack(children: [
           Container(
-            height: 100,
-            decoration: BoxDecoration(
-                color: tabIndex == 0
-                    ? AppColor_Primary
-                    : (tabIndex == 2 ? AppColor_A497CC : AppColor_Yellow)),
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              shrinkWrap: true,
+            margin: EdgeInsets.all(25),
+            child: GridView.builder(
+              // scrollDirection: Axis.horizontal,
+              // shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
               itemBuilder: (BuildContext context, int index) {
                 return getBannerTitle(index);
               },
               itemCount: CATEGORY.length,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  childAspectRatio: 3 / 1,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10
+              ),
             ),
           ),
           Positioned(
-              child: Container(
-            width: MediaQuery.of(context).size.width,
-            height: 250,
-            child: Stack(
-              children: [
-                Center(
-                  child: Container(
-                      margin: const EdgeInsets.only(top: 70),
-                      height: 160,
-                      decoration: const BoxDecoration(color: Colors.white),
-                      child: PageView.builder(
-                        controller: pageController,
-                        physics: const BouncingScrollPhysics(),
-                        itemCount: 200,
-                        itemBuilder: (context, index) {
-                          return getBannerImage(index);
-                        },
-                      )),
-                ),
-              ],
-            ),
-          )),
+              child:thumbnail(),
+              top: 70),
+          _dotIndicator(),
         ]));
   }
 
-  getBannerImage(int index) {
-    Matrix4 matrix = Matrix4.identity();
-    if (index == currPageValue.floor()) {
-      var currScale = 1 - (currPageValue - index) * (1 - scaleFactor);
-      var currTrans = height * (1 - currScale) / 2;
-      matrix = Matrix4.diagonal3Values(1.0, currScale, 1.0)
-        ..setTranslationRaw(0, currTrans, 0);
-    } else if (index == currPageValue.floor() + 1) {
-      var currScale =
-          scaleFactor + (currPageValue - index + 1) * (1 - scaleFactor);
-      var currTrans = height * (1 - currScale) / 2;
-      matrix = Matrix4.diagonal3Values(1.0, currScale, 1.0)
-        ..setTranslationRaw(0, currTrans, 0);
-    } else if (index == currPageValue.floor() - 1) {
-      var currScale = 1 - (currPageValue - index) * (1 - scaleFactor);
-      var currTrans = height * (1 - currScale) / 2;
-      matrix = Matrix4.diagonal3Values(1.0, currScale, 1.0)
-        ..setTranslationRaw(0, currTrans, 0);
-    } else {
-      var currScale = 0.8;
-      matrix = Matrix4.diagonal3Values(1.0, currScale, 1.0)
-        ..setTranslationRaw(0, height * (1 - scaleFactor) / 2, 0);
-    }
+  thumbnail() {
+    var screen = MediaQuery.of(context).size;
+    return Container(
+        width: screen.width,
+        height: screen.width / 2,
+        child: bannerList.isEmpty
+            ? const Center(child: CircularProgressIndicator())
+            : PageView.builder(
+              controller: pageController,
+              itemCount: bannerList.length,
+              itemBuilder: (BuildContext context, int index) {
+                return CachedNetworkImage(
+                  imageUrl: bannerList[index],
+                  width: screen.width,
+                  height: screen.width / 2,
+                );
+              },
+              onPageChanged: (i) {
+                setState(() {
+                  position = i;
+                });
+              },
+            )
+    );
+  }
 
-    // HomeCareBannerDto info = arrBannerList!.elementAt(index % arrBannerList!.length);
 
-    return Transform(
-      transform: matrix,
-      child: bannerList.isEmpty ? Container()
-      :Container(
-        padding: const EdgeInsets.only(left: 5, right: 5, top: 10),
-        child: InkWell(
-          onTap: () {
-            if (arrBannerList!.isNotEmpty) {
-              Navigator.push(
-                  context, SlideRightTransRoute(builder: (context) =>
-                  ProductDetail(
-                    pid: arrBannerList![index % arrBannerList!.length].url!,
-                  )));
-
-            }
-          },
-          child: ClipRRect(
-              borderRadius: BorderRadius.circular(16.0),
-              child: bannerList[index % arrBannerList!.length],
-              ),
+  _dotIndicator() {
+    // List _items = [mData.mainImage!, mData.mainImage!];
+    return Positioned(
+      left: 0.0,
+      right: 0.0,
+      bottom: 0.0,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: DotsIndicator(
+          dotsCount: bannerList.length,
+          position: position.toDouble(),
+          decorator: DotsDecorator(
+            color: const Color(0xFF000000).withOpacity(0.12), // Inactive color
+            activeColor: AppColor_Primary,
+          ),
         ),
-        ),
+      ),
     );
   }
 

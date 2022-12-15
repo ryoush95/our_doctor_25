@@ -39,8 +39,9 @@ class MyPagePageState extends BaseState<MyPagePage> {
     MyPageCategory(title: "my_info", icon: "ic_my_info.png", route: ProfileViewPage()),
     MyPageCategory(title: "order_history", icon: "ic_order_his.png", route: OrderHistoryPage()),
     MyPageCategory(title: "my_review", icon: "ic_my_review.png", route: ReviewFragment()),
+    MyPageCategory(title: "좋아요 게시물", icon: "ic_like_off.png", route: MyPostsPage()),
     MyPageCategory(title: "family_child_history", icon: "ic_child_manage.png", route: ChildManagementPage()),
-    // MyPageCategory(title: "view_my_posts", icon: "ic_pencil.svg", route: MyPostsPage()),
+    MyPageCategory(title: "view_my_posts", icon: "ic_pencil.svg", route: MyPostsPage()),
   ];
 
   @override
@@ -133,7 +134,15 @@ class MyPagePageState extends BaseState<MyPagePage> {
                             )
                           ],
                         )),
-                    const SizedBox(height: 45),
+                    SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        ElevatedButton.icon(onPressed: (){}, icon: Icon(Icons.chat_bubble_rounded), label: Text("카카오 상담")),
+                        ElevatedButton.icon(onPressed: (){}, icon: Icon(Icons.chat_bubble_rounded), label: Text("질문 게시판")),
+                      ],
+                    ),
+                    const SizedBox(height: 25),
                     ...categories
                       .asMap()
                       .map((idx, e) => MapEntry(idx, category(e, idx)))
@@ -272,7 +281,9 @@ class MyPagePageState extends BaseState<MyPagePage> {
           children: [
             Container(
               width: 25,
-              child: Image.asset('assets/${category.icon}', width: 25)
+              child: category.icon.contains(".svg") ?
+              SvgPicture.asset('assets/${category.icon}', width: 25) :
+              Image.asset('assets/${category.icon}', width: 25)
             ),
             const SizedBox(width: 18),
             H16(

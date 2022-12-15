@@ -31,6 +31,7 @@ import 'package:ourdoctor/pages/components/h13.dart';
 import 'package:ourdoctor/pages/components/round_container.dart';
 import 'package:ourdoctor/pages/home/add_children1.dart';
 import 'package:ourdoctor/pages/intro/first.dart';
+import 'package:ourdoctor/pages/monitoring/monitoring_fragment2.dart';
 import 'package:ourdoctor/pages/my/faq_list.dart';
 import 'package:ourdoctor/pages/my/favorite_product.dart';
 import 'package:ourdoctor/pages/my/my_page.dart';
@@ -1258,7 +1259,7 @@ class TabMainPageState extends BaseState<TabMainPage>
                 ),
                 Container(
                   alignment: Alignment.center,
-                  child: MonitoringFragment(
+                  child: MonitoringFragment2(
                       type: widget.infoTabIdx, pageType: widget.pageIdx),
                 ),
                 Container(
