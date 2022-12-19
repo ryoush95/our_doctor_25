@@ -22,9 +22,7 @@ class MonitorReport1 extends StatefulWidget {
 
 class _MonitorReport1State extends BaseState<MonitorReport1> {
 // List<MonitoringDto> monitoringList = [];
-  final ScrollController _scrController = ScrollController();
-  ScrollController scrollController = ScrollController();
-  static const platform = MethodChannel('doctor.flutter.dev');
+  // static const platform = MethodChannel('doctor.flutter.dev');
   final HttpService httpService = HttpService();
   bool isLast = false;
   int page = 0;
@@ -33,6 +31,8 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
 
   List<String> CATEGORYS = ["발달영역", "생활습관", "신체"];
   List<String> subCategory = ["대근육", "소근육", "인지", "언어", "사회성","자조"];
+  List<String> subCategoryImg = ["monitor_icon1.png","monitor_icon2.png","monitor_icon3.png","monitor_icon4.png","monitor_icon5.png","monitor_icon6.png",];
+
   int nTabIndex = 0;
 
   @override
@@ -81,6 +81,43 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
     );
   }
 
+  Widget bodyTile(int index) {
+    return Container(
+      width: 80,
+      height: 100,
+      margin: EdgeInsets.all(10),
+      decoration: const BoxDecoration(
+          color: AppColor_White,
+          borderRadius: BorderRadius.all(
+              Radius.circular(14)),
+          boxShadow: [
+            BoxShadow(
+              offset: Offset(3, 3),
+              color: AppColor_Gray,
+              blurRadius: 3.0, // soften the shadow
+              spreadRadius: 4.0, //extend the shadow
+            )
+          ]),
+      child: Column(
+        children: [
+          Image.asset("assets/" + subCategoryImg[index]),
+          Text(subCategory[index]),
+          Container(
+            width: 50,
+            height: 20,
+            color: AppColor_Height,
+            child: Center(
+              child: Text("68",
+                style: TextStyle(
+                color: Colors.white,
+              ),),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return PageLayout(
@@ -88,18 +125,16 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
         child: Align(
           alignment: Alignment.topCenter,
           child: SingleChildScrollView(
-            controller: _scrController,
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
+            child: Container(
+              margin: EdgeInsets.all(20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   H20(text: "우아 발달 모니터링 리포트"),
-                  const SizedBox(height: 35),
+                  const SizedBox(height: 30),
                   Container(
-                    width: MediaQuery.of(context).size.width - 64,
-                    height: 80,
-                    margin: const EdgeInsets.only(top: 16),
+                    // width: MediaQuery.of(context).size.width - 64,
+                    height: 70,
                     child: GridView.builder(
                       // scrollDirection: Axis.horizontal,
                       // shrinkWrap: true,
@@ -112,25 +147,21 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
                           crossAxisCount: 3,
                           childAspectRatio: 3 / 1,
                           crossAxisSpacing: 10,
-                          mainAxisSpacing: 10
+                          mainAxisSpacing: 10,
                       ),
                     ),
                   ),
                   Container(
-                    width: MediaQuery.of(context).size.width - 64,
-                    height: 80,
-                    margin: const EdgeInsets.only(top: 16),
+                    height: 360,
                     child: GridView.builder(
-                      // scrollDirection: Axis.horizontal,
-                      // shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
                       itemBuilder: (BuildContext context, int index) {
-                        return Text(subCategory[index]);
+                        return bodyTile(index);
                       },
                       itemCount: subCategory.length,
                       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 3,
-                          childAspectRatio: 3 / 1,
+                          childAspectRatio: 1 / 1.5,
                           crossAxisSpacing: 10,
                           mainAxisSpacing: 10
                       ),
@@ -145,7 +176,7 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
                       end: "",
                       rate: 20,
                       unit: "",
-                      color: AppColor_Height,
+                      color: AppColor_Primary,
                       cur_value: 20,
                   ),
                   Container(
@@ -160,7 +191,7 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
                       children: [
                         H16(text: "ㅁㄴㅇㅁㄴㅇㅁㄴㅇ"),
                         Text(
-                          "Container(decoration: BoxDecoration(borderRadius: BorderRadius.circular(18.0), color: AppColor_Light_Gray), padding: const EdgeInsets.only(left: 30, right: 30, top: 50, bottom: 50), margin: const EdgeInsets.symmetric(horizontal: 30), child: PrevMonitoring());",
+                          "우리 아이는 대근육 발달이 다소 늦은 편이에요. 대근육을 고르게 사용하는 여러 신체 활동을 꾸준히 한다면 더욱 잘 성장할 수 있어요.",
                           style: TextStyle(
                             color: AppColor_GrayText,
                             fontSize: 16,
