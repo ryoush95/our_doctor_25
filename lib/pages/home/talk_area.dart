@@ -223,6 +223,7 @@ class TalkAreaState extends BaseState<TalkArea> {
                                       tileTap(a);
                                     },
                                     child: Container(
+                                      height: 110,
                                       padding: const EdgeInsets.all(20.0),
                                       decoration: const BoxDecoration(
                                           color: Colors.white,
@@ -246,9 +247,9 @@ class TalkAreaState extends BaseState<TalkArea> {
                                                     text: a.nickname!,
                                                     color: const Color(0xffA0A0A0),
                                                   ),
-                                                  const Spacer(),
+                                                  const SizedBox(width: 10,),
                                                   H14(
-                                                    text: convertDate(a.regTime!),
+                                                    text: convertDate(a.regTime!).substring(5),
                                                     color: const Color(0xffA0A0A0),
                                                     weight: FW.regular,
                                                   ),
@@ -293,8 +294,8 @@ class TalkAreaState extends BaseState<TalkArea> {
                                             borderRadius: BorderRadius.circular(8.0),
                                             child: CachedNetworkImage(
                                               imageUrl: a.imgUrls!,
-                                              width: 84,
-                                              height: 84,
+                                              width: 75,
+                                              height: 75,
                                               fit: BoxFit.fill,
                                             ),
                                           ) : const SizedBox(width: 84),
@@ -312,12 +313,5 @@ class TalkAreaState extends BaseState<TalkArea> {
             )
           : Container(),
     );
-  }
-
-  String convertDate(String d) {
-    var date = DateTime.parse(d);
-    String c = DateFormat("MM/dd").format(date);
-
-    return c;
   }
 }

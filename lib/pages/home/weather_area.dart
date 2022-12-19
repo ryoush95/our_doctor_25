@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:ourdoctor/global/app_colors.dart';
 import 'package:ourdoctor/global/app_styles.dart';
 import 'package:ourdoctor/global/global.dart';
 import 'package:ourdoctor/global/http_service.dart';
@@ -14,6 +15,7 @@ import 'package:ourdoctor/pages/base/base_state.dart';
 import 'package:ourdoctor/pages/community/community_detail.dart';
 import 'package:ourdoctor/pages/components/h14.dart';
 import 'package:ourdoctor/pages/components/h20.dart';
+import 'package:ourdoctor/pages/components/h24_b.dart';
 import 'package:ourdoctor/pages/home/item_news.dart';
 import 'package:ourdoctor/pages/home/test_store_area.dart';
 import 'package:ourdoctor/pages/intro/first.dart';
@@ -51,9 +53,41 @@ class WeatherAreaState extends BaseState<WeatherArea> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              H14(text: "기온"),
-              H14(text: "기온"),
-              H14(text: "기온"),
+              Column(
+                children: [
+                  Container(
+                    height: 84,
+                    width: 84,
+                    child: Image.asset('assets/home_temp.png'),
+                  ),
+                  Text('기온', style:TextStyle(color: AppColor_GrayText)),
+                  H24B(text: "30",color: AppColor_Red,)
+                ],
+              ),
+              Column(
+                children: [
+                  Container(
+                    height: 84,
+                    width: 84,
+                    child: Image.asset('assets/home_water.png'),
+                  ),
+                  Text('습도', style:TextStyle(color: AppColor_GrayText)),
+                  H24B(text: "30" + "%",color: AppColor_Primary,)
+
+                ],
+              ),
+              Column(
+                children: [
+                  Container(
+                    height: 84,
+                    width: 84,
+                    child: Image.asset('assets/home_dust.png'),
+                  ),
+                  Text('미세먼지', style:TextStyle(color: AppColor_GrayText)),
+                  H24B(text: "좋음",color: AppColor_Green,)
+
+                ],
+              ),
             ],
           ),
         ],

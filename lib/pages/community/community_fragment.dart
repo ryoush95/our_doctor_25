@@ -228,6 +228,7 @@ class CommunityFragmenttState extends BaseState<CommunityFragment> {
       return  info.topic! == "notice" && nTabIndex != 0
       ? const SizedBox()
       : Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           InkWell(
             onTap: () async {
@@ -258,6 +259,7 @@ class CommunityFragmenttState extends BaseState<CommunityFragment> {
               }
             },
             child: Container(
+              height: 110,
               margin: const EdgeInsets.fromLTRB(25, 0, 25, 0),
               padding: const EdgeInsets.all(20.0),
               decoration: BoxDecoration(
@@ -290,9 +292,9 @@ class CommunityFragmenttState extends BaseState<CommunityFragment> {
                             text: info.nickname!,
                             color: const Color(0xffA0A0A0),
                           ),
-                          const Spacer(),
+                          const SizedBox(width: 10,),
                           H14(
-                            text: convertDate(info.regTime!),
+                            text: convertDate(info.regTime!).substring(5),
                             color: const Color(0xffA0A0A0),
                             weight: FW.regular,
                           ),
@@ -338,8 +340,8 @@ class CommunityFragmenttState extends BaseState<CommunityFragment> {
                     borderRadius: BorderRadius.circular(8.0),
                     child: CachedNetworkImage(
                       imageUrl: info.imgUrls!,
-                      width: 84,
-                      height: 84,
+                      width: 75,
+                      height: 75,
                       fit: BoxFit.fill,
                     ),
                   ) : const SizedBox(width: 84),

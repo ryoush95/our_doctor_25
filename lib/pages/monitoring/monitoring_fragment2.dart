@@ -14,11 +14,15 @@ import 'package:ourdoctor/pages/components/h14.dart';
 import 'package:ourdoctor/pages/components/h16.dart';
 import 'package:ourdoctor/pages/components/h18.dart';
 import 'package:ourdoctor/pages/components/h20.dart';
+import 'package:ourdoctor/pages/components/h24_b.dart';
 import 'package:ourdoctor/pages/components/main_text_button.dart';
 import 'package:ourdoctor/pages/components/round_container.dart';
 import 'package:ourdoctor/pages/home/circular_progress2.dart';
 import 'package:ourdoctor/pages/intro/first.dart';
 import 'package:ourdoctor/pages/monitoring/monitor_report1.dart';
+import 'package:ourdoctor/pages/monitoring/monitoring_v2.dart';
+
+import 'monitoring_test_form.dart';
 
 class MonitoringFragment2 extends StatefulWidget {
   MonitoringFragment2({Key? key, this.type = 0, this.pageType = 0})
@@ -103,7 +107,24 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   CircularProgress2(type: 1, subType: curCategory1 = 0),
-                  CircularProgress2(type: 2, subType: curCategory1 = 1),
+                  Container(
+                    height: 90,
+                    width: 90,
+                    decoration: ShapeDecoration(
+                      color: Colors.white,
+                      shape: CircleBorder(side: BorderSide(color: Colors.green, width: 7)),
+                    ),
+                    child: Container(
+                      decoration: ShapeDecoration(
+                        shape: CircleBorder(side: BorderSide(color: Colors.white, width: 4)),
+                      ),
+                      child: Center(
+                          child: H24B(
+                            text: "좋음",
+                          ),
+                      ),
+                    ),
+                  ),
                   CircularProgress2(type: 2, subType: curCategory1 = 1),
                 ],
               ),
@@ -132,7 +153,7 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
                           style: AppTextStyle.PD(
                             AppColor_BlackText,
                             16,
-                            weight: FW.regular,
+                            weight: FW.semi_bold,
                           )),
                     ])),
                     const SizedBox(height: 10),
@@ -157,7 +178,8 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
                   height: 40,
                   radius: 20,
                   onPressed: () {
-                    Navigator.push(context, SlideRightTransRoute(builder: (context) => MonitorReport1(),));
+                    // Navigator.push(context, SlideRightTransRoute(builder: (context) => MonitorReport1(),));
+                    Navigator.push(context, SlideRightTransRoute(builder: (context) => MonitoringTestForm(),));
                   },
                 ),
               ),
@@ -283,6 +305,7 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
                     ),
                     const SizedBox(width: 20),
                     Container(
+                      height: 150,
                       width: MediaQuery.of(context).size.width - 190,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -344,11 +367,11 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
                               style:
                               AppTextStyle.PD(AppColor_Primary, 16, weight: FW.bold)),
                           TextSpan(
-                              text: " 모니터링을 한지 42일 지났어요.",
+                              text: " 모니터링 기록을 완료했어요",
                               style: AppTextStyle.PD(
                                 AppColor_BlackText,
                                 16,
-                                weight: FW.regular,
+                                weight: FW.semi_bold,
                               )),
                         ])),
                     const SizedBox(height: 10),
@@ -373,7 +396,7 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
                   height: 40,
                   radius: 20,
                   onPressed: () {
-                    // Navigator.push(context, SlideRightTransRoute(builder: (context) => ,));
+                    Navigator.push(context, SlideRightTransRoute(builder: (context) => MonitoringMain2(),));
                   },
                 ),
               ),

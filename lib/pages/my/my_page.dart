@@ -136,9 +136,10 @@ class MyPagePageState extends BaseState<MyPagePage> {
                         )),
                     SizedBox(height: 20),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         ElevatedButton.icon(onPressed: (){}, icon: Icon(Icons.chat_bubble_rounded), label: Text("카카오 상담")),
+                        const SizedBox(width: 15),
                         ElevatedButton.icon(onPressed: (){}, icon: Icon(Icons.chat_bubble_rounded), label: Text("질문 게시판")),
                       ],
                     ),
