@@ -24,6 +24,8 @@ import 'package:ourdoctor/pages/home/bmi_bar.dart';
 import 'package:show_more_text_popup/show_more_text_popup.dart';
 import 'package:ourdoctor/pages/components/result_area.dart';
 
+import 'lifestyle_line_chart2.dart';
+
 
 class LifestyleReport extends StatefulWidget {
   LifestyleReport({Key? key, required this.data, this.result = 0}) : super(key: key);
@@ -62,6 +64,8 @@ class LifestyleReportState extends BaseState<LifestyleReport> {
       decoration: BoxDecoration(color: Colors.white),
       child: Column(
         children: [
+          LifestyleLineChart2(data:widget.data),
+          const SizedBox(height: 20),
           LifestyleLineChart(data: widget.data),
           const SizedBox(height: 20),
           SleepChart(data: widget.data),

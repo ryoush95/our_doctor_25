@@ -286,6 +286,7 @@ class CareFragmentState extends BaseState<CareFragment>
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                   bannerList.isNotEmpty ? CareBanner() : const CircularProgressIndicator(),
+                      bannerList.isNotEmpty ? Center(child: _dotIndicator()) : Container(),
                   const SizedBox(height: 28),
                   CategoryShow(),
                   SearchBar(),
@@ -363,7 +364,6 @@ class CareFragmentState extends BaseState<CareFragment>
           Positioned(
               child:thumbnail(),
               top: 70),
-          _dotIndicator(),
         ]));
   }
 
@@ -396,19 +396,14 @@ class CareFragmentState extends BaseState<CareFragment>
 
   _dotIndicator() {
     // List _items = [mData.mainImage!, mData.mainImage!];
-    return Positioned(
-      left: 0.0,
-      right: 0.0,
-      bottom: 0.0,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: DotsIndicator(
-          dotsCount: bannerList.length,
-          position: position.toDouble(),
-          decorator: DotsDecorator(
-            color: const Color(0xFF000000).withOpacity(0.12), // Inactive color
-            activeColor: AppColor_Primary,
-          ),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: DotsIndicator(
+        dotsCount: bannerList.length,
+        position: position.toDouble(),
+        decorator: DotsDecorator(
+          color: const Color(0xFF000000).withOpacity(0.12), // Inactive color
+          activeColor: AppColor_Primary,
         ),
       ),
     );
@@ -420,7 +415,7 @@ class CareFragmentState extends BaseState<CareFragment>
             padding: const EdgeInsets.symmetric(horizontal: 5),
             width: MediaQuery.of(context).size.width,
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 InkWell(
                   onTap: () async {
@@ -512,39 +507,39 @@ class CareFragmentState extends BaseState<CareFragment>
                     ),
                   ),
                 ),
-                InkWell(
-                  onTap: () async {
-                    String recv = await Navigator.push(
-                        context,
-                        SlideRightTransRoute(
-                            builder: (context) => HomeCareListPage(
-                                category_1:
-                                    category == 0 ? "GROWTH" : "DEVELOPMENT",
-                                category_2: "RECOMMEND")));
-                    if (recv == "200") {
-                      getHomeDataInfo();
-                    }
-                  },
-                  child: Container(
-                    width: (MediaQuery.of(context).size.width - 10) / 4,
-                    height: 70,
-                    child: Column(
-                      children: [
-                        tabIndex == 0
-                            ? Image.asset(
-                                'assets/volunteer_activism_black_24dp.png',
-                                width: 40,
-                                height: 25)
-                            : Image.asset(
-                                'assets/volunteer_activism_black_24dp1.png',
-                                width: 40,
-                                height: 25),
-                        const SizedBox(height: 10),
-                        H13(text: "맞춤추천", weight: FW.medium),
-                      ],
-                    ),
-                  ),
-                )
+                // InkWell(
+                //   onTap: () async {
+                //     String recv = await Navigator.push(
+                //         context,
+                //         SlideRightTransRoute(
+                //             builder: (context) => HomeCareListPage(
+                //                 category_1:
+                //                     category == 0 ? "GROWTH" : "DEVELOPMENT",
+                //                 category_2: "RECOMMEND")));
+                //     if (recv == "200") {
+                //       getHomeDataInfo();
+                //     }
+                //   },
+                //   child: Container(
+                //     width: (MediaQuery.of(context).size.width - 10) / 4,
+                //     height: 70,
+                //     child: Column(
+                //       children: [
+                //         tabIndex == 0
+                //             ? Image.asset(
+                //                 'assets/volunteer_activism_black_24dp.png',
+                //                 width: 40,
+                //                 height: 25)
+                //             : Image.asset(
+                //                 'assets/volunteer_activism_black_24dp1.png',
+                //                 width: 40,
+                //                 height: 25),
+                //         const SizedBox(height: 10),
+                //         H13(text: "맞춤추천", weight: FW.medium),
+                //       ],
+                //     ),
+                //   ),
+                // )
               ],
             )),
       );

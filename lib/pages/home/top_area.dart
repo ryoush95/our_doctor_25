@@ -19,6 +19,7 @@ import 'package:ourdoctor/pages/components/round_container.dart';
 import 'package:ourdoctor/pages/intro/first.dart';
 import 'package:ourdoctor/pages/monitoring/monitoring_result.dart';
 import 'package:ourdoctor/pages/monitoring/monitoring_start.dart';
+import 'package:ourdoctor/pages/monitoring/monitoring_test_form.dart';
 import 'package:ourdoctor/provider/convert_score_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:show_more_text_popup/show_more_text_popup.dart';
@@ -154,75 +155,15 @@ class TopAreaState extends BaseState<TopArea> {
   }
 
   void goMonitorStart() {
-    if (dicHomeDataInfo == null || dicHomeDataInfo!.todayResult == null) {
-      monitoringData = null;
-      Navigator.push(context,
-          SlideRightTransRoute(builder: (context) => MonitoringStartPage()));
-    } else {
-      //모니터링 리스트페이지로
-      Navigator.push(context,
-          SlideRightTransRoute(builder: (context) => MonitoringResultPage()));
-    }
 
-    /*
-    var hour = DateTime.now().hour;
-    var min = DateTime.now().minute;
-    if (isMorning()) {
-      if (hour < 9 || (hour > 10 && min > 0)) {
-        showToast(LanguageService.trans('disable_am_time'));
-        return;
-      }
-    } else {
-      if (hour < 15 || (hour > 16 && min > 0)) {
-        showToast(LanguageService.trans('disable_pm_time'));
-        return;
-      }
-    }
-    */
-    // if (dicInfo == null) {
-    //   return;
-    // }
-    // String makeDate = getCurrentDate();
-    // DateTime now = DateTime.now();
-    // String makeTime = DateFormat('HH:mm:ss').format(now);
-    // dicWriteDto = MonitorWriteDto(uid: "", regDate: makeDate, regTime: makeTime, temperature: "", oxygen: "", heartCnt: "", symptom: "", pillUrl: "", speciality: "", stepTimes: "");
-    // if (dicInfo!.regtime! == "") {
-    //   Navigator.push(context, SlideRightTransRoute(builder: (context) => MonitoringStartPage()));
-    //   return;
-    // }
-    //
-    // String regtime = dicInfo!.regtime!;
-    // String oldDate = regtime.substring(0, 10);
-    // int oldHour = int.parse(regtime.substring(11, 13));
-    // String currentDate = getCurrentDate();
-    // if (oldDate != currentDate) {
-    //   Navigator.push(context, SlideRightTransRoute(builder: (context) => MonitoringStartPage()));
+    // if (dicHomeDataInfo == null || dicHomeDataInfo!.todayResult == null) {
+    //   monitoringData = null;
+      Navigator.push(context,
+          SlideRightTransRoute(builder: (context) => MonitoringTestForm()));
     // } else {
-    //   var dt = DateTime.now();
-    //   int curHour = dt.hour;
-    //   if (curHour < 12) {
-    //     //오전 시간
-    //     if (oldHour < 12) {
-    //       dicWriteDto!.uid = dicInfo!.uid!;
-    //       dicWriteDto!.temperature = dicInfo!.temperature!;
-    //       dicWriteDto!.oxygen = dicInfo!.oxygen!;
-    //       dicWriteDto!.heartCnt = dicInfo!.heartCnt!;
-    //       dicWriteDto!.symptom = dicInfo!.symptom!;
-    //       dicWriteDto!.pillUrl = dicInfo!.pillUrl!;
-    //     }
-    //     Navigator.push(context, SlideRightTransRoute(builder: (context) => MonitoringStartPage()));
-    //   } else {
-    //     //오후 시간
-    //     if (oldHour > 12) {
-    //       dicWriteDto!.uid = dicInfo!.uid!;
-    //       dicWriteDto!.temperature = dicInfo!.temperature!;
-    //       dicWriteDto!.oxygen = dicInfo!.oxygen!;
-    //       dicWriteDto!.heartCnt = dicInfo!.heartCnt!;
-    //       dicWriteDto!.symptom = dicInfo!.symptom!;
-    //       dicWriteDto!.pillUrl = dicInfo!.pillUrl!;
-    //     }
-    //     Navigator.push(context, SlideRightTransRoute(builder: (context) => MonitoringStartPage()));
-    //   }
+    //   //모니터링 리스트페이지로
+    //   Navigator.push(context,
+    //       SlideRightTransRoute(builder: (context) => MonitoringResultPage()));
     // }
   }
 
@@ -328,7 +269,7 @@ class TopAreaState extends BaseState<TopArea> {
                         const SizedBox(height: 20),
                         Row(
                           children: [
-                            dicHomeDataInfo!.profileImgUrl != null
+                            dicHomeDataInfo!.profileImgUrl! != ""
                                 ? CachedNetworkImage(
                                     alignment: Alignment.center,
                                     fit: BoxFit.cover,
@@ -514,7 +455,7 @@ class TopAreaState extends BaseState<TopArea> {
                                   ],
                                 ),
                               ),
-                            ))
+                            )),
                       ],
                     )),
               ],

@@ -161,14 +161,14 @@ class TalkAreaState extends BaseState<TalkArea> {
                                     text: arrNewsList.elementAt(0).name!,
                                     color: const Color(0xffA0A0A0),
                                   ),
-                                  const Spacer(),
+                                  const SizedBox(width: 10),
                                   H16(
                                     text: convertDate(
                                         arrNewsList.elementAt(0).regTime!),
                                     color: const Color(0xffA0A0A0),
                                     weight: FW.regular,
                                   ),
-                                  const SizedBox(width: 20),
+                                  const Spacer(),
                                   const Icon(
                                     Icons.favorite_border_outlined,
                                     color: Color(0xffFF5252),

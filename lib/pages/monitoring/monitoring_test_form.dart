@@ -20,6 +20,8 @@ class MonitoringTestForm extends StatefulWidget {
 class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
   String option = "1";
   List<String> selList = [];
+  List<String> list4 = ["할 수 없다", "잘못한다", "할 수 있다", "잘한다"];
+  List<String> list4Img = [];
 
   Future<bool> onBackPressed() async {
     Navigator.pop(context);
@@ -47,7 +49,7 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
     return true;
   }
 
-  Widget testTile() {
+  Widget testTile2() {
     var screenSize = MediaQuery.of(context).size;
     double h = 25;
     double w = 80;
@@ -166,6 +168,87 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
     );
   }
 
+  Widget testTile4() {
+    var screenSize = MediaQuery.of(context).size;
+    double h = 25;
+    double w = 80;
+    return Container(
+      padding: EdgeInsets.all(30),
+      child: Column(children: [
+        SizedBox(
+          width: screenSize.width,
+          child: H16(
+            text: "Q1",
+            maxLine: 1,
+            color: AppColor_Gray,
+            align: TextAlign.left,
+            height: 1.5,
+            weight: FW.bold,
+          ),
+        ),
+        SizedBox(
+          width: screenSize.width,
+          child: H16(
+            text: "answpaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            maxLine: 5,
+            align: TextAlign.left,
+            height: 1.5,
+            weight: FW.medium,
+          ),
+        ),
+        const SizedBox(height: 35),
+        FlutterLogo(
+          size: 100,
+        ),
+        const SizedBox(height: 35),
+        Center(
+          child: Container(
+            width: screenSize.width,
+            height: 100,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: list4.length,
+              itemBuilder: (context, index) {
+              return InkWell(
+                onTap: () {
+                  setState(() {
+                    option = index.toString();
+                  });
+                },
+                child: Column(
+                  children: [
+                    Image.asset(
+                      option == "1"
+                          ? "assets/choose_on.png"
+                          : "assets/choose_off.png",
+                      width: 25,
+                      height: 25,
+                    ),
+                    const SizedBox(height: 20),
+                    option == "1"
+                        ? Image.asset(
+                      "assets/choose_yes.png",
+                      height: h,
+                      width: w,
+                    )
+                        : SizedBox(
+                        height: h,
+                        width: w,
+                        child: H16(
+                            text: list4[index],
+                            weight: FW.medium,
+                            color: AppColor_BlackText)),
+                  ],
+                ),
+              );
+            },),
+          )
+        ),
+        const SizedBox(width: 55),
+      ]),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return PageLayout(
@@ -214,21 +297,44 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
                         ),
                       ],
                     ),
-                    testTile(),
-                    testTile(),
-                    MainTextButton(
-                      text: "다음",
-                      backgroundColor: AppColor_Primary,
-                      style: AppTextStyle.PD(Colors.white, 18, weight: FW.bold),
-                      radius: 0,
-                      height: 66,
-                      disable: !checkValid(),
-                      disableBackground:
-                      !checkValid() ? AppColor_Primary_Disable : Colors.transparent,
-                      onPressed: () {
-                        // goNext();
-                      },
+                    testTile4(),
+                    testTile2(),
+                    const SizedBox(height: 30),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        MainTextButton(
+                          text: "검사 저장하기",
+                          backgroundColor: AppColor_Green,
+                          style: AppTextStyle.PD(Colors.white, 18, weight: FW.bold),
+                          radius: 4,
+                          height: 55,
+                          width: 150,
+                          disable: !checkValid(),
+                          disableBackground:
+                          !checkValid() ? AppColor_Primary_Disable : Colors.transparent,
+                          onPressed: () {
+                            // goNext();
+                          },
+                        ),
+                        const SizedBox(width: 15),
+                        MainTextButton(
+                          text: "다음",
+                          backgroundColor: AppColor_Primary,
+                          style: AppTextStyle.PD(Colors.white, 18, weight: FW.bold),
+                          radius: 4,
+                          height: 55,
+                          width: 150,
+                          disable: !checkValid(),
+                          disableBackground:
+                          !checkValid() ? AppColor_Primary_Disable : Colors.transparent,
+                          onPressed: () {
+                            // goNext();
+                          },
+                        ),
+                      ],
                     ),
+                    const SizedBox(height: 50),
                   ],
                 ),
               ),

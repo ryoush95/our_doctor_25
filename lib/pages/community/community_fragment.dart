@@ -335,11 +335,11 @@ class CommunityFragmenttState extends BaseState<CommunityFragment> {
                       ],
                     ),
                   ),
-                  info.imgUrls != "" ?
+                  img != "" ?
                   ClipRRect(
                     borderRadius: BorderRadius.circular(8.0),
                     child: CachedNetworkImage(
-                      imageUrl: info.imgUrls!,
+                      imageUrl: img,
                       width: 75,
                       height: 75,
                       fit: BoxFit.fill,
@@ -597,8 +597,8 @@ class CommunityFragmenttState extends BaseState<CommunityFragment> {
                             itemCount: CATEGORYS.length,
                             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 3,
-                              childAspectRatio: 3 / 1,
-                              crossAxisSpacing: 10,
+                              childAspectRatio: 3,
+                              crossAxisSpacing: 5,
                               mainAxisSpacing: 10
                             ),
                           ),

@@ -178,8 +178,8 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
                   height: 40,
                   radius: 20,
                   onPressed: () {
-                    // Navigator.push(context, SlideRightTransRoute(builder: (context) => MonitorReport1(),));
-                    Navigator.push(context, SlideRightTransRoute(builder: (context) => MonitoringTestForm(),));
+                    Navigator.push(context, SlideRightTransRoute(builder: (context) => MonitorReport1(),));
+                    // Navigator.push(context, SlideRightTransRoute(builder: (context) => MonitoringTestForm(),));
                   },
                 ),
               ),

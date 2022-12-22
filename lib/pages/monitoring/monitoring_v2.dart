@@ -30,6 +30,8 @@ import 'package:ourdoctor/pages/dialog/dlg_select_date1.dart';
 import 'package:ourdoctor/provider/old_food_list_provider.dart';
 import 'package:provider/provider.dart';
 
+import 'monitoring_result2.dart';
+
 class MonitoringMain2 extends StatefulWidget {
   const MonitoringMain2({Key? key}) : super(key: key);
 
@@ -282,7 +284,7 @@ class _MonitoringMain2State extends BaseState<MonitoringMain2> {
   }
 
   void checkValid() {
-
+    isValid = true;
   }
 
   scrollDown() {
@@ -494,7 +496,7 @@ class _MonitoringMain2State extends BaseState<MonitoringMain2> {
                           ),
                           const SizedBox(height: 20),
                           H16(
-                            text: "1. 오늘의 체온을 입력해주세요.",
+                            text: "오늘의 체온을 입력해주세요.",
                             weight: FW.medium,
                             color: AppColor_BlackText,
                             align: TextAlign.start,
@@ -502,17 +504,17 @@ class _MonitoringMain2State extends BaseState<MonitoringMain2> {
                           const SizedBox(height: 20),
                           tempInfo(screenSize),
                           const SizedBox(height: 20),
+                          // H16(
+                          //   text: "2. 오늘의 영양상태를 기록해주세요.",
+                          //   weight: FW.medium,
+                          //   color: AppColor_BlackText,
+                          //   align: TextAlign.start,
+                          // ),
+                          // const SizedBox(height: 20),
+                          // foodInfo(),
+                          // const SizedBox(height: 20),
                           H16(
-                            text: "2. 오늘의 영양상태를 기록해주세요.",
-                            weight: FW.medium,
-                            color: AppColor_BlackText,
-                            align: TextAlign.start,
-                          ),
-                          const SizedBox(height: 20),
-                          foodInfo(),
-                          const SizedBox(height: 20),
-                          H16(
-                            text: "3. 오늘의 수면시간을 기록해주세요.",
+                            text: "오늘의 수면시간을 기록해주세요.",
                             weight: FW.medium,
                             color: AppColor_BlackText,
                             align: TextAlign.start,
@@ -521,7 +523,7 @@ class _MonitoringMain2State extends BaseState<MonitoringMain2> {
                           sleepInfo(screenSize),
                           const SizedBox(height: 20),
                           H16(
-                            text: "4. 오늘의 질병현황을 기록해주세요.",
+                            text: "오늘의 질병현황을 기록해주세요.",
                             weight: FW.medium,
                             color: AppColor_BlackText,
                             align: TextAlign.start,
@@ -548,6 +550,7 @@ class _MonitoringMain2State extends BaseState<MonitoringMain2> {
                     if (!isValid) {
                       return;
                     }
+                    Navigator.push(context, SlideRightTransRoute(builder: (context) => MonitoringResult2(),));
                   },
                 ),
               ],
@@ -616,36 +619,36 @@ class _MonitoringMain2State extends BaseState<MonitoringMain2> {
                   // onSelect(0, index, checked!),
                 },
               );
-              return InkWell(
-                onTap: () async {
-                  FocusScope.of(context).requestFocus(FocusNode());
-                  // String received = await Navigator.push(context, SlideRightTransRoute(
-                  //         builder: (context) => CaloriCalcPage(type: index)));
-                },
-                child: Container(
-                  height: 70,
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 10.00),
-                  decoration: BoxDecoration(
-                      borderRadius:
-                      BorderRadius.circular(25.0),
-                      color: Provider.of<OldFoodListProvider>(context).kcalList[index].contains('\nkcal')
-                          ? AppColor_Primary
-                          : AppColor_BlackText
-                          .withOpacity(0.05)),
-                  child: Center(
-                    child: H18(
-                      text: Provider.of<OldFoodListProvider>(context).kcalList[index],
-                      weight: FW.medium,
-                      maxLine: 3,
-                      color: Provider.of<OldFoodListProvider>(context).kcalList[index].contains('kcal')
-                          ? AppColor_White
-                          : AppColor_BlackText
-                          .withOpacity(0.5),
-                    ),
-                  ),
-                ),
-              );
+              // return InkWell(
+              //   onTap: () async {
+              //     FocusScope.of(context).requestFocus(FocusNode());
+              //     // String received = await Navigator.push(context, SlideRightTransRoute(
+              //     //         builder: (context) => CaloriCalcPage(type: index)));
+              //   },
+              //   child: Container(
+              //     height: 70,
+              //     padding: const EdgeInsets.symmetric(
+              //         horizontal: 10.00),
+              //     decoration: BoxDecoration(
+              //         borderRadius:
+              //         BorderRadius.circular(25.0),
+              //         color: Provider.of<OldFoodListProvider>(context).kcalList[index].contains('\nkcal')
+              //             ? AppColor_Primary
+              //             : AppColor_BlackText
+              //             .withOpacity(0.05)),
+              //     child: Center(
+              //       child: H18(
+              //         text: Provider.of<OldFoodListProvider>(context).kcalList[index],
+              //         weight: FW.medium,
+              //         maxLine: 3,
+              //         color: Provider.of<OldFoodListProvider>(context).kcalList[index].contains('kcal')
+              //             ? AppColor_White
+              //             : AppColor_BlackText
+              //             .withOpacity(0.5),
+              //       ),
+              //     ),
+              //   ),
+              // );
             }),
         const SizedBox(height: 50),
       ],

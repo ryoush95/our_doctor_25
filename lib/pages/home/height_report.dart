@@ -250,7 +250,7 @@ class HeightReportState extends BaseState<HeightReport> {
         child: Column(
           children: [
             HeightLineChart(data: widget.data),
-            LineChartSample1(points: pricePoints, points2 : pricePoints2),
+            LineChartTemp(points: pricePoints, points2 : pricePoints2),
             const SizedBox(height: 50),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,

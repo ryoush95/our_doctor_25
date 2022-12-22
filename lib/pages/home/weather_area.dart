@@ -50,42 +50,56 @@ class WeatherAreaState extends BaseState<WeatherArea> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           H20(text: '오늘의 건강 정보'),
+          const SizedBox(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               Column(
                 children: [
-                  Container(
+                  SizedBox(
                     height: 84,
                     width: 84,
                     child: Image.asset('assets/home_temp.png'),
                   ),
-                  Text('기온', style:TextStyle(color: AppColor_GrayText)),
-                  H24B(text: "30",color: AppColor_Red,)
+                  const SizedBox(height: 10),
+                  const Text('기온', style: TextStyle(color: AppColor_GrayText)),
+                  const SizedBox(height: 10),
+                  H24B(
+                    text: "30" + "°C",
+                    color: AppColor_Red,
+                  )
                 ],
               ),
               Column(
                 children: [
-                  Container(
+                  SizedBox(
                     height: 84,
                     width: 84,
                     child: Image.asset('assets/home_water.png'),
                   ),
-                  Text('습도', style:TextStyle(color: AppColor_GrayText)),
-                  H24B(text: "30" + "%",color: AppColor_Primary,)
-
+                  const SizedBox(height: 10),
+                  const Text('습도', style: TextStyle(color: AppColor_GrayText)),
+                  const SizedBox(height: 10),
+                  H24B(
+                    text: "30" + "%",
+                    color: AppColor_Primary,
+                  )
                 ],
               ),
               Column(
                 children: [
-                  Container(
+                  SizedBox(
                     height: 84,
                     width: 84,
                     child: Image.asset('assets/home_dust.png'),
                   ),
-                  Text('미세먼지', style:TextStyle(color: AppColor_GrayText)),
-                  H24B(text: "좋음",color: AppColor_Green,)
-
+                  const SizedBox(height: 10),
+                  const Text('미세먼지', style: TextStyle(color: AppColor_GrayText)),
+                  const SizedBox(height: 10),
+                  H24B(
+                    text: "좋음",
+                    color: AppColor_Green,
+                  )
                 ],
               ),
             ],
