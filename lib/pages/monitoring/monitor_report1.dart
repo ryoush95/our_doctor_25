@@ -19,6 +19,7 @@ import 'package:ourdoctor/pages/components/main_text_button.dart';
 import 'package:ourdoctor/pages/components/simple_header.dart';
 import 'package:ourdoctor/pages/home/lifestyle_report.dart';
 import 'package:ourdoctor/pages/home/range_show.dart';
+import 'package:ourdoctor/pages/monitoring/monitoring_test_result.dart';
 import 'package:sprintf/sprintf.dart';
 
 class MonitorReport1 extends StatefulWidget {
@@ -33,7 +34,7 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
   // static const platform = MethodChannel('doctor.flutter.dev');
   final HttpService httpService = HttpService();
   bool isLast = false;
-  int page = 0;
+  int subTabIndex = 0;
   int tabIndex = 0;
   List<MonitorListDto>? arrMonitorList = [];
 
@@ -133,49 +134,56 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
   }
 
   Widget bodyTile(int index) {
-    return Stack(
-      children: [
-        Container(
-          width: 100,
-          height: 90,
-          margin: const EdgeInsets.fromLTRB(10,50,10,10),
-          decoration: const BoxDecoration(
-              color: AppColor_White,
-              borderRadius: BorderRadius.all(
-                  Radius.circular(4)),
-              boxShadow: [
-                BoxShadow(
-                  offset: Offset(3, 3),
-                  color: AppColor_Gray,
-                  blurRadius: 3.0, // soften the shadow
-                  spreadRadius: 4.0, //extend the shadow
-                )
-              ]),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              H16(text: subCategory[index]),
-              const SizedBox(height: 5),
-              Container(
-                width: 50,
-                height: 20,
-                color: AppColor_Height,
-                child: Center(
-                  child: Text("68",
-                    style: TextStyle(
-                    color: Colors.white,
-                  ),),
+    return InkWell(
+      onTap: () {
+        setState(() {
+          subTabIndex = index;
+        });
+      },
+      child: Stack(
+        children: [
+          Container(
+            width: 100,
+            height: 90,
+            margin: const EdgeInsets.fromLTRB(10,50,10,10),
+            decoration: const BoxDecoration(
+                color: AppColor_White,
+                borderRadius: BorderRadius.all(
+                    Radius.circular(4)),
+                boxShadow: [
+                  BoxShadow(
+                    offset: Offset(3, 3),
+                    color: AppColor_Gray,
+                    blurRadius: 3.0, // soften the shadow
+                    spreadRadius: 4.0, //extend the shadow
+                  )
+                ]),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                H16(text: subCategory[index]),
+                const SizedBox(height: 5),
+                Container(
+                  width: 50,
+                  height: 20,
+                  color: AppColor_Height,
+                  child: Center(
+                    child: Text("68",
+                      style: TextStyle(
+                      color: Colors.white,
+                    ),),
+                  ),
                 ),
-              ),
-              const SizedBox(height: 10),
-            ],
+                const SizedBox(height: 10),
+              ],
+            ),
           ),
-        ),
-        Align(
-          alignment: Alignment.topCenter,
-            child: Image.asset("assets/" + subCategoryImg[index],width: 80,),
-        ),
-      ],
+          Align(
+            alignment: Alignment.topCenter,
+              child: Image.asset("assets/" + subCategoryImg[index],width: 80,),
+          ),
+        ],
+      ),
     );
   }
 
@@ -200,16 +208,16 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
             ),
           ),
           const SizedBox(height: 30),
-          H20(text: "언어 발달 점수"),
+          H20(text: "${subCategory[subTabIndex]} 발달 점수"),
           // ReportArea(),
           RangeShow(
             isInspect: true,
             start: "",
             end: "",
-            rate: 20,
+            rate: 98,
             unit: "",
             color: AppColor_Primary,
-            cur_value: 20,
+            cur_value: 98,
           ),
           Container(
             decoration: BoxDecoration(
@@ -251,7 +259,7 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
         ],
       );
     } else if (tabIndex == 1){
-      return Container();
+      return MonitoringTestResult();
     } else if (tabIndex == 2) {
       return Container(padding: const EdgeInsets.symmetric(horizontal: 30), child: LifestyleReport(data: dicHomeGraphLifeStyleInfo!, result: 1));;
     }

@@ -110,17 +110,23 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
                   Container(
                     height: 90,
                     width: 90,
-                    decoration: ShapeDecoration(
+                    decoration: const ShapeDecoration(
                       color: Colors.white,
-                      shape: CircleBorder(side: BorderSide(color: Colors.green, width: 7)),
+                      shape: CircleBorder(side: BorderSide(color: AppColor_Primary, width: 7)),
                     ),
                     child: Container(
-                      decoration: ShapeDecoration(
+                      decoration: const ShapeDecoration(
                         shape: CircleBorder(side: BorderSide(color: Colors.white, width: 4)),
                       ),
                       child: Center(
-                          child: H24B(
-                            text: "좋음",
+                          child: Column(
+                            children: [
+                              Image.asset("assets/icon_good.png",height: 40,),
+                              const SizedBox(height: 7),
+                              H16(
+                                text: "좋아요",
+                              ),
+                            ],
                           ),
                       ),
                     ),

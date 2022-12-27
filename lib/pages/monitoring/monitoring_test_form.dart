@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:ourdoctor/global/app_colors.dart';
 import 'package:ourdoctor/global/app_styles.dart';
 import 'package:ourdoctor/helpers/common_util.dart';
+import 'package:ourdoctor/helpers/transition.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
 import 'package:ourdoctor/pages/base/page_layout.dart';
+import 'package:ourdoctor/pages/components/h14.dart';
 import 'package:ourdoctor/pages/components/h16.dart';
 import 'package:ourdoctor/pages/components/main_text_button.dart';
 import 'package:ourdoctor/pages/components/simple_header.dart';
+import 'package:ourdoctor/pages/monitoring/monitoring_test_result.dart';
 import 'package:ourdoctor/provider/child_quiz_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -19,6 +22,7 @@ class MonitoringTestForm extends StatefulWidget {
 
 class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
   String option = "1";
+  int option4 = 0;
   List<String> selList = [];
   List<String> list4 = ["할 수 없다", "잘못한다", "할 수 있다", "잘한다"];
   List<String> list4Img = [];
@@ -86,40 +90,64 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              InkWell(
-                onTap: () {
-                  setState(() {
-                    option = "1";
-                  });
-                },
-                child: Row(
-                  children: [
-                    Column(
-                      children: [
-                        Image.asset(
+              SizedBox(
+                width: w,
+                child: InkWell(
+                  onTap: () {
+                    setState(() {
+                      option = "1";
+                    });
+                  },
+                  child: Row(
+                    children: [
+                      Column(
+                        children: [
+                          Image.asset(
+                            option == "1"
+                                ? "assets/choose_on.png"
+                                : "assets/choose_off.png",
+                            width: 25,
+                            height: 25,
+                          ),
+                          const SizedBox(height: 20),
                           option == "1"
-                              ? "assets/choose_on.png"
-                              : "assets/choose_off.png",
-                          width: 25,
-                          height: 25,
-                        ),
-                        const SizedBox(height: 20),
-                        option == "1"
-                            ? Image.asset(
-                                "assets/choose_yes.png",
+                              ? Container(
                                 height: h,
-                                width: w,
+                                width: 50,
+                                padding: const EdgeInsets.fromLTRB(3, 3, 5, 3),
+                                // color: AppColor_Primary,
+                                decoration: const BoxDecoration(
+                                  borderRadius: BorderRadius.all(Radius.circular(18)),
+                                  color: AppColor_Primary
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Image.asset(
+                                        "assets/choose_check.png",
+
+                                      ),
+                                    const SizedBox(width: 5),
+                                    H16(
+                                        text: "예 ",
+                                        weight: FW.medium,
+                                        color: AppColor_White),
+                                  ],
+                                ),
                               )
-                            : SizedBox(
-                                height: h,
-                                width: w,
-                                child: H16(
-                                    text: "예",
-                                    weight: FW.medium,
-                                    color: AppColor_BlackText)),
-                      ],
-                    ),
-                  ],
+                              : SizedBox(
+                                  height: h,
+                              width: 50,
+                              child: Center(
+                                    child: H16(
+                                        text: "예 ",
+                                        weight: FW.medium,
+                                        color: AppColor_BlackText),
+                                  )),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
               const SizedBox(width: 55),
@@ -143,18 +171,35 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
                         ),
                         const SizedBox(height: 20),
                         option == "0"
-                            ? Image.asset(
-                                "assets/choose_no.png",
-                                height: h,
-                                width: w,
-                              )
+                            ? Container(
+                          height: h,
+                          padding: const EdgeInsets.fromLTRB(3, 3, 5, 3),
+                          // color: AppColor_Primary,
+                          decoration: const BoxDecoration(
+                              borderRadius: BorderRadius.all(Radius.circular(18)),
+                              color: AppColor_Primary
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset("assets/choose_check.png"),
+                              const SizedBox(width: 5),
+                              H16(
+                                  text: "아니오",
+                                  weight: FW.medium,
+                                  color: AppColor_White),
+                            ],
+                          ),
+                        )
                             : SizedBox(
                                 height: h,
                                 width: w,
-                                child: H16(
-                                    text: "아니오",
-                                    weight: FW.medium,
-                                    color: AppColor_BlackText))
+                                child: Center(
+                                  child: H16(
+                                      text: "아니오",
+                                      weight: FW.medium,
+                                      color: AppColor_BlackText),
+                                )),
                       ],
                     ),
                   ],
@@ -171,9 +216,9 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
   Widget testTile4() {
     var screenSize = MediaQuery.of(context).size;
     double h = 25;
-    double w = 80;
+    double w = (MediaQuery.of(context).size.width-44) / 4;
     return Container(
-      padding: EdgeInsets.all(30),
+      padding: const EdgeInsets.all(18),
       child: Column(children: [
         SizedBox(
           width: screenSize.width,
@@ -206,39 +251,61 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
             width: screenSize.width,
             height: 100,
             child: ListView.builder(
+              physics: NeverScrollableScrollPhysics(),
               scrollDirection: Axis.horizontal,
               itemCount: list4.length,
               itemBuilder: (context, index) {
-              return InkWell(
-                onTap: () {
-                  setState(() {
-                    option = index.toString();
-                  });
-                },
-                child: Column(
-                  children: [
-                    Image.asset(
-                      option == "1"
-                          ? "assets/choose_on.png"
-                          : "assets/choose_off.png",
-                      width: 25,
-                      height: 25,
-                    ),
-                    const SizedBox(height: 20),
-                    option == "1"
-                        ? Image.asset(
-                      "assets/choose_yes.png",
-                      height: h,
-                      width: w,
-                    )
-                        : SizedBox(
+              return SizedBox(
+                width: w,
+                child: InkWell(
+                  onTap: () {
+                    setState(() {
+                      option4 = index;
+                    });
+                  },
+                  child: Column(
+                    children: [
+                      Image.asset(
+                        option4 == index
+                            ? "assets/choose_on.png"
+                            : "assets/choose_off.png",
+                        height: 25,
+                      ),
+                      const SizedBox(height: 20),
+                      option4 == index
+                          ? Container(
                         height: h,
-                        width: w,
-                        child: H16(
-                            text: list4[index],
-                            weight: FW.medium,
-                            color: AppColor_BlackText)),
-                  ],
+                        padding: const EdgeInsets.fromLTRB(3, 3, 5, 3),
+                        // color: AppColor_Primary,
+                        decoration: const BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(18)),
+                            color: AppColor_Primary
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset(
+                              "assets/choose_check.png",
+                              width: 18,
+                            ),
+                            const SizedBox(width: 5),
+                            H14(
+                                text: list4[index],
+                                weight: FW.medium,
+                                color: AppColor_White),
+                          ],
+                        ),
+                      )
+                          : SizedBox(
+                          height: h,
+                          child: Center(
+                            child: H14(
+                                text: list4[index],
+                                weight: FW.medium,
+                                color: AppColor_BlackText),
+                          )),
+                    ],
+                  ),
                 ),
               );
             },),
@@ -329,7 +396,7 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
                           disableBackground:
                           !checkValid() ? AppColor_Primary_Disable : Colors.transparent,
                           onPressed: () {
-                            // goNext();
+                            Navigator.push(context, SlideRightTransRoute(builder: (context) => MonitoringTestResult(),));
                           },
                         ),
                       ],

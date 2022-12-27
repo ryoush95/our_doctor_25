@@ -27,57 +27,6 @@ class LifestyleLineChart2 extends StatefulWidget {
 class LifestyleLineChart2State extends BaseState<LifestyleLineChart2> {
   DateTime now = DateTime.now();
 
-  //NOTE: 추후 다국어 설정 시 변경 필요
-  String get getDiagnoseResult {
-    final result = widget.data.monitoringFood!.diagnose!.result!;
-    switch(result) {
-      case '정상':
-        return '$result이에요.';
-      case '부족':
-        return '$result해요.';
-      case '과다':
-        return '$result예요.';
-
-      default: 
-        return '$result입니다.';
-    }
-  }
-
-  Widget get getDiagnoseResultWidget {
-    final result = widget.data.monitoringFood!.diagnose!.result;
-     switch(result) {
-      case '정상':
-        return _diagnoseContainer(
-          fText: '일일 권장섭취량대로',
-          isNormal: true, 
-          sText: '섭취하고 있어요.'
-        );
-
-      case '부족':
-        return _diagnoseContainer(
-          fText: LanguageService.trans('than_the_recommended'),
-          isNormal: false,
-          calories: widget.data.monitoringFood!.percent!.toString(),
-          sText: result!,
-        );
-
-      case '과다':
-        return _diagnoseContainer(
-          fText: LanguageService.trans('than_the_recommended'),
-          isNormal: false,
-          calories: widget.data.monitoringFood!.percent!.toString(),
-          sText: result!,
-        );
-
-      default: 
-        return _diagnoseContainer(
-          fText: '일일 권장섭취량대로',
-          isNormal: true, 
-          sText: '섭취하고 있어요.'
-        );
-    }
-  }
-
   Widget _diagnoseContainer({
     required String fText,
     required bool isNormal,
@@ -114,7 +63,7 @@ class LifestyleLineChart2State extends BaseState<LifestyleLineChart2> {
   @override
   Widget build(BuildContext context) {
     return RoundContainer(
-        height: 340,
+        height: 260,
         radius: 30,
         bgColor: AppColor_Light_Gray,
         child: Container(
@@ -126,7 +75,7 @@ class LifestyleLineChart2State extends BaseState<LifestyleLineChart2> {
                     const SizedBox(width: 5),
                     Row(
                       children: [
-                        Image.asset('assets/restaurant_black_24dp.png', width: 24),
+                        Image.asset('assets/home_temp.png', height: 24,width: 24,),
                         const SizedBox(width: 5),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -152,7 +101,7 @@ class LifestyleLineChart2State extends BaseState<LifestyleLineChart2> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        H18(text: sprintf("%d", [lastKcal().floor()]) + " Kcal", color: AppColor_BlackText, weight: FW.semi_bold),
+                        H18(text: sprintf("%d", [lastKcal().floor()]) + " °C", color: AppColor_BlackText, weight: FW.semi_bold),
                         const SizedBox(height: 5),
                       ],
                     ),
@@ -168,12 +117,6 @@ class LifestyleLineChart2State extends BaseState<LifestyleLineChart2> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                    width: double.infinity,
-                    height: 50,
-                    child: getDiagnoseResultWidget
-                ),
               ],
             )));
   }
