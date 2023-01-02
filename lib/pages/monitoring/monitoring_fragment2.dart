@@ -85,17 +85,17 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
     return Column(
       children: [
         H20(text: "우아 발달 모니터링 리포트"),
-        const SizedBox(height: 35),
+        const SizedBox(height: 30),
         Container(
           width: double.infinity,
           height: 390,
           padding: const EdgeInsets.all(20.0),
           decoration: const BoxDecoration(
               color: AppColor_White,
-              borderRadius: BorderRadius.all(Radius.circular(14)),
+              borderRadius: BorderRadius.all(Radius.circular(6)),
               boxShadow: [
                 BoxShadow(
-                  color: AppColor_Gray,
+                  color: AppColor_Light_Gray,
                   blurRadius: 5.0, // soften the shadow
                   spreadRadius: 5.0, //extend the shadow
                 )
@@ -207,10 +207,10 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
           padding: const EdgeInsets.all(20.0),
           decoration: const BoxDecoration(
               color: AppColor_White,
-              borderRadius: BorderRadius.all(Radius.circular(14)),
+              borderRadius: BorderRadius.all(Radius.circular(6)),
               boxShadow: [
                 BoxShadow(
-                  color: AppColor_Gray,
+                  color: AppColor_Light_Gray,
                   blurRadius: 5.0, // soften the shadow
                   spreadRadius: 5.0, //extend the shadow
                 )

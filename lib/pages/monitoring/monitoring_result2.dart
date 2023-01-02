@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:ourdoctor/global/app_colors.dart';
 import 'package:ourdoctor/global/app_styles.dart';
 import 'package:ourdoctor/global/global.dart';
+import 'package:ourdoctor/global/http_service.dart';
+import 'package:ourdoctor/helpers/common_util.dart';
+import 'package:ourdoctor/helpers/transition.dart';
 import 'package:ourdoctor/models/dto/report_dto.dart';
+import 'package:ourdoctor/models/home_grapth_res_model.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
 import 'package:ourdoctor/pages/base/page_layout.dart';
 import 'package:ourdoctor/pages/components/h14.dart';
@@ -12,6 +16,11 @@ import 'package:ourdoctor/pages/components/h20.dart';
 import 'package:ourdoctor/pages/components/main_text_button.dart';
 import 'package:ourdoctor/pages/components/simple_header.dart';
 import 'package:ourdoctor/pages/home/disease_report.dart';
+import 'package:ourdoctor/pages/home/inspection_report.dart';
+import 'package:ourdoctor/pages/home/lifestyle_line_chart2.dart';
+import 'package:ourdoctor/pages/home/lifestyle_report.dart';
+import 'package:ourdoctor/pages/intro/first.dart';
+import 'package:sprintf/sprintf.dart';
 
 class MonitoringResult2 extends StatefulWidget {
   const MonitoringResult2({Key? key}) : super(key: key);
@@ -21,133 +30,102 @@ class MonitoringResult2 extends StatefulWidget {
 }
 
 class _MonitoringResult2State extends BaseState<MonitoringResult2> {
+  final HttpService httpService = HttpService();
   int tabIndex = 0;
   List<String> category = ["질병", "수면", "영양", "맞춤검사"];
+  List<String> subTitle = ["아침식사", "점심식사", "간식", "저녁식사"];
+  List<String> subCategory = [""];
+  List<int> _data = [0,0,0,0,0,0,0];
   List<ReportDto> reportList = [];
   List<ReportDto> reportList1 = [];
   List<ReportDto> reportList2 = [];
+
+  bool foodDetail = false;
+  bool foodCheck = true;
+
+  //test data
+  HomeGraphLifeStyleDto? dicHomeGraphLifeStyleInfo;
+
+  @override
+  void initState() {
+    super.initState();
+    dicHomeGraphLifeStyleInfo = null;
+    getHomeGraphLifeStyle();
+  }
 
   Future<bool> onBackPressed() async {
     Navigator.pop(context);
     return true;
   }
 
+  //홈 그래프 생활습관 얻기
+  Future<void> getHomeGraphLifeStyle() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    String curDate = sprintf("%04d-%02d", [2022, 11]);
+    Future<HomeGraphLifeStyleResModel> info = httpService.homeGraphLifeStyle1(curDate);
+    info.then((HomeGraphLifeStyleResModel value) async {
+      setState(() {
+        isLoading = false;
+      });
+      if (value.result == 0) {
+        setState(() {
+          dicHomeGraphLifeStyleInfo = value.data!;
+        });
+      } else {
+        showToast(value.msg ?? "");
+        if (value.result == 106) {
+          //token expired
+          Navigator.pushReplacement(context, SlideRightTransRoute(builder: (context) => FirstPage()));
+        }
+      }
+    }).catchError((onError) {
+      setState(() {
+        isLoading = false;
+      });
+      showToast(onError);
+    });
+  }
+
   Widget _body() {
     if (tabIndex == 0) {
-      return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 30),
-          child: DiseaseReport(
-              data: reportList,
-              data1: reportList1,
-              data2: reportList2,
-              result: 1),
-      );
-    } else if (tabIndex == 1) {
-      return Container();
-    } else if (tabIndex == 2) {
+      // CATE : 질병
       return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          H20(
-            text: "우아냠냠 체크 리스트",
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: dicHomeGraphLifeStyleInfo == null ? Container(): LifestyleLineChart2(data:dicHomeGraphLifeStyleInfo!),
           ),
           const SizedBox(height: 20),
-          Column(
-            children: [
-              Container(
-                  width: 300,
-                  height: 250,
-                  padding: EdgeInsets.all(25),
-                  decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(8)),
-                      color: AppColor_Light_Gray),
-                  child: ListView.builder(
-                    itemCount: 7,
-                    itemBuilder: (context, index) {
-                      return Column(
-                        children: [
-                          Row(children: [
-                            Image.asset(
-                              "assets/ic_radio_on.png",
-                              width: 20,
-                            ),
-                            Image.asset(
-                              "assets/ic_radio_off.png",
-                              width: 20,
-                            ),
-                            const SizedBox(width: 8),
-                            H16(
-                              text: "아이가 잘 먹고 있나요?",
-                              weight: FW.regular,
-                            )
-                          ]),
-                          const SizedBox(height: 8),
-                        ],
-                      );
-                    },
-                  )),
-              const SizedBox(height: 20),
-              MainTextButton(
-                text: "3개 미만",
-                width: 200,
-                height: 40,
-                style: AppTextStyle.PD(Colors.white, 16, weight: FW.semi_bold),
-              ),
-              const SizedBox(height: 10),
-              MainTextButton(
-                text: "3개 이상",
-                width: 200,
-                height: 40,
-                style: AppTextStyle.PD(Colors.white, 16, weight: FW.semi_bold),
-              ),
-              const SizedBox(height: 20),
-            ],
-          ),
-          RichText(
-              text: TextSpan(children: [
-            TextSpan(
-              text: gSelChildInfo!.name!,
-              style: AppTextStyle.PD(AppColor_Primary, 20, weight: FW.bold),
-            ),
-            TextSpan(
-              text: "의 영양식단을 추천해요!",
-              style: AppTextStyle.PD(Colors.black, 20, weight: FW.bold),
-            )
-          ])),
-          const SizedBox(height: 10),
-          SizedBox(
-            width: 300,
-            height: 1200,
-            child: ListView.builder(
-              itemCount: 4,
-              physics: ClampingScrollPhysics(),
-              itemBuilder: (context, index) {
-                return Column(
-                  children: [
-                    Container(
-                      width: 300,
-                      height: 250,
-                      decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(4)),
-                          color: AppColor_Gray),
-                      child: Column(
-                        children: [
-                          const SizedBox(height: 20),
-                          H18(text: "아침 식사"),
-                          Expanded(child: H18(text: "아침 식사")),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                  ],
-                );
-              },
-            ),
+          Container(
+              padding: const EdgeInsets.symmetric(horizontal: 30),
+              child: DiseaseReport(
+                  data: reportList,
+                  data1: reportList1,
+                  data2: reportList2,
+                  result: 1),
           ),
         ],
       );
+    } else if (tabIndex == 1) {
+      // CATE : 수면
+      return Container(padding: const EdgeInsets.symmetric(horizontal: 30), child: LifestyleReport(data: dicHomeGraphLifeStyleInfo!, result: 1));
+    } else if (tabIndex == 2) {
+      // CATE : 영양
+      return Stack(
+        children: [
+          firstPage(),
+          secondPage(),
+        ],
+      );
     } else if (tabIndex == 3) {
-      return Container();
+      // CATE : 맞춤검사
+      return Padding(
+        padding: const EdgeInsets.only(left: 30.0,right: 30.0),
+        child: InspectionReport(data: reportList, data1: reportList1, data2: reportList2),
+      );
     }
     return CircularProgressIndicator();
   }
@@ -228,4 +206,137 @@ class _MonitoringResult2State extends BaseState<MonitoringResult2> {
           ],
         ));
   }
+
+  Widget firstPage() => Visibility(
+      visible: !foodDetail,
+      child: Container(
+        margin: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            H20(
+              text: "우아냠냠 체크 리스트",
+            ),
+            const SizedBox(height: 20),
+            Column(
+              children: [
+                Container(
+                    height: 250,
+                    padding: const EdgeInsets.all(25),
+                    decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(8)),
+                        color: AppColor_Light_Gray),
+                    child: ListView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: _data.length,
+                      itemBuilder: (context, index) {
+                        return Column(
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                if (_data[index] == 0){
+                                  _data[index] = 1;
+                                } else {
+                                  _data[index] = 0;
+                                }
+                                setState(() {});
+                              },
+                              child: Row(children: [
+                                Image.asset(
+                                  _data[index] == 0 ? "assets/ic_radio_off.png"
+                                      :"assets/ic_radio_on.png",
+                                  width: 20,
+                                ),
+                                const SizedBox(width: 8),
+                                H16(
+                                  text: "아이가 잘 먹고 있나요?",
+                                  weight: FW.regular,
+                                )
+                              ]),
+                            ),
+                            const SizedBox(height: 8),
+                          ],
+                        );
+                      },
+                    )),
+                const SizedBox(height: 20),
+                MainTextButton(
+                  text: "완료",
+                  width: 200,
+                  height: 40,
+                  style: AppTextStyle.PD(Colors.white, 16, weight: FW.semi_bold),
+                  // disableBackground: AppColor_Primary_Disable,
+                  // disable: _data.where((element) => element == 1).length < 3 ? true : false,
+                  onPressed: (){
+                    foodDetail = !foodDetail;
+                    foodCheck = _data.where((element) => element == 1).length < 3;
+                    setState(() {});
+                  },
+                ),
+                const SizedBox(height: 20),
+              ],
+            ),
+
+          ],
+        ),
+      )
+  );
+
+  Widget secondPage() => Visibility(
+    visible: foodDetail,
+      child: Container(
+        margin: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            RichText(
+                text: TextSpan(children: [
+                  TextSpan(
+                    text: gSelChildInfo!.name!,
+                    style: AppTextStyle.PD(AppColor_Primary, 20, weight: FW.bold),
+                  ),
+                  TextSpan(
+                    text: "의 영양식단을 추천해요!",
+                    style: AppTextStyle.PD(Colors.black, 20, weight: FW.bold),
+                  )
+                ])),
+            const SizedBox(height: 20),
+            SizedBox(
+              height: 1100,
+              child: ListView.builder(
+                itemCount: subTitle.length,
+                physics: const ClampingScrollPhysics(),
+                itemBuilder: (context, index) {
+                  return Column(
+                    children: [
+                      Container(
+                        width: 300,
+                        height: 250,
+                        decoration: const BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(4)),
+                            color: AppColor_Light_Gray),
+                        child: Column(
+                          children: [
+                            const SizedBox(height: 20),
+                            H18(text: subTitle[index]),
+                            // Expanded(child: H18(text: "아침 식사")),
+                            // FIXME: 영양 이미지넣을때 주석 해제
+                            // const SizedBox(height: 10),
+                            // foodCheck ?
+                            // Image.asset("food_image${index}_down.png", width: 260,):
+                            // Image.asset("food_image${index}_up.png", width: 260),
+
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                    ],
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      )
+  );
 }

@@ -32,21 +32,21 @@ class PrevMonitoringState extends BaseState<PrevMonitoring> {
               decoration: const BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(15.0)),
                   color: Colors.transparent),
-              child: H16(text: LanguageService.trans('meet_customized_growth'), maxLine: 3, color: AppColor_Tab_Unselected, weight: FW.medium,)
+              child: Center(child: H16(text: LanguageService.trans('meet_customized_growth'), maxLine: 3, color: AppColor_Tab_Unselected, weight: FW.medium,))
           ),
           const SizedBox(height: 20),
-          Center(
-            child: MainTextButton(
-              text: LanguageService.trans('start_monitoring'),
-              style: AppTextStyle.PD(Colors.white, 14, weight: FW.medium),
-              width: 160,
-              height: 36,
-              radius: 14,
-              onPressed: () {
-                Navigator.push(context, SlideRightTransRoute(builder: (context) => MonitoringStartPage()));
-              },
-            ),
-          ),
+          // Center(
+          //   child: MainTextButton(
+          //     text: LanguageService.trans('start_monitoring'),
+          //     style: AppTextStyle.PD(Colors.white, 14, weight: FW.medium),
+          //     width: 160,
+          //     height: 36,
+          //     radius: 14,
+          //     onPressed: () {
+          //       Navigator.push(context, SlideRightTransRoute(builder: (context) => MonitoringStartPage()));
+          //     },
+          //   ),
+          // ),
         ]
     );
   }

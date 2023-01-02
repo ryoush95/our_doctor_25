@@ -28,7 +28,7 @@ class WeightLineChartState extends BaseState<WeightLineChart> {
   Widget build(BuildContext context) {
     return RoundContainer(
         height: 340,
-        radius: 30,
+        radius: 6,
         bgColor: AppColor_Light_Gray,
         child: Container(
             padding: const EdgeInsets.all(18),

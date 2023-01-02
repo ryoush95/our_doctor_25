@@ -101,6 +101,7 @@ class SchoolAreaState extends BaseState<SchoolArea> {
                   child: ListView.builder(
                       shrinkWrap: true,
                       scrollDirection: Axis.horizontal,
+                      physics: const BouncingScrollPhysics(),
                       itemCount: arrSchoolList.length,
                       itemBuilder: (BuildContext context, int index) {
                         CommunityDto info = arrSchoolList.elementAt(index);

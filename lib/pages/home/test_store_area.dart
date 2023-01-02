@@ -79,6 +79,7 @@ class TestStoreAreaState extends BaseState<TestStoreArea> {
           height: 230,
           child: ListView.builder(
               scrollDirection: Axis.horizontal,
+              physics: const BouncingScrollPhysics(),
               itemCount: arrTestList!.length,
               itemBuilder: (BuildContext context, int index) {
                 return InkWell(

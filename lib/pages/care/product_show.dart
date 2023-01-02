@@ -88,12 +88,13 @@ class ProductShowState extends BaseState<ProductShow> {
               height: 340,
               child: ListView.builder(
                   scrollDirection: Axis.horizontal,
+                  physics: const BouncingScrollPhysics(),
                   // itemCount: arrBannerList == null ? 0 : arrBannerList!.length,
                   itemCount: widget.list!.length,
                   itemBuilder: (BuildContext context, int index) {
                     //BannerList info = arrBannerList!.elementAt(index);
                     return Container(
-                      padding: const EdgeInsets.only(right: 20),
+                      // padding: const EdgeInsets.only(right: 20),
                       child: ItemProduct(data: info, info: widget.list!.elementAt(index)),
                     );
                   }),

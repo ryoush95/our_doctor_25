@@ -95,46 +95,48 @@ class InspectionMbtiFinalPageState
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(horizontal: 30),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    RichText(
-                      text: TextSpan(
-                        children: [
-                          TextSpan(
-                            text: "우리 아이 성격 테스트!\n\n",
-                            style: AppTextStyle.PD(AppColor_Primary, 20,
-                                weight: FW.bold),
-                          ),
-                          TextSpan(
-                            text: "우리 아이 성격에 딱 맞는 유명인은 \n누가 있을까?\n\n\n",
-                            style: AppTextStyle.PD(AppColor_BlackText, 18,
-                                weight: FW.regular),
-                          ),
-                          TextSpan(
-                            text: "다음 질문에 응답해 주세요.\n\n\n",
-                            style: AppTextStyle.PD(AppColor_BlackText, 19,
-                                weight: FW.bold),
-                          ),
-                          TextSpan(
-                            text: "4 / 4 ",
-                            style: AppTextStyle.PD(AppColor_Table_DateTime, 15,
-                                weight: FW.regular),
-                          ),
-                        ],
+                child: Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      RichText(
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text: "우리 아이 성격 테스트!\n\n",
+                              style: AppTextStyle.PD(AppColor_Primary, 20,
+                                  weight: FW.bold),
+                            ),
+                            TextSpan(
+                              text: "우리 아이 성격에 딱 맞는 유명인은 \n누가 있을까?\n\n\n",
+                              style: AppTextStyle.PD(AppColor_BlackText, 18,
+                                  weight: FW.regular),
+                            ),
+                            TextSpan(
+                              text: "다음 질문에 응답해 주세요.\n\n\n",
+                              style: AppTextStyle.PD(AppColor_BlackText, 19,
+                                  weight: FW.bold),
+                            ),
+                            TextSpan(
+                              text: "4 / 4 ",
+                              style: AppTextStyle.PD(AppColor_Table_DateTime, 15,
+                                  weight: FW.regular),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    const Divider(
-                      color: AppColor_Table_DateTime,
-                      thickness: 1,
-                    ),
-                    const SizedBox(height: 30),
-                    ListView.builder(
-                        shrinkWrap: true,
-                        itemBuilder: _itemBuilder,
-                        itemCount: widget.list.length,
-                        controller: _listController)
-                  ],
+                      const Divider(
+                        color: AppColor_Table_DateTime,
+                        thickness: 1,
+                      ),
+                      const SizedBox(height: 30),
+                      ListView.builder(
+                          shrinkWrap: true,
+                          itemBuilder: _itemBuilder,
+                          itemCount: widget.list.length,
+                          controller: _listController)
+                    ],
+                  ),
                 ),
               ),
             ),

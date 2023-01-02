@@ -275,6 +275,7 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
                       option4 == index
                           ? Container(
                         height: h,
+                        width: index == 3 ? 70 : w + 3,
                         padding: const EdgeInsets.fromLTRB(3, 3, 5, 3),
                         // color: AppColor_Primary,
                         decoration: const BoxDecoration(
@@ -396,7 +397,7 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
                           disableBackground:
                           !checkValid() ? AppColor_Primary_Disable : Colors.transparent,
                           onPressed: () {
-                            Navigator.push(context, SlideRightTransRoute(builder: (context) => MonitoringTestResult(),));
+                            // Navigator.push(context, SlideRightTransRoute(builder: (context) => MonitoringTestResult(),));
                           },
                         ),
                       ],

@@ -50,9 +50,9 @@ class RangeShowState extends BaseState<RangeShow> {
     var screenSize = MediaQuery.of(context).size;
     var customPadding = 40.0;
     var slideWidth = screenSize.width - 60 - customPadding * 2;
-    var customTop = 90.0;
+    var customTop = 70.0;
     return Container(
-        height: 130,
+        height: 110,
         child: Stack(
           children: [
             Positioned(

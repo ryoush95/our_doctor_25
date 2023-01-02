@@ -53,6 +53,7 @@ class HomeFragmentState extends BaseState<HomeFragment> {
   String keyword = "";
   var keywordController = TextEditingController();
   final searchController = TextEditingController();
+  ScrollController sc = ScrollController();
 
   void showMoreText() {
     ShowMoreTextPopup popup = ShowMoreTextPopup(context,
@@ -183,6 +184,7 @@ class HomeFragmentState extends BaseState<HomeFragment> {
             Align(
               alignment: Alignment.topCenter,
               child: SingleChildScrollView(
+                controller: sc,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -212,7 +214,28 @@ class HomeFragmentState extends BaseState<HomeFragment> {
                   ],
                 ),
               ),
-
+            ),
+            Visibility(
+              // visible: nTabIndex == 4 || nTabIndex == 5,
+              child: Positioned(
+                child: SizedBox(
+                  width: 50,
+                  height: 50,
+                  child: FloatingActionButton(
+                    highlightElevation: 0,
+                    focusElevation: 0,
+                    elevation: 0,
+                    backgroundColor: AppColor_Primary,
+                    shape: const CircleBorder(),
+                    onPressed: (){
+                      sc.animateTo(0, duration: const Duration(milliseconds: 500), curve: Curves.easeOut);
+                    },
+                    child: const Icon(Icons.arrow_upward_rounded, size: 30,),
+                  ),
+                ),
+                right: 12,
+                bottom: 12,
+              ),
             ),
           ],
         ));

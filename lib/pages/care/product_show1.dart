@@ -70,6 +70,7 @@ class ProductShow1State extends BaseState<ProductShow1> {
               height: 340,
               child: ListView.builder(
                   scrollDirection: Axis.horizontal,
+                  physics: const BouncingScrollPhysics(),
                   // itemCount: arrBannerList == null ? 0 : arrBannerList!.length,
                   itemCount: widget.list!.length,
                   itemBuilder: (BuildContext context, int index) {

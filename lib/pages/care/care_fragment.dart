@@ -106,6 +106,13 @@ class CareFragmentState extends BaseState<CareFragment>
     });
   }
 
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    changeTab(0);
+  }
+
   void _scrollListener() {
     if (!isLoading) {
       if (controller.position.pixels == controller.position.maxScrollExtent) {
@@ -120,7 +127,7 @@ class CareFragmentState extends BaseState<CareFragment>
   }
 
   void changeTab(int tab) {
-    Provider.of<ConvertScoreProvider>(context, listen: true).changeCareTab(tab);
+    Provider.of<ConvertScoreProvider>(context, listen: false).changeCareTab(tab);
     setState(() {
       tabIndex = tab;
       tabController.index = tabIndex;
@@ -229,30 +236,32 @@ class CareFragmentState extends BaseState<CareFragment>
       }
     }).catchError((onError) {
       setState(() {
-        isLoading = false;
+        if(mounted) {
+          isLoading = false;
+        }
       });
       showToast(onError);
     });
   }
 
   Widget getBannerTitle(int index) {
-    return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 8),
-        margin: const EdgeInsets.only(right: 8),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(18),
-            color: tabIndex == index ? AppColor_Primary : AppColor_f4f5f7),
-        child: GestureDetector(
-          onTap: () {
-            setState(() {
-              tabIndex = index;
-              nPage = 0;
-              position = 0;
-              getBannerList();
-              getHomeDataInfo();
-              pageController.jumpToPage(0);
-            });
-          },
+    return InkWell(
+      onTap: () {
+        changeTab(index);
+        setState(() {
+          nPage = 0;
+          position = 0;
+          getBannerList();
+          getHomeDataInfo();
+          pageController.jumpToPage(0);
+        });
+      },
+      child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 8),
+          margin: const EdgeInsets.only(right: 8),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(18),
+              color: tabIndex == index ? AppColor_Primary : AppColor_f4f5f7),
           child: SizedBox(
             child: Stack(
               children: [
@@ -269,8 +278,8 @@ class CareFragmentState extends BaseState<CareFragment>
                 ),
               ],
             ),
-          ),
-        ));
+          )),
+    );
   }
 
   @override
@@ -303,9 +312,9 @@ class CareFragmentState extends BaseState<CareFragment>
             mainAxisSize: MainAxisSize.min,
             children: [
               tabIndex == 2
-              ? ProductShow1(
+              ? ProductShow(
                 category: category,
-                title: LanguageService.trans("인기 검사"),
+                title: "인기 검사",
                 list: arrLikeList,
               ) : const SizedBox(),
             ],

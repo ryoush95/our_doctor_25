@@ -164,10 +164,10 @@ class CommunityFragmenttState extends BaseState<CommunityFragment> {
               decoration: const BoxDecoration(
                   color: AppColor_White,
                   borderRadius: BorderRadius.all(
-                      Radius.circular(14)),
+                      Radius.circular(6)),
                   boxShadow: [
                     BoxShadow(
-                      color: AppColor_Gray,
+                      color: AppColor_Light_Gray,
                       blurRadius: 5.0, // soften the shadow
                       spreadRadius: 5.0, //extend the shadow
                     )
@@ -265,10 +265,10 @@ class CommunityFragmenttState extends BaseState<CommunityFragment> {
               decoration: BoxDecoration(
                   color: (info.topic! == "notice" || info.fixed == "1") ? AppColor_Primary : AppColor_White,
                   borderRadius: const BorderRadius.all(
-                      Radius.circular(14)),
+                      Radius.circular(6)),
                   boxShadow: const [
                     BoxShadow(
-                      color: AppColor_Gray,
+                      color: AppColor_Light_Gray,
                       blurRadius: 5.0, // soften the shadow
                       spreadRadius: 5.0, //extend the shadow
                     )

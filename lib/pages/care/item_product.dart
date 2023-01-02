@@ -77,6 +77,7 @@ class ItemProductState extends BaseState<ItemProduct> {
     return InkWell(
       child: Container(
           width: 150,
+          margin: const EdgeInsets.only(right: 10),
           // margin: const EdgeInsets.only(right: 20, top: 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,

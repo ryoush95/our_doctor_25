@@ -61,7 +61,7 @@ class ResultAreaState extends BaseState<ResultArea> {
         decoration: BoxDecoration(color: Colors.white),
         child: Container(
           width: double.infinity,
-          decoration: BoxDecoration(borderRadius: BorderRadius.circular(18.0), color: AppColor_Light_Gray),
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(6.0), color: AppColor_Light_Gray),
           padding: const EdgeInsets.all(30),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,

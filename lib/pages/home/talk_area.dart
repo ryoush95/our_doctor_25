@@ -144,10 +144,10 @@ class TalkAreaState extends BaseState<TalkArea> {
                           decoration: const BoxDecoration(
                               color: Colors.white,
                               borderRadius:
-                                  BorderRadius.all(Radius.circular(14)),
+                                  BorderRadius.all(Radius.circular(6)),
                               boxShadow: [
                                 BoxShadow(
-                                  color: AppColor_Gray,
+                                  color: AppColor_Light_Gray,
                                   blurRadius: 5.0, // soften the shadow
                                   spreadRadius: 5.0, //extend the shadow
                                 )
@@ -227,11 +227,10 @@ class TalkAreaState extends BaseState<TalkArea> {
                                       padding: const EdgeInsets.all(20.0),
                                       decoration: const BoxDecoration(
                                           color: Colors.white,
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(14)),
+                                          borderRadius: BorderRadius.all(Radius.circular(6)),
                                           boxShadow: [
                                             BoxShadow(
-                                              color: AppColor_Gray,
+                                              color: AppColor_Light_Gray,
                                               blurRadius: 5.0, // soften the shadow
                                               spreadRadius: 5.0, //extend the shadow
                                             )

@@ -19,6 +19,8 @@ import 'package:ourdoctor/pages/home/test_store_area.dart';
 import 'package:ourdoctor/pages/intro/first.dart';
 import 'package:ourdoctor/pages/app_event.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
+import 'package:ourdoctor/provider/convert_score_provider.dart';
+import 'package:provider/provider.dart';
 
 import '../app_event.dart';
 import 'item_community.dart';
@@ -89,7 +91,8 @@ class NewsAreaState extends BaseState<NewsArea> {
               H20(text: "우아 테스트"),
               InkWell(
                 onTap: () {
-                  eventBus.fire(MoreCommunityEvent(type: 1));
+                  Provider.of<ConvertScoreProvider>(context, listen: false).changeCareTab(2);
+                  eventBus.fire(MoreHomeCareEvent(type: 0));
                 },
                 child:
                     H14(text: LanguageService.trans('more'), weight: FW.medium),

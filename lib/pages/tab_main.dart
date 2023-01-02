@@ -89,8 +89,7 @@ class TabMainPageState extends BaseState<TabMainPage>
         icon: 'ic_jjim_product.png',
         title: 'favorite_product',
         route: FavoriteProductPage()),
-    SideMenuCategory(
-        icon: 'ic_pencil.svg', title: 'view_my_posts', route: MyPostsPage()),
+    // SideMenuCategory(icon: 'ic_pencil.svg', title: 'view_my_posts', route: MyPostsPage()),
     SideMenuCategory(
         icon: 'settings_black_24dp.png', title: 'my_page', route: MyPagePage()),
     SideMenuCategory(

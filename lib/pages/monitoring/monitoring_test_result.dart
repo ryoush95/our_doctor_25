@@ -241,15 +241,15 @@ class _MonitoringTestResultState extends BaseState<MonitoringTestResult> {
         Container(
           width: MediaQuery.of(context).size.width - 40,
           padding: const EdgeInsets.all(20),
-          margin: const EdgeInsets.all(20),
+          margin: const EdgeInsets.only(bottom: 20),
           decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.all(Radius.circular(14)),
+              color: AppColor_White,
+              borderRadius: BorderRadius.all(Radius.circular(6)),
               boxShadow: [
                 BoxShadow(
-                  color: AppColor_Gray,
-                  blurRadius: 5.0, // soften the shadow
-                  spreadRadius: 5.0, //extend the shadow
+                  color: AppColor_Light_Gray,
+                  blurRadius: 3.0, // soften the shadow
+                  spreadRadius: 4.0, //extend the shadow
                 )
               ]),
           child: Column(

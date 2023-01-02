@@ -60,6 +60,16 @@ class CircularProgress2State extends BaseState<CircularProgress2> {
     return result > 100 ? 100 : result;
   }
 
+  Color changeColor(double p) {
+    if (p < 80) {
+      return AppColor_Red;
+    } else if (p < 90) {
+      return AppColor_Oxygen;
+    } else {
+      return AppColor_Primary;
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -151,12 +161,13 @@ class CircularProgress2State extends BaseState<CircularProgress2> {
                               ? "??"
                               : convertScore(showScore().toString()),
                           // weight: FW.regular,
+                        color: changeColor(showScore()),
                       ),
                       H14(text: LanguageService.trans('jom'), weight: FW.regular),
                     ],
                   ),
                   circularStrokeCap: CircularStrokeCap.round,
-                  progressColor: AppColor_Primary,
+                  progressColor: changeColor(showScore()),
                   backgroundColor: AppColor_f4f5f7,
                 ),
               ),

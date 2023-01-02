@@ -371,11 +371,12 @@ class DiseaseReportState extends BaseState<DiseaseReport> {
                       ),
                       Visibility(
                         visible: item.medicationUrl!.isNotEmpty,
-                        child: Image.asset(
-                          'assets/ic_search.png',
-                          width: 20,
-                          height: 20,
-                        ),
+                        child: const Icon(Icons.image, color: AppColor_Primary, size: 20,)
+                        // Image.asset(
+                        //   'assets/ic_search.png',
+                        //   width: 20,
+                        //   height: 20,
+                        // ),
                       ),
                     ],
                   ),

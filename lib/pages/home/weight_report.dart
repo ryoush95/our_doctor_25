@@ -247,7 +247,7 @@ class WeightReportState extends BaseState<WeightReport> {
                 }
               },
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(6),
                 child: Image.network(
                     arrBannerList[rnum].image!
                 ),

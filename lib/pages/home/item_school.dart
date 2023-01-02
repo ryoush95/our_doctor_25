@@ -38,18 +38,33 @@ class ItemSchoolState extends BaseState<ItemSchool> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 190,
+      width: 150,
       height: 190,
       margin: const EdgeInsets.only(right: 10),
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: AppColor_Selector_Border),
-        borderRadius: const BorderRadius.all(Radius.circular(8)),
-      ),
+      // decoration: BoxDecoration(
+      //   color: Colors.white,
+      //   border: Border.all(color: AppColor_Selector_Border),
+      //   borderRadius: const BorderRadius.all(Radius.circular(8)),
+      // ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          Visibility(
+            visible: widget.item.imgUrl! != "",
+            child: Container(
+              margin: const EdgeInsets.only(top: 10,bottom: 8),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8.0),
+                child: ExtendedImage.network(
+                  widget.item.imgUrl!,
+                  width: 150,
+                  height: 150,
+                  fit: BoxFit.fill,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 15,),
           Row(
             children: [
               H14(text: "[" + getTopicName(widget.item.topic!) + "]", weight: FW.semi_bold, color: AppColor_Primary),
@@ -76,30 +91,6 @@ class ItemSchoolState extends BaseState<ItemSchool> {
               ),
             ],
           ),
-          Visibility(
-            visible: widget.item.imgUrl! != "",
-            child: Container(
-              margin: const EdgeInsets.only(top: 10,bottom: 8),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(8.0),
-                child: ExtendedImage.network(
-                  widget.item.imgUrl!,
-                  height: 158,
-                  fit: BoxFit.fill,
-                ),
-              ),
-            ),
-          ),
-          // H12(
-          //   text: widget.item.content!,
-          //   weight: FW.medium,
-          //   color: AppColor_GrayText,
-          //   height: 1.5,
-          //   align: TextAlign.start,
-          //   maxLine: widget.item.imgUrl! != "" ? 4 : 16,
-          // ),
-          // const SizedBox(height: 8),
-          // H12(text: LanguageService.trans('more'), color: AppColor_Primary),
         ],
       ),
     );

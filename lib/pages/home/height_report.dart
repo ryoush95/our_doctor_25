@@ -250,7 +250,6 @@ class HeightReportState extends BaseState<HeightReport> {
         child: Column(
           children: [
             HeightLineChart(data: widget.data),
-            LineChartTemp(points: pricePoints, points2 : pricePoints2),
             const SizedBox(height: 50),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -362,7 +361,7 @@ class HeightReportState extends BaseState<HeightReport> {
               },
               child: arrBannerList.isEmpty ? Container() :
               ClipRRect(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(6),
                   child: Image.network(
                       arrBannerList[rnum].image!
                   ),
