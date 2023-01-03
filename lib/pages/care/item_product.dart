@@ -146,7 +146,7 @@ class ItemProductState extends BaseState<ItemProduct> {
                 width: 150,
                 child: H14(
                   text: widget.info!.name!,
-                  weight: FW.regular,
+                  weight: FW.medium,
                   maxLine: 1,
                   align: TextAlign.start,
                   height: 1.4,
@@ -226,6 +226,7 @@ class ItemProductState extends BaseState<ItemProduct> {
         label,
         style: TextStyle(
           color: AppColor_GrayText,
+          fontSize: 16,
         ),
       ),
       backgroundColor: Colors.white,

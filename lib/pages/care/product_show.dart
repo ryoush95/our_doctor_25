@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ourdoctor/global/app_styles.dart';
 import 'package:ourdoctor/global/global.dart';
 import 'package:ourdoctor/helpers/transition.dart';
 import 'package:ourdoctor/language/language_service.dart';
@@ -77,7 +78,7 @@ class ProductShowState extends BaseState<ProductShow> {
                   },
                   child: Container(
                     margin: const EdgeInsets.only(right: 30),
-                    child: H14(text: LanguageService.trans("view_more")),
+                    child: H14(text: LanguageService.trans("view_more"), weight: FW.medium,),
                   ),
                 ),
               ],
@@ -95,7 +96,10 @@ class ProductShowState extends BaseState<ProductShow> {
                     //BannerList info = arrBannerList!.elementAt(index);
                     return Container(
                       // padding: const EdgeInsets.only(right: 20),
-                      child: ItemProduct(data: info, info: widget.list!.elementAt(index)),
+                      child: ItemProduct(
+                          data: info,
+                          info: widget.list!.elementAt(index),
+                      ),
                     );
                   }),
             )

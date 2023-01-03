@@ -13,7 +13,8 @@ class AppTextStyle {
         height: height,
         color: color,
         overflow: ellipsis ? TextOverflow.ellipsis : TextOverflow.visible,
-        decoration: underline? TextDecoration.underline: TextDecoration.none
+        decoration: underline? TextDecoration.underline: TextDecoration.none,
+        letterSpacing: -1.0,
     );
   }
 }

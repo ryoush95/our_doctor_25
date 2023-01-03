@@ -106,13 +106,6 @@ class CareFragmentState extends BaseState<CareFragment>
     });
   }
 
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-    changeTab(0);
-  }
-
   void _scrollListener() {
     if (!isLoading) {
       if (controller.position.pixels == controller.position.maxScrollExtent) {
@@ -350,7 +343,7 @@ class CareFragmentState extends BaseState<CareFragment>
   Widget CareBanner() {
     return SizedBox(
       width: double.infinity,
-        height: 260,
+        height: 270,
         child: Stack(children: [
           Container(
             margin: EdgeInsets.all(25),
@@ -379,18 +372,31 @@ class CareFragmentState extends BaseState<CareFragment>
   thumbnail() {
     var screen = MediaQuery.of(context).size;
     return Container(
-        width: screen.width,
-        height: screen.width / 2,
+        width: screen.width - 10,
+        height: screen.width / 2 - 10,
+        margin: const EdgeInsets.all(5),
+        decoration: const BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: AppColor_Light_Gray,
+                blurRadius: 5.0, // soften the shadow
+                spreadRadius: 5.0, //extend the shadow
+              ),
+            ]),
         child: bannerList.isEmpty
             ? const Center(child: CircularProgressIndicator())
             : PageView.builder(
               controller: pageController,
               itemCount: bannerList.length,
               itemBuilder: (BuildContext context, int index) {
-                return CachedNetworkImage(
-                  imageUrl: bannerList[index],
-                  width: screen.width,
-                  height: screen.width / 2,
+                return ClipRRect(
+                  borderRadius: BorderRadius.circular(6),
+                  child: CachedNetworkImage(
+                    imageUrl: bannerList[index],
+                    width: screen.width,
+                    height: screen.width / 2,
+                    fit: BoxFit.fill,
+                  ),
                 );
               },
               onPageChanged: (i) {

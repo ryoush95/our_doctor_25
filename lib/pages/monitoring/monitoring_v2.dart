@@ -53,6 +53,7 @@ class _MonitoringMain2State extends BaseState<MonitoringMain2> {
 
 
   String mHeight = "";
+  int hasTemp = 2;
   int hasDisease = 2;
   int disease_count = 1;
   List<String> imageList = [];
@@ -561,32 +562,90 @@ class _MonitoringMain2State extends BaseState<MonitoringMain2> {
   Widget tempInfo (screenSize) {
     return SizedBox(
         width: (screenSize.width - 70) / 2,
-        child: Row(
+        child: Column(
           children: [
-            Expanded(
-              child: OutlineNumInput(
-                controller: bodyTempCont,
-                keyboardType:
-                const TextInputType
-                    .numberWithOptions(
-                  decimal: true,
-                  signed: true,
+            Row(
+              children: [
+                Expanded(
+                  child: OutlineNumInput(
+                    controller: bodyTempCont,
+                    keyboardType:
+                    const TextInputType
+                        .numberWithOptions(
+                      decimal: true,
+                      signed: true,
+                    ),
+                    textInputAction:
+                    TextInputAction.done,
+                    placeholder: "",
+                    onChanged: (text) {
+                      mHeight = text;
+                      setState(() {});
+                      // checkValid();
+                    },
+                  ),
                 ),
-                textInputAction:
-                TextInputAction.done,
-                placeholder: "",
-                onChanged: (text) {
-                  mHeight = text;
-                  setState(() {});
-                  // checkValid();
-                },
-              ),
+                const SizedBox(width: 10),
+                H17(
+                  text: LanguageService.trans("°C"),
+                  weight: FW.medium,
+                  color: AppColor_BlackText,
+                ),
+              ],
             ),
-            const SizedBox(width: 10),
-            H17(
-              text: LanguageService.trans("°C"),
-              weight: FW.medium,
-              color: AppColor_BlackText,
+            SizedBox(
+              height: 40,
+              child: Row(
+                children: [
+                  InkWell(
+                    onTap: () {
+                      hasTemp = 1;
+                      checkValid();
+                      setState(() {});
+                    },
+                    child: Row(
+                      children: [
+                        Image.asset(
+                          hasTemp == 1
+                              ? "assets/ic_option_on.png"
+                              : "assets/ic_option_off.png",
+                          width: 25,
+                          height: 25,
+                        ),
+                        const SizedBox(width: 10),
+                        H16(
+                            text: "귀",
+                            weight: FW.medium,
+                            color: AppColor_BlackText),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 25),
+                  InkWell(
+                    onTap: () {
+                      hasTemp = 2;
+                      checkValid();
+                      setState(() {});
+                    },
+                    child: Row(
+                      children: [
+                        Image.asset(
+                          hasTemp == 2
+                              ? "assets/ic_option_on.png"
+                              : "assets/ic_option_off.png",
+                          width: 25,
+                          height: 25,
+                        ),
+                        const SizedBox(width: 10),
+                        H16(
+                            text: "이마",
+                            weight: FW.medium,
+                            color: AppColor_BlackText),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),

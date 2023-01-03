@@ -14,6 +14,7 @@ import 'package:ourdoctor/pages/app_event.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
 import 'package:ourdoctor/pages/components/h14.dart';
 import 'package:ourdoctor/pages/components/h16.dart';
+import 'package:ourdoctor/pages/components/h18.dart';
 import 'package:ourdoctor/pages/components/main_text_button.dart';
 import 'package:ourdoctor/pages/components/round_container.dart';
 import 'package:ourdoctor/pages/intro/first.dart';
@@ -233,7 +234,7 @@ class TopAreaState extends BaseState<TopArea> {
   Widget build(BuildContext context) {
     return !isLoading
         ? Container(
-            height: 290,
+            height: 330,
             padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
             decoration: const BoxDecoration(
                 color: Colors.white,
@@ -258,14 +259,14 @@ class TopAreaState extends BaseState<TopArea> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        H14(
+                        H18(
                             text: month +
                                 LanguageService.trans('month') +
                                 ' ' +
                                 day +
                                 LanguageService.trans('day') +
                                 ' ' +
-                                days[weekday % 7]),
+                                days[weekday % 7], weight: FW.bold,),
                         const SizedBox(height: 20),
                         Row(
                           children: [
@@ -278,12 +279,12 @@ class TopAreaState extends BaseState<TopArea> {
                                         CircleAvatar(
                                       backgroundColor: Colors.white,
                                       backgroundImage: image,
-                                      radius: 42,
+                                      radius: 64,
                                     ),
                                   )
                                 : RoundContainer(
-                                    width: 84.0,
-                                    height: 84.0,
+                                    width: 128,
+                                    height: 128,
                                     bgColor: Colors.white,
                                     child: Center(
                                       child: Image.asset(
@@ -330,7 +331,7 @@ class TopAreaState extends BaseState<TopArea> {
                                               weight: FW.regular,
                                             )),
                                       ])),
-                                  const SizedBox(height: 30),
+                                  const SizedBox(height: 32),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
@@ -356,7 +357,7 @@ class TopAreaState extends BaseState<TopArea> {
                                       ])),
                                     ],
                                   ),
-                                  const SizedBox(height: 20),
+                                  const SizedBox(height: 15),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
@@ -386,7 +387,7 @@ class TopAreaState extends BaseState<TopArea> {
                             ),
                           ],
                         ),
-                        const SizedBox(height: 15),
+                        const SizedBox(height: 20),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -444,9 +445,9 @@ class TopAreaState extends BaseState<TopArea> {
                                         style: AppTextStyle.PD(
                                             Colors.white, 16,
                                             weight: FW.medium),
-                                        width: 200,
+                                        width: 185,
                                         height: 40,
-                                        radius: 20,
+                                        radius: 6,
                                         onPressed: () {
                                           goMonitorStart();
                                         },

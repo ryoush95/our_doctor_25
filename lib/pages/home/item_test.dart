@@ -78,7 +78,7 @@ class ItemTestState extends BaseState<ItemTest> {
               widget.info!.mainImage == "" ? Container(): ClipPath(
                 clipper: ShapeBorderClipper(
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10))),
+                        borderRadius: BorderRadius.circular(8))),
                 child: ExtendedImage.network(
                   widget.info!.mainImage!,
                   width: 150,
@@ -107,9 +107,9 @@ class ItemTestState extends BaseState<ItemTest> {
           const SizedBox(height: 15),
           H14(
             text: widget.info!.name!,
-            weight: FW.regular,
+            weight: FW.medium,
           ),
-          const SizedBox(height: 6),
+          const SizedBox(height: 4),
           Container(
             width: 150,
             child: H16(

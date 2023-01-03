@@ -1388,6 +1388,7 @@ class TabMainPageState extends BaseState<TabMainPage>
                                       return;
                                     }
                                     faqFromSide = false;
+                                    Provider.of<ConvertScoreProvider>(context, listen: false).changeCareTab(0);
                                     changeTab(MainTab.home_care);
                                   },
                                   child: Column(

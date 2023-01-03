@@ -76,7 +76,7 @@ class TestStoreAreaState extends BaseState<TestStoreArea> {
       children: [
         Container(
           width: double.infinity,
-          height: 230,
+          height: 220,
           child: ListView.builder(
               scrollDirection: Axis.horizontal,
               physics: const BouncingScrollPhysics(),

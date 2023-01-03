@@ -25,6 +25,8 @@ import 'package:ourdoctor/pages/intro/first.dart';
 import 'package:ourdoctor/provider/convert_score_provider.dart';
 import 'package:provider/provider.dart';
 
+import 'community_item.dart';
+
 class CommunityFragment extends StatefulWidget {
   @override
   CommunityFragmenttState createState() => CommunityFragmenttState();
@@ -137,7 +139,7 @@ class CommunityFragmenttState extends BaseState<CommunityFragment> {
 
   Widget _getTiles(int index) {
     CommunityDto info = arrCommunityList.elementAt(index);
-    String img = getImg(info);
+    info.imgUrls = getImg(info);
     if (info.secret == "1") {
       return Column(
         children: [
@@ -259,96 +261,9 @@ class CommunityFragmenttState extends BaseState<CommunityFragment> {
               }
             },
             child: Container(
-              height: 110,
-              margin: const EdgeInsets.fromLTRB(25, 0, 25, 0),
-              padding: const EdgeInsets.all(20.0),
-              decoration: BoxDecoration(
-                  color: (info.topic! == "notice" || info.fixed == "1") ? AppColor_Primary : AppColor_White,
-                  borderRadius: const BorderRadius.all(
-                      Radius.circular(6)),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: AppColor_Light_Gray,
-                      blurRadius: 5.0, // soften the shadow
-                      spreadRadius: 5.0, //extend the shadow
-                    )
-                  ]),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(children: [
-                          Visibility(
-                            visible: info.admin == "1",
-                            child: Image.asset('assets/ic_answer.png', width: 12),
-                          ),
-                          Visibility(
-                            visible: info.admin == "1",
-                            child: const SizedBox(width: 2),
-                          ),
-                          H14(
-                            text: info.nickname!,
-                            color: const Color(0xffA0A0A0),
-                          ),
-                          const SizedBox(width: 10,),
-                          H14(
-                            text: convertDate(info.regTime!).substring(5),
-                            color: const Color(0xffA0A0A0),
-                            weight: FW.regular,
-                          ),
-                          const SizedBox(width: 10),
-                        ]),
-                        const SizedBox(height: 10),
-                        H16(
-                          text: info.title!,
-                          align: TextAlign.start,
-                          color: (info.topic! == "notice" || info.fixed == "1") ? AppColor_White : Colors.black,
-                        ),
-                        const SizedBox(height: 10),
-                        Row(
-                          children: [
-                            const Icon(
-                              Icons.favorite_border_outlined,
-                              color: Color(0xffFF5252),
-                              size: 18,
-                            ),
-                            H16(
-                              text: " " + info.likeCnt!,
-                              color: (info.topic! == "notice" || info.fixed == "1") ? AppColor_White : Color(0xffA0A0A0),
-                              weight: FW.regular,
-                            ),
-                            const SizedBox(width: 20),
-                            const Icon(
-                              Icons.chat_bubble_outline,
-                              color: Colors.black,
-                              size: 18,
-                            ),
-                            H16(
-                              text: " " + info.commentCnt!,
-                              color: (info.topic! == "notice" || info.fixed == "1") ? AppColor_White : Color(0xffA0A0A0),
-                              weight: FW.regular,
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
-                  img != "" ?
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(8.0),
-                    child: CachedNetworkImage(
-                      imageUrl: img,
-                      width: 75,
-                      height: 75,
-                      fit: BoxFit.fill,
-                    ),
-                  ) : const SizedBox(width: 84),
-                ],
-              ),
+                margin: const EdgeInsets.fromLTRB(25, 0, 25, 0),
+                child: CommunityItem(data: info, admin: info.admin!,),
             ),
-
           ),
           Container(
             height: 10,

@@ -14,6 +14,7 @@ import 'package:ourdoctor/models/home_data_res_model.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
 import 'package:ourdoctor/pages/community/community_detail.dart';
 import 'package:ourdoctor/pages/components/h14.dart';
+import 'package:ourdoctor/pages/components/h18.dart';
 import 'package:ourdoctor/pages/components/h20.dart';
 import 'package:ourdoctor/pages/components/h24_b.dart';
 import 'package:ourdoctor/pages/home/item_news.dart';
@@ -49,7 +50,7 @@ class WeatherAreaState extends BaseState<WeatherArea> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          H20(text: '오늘의 건강 정보'),
+          H18(text: '오늘의 건강 정보'),
           const SizedBox(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -57,14 +58,14 @@ class WeatherAreaState extends BaseState<WeatherArea> {
               Column(
                 children: [
                   SizedBox(
-                    height: 84,
-                    width: 84,
+                    height: 50,
+                    width: 50,
                     child: Image.asset('assets/home_temp.png'),
                   ),
                   const SizedBox(height: 10),
-                  const Text('기온', style: TextStyle(color: AppColor_GrayText)),
+                  const Text('기온', style: TextStyle(color: AppColor_GrayText, fontSize: 14)),
                   const SizedBox(height: 10),
-                  H24B(
+                  H20(
                     text: "30" + "°C",
                     color: AppColor_Red,
                   )
@@ -73,14 +74,14 @@ class WeatherAreaState extends BaseState<WeatherArea> {
               Column(
                 children: [
                   SizedBox(
-                    height: 84,
-                    width: 84,
+                    height: 50,
+                    width: 50,
                     child: Image.asset('assets/home_water.png'),
                   ),
                   const SizedBox(height: 10),
-                  const Text('습도', style: TextStyle(color: AppColor_GrayText)),
+                  const Text('습도', style: TextStyle(color: AppColor_GrayText, fontSize: 14)),
                   const SizedBox(height: 10),
-                  H24B(
+                  H20(
                     text: "30" + "%",
                     color: AppColor_Primary,
                   )
@@ -89,14 +90,14 @@ class WeatherAreaState extends BaseState<WeatherArea> {
               Column(
                 children: [
                   SizedBox(
-                    height: 84,
-                    width: 84,
+                    height: 50,
+                    width: 50,
                     child: Image.asset('assets/home_dust.png'),
                   ),
                   const SizedBox(height: 10),
-                  const Text('미세먼지', style: TextStyle(color: AppColor_GrayText)),
+                  const Text('미세먼지', style: TextStyle(color: AppColor_GrayText, fontSize: 14)),
                   const SizedBox(height: 10),
-                  H24B(
+                  H20(
                     text: "좋음",
                     color: AppColor_Green,
                   )

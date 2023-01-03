@@ -14,6 +14,7 @@ import 'package:ourdoctor/pages/app_event.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
 import 'package:ourdoctor/pages/community/community_detail.dart';
 import 'package:ourdoctor/pages/components/h14.dart';
+import 'package:ourdoctor/pages/components/h18.dart';
 import 'package:ourdoctor/pages/components/h20.dart';
 import 'package:ourdoctor/pages/home/item_community.dart';
 import 'package:ourdoctor/pages/intro/first.dart';
@@ -83,7 +84,7 @@ class SchoolAreaState extends BaseState<SchoolArea> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              H20(text: LanguageService.trans('교육')),
+              H18(text: "교육"),
               InkWell(
                 onTap: () {
                   eventBus.fire(MoreCommunityEvent(type: 2));
@@ -97,7 +98,7 @@ class SchoolAreaState extends BaseState<SchoolArea> {
           !isLoading
               ? SizedBox(
                   width: double.infinity,
-                  height: 220,
+                  height: 240,
                   child: ListView.builder(
                       shrinkWrap: true,
                       scrollDirection: Axis.horizontal,

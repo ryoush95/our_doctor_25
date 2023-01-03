@@ -144,26 +144,36 @@ class CircularProgress2State extends BaseState<CircularProgress2> {
       child: Center(
         child: Container(
           width: MediaQuery.of(context).size.width / 4,
-          height: 132,
+          height: 112,
           child: Stack(
             children: [
               Center(
                 child: CircularPercentIndicator(
                   radius: 90,
-                  lineWidth: 7.0,
+                  lineWidth: 6.0,
                   animation: true,
                   percent: dicHomeDataInfo == null ? 0 : showScore() / 100,
                   center: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      H24B(
-                          text: (dicHomeDataInfo == null || showScore() == 0)
+                      Text(
+                          (dicHomeDataInfo == null || showScore() == 0)
                               ? "??"
                               : convertScore(showScore().toString()),
                           // weight: FW.regular,
-                        color: changeColor(showScore()),
+                        style: TextStyle(
+                            color: changeColor(showScore()),
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                      H14(text: LanguageService.trans('jom'), weight: FW.regular),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const SizedBox(height: 12,),
+                          H14(text: LanguageService.trans('jom'), weight: FW.regular),
+                        ],
+                      ),
                     ],
                   ),
                   circularStrokeCap: CircularStrokeCap.round,

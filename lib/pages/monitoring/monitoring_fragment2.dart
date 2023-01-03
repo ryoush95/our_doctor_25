@@ -83,12 +83,13 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
 
   Widget monitor1() {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        H20(text: "우아 발달 모니터링 리포트"),
-        const SizedBox(height: 30),
+        H18(text: "우아 발달 모니터링 리포트"),
+        const SizedBox(height: 20),
         Container(
           width: double.infinity,
-          height: 390,
+          height: 370,
           padding: const EdgeInsets.all(20.0),
           decoration: const BoxDecoration(
               color: AppColor_White,
@@ -110,9 +111,10 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
                   Container(
                     height: 90,
                     width: 90,
+                    margin: const EdgeInsets.all(5),
                     decoration: const ShapeDecoration(
                       color: Colors.white,
-                      shape: CircleBorder(side: BorderSide(color: AppColor_Primary, width: 7)),
+                      shape: CircleBorder(side: BorderSide(color: AppColor_Primary, width: 6)),
                     ),
                     child: Container(
                       decoration: const ShapeDecoration(
@@ -137,12 +139,12 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  H18(text: "발달영역", align: TextAlign.center),
-                  H18(text: "생활습관", align: TextAlign.center),
-                  H18(text: "신체성장", align: TextAlign.center),
+                  H16(text: "발달영역", align: TextAlign.center),
+                  H16(text: "생활습관", align: TextAlign.center),
+                  H16(text: "신체성장", align: TextAlign.center),
                 ],
               ),
-              const SizedBox(height: 35),
+              Spacer(),
               SizedBox(
                 height: 100,
                 child: Column(
@@ -162,7 +164,7 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
                             weight: FW.semi_bold,
                           )),
                     ])),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 15),
                     H16(
                       text: "현재 개월 수에 맞는 모니터링을 해야할 시기가 지났어요\n모니터링을 시작해 볼까요?",
                       weight: FW.regular,
@@ -173,16 +175,16 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
                 ),
 
               ),
-              const SizedBox(height: 25),
+              const SizedBox(height: 15),
               Center(
                 child: MainTextButton(
                   text: "모니터링 시작하기",
                   style: AppTextStyle.PD(
                       Colors.white, 16,
                       weight: FW.medium),
-                  width: 200,
+                  width: 185,
                   height: 40,
-                  radius: 20,
+                  radius: 6,
                   onPressed: () {
                     Navigator.push(context, SlideRightTransRoute(builder: (context) => MonitorReport1(),));
                     // Navigator.push(context, SlideRightTransRoute(builder: (context) => MonitoringTestForm(),));
@@ -198,12 +200,13 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
 
   Widget monitor2() {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        H20(text: "우아 생활 모니터링"),
-        const SizedBox(height: 35),
+        H18(text: "우아 생활 모니터링"),
+        const SizedBox(height: 22),
         Container(
           width: double.infinity,
-          height: 390,
+          height: 400,
           padding: const EdgeInsets.all(20.0),
           decoration: const BoxDecoration(
               color: AppColor_White,
@@ -218,7 +221,7 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
           child: Column(
             children: [
               Container(
-                height: 160,
+                height: 170,
                 child: Row(
                   children: [
                     Column(
@@ -228,8 +231,8 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
                         InkWell(
                           //onTap: onSelectPhoto,
                           child: SizedBox(
-                            width: 84,
-                            height: 84,
+                            width: 100,
+                            height: 100,
                             child: Stack(
                               children: [
                                 Visibility(
@@ -239,8 +242,8 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
                                           .contains("img_photo_default"),
                                   child: Center(
                                     child: RoundContainer(
-                                      width: 76.0,
-                                      height: 76.0,
+                                      width: 100.0,
+                                      height: 100.0,
                                       bgColor: Colors.white,
                                       child: Center(
                                         child: Image.asset(
@@ -311,33 +314,33 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
                     ),
                     const SizedBox(width: 20),
                     Container(
-                      height: 150,
-                      width: MediaQuery.of(context).size.width - 190,
+                      height: 130,
+                      width: MediaQuery.of(context).size.width - 200,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              H18(text: "영양"),
-                              H18(text: "충분",color: AppColor_Primary,),
+                              H16(text: "영양", weight: FW.regular,),
+                              H16(text: "충분",color: AppColor_Primary,),
                             ],
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              H18(text: "수면"),
-                              H18(text: "충분",color: AppColor_Primary,),
+                              H16(text: "수면", weight: FW.regular,),
+                              H16(text: "충분",color: AppColor_Primary,),
                             ],
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              H18(text: "체온"),
+                              H16(text: "체온", weight: FW.regular,),
                               Row(
                                 children: [
-                                  H18(text: "충분",color: AppColor_Primary,),
-                                  H18(text: " °C"),
+                                  H16(text: "충분",color: AppColor_Primary,),
+                                  H16(text: " °C"),
                                 ],
                               ),
                             ],
@@ -345,11 +348,11 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              H18(text: "질병"),
+                              H16(text: "질병", weight: FW.regular,),
                               Row(
                                 children: [
-                                  H18(text: "처방전+ "),
-                                  H18(text: "0",color: AppColor_Primary,),
+                                  H16(text: "처방전+ "),
+                                  H16(text: "0",color: AppColor_Primary,),
                                 ],
                               ),
                             ],
@@ -360,7 +363,7 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
                   ],
                 ),
               ),
-              const SizedBox(height: 25),
+              Spacer(),
               SizedBox(
                 height: 100,
                 child: Column(
@@ -380,7 +383,7 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
                                 weight: FW.semi_bold,
                               )),
                         ])),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 15),
                     H16(
                       text: "현재 개월 수에 맞는 모니터링을 해야할 시기가 지났어요\n모니터링을 시작해 볼까요?",
                       weight: FW.regular,
@@ -391,16 +394,16 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
                 ),
 
               ),
-              const SizedBox(height: 25),
+              const SizedBox(height: 15),
               Center(
                 child: MainTextButton(
                   text: "모니터링 시작하기",
                   style: AppTextStyle.PD(
                       Colors.white, 16,
                       weight: FW.medium),
-                  width: 200,
+                  width: 185,
                   height: 40,
-                  radius: 20,
+                  radius: 6,
                   onPressed: () {
                     Navigator.push(context, SlideRightTransRoute(builder: (context) => MonitoringMain2(),));
                   },
@@ -425,8 +428,9 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 monitor1(),
-                const SizedBox(height: 50),
+                const SizedBox(height: 55),
                 monitor2(),
+                const SizedBox(height: 36),
               ],
             ),
           ),

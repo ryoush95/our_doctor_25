@@ -15,6 +15,7 @@ import 'package:ourdoctor/models/community_list_res_model.dart';
 import 'package:ourdoctor/models/home_data_res_model.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
 import 'package:ourdoctor/pages/community/community_detail.dart';
+import 'package:ourdoctor/pages/community/community_item.dart';
 import 'package:ourdoctor/pages/components/h14.dart';
 import 'package:ourdoctor/pages/components/h16.dart';
 import 'package:ourdoctor/pages/components/h18.dart';
@@ -121,7 +122,7 @@ class TalkAreaState extends BaseState<TalkArea> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    H20(text: '자유게시판'),
+                    H18(text: '자유게시판'),
                     InkWell(
                       onTap: () {
                         eventBus.fire(MoreCommunityEvent(type: 5));
@@ -132,7 +133,7 @@ class TalkAreaState extends BaseState<TalkArea> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: 22),
                 arrNewsList[0].imgUrl == ""
                     ? Container()
                     : InkWell(
@@ -157,16 +158,17 @@ class TalkAreaState extends BaseState<TalkArea> {
                             children: [
                               Row(
                                 children: [
-                                  H16(
+                                  H14(
                                     text: arrNewsList.elementAt(0).name!,
                                     color: const Color(0xffA0A0A0),
+                                    weight: FW.medium,
                                   ),
                                   const SizedBox(width: 10),
-                                  H16(
+                                  H14(
                                     text: convertDate(
                                         arrNewsList.elementAt(0).regTime!),
                                     color: const Color(0xffA0A0A0),
-                                    weight: FW.regular,
+                                    weight: FW.medium,
                                   ),
                                   const Spacer(),
                                   const Icon(
@@ -195,7 +197,7 @@ class TalkAreaState extends BaseState<TalkArea> {
                                 ],
                               ),
                               const SizedBox(height: 10),
-                              H18(text: arrNewsList.elementAt(0).title!),
+                              H16(text: arrNewsList.elementAt(0).title!, weight: FW.bold,),
                               const SizedBox(height: 10),
                               ClipRRect(
                                   borderRadius: BorderRadius.circular(16),
@@ -206,7 +208,7 @@ class TalkAreaState extends BaseState<TalkArea> {
                           ),
                         ),
                       ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 10),
                 !isLoading
                     ? SizedBox(
                         width: MediaQuery.of(context).size.width,
@@ -216,94 +218,16 @@ class TalkAreaState extends BaseState<TalkArea> {
                             physics: const NeverScrollableScrollPhysics(),
                             itemBuilder: (context, index) {
                               CommunityDto a = arrNewsList.elementAt(index + 1);
-                              return Column(
-                                children: [
-                                  InkWell(
-                                    onTap: () {
-                                      tileTap(a);
-                                    },
-                                    child: Container(
-                                      height: 110,
-                                      padding: const EdgeInsets.all(20.0),
-                                      decoration: const BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius: BorderRadius.all(Radius.circular(6)),
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: AppColor_Light_Gray,
-                                              blurRadius: 5.0, // soften the shadow
-                                              spreadRadius: 5.0, //extend the shadow
-                                            )
-                                          ]),
-                                      child: Row(
-                                        children: [
-                                          Expanded(
-                                            child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Row(children: [
-                                                  H14(
-                                                    text: a.nickname!,
-                                                    color: const Color(0xffA0A0A0),
-                                                  ),
-                                                  const SizedBox(width: 10,),
-                                                  H14(
-                                                    text: convertDate(a.regTime!).substring(5),
-                                                    color: const Color(0xffA0A0A0),
-                                                    weight: FW.regular,
-                                                  ),
-                                                  const SizedBox(width: 10),
-                                                ]),
-                                                const SizedBox(height: 10),
-                                                H16(
-                                                  text: a.title!,
-                                                  align: TextAlign.start,
-                                                ),
-                                                const SizedBox(height: 10),
-                                                Row(
-                                                  children: [
-                                                    const Icon(
-                                                      Icons.favorite_border_outlined,
-                                                      color: Color(0xffFF5252),
-                                                      size: 18,
-                                                    ),
-                                                    H16(
-                                                      text: " " + a.likeCnt!,
-                                                      color: const Color(0xffA0A0A0),
-                                                      weight: FW.regular,
-                                                    ),
-                                                    const SizedBox(width: 20),
-                                                    const Icon(
-                                                      Icons.chat_bubble_outline,
-                                                      color: Color(0xffA0A0A0),
-                                                      size: 18,
-                                                    ),
-                                                    H16(
-                                                      text: " " + a.commentCnt!,
-                                                      color: const Color(0xffA0A0A0),
-                                                      weight: FW.regular,
-                                                    ),
-                                                  ],
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                          a.imgUrls != "" ?
-                                          ClipRRect(
-                                            borderRadius: BorderRadius.circular(8.0),
-                                            child: CachedNetworkImage(
-                                              imageUrl: a.imgUrls!,
-                                              width: 75,
-                                              height: 75,
-                                              fit: BoxFit.fill,
-                                            ),
-                                          ) : const SizedBox(width: 84),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(height: 20),
-                                ],
+                              return InkWell(
+                                onTap: (){
+                                  Navigator.push(context, SlideRightTransRoute(builder: (context) => CommunityDetailPage(uid: a.uid,)));
+                                },
+                                child: Column(
+                                  children: [
+                                    CommunityItem(data: a),
+                                    const SizedBox(height: 10),
+                                  ],
+                                ),
                               );
                             }),
                       )

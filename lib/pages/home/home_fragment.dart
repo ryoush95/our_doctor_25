@@ -196,7 +196,7 @@ class HomeFragmentState extends BaseState<HomeFragment> {
                     WeatherArea(),
                     const SizedBox(height: 50),
                     TalkArea(),//게시판
-                    const SizedBox(height: 50),
+                    const SizedBox(height: 10),
                     // QuizArea(),//질문
                     // const SizedBox(height: 50),
                     NewsArea(curCategory: 1),//뉴스

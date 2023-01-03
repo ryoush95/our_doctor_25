@@ -39,7 +39,7 @@ class ItemSchoolState extends BaseState<ItemSchool> {
   Widget build(BuildContext context) {
     return Container(
       width: 150,
-      height: 190,
+      height: 230,
       margin: const EdgeInsets.only(right: 10),
       // decoration: BoxDecoration(
       //   color: Colors.white,
@@ -83,7 +83,7 @@ class ItemSchoolState extends BaseState<ItemSchool> {
               Expanded(
                 child: H14(
                   text: widget.item.title!,
-                  weight: FW.semi_bold,
+                  weight: FW.medium,
                   align: TextAlign.start,
                   color: AppColor_BlackText,
                   ellipsis: false,

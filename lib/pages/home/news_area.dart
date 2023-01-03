@@ -13,6 +13,7 @@ import 'package:ourdoctor/models/home_data_res_model.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
 import 'package:ourdoctor/pages/community/community_detail.dart';
 import 'package:ourdoctor/pages/components/h14.dart';
+import 'package:ourdoctor/pages/components/h18.dart';
 import 'package:ourdoctor/pages/components/h20.dart';
 import 'package:ourdoctor/pages/home/item_news.dart';
 import 'package:ourdoctor/pages/home/test_store_area.dart';
@@ -88,7 +89,7 @@ class NewsAreaState extends BaseState<NewsArea> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              H20(text: "우아 테스트"),
+              H18(text: "우아 테스트"),
               InkWell(
                 onTap: () {
                   Provider.of<ConvertScoreProvider>(context, listen: false).changeCareTab(2);
@@ -99,7 +100,7 @@ class NewsAreaState extends BaseState<NewsArea> {
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 22),
           TestStoreArea(),
           // const SizedBox(height: 12),
           // !isLoading
