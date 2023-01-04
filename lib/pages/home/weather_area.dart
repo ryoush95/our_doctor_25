@@ -6,11 +6,7 @@ import 'package:ourdoctor/global/global.dart';
 import 'package:ourdoctor/global/http_service.dart';
 import 'package:ourdoctor/helpers/common_util.dart';
 import 'package:ourdoctor/helpers/transition.dart';
-import 'package:ourdoctor/language/language_service.dart';
-import 'package:ourdoctor/models/community_add_res_model.dart';
-import 'package:ourdoctor/models/community_detail_res_model.dart';
-import 'package:ourdoctor/models/community_list_res_model.dart';
-import 'package:ourdoctor/models/home_data_res_model.dart';
+import 'package:ourdoctor/models/home_weather_model.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
 import 'package:ourdoctor/pages/community/community_detail.dart';
 import 'package:ourdoctor/pages/components/h14.dart';
@@ -22,6 +18,8 @@ import 'package:ourdoctor/pages/home/test_store_area.dart';
 import 'package:ourdoctor/pages/intro/first.dart';
 import 'package:ourdoctor/pages/app_event.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
+import 'package:ourdoctor/provider/global_provider.dart';
+import 'package:provider/provider.dart';
 
 import '../app_event.dart';
 import 'item_community.dart';
@@ -37,14 +35,67 @@ class WeatherArea extends StatefulWidget {
 
 class WeatherAreaState extends BaseState<WeatherArea> {
   final HttpService httpService = HttpService();
+  GlobalProvider? p;
 
   @override
   void initState() {
     super.initState();
+    p = Provider.of<GlobalProvider>(context,listen: false);
+    if (p!.homeWeatherTemp == "") {
+      getWeather();
+    }
+  }
+
+  Future<void> getWeather() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    Future<HomeWeatherModel> offerInfo = httpService.getWeather();
+    offerInfo.then((HomeWeatherModel value) async {
+      setState(() {
+        isLoading = false;
+      });
+      if (value.result == 0) {
+        p!.changeWeather(value.data!.temperature, value.data!.humidity, value.data!.pm10Grade);
+      } else {
+        showToast(value.msg!);
+        if (value.result == 106) {
+          //token expired
+          Navigator.pushReplacement(context, SlideRightTransRoute(builder: (context) => FirstPage()));
+        }
+      }
+    }).catchError((onError) {
+      setState(() {
+        isLoading = false;
+      });
+      print(onError.toString());
+    });
+  }
+
+  Widget converDust(String i) {
+    String dustName = "좋음";
+    Color dustColor = AppColor_Oxygen;
+
+    if(i == "1") {
+      dustName = "좋음";
+      dustColor = AppColor_Oxygen;
+    } else if (i == "2") {
+      dustName = "보통";
+      dustColor = AppColor_Primary;
+    } else {
+      dustName = "나쁨";
+      dustColor = AppColor_Red;
+    }
+    return H20(
+      text: dustName,
+      color: dustColor,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    // final p = Provider.of<GlobalProvider>(context,listen: false);
     return Padding(
       padding: const EdgeInsets.all(28.0),
       child: Column(
@@ -66,7 +117,7 @@ class WeatherAreaState extends BaseState<WeatherArea> {
                   const Text('기온', style: TextStyle(color: AppColor_GrayText, fontSize: 14)),
                   const SizedBox(height: 10),
                   H20(
-                    text: "30" + "°C",
+                    text: p!.homeWeatherTemp + "°C",
                     color: AppColor_Red,
                   )
                 ],
@@ -82,7 +133,7 @@ class WeatherAreaState extends BaseState<WeatherArea> {
                   const Text('습도', style: TextStyle(color: AppColor_GrayText, fontSize: 14)),
                   const SizedBox(height: 10),
                   H20(
-                    text: "30" + "%",
+                    text: p!.homeWeatherWater + "%",
                     color: AppColor_Primary,
                   )
                 ],
@@ -97,10 +148,7 @@ class WeatherAreaState extends BaseState<WeatherArea> {
                   const SizedBox(height: 10),
                   const Text('미세먼지', style: TextStyle(color: AppColor_GrayText, fontSize: 14)),
                   const SizedBox(height: 10),
-                  H20(
-                    text: "좋음",
-                    color: AppColor_Green,
-                  )
+                  converDust(p!.homeWeatherDust),
                 ],
               ),
             ],

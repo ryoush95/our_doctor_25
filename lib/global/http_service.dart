@@ -44,6 +44,7 @@ import 'package:ourdoctor/models/home_grapth_res_model.dart';
 import 'package:ourdoctor/models/home_monitor_res_model.dart';
 import 'package:ourdoctor/models/home_story_res_model.dart';
 import 'package:ourdoctor/models/home_vaccine_res_model.dart';
+import 'package:ourdoctor/models/home_weather_model.dart';
 import 'package:ourdoctor/models/homecare_banner_res_model.dart';
 import 'package:ourdoctor/models/homecare_data_res_model.dart';
 import 'package:ourdoctor/models/homecare_list_res_model.dart';
@@ -207,6 +208,7 @@ class HttpService {
     }
   }
 
+  //버전 가져오기
   Future<String> getVersion() async {
     String _url = API_BASE_URL + "api/user/get_ver";
     String devtype = "";
@@ -223,6 +225,24 @@ class HttpService {
     final response = await http.post(myUri, body: body);
     if (response.statusCode == 200) {
       return response.body;
+    } else {
+      // If that call was not successful, throw an error.
+      showToast(LanguageService.trans("server_fail"));
+      throw Exception(LanguageService.trans("server_fail"));
+    }
+  }
+
+  //날씨정보 얻기
+  Future<HomeWeatherModel> getWeather() async {
+    String _url = API_BASE_URL + "api/user/get_weather?access_token=token";
+
+    Map<String, String> body = {
+      'access_token': gUserInfo!.accessToken!,
+    };
+    Uri myUri = Uri.parse(_url);
+    final response = await http.post(myUri, body: body);
+    if (response.statusCode == 200) {
+      return HomeWeatherModel.fromJson(json.decode(response.body));
     } else {
       // If that call was not successful, throw an error.
       showToast(LanguageService.trans("server_fail"));
