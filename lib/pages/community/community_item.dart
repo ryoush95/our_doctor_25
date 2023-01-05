@@ -26,7 +26,7 @@ class _CommunityItemState extends State<CommunityItem> {
     return Column(
       children: [
         Container(
-          height: 110,
+          height: 120,
           padding: const EdgeInsets.all(20.0),
           decoration: BoxDecoration(
               color: widget.admin == "1" ? AppColor_Primary : Colors.white,
@@ -56,7 +56,6 @@ class _CommunityItemState extends State<CommunityItem> {
                       H14(
                         text: widget.data.nickname!,
                         color: widget.admin == "1" ? Color(0xffB6D7FE) : Color(0xffA0A0A0),
-
                         weight: FW.regular,
                       ),
                       const SizedBox(
@@ -70,13 +69,13 @@ class _CommunityItemState extends State<CommunityItem> {
                       ),
                       const SizedBox(width: 10),
                     ]),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 15),
                     H16(
                       text: widget.data.title!,
                       color: (widget.admin == "1") ? AppColor_White : Colors.black,
                       align: TextAlign.start,
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 15),
                     Row(
                       children: [
                         const Icon(
@@ -110,12 +109,12 @@ class _CommunityItemState extends State<CommunityItem> {
                       borderRadius: BorderRadius.circular(8.0),
                       child: CachedNetworkImage(
                         imageUrl: widget.data.imgUrls!,
-                        width: 75,
-                        height: 75,
+                        width: 85,
+                        height: 85,
                         fit: BoxFit.fill,
                       ),
                     )
-                  : const SizedBox(width: 84),
+                  : const SizedBox(width: 1),
             ],
           ),
         ),

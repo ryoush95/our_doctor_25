@@ -288,7 +288,7 @@ class CareFragmentState extends BaseState<CareFragment>
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                   bannerList.isNotEmpty ? CareBanner() : const CircularProgressIndicator(),
-                      bannerList.isNotEmpty ? Center(child: _dotIndicator()) : Container(),
+                  bannerList.isNotEmpty ? Center(child: _dotIndicator()) : Container(),
                   const SizedBox(height: 28),
                   CategoryShow(),
                   SearchBar(),

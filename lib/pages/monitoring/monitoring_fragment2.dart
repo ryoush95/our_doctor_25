@@ -10,6 +10,7 @@ import 'package:ourdoctor/models/final_result_res_model.dart';
 import 'package:ourdoctor/models/home_monitor_res_model.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
 import 'package:ourdoctor/pages/base/page_layout.dart';
+import 'package:ourdoctor/pages/components/h12.dart';
 import 'package:ourdoctor/pages/components/h14.dart';
 import 'package:ourdoctor/pages/components/h16.dart';
 import 'package:ourdoctor/pages/components/h18.dart';
@@ -107,41 +108,32 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  CircularProgress2(type: 1, subType: curCategory1 = 0),
-                  Container(
-                    height: 90,
-                    width: 90,
-                    margin: const EdgeInsets.all(5),
-                    decoration: const ShapeDecoration(
-                      color: Colors.white,
-                      shape: CircleBorder(side: BorderSide(color: AppColor_Primary, width: 6)),
-                    ),
-                    child: Container(
-                      decoration: const ShapeDecoration(
-                        shape: CircleBorder(side: BorderSide(color: Colors.white, width: 4)),
-                      ),
-                      child: Center(
-                          child: Column(
-                            children: [
-                              Image.asset("assets/icon_good.png",height: 40,),
-                              const SizedBox(height: 7),
-                              H16(
-                                text: "좋아요",
-                              ),
-                            ],
-                          ),
-                      ),
-                    ),
-                  ),
-                  CircularProgress2(type: 2, subType: curCategory1 = 1),
+                  SizedBox(width: 85,child: H16(text: "신체성장", align: TextAlign.center, weight: FW.medium)),
+                  SizedBox(width: 85,child: H16(text: "발달영역", align: TextAlign.center, weight: FW.medium)),
+                  SizedBox(width: 85,child: H16(text: "생활습관", align: TextAlign.center, weight: FW.medium)),
                 ],
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  H16(text: "발달영역", align: TextAlign.center),
-                  H16(text: "생활습관", align: TextAlign.center),
-                  H16(text: "신체성장", align: TextAlign.center),
+                  CircularProgress2(type: 1, subType: curCategory1 = 0),
+                  Container(margin: EdgeInsets.all(5),child: CircularProgress2(type: 2, subType: curCategory1 = 1)),
+                  Container(
+                    height: 85,
+                    width: 85,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset("assets/icon_normal.png",height: 48,),
+                        const SizedBox(height: 7),
+                        H12(
+                          text: "보통이예요",
+                          color: AppColor_Oxygen,
+                          weight: FW.medium,
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
               ),
               Spacer(),

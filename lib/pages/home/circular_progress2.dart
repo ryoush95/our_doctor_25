@@ -143,13 +143,13 @@ class CircularProgress2State extends BaseState<CircularProgress2> {
     return Container(
       child: Center(
         child: Container(
-          width: MediaQuery.of(context).size.width / 4,
+          width: 85,
           height: 112,
           child: Stack(
             children: [
               Center(
                 child: CircularPercentIndicator(
-                  radius: 90,
+                  radius: 85,
                   lineWidth: 6.0,
                   animation: true,
                   percent: dicHomeDataInfo == null ? 0 : showScore() / 100,

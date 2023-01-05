@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 //Colors
 const AppColor_Primary = Color(0xFF4B9EFF); // main app color
-const AppColor_Oxygen = Color(0xFF21eba0); // oxygen saturation graph color
+// const AppColor_Oxygen = Color(0xFF21eba0); // oxygen saturation graph color
+const AppColor_Oxygen = Color(0xff19d58f);
 const AppColor_Breath = Color(0xFFFFB238); // breath graph color
 const AppColor_Primary_Disable = Color(0x334B9EFF);
 const AppColor_Green = Color(0xFF19D58F);

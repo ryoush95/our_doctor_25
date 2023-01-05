@@ -101,7 +101,7 @@ class LifestyleLineChart2State extends BaseState<LifestyleLineChart2> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        H18(text: sprintf("%d", [lastKcal().floor()]) + " °C", color: AppColor_BlackText, weight: FW.semi_bold),
+                        H18(text: sprintf("%.0f", [36.6]) + " °C", color: AppColor_BlackText, weight: FW.semi_bold),
                         const SizedBox(height: 5),
                       ],
                     ),

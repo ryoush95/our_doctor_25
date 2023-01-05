@@ -191,7 +191,6 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
   Widget bodyTabSelector() {
     return Container(
         width: 130,
-        margin: const EdgeInsets.only(left: 40),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(13),
             color: AppColor_Table_Border),
@@ -588,7 +587,7 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
     } else if (tabIndex == 2) {
       return Container(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             bodyTabSelector(),
             bodyTile(),

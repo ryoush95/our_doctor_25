@@ -490,7 +490,7 @@ class _MonitoringMain2State extends BaseState<MonitoringMain2> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           H24B(
-                            text: LanguageService.trans("1_physical_development"),
+                            text: "오늘의 모니터링",
                             color: AppColor_BlackText,
                             align: TextAlign.left,
                             height: 1.5,
