@@ -181,7 +181,7 @@ class _LineChartWidgetState extends State<LineChartWidget> {
       borderData: FlBorderData(show: false),
       minX: 0,
       maxX: widget.data.isNotEmpty ? 13 : (widget.type == 'food' ? widget.data1!.graphFood!.length.toDouble() - 1 : widget.data1!.graphSleep!.length.toDouble() - 1),
-      minY: getMinY().floor() - 1.0,
+      minY: 0,
       maxY: getMaxY().ceil() + 1.0,
       lineBarsData: [
         LineChartBarData(

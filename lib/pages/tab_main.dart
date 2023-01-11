@@ -1429,6 +1429,7 @@ class TabMainPageState extends BaseState<TabMainPage>
                                   if (currentTab == MainTab.community) {
                                     return;
                                   }
+                                  Provider.of<ConvertScoreProvider>(context, listen: false).changeTab(0);
                                   changeTab(MainTab.community);
                                 },
                                 child: Column(

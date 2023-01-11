@@ -22,6 +22,7 @@ class _MonitoringTestResultState extends BaseState<MonitoringTestResult> {
   int tabIndex = 0;
   String option = "1";
   List<String> CATEGORY = ["개인위생", "구강교육", "감각", "안전사고", "영양", "전자미디어", "정서", "대소변", "수면교육"];
+  ScrollController sc = ScrollController();
 
   Future<bool> onBackPressed() async {
     Navigator.pop(context);
@@ -31,6 +32,7 @@ class _MonitoringTestResultState extends BaseState<MonitoringTestResult> {
   Widget categoryTile(int index) {
     return InkWell(
       onTap: () {
+        sc.jumpTo(0.0);
         setState(() {
           tabIndex = index;
         });
@@ -237,6 +239,7 @@ class _MonitoringTestResultState extends BaseState<MonitoringTestResult> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
+      controller: sc,
       child: Column(children: [
         Container(
           width: MediaQuery.of(context).size.width - 40,
@@ -318,24 +321,10 @@ class _MonitoringTestResultState extends BaseState<MonitoringTestResult> {
                   align: TextAlign.start,
                 ),
               ),
-              const SizedBox(height: 20),
-              Center(
-                child: MainTextButton(
-                  text: "모니터링 확인하기",
-                  style: AppTextStyle.PD(
-                      Colors.white, 16,
-                      weight: FW.medium),
-                  width: 200,
-                  height: 40,
-                  radius: 20,
-                  onPressed: () {
-                    // goMonitorStart();
-                  },
-                ),
-              ),
             ],
           ),
         ),
+        const SizedBox(height: 20),
         Container(
           height: 150,
           child: GridView.builder(

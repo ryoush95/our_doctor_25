@@ -315,22 +315,29 @@ class TopAreaState extends BaseState<TopArea> {
                                               16,
                                               weight: FW.regular,
                                             )),
-                                      ])),
-                                  RichText(
-                                      text: TextSpan(children: [
                                         TextSpan(
-                                            text: widget.name,
-                                            style: AppTextStyle.PD(
-                                                AppColor_Primary, 16,
-                                                weight: FW.bold)),
-                                        TextSpan(
-                                            text: " 어린이는 폭풍성장중!!",
+                                            text: " 폭풍성장중!!",
                                             style: AppTextStyle.PD(
                                               AppColor_BlackText,
                                               16,
                                               weight: FW.regular,
                                             )),
                                       ])),
+                                  // RichText(
+                                  //     text: TextSpan(children: [
+                                  //       TextSpan(
+                                  //           text: widget.name,
+                                  //           style: AppTextStyle.PD(
+                                  //               AppColor_Primary, 16,
+                                  //               weight: FW.bold)),
+                                  //       TextSpan(
+                                  //           text: " 어린이는 폭풍성장중!!",
+                                  //           style: AppTextStyle.PD(
+                                  //             AppColor_BlackText,
+                                  //             16,
+                                  //             weight: FW.regular,
+                                  //           )),
+                                  //     ])),
                                   const SizedBox(height: 32),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -391,28 +398,34 @@ class TopAreaState extends BaseState<TopArea> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            RichText(text: TextSpan(
-                              children: [
-                                TextSpan(
-                                  text: "생활 ",
-                                  style: AppTextStyle.PD(
-                                      AppColor_Primary, 16,
-                                      weight: FW.bold)),
-                                TextSpan(
-                                    text: "모니터링 기록 ",
-                                    style: AppTextStyle.PD(
-                                      AppColor_BlackText,
-                                      16,
-                                      weight: FW.regular,
-                                    )),
-                                TextSpan(
-                                    text: "+12일 ",
-                                    style: AppTextStyle.PD(
-                                      AppColor_BlackText,
-                                      16,
-                                    )),
-                              ]
-                            )),
+                            // RichText(text: TextSpan(
+                            //   children: [
+                            //     TextSpan(
+                            //       text: "생활 ",
+                            //       style: AppTextStyle.PD(
+                            //           AppColor_Primary, 16,
+                            //           weight: FW.bold)),
+                            //     TextSpan(
+                            //         text: "모니터링 기록 ",
+                            //         style: AppTextStyle.PD(
+                            //           AppColor_BlackText,
+                            //           16,
+                            //           weight: FW.regular,
+                            //         )),
+                            //     TextSpan(
+                            //         text: "+12일 ",
+                            //         style: AppTextStyle.PD(
+                            //           AppColor_BlackText,
+                            //           16,
+                            //         )),
+                            //   ]
+                            // )),
+                            Container(
+                              width: 128,
+                              child: Center(
+                                child: H16(text: widget.name, color: AppColor_Primary,),
+                              )
+                            ),
                             RichText(text: TextSpan(
                                 children: [
                                   TextSpan(
@@ -441,7 +454,7 @@ class TopAreaState extends BaseState<TopArea> {
                                   children: [
                                     Center(
                                       child: MainTextButton(
-                                        text: getButtonName(),
+                                        text: "모니터링 시작하기",
                                         style: AppTextStyle.PD(
                                             Colors.white, 16,
                                             weight: FW.medium),
@@ -449,7 +462,10 @@ class TopAreaState extends BaseState<TopArea> {
                                         height: 40,
                                         radius: 6,
                                         onPressed: () {
-                                          goMonitorStart();
+                                          // goMonitorStart();
+                                          // Navigator.push(context,
+                                          //     SlideRightTransRoute(builder: (context) => MonitoringTestForm()));
+                                          eventBus.fire(MoreMonitoring());
                                         },
                                       ),
                                     ),
