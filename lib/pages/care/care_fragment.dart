@@ -305,7 +305,7 @@ class CareFragmentState extends BaseState<CareFragment>
             mainAxisSize: MainAxisSize.min,
             children: [
               tabIndex == 2
-              ? ProductShow(
+              ? ProductShow1(
                 category: category,
                 title: "인기 검사",
                 list: arrLikeList,

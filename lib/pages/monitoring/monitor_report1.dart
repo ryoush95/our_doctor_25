@@ -611,41 +611,33 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
                 title: "우아 발달 모니터링 리포트",
                 onBackPressed: onBackPressed,
               ),
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Container(
-                    margin: EdgeInsets.all(20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // H20(text: "우아 발달 모니터링 리포트"),
-                        // const SizedBox(height: 30),
-                        //category
-                        SizedBox(
-                          // width: MediaQuery.of(context).size.width - 64,
-                          height: 70,
-                          child: GridView.builder(
-                            // scrollDirection: Axis.horizontal,
-                            // shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemBuilder: (BuildContext context, int index) {
-                              return _getTiles1(index);
-                            },
-                            itemCount: CATEGORYS.length,
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 3,
-                              childAspectRatio: 3 / 1,
-                              crossAxisSpacing: 10,
-                              mainAxisSpacing: 10,
-                            ),
-                          ),
-                        ),
-                        //in body
-                        _body(),
-                      ],
-                    ),
+              Container(
+                // width: MediaQuery.of(context).size.width - 64,
+                padding: const EdgeInsets.only(left: 20, right: 20,top: 10),
+                height: 50,
+                child: GridView.builder(
+                  // scrollDirection: Axis.horizontal,
+                  // shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemBuilder: (BuildContext context, int index) {
+                    return _getTiles1(index);
+                  },
+                  itemCount: CATEGORYS.length,
+                  gridDelegate:
+                  const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    childAspectRatio: 3 / 1,
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10,
                   ),
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  margin: const EdgeInsets.all(20),
+                  child: SingleChildScrollView(
+                      physics: const BouncingScrollPhysics(),
+                      child: _body()),
                 ),
               ),
             ],

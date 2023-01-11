@@ -41,9 +41,7 @@ class WeatherAreaState extends BaseState<WeatherArea> {
   void initState() {
     super.initState();
     p = Provider.of<GlobalProvider>(context,listen: false);
-    if (p!.homeWeatherTemp == "") {
-      getWeather();
-    }
+    getWeather();
   }
 
   Future<void> getWeather() async {
@@ -86,8 +84,11 @@ class WeatherAreaState extends BaseState<WeatherArea> {
     } else {
       dustName = "나쁨";
       dustColor = AppColor_Red;
+    // } else {
+    //   dustName = "매우 나쁨";
+    //   dustColor = AppColor_Red;
     }
-    return H20(
+    return H18(
       text: dustName,
       color: dustColor,
     );
@@ -116,7 +117,7 @@ class WeatherAreaState extends BaseState<WeatherArea> {
                   const SizedBox(height: 10),
                   const Text('기온', style: TextStyle(color: AppColor_GrayText, fontSize: 14)),
                   const SizedBox(height: 10),
-                  H20(
+                  H18(
                     text: p!.homeWeatherTemp + "°C",
                     color: AppColor_Red,
                   )
@@ -132,7 +133,7 @@ class WeatherAreaState extends BaseState<WeatherArea> {
                   const SizedBox(height: 10),
                   const Text('습도', style: TextStyle(color: AppColor_GrayText, fontSize: 14)),
                   const SizedBox(height: 10),
-                  H20(
+                  H18(
                     text: p!.homeWeatherWater + "%",
                     color: AppColor_Primary,
                   )

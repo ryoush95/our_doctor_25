@@ -215,7 +215,7 @@ class _MonitoringMain2State extends BaseState<MonitoringMain2> {
       }
 
       if (monitoringData!.symptom_list!.isNotEmpty) {
-        hasDisease = 1;
+        // hasDisease = 1;
         for (int i = 0; i < monitoringData!.symptom_list!.length; i++) {
           MonitoringSymptomDto item =
           monitoringData!.symptom_list!.elementAt(i);
@@ -486,6 +486,7 @@ class _MonitoringMain2State extends BaseState<MonitoringMain2> {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 30),
                     child: SingleChildScrollView(
+                      physics: const BouncingScrollPhysics(),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [

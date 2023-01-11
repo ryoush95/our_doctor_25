@@ -76,7 +76,7 @@ class ProductShow1State extends BaseState<ProductShow1> {
                   itemBuilder: (BuildContext context, int index) {
                     //BannerList info = arrBannerList!.elementAt(index);
                     return Container(
-                      padding: const EdgeInsets.only(right: 20),
+                      // padding: const EdgeInsets.only(right: 20),
                       child: ItemTestProduct(data: info, likeInfo: widget.list!.elementAt(index)),
                     );
                   }),

@@ -353,7 +353,7 @@ class ReportAreaState extends BaseState<ReportArea> with TickerProviderStateMixi
       isLoading = true;
     });
 
-    String curDate = sprintf("%04d-%02d", [now.year, now.month]);
+    String curDate = sprintf("%04d-%02d", [curYear, curMonth]);
     Future<HomeGraphLifeStyleResModel> info = httpService.homeGraphLifeStyle1(curDate);
     info.then((HomeGraphLifeStyleResModel value) async {
       setState(() {

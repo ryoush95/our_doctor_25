@@ -90,7 +90,7 @@ class ItemTestProductState extends BaseState<ItemTestProduct> {
     return InkWell(
       child: Container(
           width: 150,
-          // margin: const EdgeInsets.only(right: 20, top: 20),
+          margin: const EdgeInsets.only(right: 10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [

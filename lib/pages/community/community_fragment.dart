@@ -500,7 +500,7 @@ class CommunityFragmenttState extends BaseState<CommunityFragment> {
                         ),
                         Container(
                           width: MediaQuery.of(context).size.width - 64,
-                          height: 80,
+                          height: 85,
                           margin: const EdgeInsets.only(top: 16),
                           child: GridView.builder(
                             // scrollDirection: Axis.horizontal,

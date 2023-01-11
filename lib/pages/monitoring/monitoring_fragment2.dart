@@ -21,6 +21,7 @@ import 'package:ourdoctor/pages/components/round_container.dart';
 import 'package:ourdoctor/pages/home/circular_progress2.dart';
 import 'package:ourdoctor/pages/intro/first.dart';
 import 'package:ourdoctor/pages/monitoring/monitor_report1.dart';
+import 'package:ourdoctor/pages/monitoring/monitoring_result2.dart';
 import 'package:ourdoctor/pages/monitoring/monitoring_v2.dart';
 
 import 'monitoring_test_form.dart';
@@ -194,7 +195,18 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        H18(text: "우아 생활 모니터링"),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            H18(text: "우아 생활 모니터링"),
+            InkWell(
+              onTap: () {
+                Navigator.push(context, SlideRightTransRoute(builder: (context) => MonitoringResult2()));
+              },
+              child: H16(text: "지난기록"),
+            ),
+          ],
+        ),
         const SizedBox(height: 22),
         Container(
           width: double.infinity,
@@ -414,6 +426,7 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
         isLoading: isLoading,
         onBack: onBackPressed,
         child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
           child: Container(
             margin: EdgeInsets.all(20.0),
             child: Column(

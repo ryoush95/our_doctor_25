@@ -40,6 +40,10 @@ class _MonitoringResult2State extends BaseState<MonitoringResult2> {
   List<ReportDto> reportList1 = [];
   List<ReportDto> reportList2 = [];
 
+  int curYear = 0;
+  int curMonth = 0;
+  DateTime now = DateTime.now();
+
   bool foodDetail = false;
   bool foodCheck = true;
 
@@ -50,6 +54,9 @@ class _MonitoringResult2State extends BaseState<MonitoringResult2> {
   void initState() {
     super.initState();
     dicHomeGraphLifeStyleInfo = null;
+
+    curYear = now.year;
+    curMonth = now.month;
     getHomeGraphLifeStyle();
   }
 
@@ -64,7 +71,7 @@ class _MonitoringResult2State extends BaseState<MonitoringResult2> {
       isLoading = true;
     });
 
-    String curDate = sprintf("%04d-%02d", [2022, 11]);
+    String curDate = sprintf("%04d-%02d", [curYear, curMonth]);
     Future<HomeGraphLifeStyleResModel> info = httpService.homeGraphLifeStyle1(curDate);
     info.then((HomeGraphLifeStyleResModel value) async {
       setState(() {
@@ -89,6 +96,23 @@ class _MonitoringResult2State extends BaseState<MonitoringResult2> {
     });
   }
 
+  bool isTomorrowMonth() {
+    int year = curYear;
+    int month = curMonth;
+    if (month + 1 == 13) {
+      month = 1;
+      year = year + 1;
+    } else {
+      month = month + 1;
+    }
+
+    if (DateTime(year,month).compareTo(now) > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   Widget _body() {
     if (tabIndex == 0) {
       // CATE : 질병
@@ -107,11 +131,58 @@ class _MonitoringResult2State extends BaseState<MonitoringResult2> {
                   data2: reportList2,
                   result: 1),
           ),
+          const SizedBox(height: 50),
         ],
       );
     } else if (tabIndex == 1) {
       // CATE : 수면
-      return Container(padding: const EdgeInsets.symmetric(horizontal: 30), child: LifestyleReport(data: dicHomeGraphLifeStyleInfo!, result: 1));
+      return Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              InkWell(
+                  onTap: () {
+                    if (curMonth - 1 == 0) {
+                      curMonth = 12;
+                      curYear = curYear - 1;
+                    } else {
+                      curMonth = curMonth - 1;
+                    }
+                    setState(() {});
+                    getHomeGraphLifeStyle();
+                  },
+                  child: Image.asset('assets/chevron_left_black_24dp.png', width: 20)),
+              const SizedBox(width: 18),
+              //H16(text: '${firstDate.month}월 ${numOfWeeks(firstDate)}주차' /*firstDateString + ' - ' + lastDateString*/, color: const Color(0xFF888888), weight: FW.semi_bold),
+              H16(text: '$curYear년 $curMonth월', color: AppColor_BlackText.withOpacity(0.5), weight: FW.semi_bold),
+              const SizedBox(width: 18),
+              InkWell(
+                  onTap: () {
+                    // if (firstDate.subtract(const Duration(days: -7)).isAfter(now)) {
+                    //   return;
+                    // }
+                    if (isTomorrowMonth()) {
+                      return;
+                    }
+
+                    if (curMonth + 1 == 13) {
+                      curMonth = 1;
+                      curYear = curYear + 1;
+                    } else {
+                      curMonth = curMonth + 1;
+                    }
+                    setState(() {});
+                    getHomeGraphLifeStyle();
+                  },
+                  child: Opacity(opacity: (now.year == curYear && now.month == curMonth) ? 0.2 : 1.0, child: Image.asset('assets/chevron_right_black_24dp.png', width: 20))),
+              // const SizedBox(width: 10),
+            ],
+          ),
+          Container(padding: const EdgeInsets.symmetric(horizontal: 30), child: LifestyleReport(data: dicHomeGraphLifeStyleInfo!, result: 1)),
+        ],
+      );
     } else if (tabIndex == 2) {
       // CATE : 영양
       return Stack(
@@ -176,6 +247,7 @@ class _MonitoringResult2State extends BaseState<MonitoringResult2> {
             ),
             Expanded(
               child: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
                 child: Column(
                   children: [
                     Container(

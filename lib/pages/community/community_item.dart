@@ -29,7 +29,7 @@ class _CommunityItemState extends State<CommunityItem> {
           height: 120,
           padding: const EdgeInsets.all(20.0),
           decoration: BoxDecoration(
-              color: widget.admin == "1" ? AppColor_Primary : Colors.white,
+              color: widget.data.fixed == "1" ? AppColor_Primary : Colors.white,
               borderRadius: BorderRadius.all(Radius.circular(6)),
               boxShadow: const [
                 BoxShadow(
@@ -55,7 +55,7 @@ class _CommunityItemState extends State<CommunityItem> {
                       ),
                       H14(
                         text: widget.data.nickname!,
-                        color: widget.admin == "1" ? Color(0xffB6D7FE) : Color(0xffA0A0A0),
+                        color: widget.data.fixed == "1" ? Color(0xffB6D7FE) : Color(0xffA0A0A0),
                         weight: FW.regular,
                       ),
                       const SizedBox(
@@ -63,7 +63,7 @@ class _CommunityItemState extends State<CommunityItem> {
                       ),
                       H14(
                         text: convertDate(widget.data.regTime!).substring(5),
-                        color: widget.admin == "1" ? Color(0xffB6D7FE) : Color(0xffA0A0A0),
+                        color: widget.data.fixed == "1" ? Color(0xffB6D7FE) : Color(0xffA0A0A0),
 
                         weight: FW.regular,
                       ),
@@ -72,7 +72,7 @@ class _CommunityItemState extends State<CommunityItem> {
                     const SizedBox(height: 15),
                     H16(
                       text: widget.data.title!,
-                      color: (widget.admin == "1") ? AppColor_White : Colors.black,
+                      color: widget.data.fixed == "1" ? AppColor_White : Colors.black,
                       align: TextAlign.start,
                     ),
                     const SizedBox(height: 15),
