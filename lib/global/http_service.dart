@@ -1650,6 +1650,32 @@ class HttpService {
     }
   }
 
+  //모나터링보관2
+  Future<DefaultResModel> monitoringSaveV2(String tempLoca) async {
+    String _url = API_BASE_URL + "api/monitor/save";
+    Map<String, String> body = {
+      'access_token': gUserInfo!.accessToken!,
+      'body_temp' : monitoringData!.bodyTemp!,
+      'body_loca' : tempLoca,
+      'sleep_at_night': monitoringData!.sleep_at_night!,
+      'sleep_at_lunch': monitoringData!.sleep_at_lunch!,
+      'symptom_list': json.encode(monitoringData!.symptom_list!),
+      // 'breakfast': json.encode(monitoringData!.foodAddList1),
+      // 'lunch': json.encode(monitoringData!.foodAddList2),
+      // 'snack': json.encode(monitoringData!.foodAddList3),
+      // 'dinner': json.encode(monitoringData!.foodAddList4),
+    };
+    Uri myUri = Uri.parse(_url);
+    final response = await http.post(myUri, body: body);
+    if (response.statusCode == 200) {
+      return DefaultResModel.fromJson(json.decode(response.body));
+    } else {
+      // If that call was not successful, throw an error.
+      showToast(LanguageService.trans("server_fail"));
+      throw Exception(LanguageService.trans("server_fail"));
+    }
+  }
+
   //1분 무료진단 결과 얻기
   Future<FreeTestResModel> freeTest(String dad_height, String mom_height, String gender, String height, String weight, String birth, String sleep_time_launch, String sleep_time_night) async {
     String _url = API_BASE_URL + "api/Common/free_test";

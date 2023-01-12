@@ -46,6 +46,7 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
   void initState(){
 
     getMonitor2HomeDataInfo();
+    super.initState();
   }
 
   Future<bool> onBackPressed() async {

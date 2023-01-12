@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ourdoctor/global/app_colors.dart';
+import 'package:ourdoctor/global/app_get_it.dart';
 import 'package:ourdoctor/global/app_styles.dart';
 import 'package:ourdoctor/global/global.dart';
 import 'package:ourdoctor/global/http_service.dart';
 import 'package:ourdoctor/helpers/common_util.dart';
 import 'package:ourdoctor/helpers/transition.dart';
 import 'package:ourdoctor/language/language_service.dart';
+import 'package:ourdoctor/models/default_res_model.dart';
 import 'package:ourdoctor/models/monitor_day_res_model.dart';
 import 'package:ourdoctor/models/upload_res_model.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
@@ -27,6 +29,8 @@ import 'package:ourdoctor/pages/components/selector.dart';
 import 'package:ourdoctor/pages/components/simple_header.dart';
 import 'package:ourdoctor/pages/components/underline_input1.dart';
 import 'package:ourdoctor/pages/dialog/dlg_select_date1.dart';
+import 'package:ourdoctor/pages/intro/first.dart';
+import 'package:ourdoctor/provider/global_provider.dart';
 import 'package:ourdoctor/provider/old_food_list_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -45,7 +49,7 @@ class _MonitoringMain2State extends BaseState<MonitoringMain2> {
 
   ScrollController controller = ScrollController();
   final bodyTempCont = TextEditingController();
-  ScrollController _listController = new ScrollController();
+  ScrollController _listController = ScrollController();
   List<TextEditingController> directInputController = [];
   List<TextEditingController> recordTimeControllerList = [];
   List<TextEditingController> surgeryControllerList = [];
@@ -53,7 +57,7 @@ class _MonitoringMain2State extends BaseState<MonitoringMain2> {
 
 
   String mHeight = "";
-  int hasTemp = 2;
+  int hasTemp = 0;
   int hasDisease = 2;
   int disease_count = 1;
   List<String> imageList = [];
@@ -93,6 +97,8 @@ class _MonitoringMain2State extends BaseState<MonitoringMain2> {
     LanguageService.trans("dinner"),
   ];
 
+  final provider = getIt.get<GlobalProvider>();
+
   @override
   void initState() {
     super.initState();
@@ -116,7 +122,6 @@ class _MonitoringMain2State extends BaseState<MonitoringMain2> {
       timeList2.add(i.toString() + "분");
     }
 
-    _listController = ScrollController();
     if (monitoringData == null ||
         (monitoringData!.height == "" &&
             monitoringData!.weight == "" &&
@@ -462,6 +467,29 @@ class _MonitoringMain2State extends BaseState<MonitoringMain2> {
     });
   }
 
+  void saveMonitor() {
+    httpService.monitoringSaveV2(hasTemp == 0 ? "귀" : "이마");
+    Future<DefaultResModel> info = httpService.monitoringSave();
+    info.then((DefaultResModel value) async {
+      setState(() {
+        isLoading = false;
+      });
+      if (value.result == 0) {
+        showToast("success");
+      } else {
+        showToast(value.msg ?? "");
+        if (value.result == 106) {
+          //token expired
+          Navigator.pushReplacement(context, SlideRightTransRoute(builder: (context) => FirstPage()));
+        }
+      }
+    }).catchError((onError) {
+      setState(() {
+        isLoading = false;
+      });
+      showToast(onError);
+    });
+  }
 
 
   @override
@@ -552,6 +580,8 @@ class _MonitoringMain2State extends BaseState<MonitoringMain2> {
                     if (!isValid) {
                       return;
                     }
+                    //FIXME : 모니터링 저장
+                    // saveMonitor();
                     Navigator.push(context, SlideRightTransRoute(builder: (context) => MonitoringResult2(),));
                   },
                 ),
@@ -600,14 +630,14 @@ class _MonitoringMain2State extends BaseState<MonitoringMain2> {
                 children: [
                   InkWell(
                     onTap: () {
-                      hasTemp = 1;
+                      hasTemp = 0;
                       checkValid();
                       setState(() {});
                     },
                     child: Row(
                       children: [
                         Image.asset(
-                          hasTemp == 1
+                          hasTemp == 0
                               ? "assets/ic_option_on.png"
                               : "assets/ic_option_off.png",
                           width: 25,
@@ -624,14 +654,14 @@ class _MonitoringMain2State extends BaseState<MonitoringMain2> {
                   const SizedBox(width: 25),
                   InkWell(
                     onTap: () {
-                      hasTemp = 2;
+                      hasTemp = 1;
                       checkValid();
                       setState(() {});
                     },
                     child: Row(
                       children: [
                         Image.asset(
-                          hasTemp == 2
+                          hasTemp == 1
                               ? "assets/ic_option_on.png"
                               : "assets/ic_option_off.png",
                           width: 25,
@@ -1285,8 +1315,7 @@ class _MonitoringMain2State extends BaseState<MonitoringMain2> {
                                     width: 15),
                                 const SizedBox(width: 10),
                                 H14(
-                                  text: LanguageService.trans(
-                                      "add_prescription_photo"),
+                                  text: LanguageService.trans("add_prescription_photo"),
                                   weight: FW.medium,
                                 )
                               ],

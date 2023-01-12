@@ -35,6 +35,7 @@ class MonitorDayResModel {
 class MonitoringDayDto {
   String? height;
   String? weight;
+  String? bodyTemp;
   String? nutrition;
   String? sleep_at_night;
   String? sleep_at_lunch;
@@ -48,11 +49,12 @@ class MonitoringDayDto {
   List<FoodDto>? foodAddList3 = []; //간식
   List<FoodDto>? foodAddList4 = []; //저녁
 
-  MonitoringDayDto({this.height, this.weight, this.nutrition, this.sleep_at_night, this.sleep_at_lunch, this.language, this.sociability, this.work_out, this.symptom_list});
+  MonitoringDayDto({this.height, this.weight, this.bodyTemp, this.nutrition, this.sleep_at_night, this.sleep_at_lunch, this.language, this.sociability, this.work_out, this.symptom_list});
 
   MonitoringDayDto.fromJson(Map<String, dynamic> json) {
     height = json['height'] ?? "";
     weight = json['weight'] ?? "";
+    bodyTemp = json['body_temp'] ?? "";
     nutrition = json['nutrition'] ?? "";
     sleep_at_night = json['sleep_at_night'] ?? "";
     sleep_at_lunch = json['sleep_at_lunch'] ?? "";
@@ -71,6 +73,7 @@ class MonitoringDayDto {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['height'] = this.height;
     data['weight'] = this.weight;
+    data['body_temp'] = this.bodyTemp;
     data['nutrition'] = this.nutrition;
     data['sleep_at_night'] = this.sleep_at_night;
     data['sleep_at_lunch'] = this.sleep_at_lunch;

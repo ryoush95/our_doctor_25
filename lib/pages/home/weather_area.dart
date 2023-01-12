@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ourdoctor/global/app_colors.dart';
+import 'package:ourdoctor/global/app_get_it.dart';
 import 'package:ourdoctor/global/app_styles.dart';
 import 'package:ourdoctor/global/global.dart';
 import 'package:ourdoctor/global/http_service.dart';
@@ -10,6 +11,7 @@ import 'package:ourdoctor/models/home_weather_model.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
 import 'package:ourdoctor/pages/community/community_detail.dart';
 import 'package:ourdoctor/pages/components/h14.dart';
+import 'package:ourdoctor/pages/components/h16.dart';
 import 'package:ourdoctor/pages/components/h18.dart';
 import 'package:ourdoctor/pages/components/h20.dart';
 import 'package:ourdoctor/pages/components/h24_b.dart';
@@ -35,12 +37,13 @@ class WeatherArea extends StatefulWidget {
 
 class WeatherAreaState extends BaseState<WeatherArea> {
   final HttpService httpService = HttpService();
-  GlobalProvider? p;
+  // GlobalProvider? p;
+  final p = getIt.get<GlobalProvider>();
 
   @override
   void initState() {
     super.initState();
-    p = Provider.of<GlobalProvider>(context,listen: false);
+    // p = Provider.of<GlobalProvider>(context,listen: false);
     getWeather();
   }
 
@@ -55,7 +58,7 @@ class WeatherAreaState extends BaseState<WeatherArea> {
         isLoading = false;
       });
       if (value.result == 0) {
-        p!.changeWeather(value.data!.temperature, value.data!.humidity, value.data!.pm10Grade);
+        p.changeWeather(value.data!.temperature, value.data!.humidity, value.data!.pm10Grade);
       } else {
         showToast(value.msg!);
         if (value.result == 106) {
@@ -88,7 +91,7 @@ class WeatherAreaState extends BaseState<WeatherArea> {
     //   dustName = "매우 나쁨";
     //   dustColor = AppColor_Red;
     }
-    return H18(
+    return H16(
       text: dustName,
       color: dustColor,
     );
@@ -117,8 +120,8 @@ class WeatherAreaState extends BaseState<WeatherArea> {
                   const SizedBox(height: 10),
                   const Text('기온', style: TextStyle(color: AppColor_GrayText, fontSize: 14)),
                   const SizedBox(height: 10),
-                  H18(
-                    text: p!.homeWeatherTemp + "°C",
+                  H16(
+                    text: p.homeWeatherTemp + "°C",
                     color: AppColor_Red,
                   )
                 ],
@@ -133,8 +136,8 @@ class WeatherAreaState extends BaseState<WeatherArea> {
                   const SizedBox(height: 10),
                   const Text('습도', style: TextStyle(color: AppColor_GrayText, fontSize: 14)),
                   const SizedBox(height: 10),
-                  H18(
-                    text: p!.homeWeatherWater + "%",
+                  H16(
+                    text: p.homeWeatherWater + "%",
                     color: AppColor_Primary,
                   )
                 ],
@@ -149,7 +152,7 @@ class WeatherAreaState extends BaseState<WeatherArea> {
                   const SizedBox(height: 10),
                   const Text('미세먼지', style: TextStyle(color: AppColor_GrayText, fontSize: 14)),
                   const SizedBox(height: 10),
-                  converDust(p!.homeWeatherDust),
+                  converDust(p.homeWeatherDust),
                 ],
               ),
             ],

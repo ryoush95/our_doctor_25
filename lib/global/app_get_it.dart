@@ -4,6 +4,7 @@ import 'package:event_bus/event_bus.dart';
 import 'package:get_it/get_it.dart';
 import 'package:ourdoctor/global/app_api.dart';
 import 'package:ourdoctor/models/dto/user_dto.dart';
+import 'package:ourdoctor/provider/global_provider.dart';
 import 'package:ourdoctor/stores/my_page_store.dart';
 import 'package:ourdoctor/stores/user_info_store.dart';
 
@@ -15,6 +16,7 @@ final getIt = GetIt.instance;
 setupLocator() async {
   // Register EventBus
   getIt.registerSingleton(EventBus());
+  getIt.registerSingleton<GlobalProvider>(GlobalProvider());
 
   // API
   final Dio dio = Dio();
