@@ -336,8 +336,8 @@ class HeightReportState extends BaseState<HeightReport> {
             ),
             const SizedBox(height: 15),
             RangeShow(
-                start: widget.data.monitoring!.diagnose!.min!,
-                end: widget.data.monitoring!.diagnose!.max!,
+                start: widget.data.monitoring!.diagnose!.min!.length < 5 ? widget.data.monitoring!.diagnose!.min! :  widget.data.monitoring!.diagnose!.min!.substring(5),
+                end: widget.data.monitoring!.diagnose!.max!.length < 5? widget.data.monitoring!.diagnose!.max! : widget.data.monitoring!.diagnose!.max!.substring(5),
                 rate: widget.data.monitoring!.value! > double.parse(widget.data.monitoring!.diagnose!.max!)
                     ? 100
                     : (widget.data.monitoring!.value! < double.parse(widget.data.monitoring!.diagnose!.min!)

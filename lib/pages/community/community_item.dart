@@ -78,8 +78,10 @@ class _CommunityItemState extends State<CommunityItem> {
                     const SizedBox(height: 15),
                     Row(
                       children: [
-                        const Icon(
-                          Icons.favorite_border_outlined,
+                        Icon(
+                          widget.data.likeYn! ==  "n" ?
+                          Icons.favorite_border_outlined :
+                          Icons.favorite_outlined,
                           color: Color(0xffFF5252),
                           size: 18,
                         ),

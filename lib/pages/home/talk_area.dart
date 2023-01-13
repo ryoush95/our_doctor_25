@@ -171,9 +171,11 @@ class TalkAreaState extends BaseState<TalkArea> {
                                     weight: FW.medium,
                                   ),
                                   const Spacer(),
-                                  const Icon(
-                                    Icons.favorite_border_outlined,
-                                    color: Color(0xffFF5252),
+                                  Icon(
+                                    arrNewsList.elementAt(0).likeYn! ==  "n" ?
+                                    Icons.favorite_border_outlined :
+                                    Icons.favorite_outlined,
+                                    color: const Color(0xffFF5252),
                                     size: 18,
                                   ),
                                   H16(
