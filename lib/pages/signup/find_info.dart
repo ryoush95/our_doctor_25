@@ -553,8 +553,8 @@ class FindInfoPageState extends BaseState<FindInfoPage> {
       isLoading = true;
     });
 
-    String name = nameInputController.text;
-    String id = passIdInputController.text;
+    String name = pageType == 1 ? nameInputController.text : passNameInputController.text;
+    String id = pageType == 1 ? "" : passIdInputController.text;
     String phone = pageType == 1 ? idPhone : passPhone;
 
     Future<DefaultResModel> offerInfo = httpService.authKey(name,phone,"pw",id);

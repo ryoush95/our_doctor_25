@@ -221,8 +221,8 @@ class WeightReportState extends BaseState<WeightReport> {
             ),
             const SizedBox(height: 15),
             RangeShow(
-                start: widget.data.monitoring!.diagnose!.min!.length < 5 ? widget.data.monitoring!.diagnose!.min! :  widget.data.monitoring!.diagnose!.min!.substring(5),
-                end: widget.data.monitoring!.diagnose!.max!.length < 5? widget.data.monitoring!.diagnose!.max! : widget.data.monitoring!.diagnose!.max!.substring(5),
+                start: convertFixDouble(widget.data.monitoring!.diagnose!.min!),
+                end: convertFixDouble(widget.data.monitoring!.diagnose!.max!),
                 rate: widget.data.monitoring!.value! > double.parse(widget.data.monitoring!.diagnose!.max!)
                     ? 100
                     : (widget.data.monitoring!.value! < double.parse(widget.data.monitoring!.diagnose!.min!)
@@ -255,6 +255,12 @@ class WeightReportState extends BaseState<WeightReport> {
             )
           ],
         ));
+  }
+
+  String convertFixDouble(String a) {
+    double d = double.parse(a);
+
+    return d.toStringAsFixed(2).replaceFirst(RegExp(r'\.?0*$'), '');
   }
 
   int getWeight() {

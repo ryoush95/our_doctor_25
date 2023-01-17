@@ -311,8 +311,8 @@ class DiagnosisResult1PageState extends BaseState<DiagnosisResult1Page> {
                               ),
                             ]),
                             RangeShow(
-                              start: widget.data!.hEIGHT!.min!.toString(),
-                              end: widget.data!.hEIGHT!.max!.toString(),
+                              start: widget.data!.hEIGHT!.min!.toStringAsFixed(2).replaceFirst(RegExp(r'\.?0*$'), ''),
+                              end: widget.data!.hEIGHT!.max!.toStringAsFixed(2).replaceFirst(RegExp(r'\.?0*$'), ''),
                               rate: widget.data!.hEIGHT!.percent!,
                               unit: "cm",
                               cur_value: double.parse(widget.data!.hEIGHT!.curValue!),
@@ -426,8 +426,8 @@ class DiagnosisResult1PageState extends BaseState<DiagnosisResult1Page> {
                               ),
                             ]),
                             RangeShow(
-                              start: widget.data!.wEIGHT!.min!.toString(),
-                              end: widget.data!.wEIGHT!.max!.toString(),
+                              start: widget.data!.wEIGHT!.min!.toStringAsFixed(2).replaceFirst(RegExp(r'\.?0*$'), ''),
+                              end: widget.data!.wEIGHT!.max!.toStringAsFixed(2).replaceFirst(RegExp(r'\.?0*$'), ''),
                               rate: widget.data!.wEIGHT!.percent!,
                               unit: "kg",
                               cur_value: double.parse(widget.data!.wEIGHT!.curValue!),
