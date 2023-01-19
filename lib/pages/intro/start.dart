@@ -68,6 +68,7 @@ class StartPageState extends BaseState<StartPage> {
                   text: LanguageService.trans("start_description"),
                   weight: FW.regular,
                   height: 1.5,
+                  maxLine: 3,
                 ),
               ],
             )),

@@ -352,6 +352,7 @@ class FirstStepPageState extends BaseState<FirstStepPage> {
   void dispose() {
     // Clean up the focus node when the Form is disposed.
     _listController.dispose();
+
     super.dispose();
   }
 

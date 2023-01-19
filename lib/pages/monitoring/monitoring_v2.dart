@@ -282,7 +282,11 @@ class _MonitoringMain2State extends BaseState<MonitoringMain2> {
     checkValid();
   }
 
-
+  @override
+  void dispose() {
+    super.dispose();
+    imageList.clear();
+  }
 
   Future<bool> onBackPressed() async {
     Navigator.pop(context);

@@ -91,7 +91,8 @@ class _LineChartTempState extends State<LineChartTemp> {
           gridData: FlGridData(
             show: true,
             drawVerticalLine: false,
-            horizontalInterval: 2.5,
+            // 회색 가로줄
+            horizontalInterval: 2,
             getDrawingHorizontalLine: (value) {
               return FlLine(
                 color: const Color(0xfff4f4f4),
@@ -111,7 +112,7 @@ class _LineChartTempState extends State<LineChartTemp> {
 
                   return SideTitleWidget(child: Text(title, style: style), axisSide: meta.axisSide);
                 },
-                reservedSize: 22,
+                reservedSize: 30,
               ),
             ),
             bottomTitles: AxisTitles(
@@ -203,14 +204,20 @@ class _LineChartTempState extends State<LineChartTemp> {
             rightTitles: AxisTitles(
               sideTitles: SideTitles(
                 showTitles: true,
-                interval: 2,
+                interval: 0.5,
                 getTitlesWidget: (value, meta) {
-                  final style = AppTextStyle.PD(const Color(0xff585859), 11, weight: FW.medium);
-                  String title = sprintf("%.0f", [value]);
+                  var style = AppTextStyle.PD(const Color(0xff585859), 11, weight: FW.medium);
+                  // String title = sprintf("%.0f", [value]);
+                  String title = value.toString();
+                  if(title != "36.5") {
+                    style = AppTextStyle.PD(
+                        Colors.white, 11, weight: FW.medium);
+                    return SideTitleWidget(child: Text(title /*+ "°C"*/, style: style), axisSide: meta.axisSide);
+                  }
 
                   return SideTitleWidget(child: Text(title, style: style), axisSide: meta.axisSide);
                 },
-                reservedSize: 22,
+                reservedSize: 30,
               ),
             ),
             bottomTitles: AxisTitles(
@@ -220,7 +227,7 @@ class _LineChartTempState extends State<LineChartTemp> {
                 //interval: ((maxY - minY) / 4) == 0 ? 1 : ((maxY - minY) / 4).ceil().toDouble(),
                 interval:  1,
                 getTitlesWidget: (value, meta) {
-                  final style = AppTextStyle.PD(const Color(0xff585859), 11, weight: FW.medium);
+                  final style = AppTextStyle.PD(Colors.white, 11, weight: FW.medium);
                   return SideTitleWidget(child: Text(d[value.toInt()] + "일", style: style), axisSide: meta.axisSide);
                 },
               ),

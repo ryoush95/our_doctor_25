@@ -2,6 +2,7 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:ourdoctor/global/app_colors.dart';
 import 'package:ourdoctor/global/app_styles.dart';
+import 'package:ourdoctor/global/global.dart';
 import 'package:ourdoctor/global/http_service.dart';
 import 'package:ourdoctor/helpers/common_util.dart';
 import 'package:ourdoctor/helpers/transition.dart';
@@ -24,6 +25,7 @@ import 'package:ourdoctor/pages/monitoring/monitor_report1.dart';
 import 'package:ourdoctor/pages/monitoring/monitoring_result2.dart';
 import 'package:ourdoctor/pages/monitoring/monitoring_v2.dart';
 
+import '../app_event.dart';
 import 'monitoring_test_form.dart';
 
 class MonitoringFragment2 extends StatefulWidget {
@@ -46,6 +48,12 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
   void initState(){
 
     getMonitor2HomeDataInfo();
+
+    eventBus.on<SelectChildEvent>().listen((event) {
+      if (mounted) {
+        getMonitor2HomeDataInfo();
+      }
+    });
     super.initState();
   }
 
@@ -199,12 +207,12 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            H18(text: "우아 생활 모니터링"),
+            H18(text: "우아 성장 노트"),
             InkWell(
               onTap: () {
                 Navigator.push(context, SlideRightTransRoute(builder: (context) => MonitoringResult2()));
               },
-              child: H16(text: "지난기록"),
+              child: H14(text: "지난기록", weight: FW.regular,),
             ),
           ],
         ),
@@ -368,41 +376,21 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
                   ],
                 ),
               ),
-              Spacer(),
+              const Spacer(),
               SizedBox(
                 height: 100,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    RichText(
-                        text: TextSpan(children: [
-                          TextSpan(
-                              text: "발달",
-                              style:
-                              AppTextStyle.PD(AppColor_Primary, 16, weight: FW.bold)),
-                          TextSpan(
-                              text: " 모니터링 기록을 완료했어요",
-                              style: AppTextStyle.PD(
-                                AppColor_BlackText,
-                                16,
-                                weight: FW.semi_bold,
-                              )),
-                        ])),
-                    const SizedBox(height: 15),
-                    H16(
-                      text: "현재 개월 수에 맞는 모니터링을 해야할 시기가 지났어요\n모니터링을 시작해 볼까요?",
-                      weight: FW.regular,
-                      maxLine: 3,
-                      align: TextAlign.start,
-                    ),
-                  ],
+                child: H16(
+                  text: "아이의 건강한 성장을 위해 성장 기록을 시작해 볼까요?",
+                  weight: FW.regular,
+                  maxLine: 3,
+                  align: TextAlign.start,
                 ),
 
               ),
               const SizedBox(height: 15),
               Center(
                 child: MainTextButton(
-                  text: "모니터링 시작하기",
+                  text: "성장 노트 기록하기",
                   style: AppTextStyle.PD(
                       Colors.white, 16,
                       weight: FW.medium),

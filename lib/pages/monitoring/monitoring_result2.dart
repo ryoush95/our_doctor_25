@@ -136,7 +136,9 @@ class _MonitoringResult2State extends BaseState<MonitoringResult2> {
       );
     } else if (tabIndex == 1) {
       // CATE : 수면
-      return Column(
+      print(gUserInfo!.accessToken!);
+      return dicHomeGraphLifeStyleInfo!.monitoringSleep != null
+          ? Column(
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -182,6 +184,8 @@ class _MonitoringResult2State extends BaseState<MonitoringResult2> {
           ),
           Container(padding: const EdgeInsets.symmetric(horizontal: 30), child: LifestyleReport(data: dicHomeGraphLifeStyleInfo!, result: 1)),
         ],
+      ) : const SizedBox(
+        child: Text("검사결과 없음"),
       );
     } else if (tabIndex == 2) {
       // CATE : 영양

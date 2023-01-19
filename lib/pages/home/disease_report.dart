@@ -871,7 +871,7 @@ class DiseaseReportState extends BaseState<DiseaseReport> {
                         height: 40,
                         onPressed: (){
                           Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => SymtomPaperList(),
+                            builder: (context) => SymtomPaperList(data: dicDiseaseInfo!.symptomList!),
                           ));
                         },
                       ),

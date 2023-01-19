@@ -5,6 +5,7 @@ import 'package:ourdoctor/global/app_styles.dart';
 import 'package:ourdoctor/global/http_service.dart';
 import 'package:ourdoctor/helpers/common_util.dart';
 import 'package:ourdoctor/helpers/transition.dart';
+import 'package:ourdoctor/models/home_disease_res_model.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
 import 'package:ourdoctor/pages/base/page_layout.dart';
 import 'package:ourdoctor/pages/components/h16.dart';
@@ -13,17 +14,30 @@ import 'package:ourdoctor/pages/components/text_highlighting.dart';
 import 'package:ourdoctor/pages/home/symptom_paper_detail.dart';
 
 class SymtomPaperList extends StatefulWidget {
-  const SymtomPaperList({Key? key}) : super(key: key);
+  SymtomPaperList({Key? key, required this.data}) : super(key: key);
 
+  List data;
   @override
   State<SymtomPaperList> createState() => _SymtomPaperListState();
 }
 
 class _SymtomPaperListState extends BaseState<SymtomPaperList> {
   HttpService httpService = new HttpService();
+  List<SymptomList> list = [];
 
   String img = "https://blog.kakaocdn.net/dn/XsNHt/btrb3m0cuQb/62QmvGg1bUVrI5uZfcWEi1/img.png";
 
+  @override
+  void initState(){
+    super.initState();
+    SymptomList s;
+    for(int i = 0; i < widget.data.length; i++) {
+      s = widget.data[i];
+      if (s.medicationUrl != "") {
+        list.add(s);
+      }
+    }
+  }
 
   Future<bool> onBackPressed() async {
     Navigator.pop(context);
@@ -44,11 +58,11 @@ class _SymtomPaperListState extends BaseState<SymtomPaperList> {
             ),
             Expanded(
               child: ListView.builder(
-                itemCount: 4,
+                itemCount: list.length,
                 itemBuilder: (context, index) {
                   return InkWell(
                     onTap: (){
-                      Navigator.push(context, SlideRightTransRoute(builder: (context) => SymptomPaperDetailPage(),));
+                      Navigator.push(context, SlideRightTransRoute(builder: (context) => SymptomPaperDetailPage( data: list[index],),));
                     },
                     child: Container(
                       margin: const EdgeInsets.symmetric(vertical: 5),
@@ -70,7 +84,7 @@ class _SymtomPaperListState extends BaseState<SymtomPaperList> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     DynamicTextHighlighting(
-                                      text: "제목ㅁㅁㄱㅁㄱㅁㄱㅁㄱㅁㄱㅁ",
+                                      text: list[index].symptom!,
                                       highlights: [],
                                       style: const TextStyle(
                                         fontWeight: FontWeight.w600,
@@ -86,7 +100,7 @@ class _SymtomPaperListState extends BaseState<SymtomPaperList> {
                                       children: [
                                         Expanded(
                                           child: AutoSizeText(
-                                            "date",
+                                            list[index].createdAt!,
                                             style: TextStyle(
                                               fontWeight: FontWeight.w500,
                                               color: AppColor_BlackText.withOpacity(.4),
@@ -115,7 +129,7 @@ class _SymtomPaperListState extends BaseState<SymtomPaperList> {
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(8.0),
                                 child: Image.network(
-                                  img,
+                                  list[index].medicationUrl!,
                                   width: 60,
                                   height: 60,
                                   fit: BoxFit.fill,

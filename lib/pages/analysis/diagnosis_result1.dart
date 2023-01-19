@@ -615,103 +615,104 @@ class DiagnosisResult1PageState extends BaseState<DiagnosisResult1Page> {
                         child: Center(child: H14(text: LanguageService.trans("minute_hint"), color: AppColor_GrayText, maxLine: 2, height: 1.4, weight: FW.regular)),
                       ),
                       const SizedBox(height: 80),
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: (MediaQuery.of(context).size.width * 1170) / 1218,
-                        child: Stack(
-                          children: [
-                            Image.asset(
-                              'assets/bg_result.png',
-                              width: MediaQuery.of(context).size.width,
-                              height: (MediaQuery.of(context).size.width * 1170) / 1218,
-                              fit: BoxFit.cover,
-                            ),
-                            Container(
-                              padding: const EdgeInsets.only(top: 60.0, left: 32.0, right: 20.0,),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  H22(
-                                    text: LanguageService.trans("monitorint_result1"),
-                                    color: AppColor_White,
-                                    maxLine: 2,
-                                    height: 1.4,
-                                    align: TextAlign.left,
-                                    weight: FW.bold,
-                                  ),
-                                  const SizedBox(height: 12),
-                                  H18(
-                                    text: LanguageService.trans("monitorint_result2"),
-                                    color: AppColor_White,
-                                    maxLine: 2,
-                                    align: TextAlign.left,
-                                    weight: FW.semi_bold,
-                                  ),
-                                  const SizedBox(height: 92),
-                                  Wrap(
-                                    crossAxisAlignment: WrapCrossAlignment.start,
-                                    children:  [...List.generate(3, (int idx) => monitorint_result3_text(
-                                      LanguageService.trans("monitorint_result3-${idx+1}")
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: 133,
-                        color: AppColor_BlackText.withOpacity(0.8),
-                        padding: const EdgeInsets.only(left: 32.0, right: 28.0),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Container(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    H16(
-                                      text: LanguageService.trans("monitorint_result4"),
-                                      color: AppColor_White,
-                                      maxLine: 1,
-                                      align: TextAlign.left,
-                                      weight: FW.bold,
-                                    ),
-                                    const SizedBox(height: 5),
-                                    H16(
-                                      text: LanguageService.trans("monitorint_result5"),
-                                      color: AppColor_White,
-                                      maxLine: 1,
-                                      align: TextAlign.left,
-                                      weight: FW.regular,
-                                    ),
-                                    const SizedBox(height: 13),
-                                    H12(
-                                      text: LanguageService.trans("monitorint_result6"),
-                                      color: AppColor_White,
-                                      maxLine: 2,
-                                      height: 1.4,
-                                      align: TextAlign.left,
-                                      weight: FW.regular,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            Image.asset(
-                              'assets/ic_ad.png',
-                              width: 89,
-                              height: 89,
-                              fit: BoxFit.cover,
-                            ),
-                          ],
-                        ),
-                      ),
+                      // 노션 5-37 배너삭제
+                      // Container(
+                      //   width: MediaQuery.of(context).size.width,
+                      //   height: (MediaQuery.of(context).size.width * 1170) / 1218,
+                      //   child: Stack(
+                      //     children: [
+                      //       Image.asset(
+                      //         'assets/bg_result.png',
+                      //         width: MediaQuery.of(context).size.width,
+                      //         height: (MediaQuery.of(context).size.width * 1170) / 1218,
+                      //         fit: BoxFit.cover,
+                      //       ),
+                      //       Container(
+                      //         padding: const EdgeInsets.only(top: 60.0, left: 32.0, right: 20.0,),
+                      //         child: Column(
+                      //           crossAxisAlignment: CrossAxisAlignment.start,
+                      //           children: [
+                      //             H22(
+                      //               text: LanguageService.trans("monitorint_result1"),
+                      //               color: AppColor_White,
+                      //               maxLine: 2,
+                      //               height: 1.4,
+                      //               align: TextAlign.left,
+                      //               weight: FW.bold,
+                      //             ),
+                      //             const SizedBox(height: 12),
+                      //             H18(
+                      //               text: LanguageService.trans("monitorint_result2"),
+                      //               color: AppColor_White,
+                      //               maxLine: 2,
+                      //               align: TextAlign.left,
+                      //               weight: FW.semi_bold,
+                      //             ),
+                      //             const SizedBox(height: 92),
+                      //             Wrap(
+                      //               crossAxisAlignment: WrapCrossAlignment.start,
+                      //               children:  [...List.generate(3, (int idx) => monitorint_result3_text(
+                      //                 LanguageService.trans("monitorint_result3-${idx+1}")
+                      //                   ),
+                      //                 ),
+                      //               ],
+                      //             ),
+                      //           ],
+                      //         ),
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
+                      // Container(
+                      //   width: MediaQuery.of(context).size.width,
+                      //   height: 133,
+                      //   color: AppColor_BlackText.withOpacity(0.8),
+                      //   padding: const EdgeInsets.only(left: 32.0, right: 28.0),
+                      //   child: Row(
+                      //     children: [
+                      //       Expanded(
+                      //         child: Container(
+                      //           child: Column(
+                      //             crossAxisAlignment: CrossAxisAlignment.start,
+                      //             mainAxisAlignment: MainAxisAlignment.center,
+                      //             children: [
+                      //               H16(
+                      //                 text: LanguageService.trans("monitorint_result4"),
+                      //                 color: AppColor_White,
+                      //                 maxLine: 1,
+                      //                 align: TextAlign.left,
+                      //                 weight: FW.bold,
+                      //               ),
+                      //               const SizedBox(height: 5),
+                      //               H16(
+                      //                 text: LanguageService.trans("monitorint_result5"),
+                      //                 color: AppColor_White,
+                      //                 maxLine: 1,
+                      //                 align: TextAlign.left,
+                      //                 weight: FW.regular,
+                      //               ),
+                      //               const SizedBox(height: 13),
+                      //               H12(
+                      //                 text: LanguageService.trans("monitorint_result6"),
+                      //                 color: AppColor_White,
+                      //                 maxLine: 2,
+                      //                 height: 1.4,
+                      //                 align: TextAlign.left,
+                      //                 weight: FW.regular,
+                      //               ),
+                      //             ],
+                      //           ),
+                      //         ),
+                      //       ),
+                      //       Image.asset(
+                      //         'assets/ic_ad.png',
+                      //         width: 89,
+                      //         height: 89,
+                      //         fit: BoxFit.cover,
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
                     ],
                   )),
                 ),

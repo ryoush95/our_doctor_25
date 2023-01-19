@@ -2437,6 +2437,7 @@ class HttpService {
   //홈 그래프 생활습관
   Future<HomeGraphLifeStyleResModel> homeGraphLifeStyle1(String month) async {
     String _url = API_BASE_URL + "api/Monitor2/home_graph_lifestyle2";
+    print(gUserInfo!.accessToken!);
     Map<String, String> body = {'access_token': gUserInfo!.accessToken!, 'month': month};
     log(gUserInfo!.accessToken!);
     Uri myUri = Uri.parse(_url);

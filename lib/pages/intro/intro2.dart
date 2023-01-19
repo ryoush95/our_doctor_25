@@ -75,7 +75,7 @@ class IntroGrowthPageState extends BaseState<IntroGrowthPage> {
                 H16(
                   text: LanguageService.trans("intro3_description"),
                   weight: FW.medium,
-                  maxLine: 3,
+                  maxLine: 5,
                   height: 1.5,
                   color: AppColor_Intro_Description,
                 ),
