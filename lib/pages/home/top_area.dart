@@ -463,9 +463,9 @@ class TopAreaState extends BaseState<TopArea> {
                                         radius: 6,
                                         onPressed: () {
                                           // goMonitorStart();
-                                          // Navigator.push(context,
-                                          //     SlideRightTransRoute(builder: (context) => MonitoringTestForm()));
-                                          eventBus.fire(MoreMonitoring());
+                                          Navigator.push(context,
+                                              SlideRightTransRoute(builder: (context) => MonitoringTestForm()));
+                                          // eventBus.fire(MoreMonitoring());
                                         },
                                       ),
                                     ),

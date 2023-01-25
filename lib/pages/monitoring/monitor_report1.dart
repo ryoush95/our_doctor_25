@@ -42,6 +42,68 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
   int tabIndex = 0;
   int subTabIndex2 = 0;
   List<MonitorListDto>? arrMonitorList = [];
+  String comment1 = "또래보다 느릴 수 있어 심화평가 권고";
+  String comment2 = """
+큰 근육을 이용한 운동발달이 또래보다 느릴 수 있어요. 대근육운동은 아이의 신경계 및 근골격계의 발달과 밀접하게 연관되어 있어요.
+아이들은 운동기능을 통해 세상을 탐색하며 신체,
+인지, 정서를 발달시켜나가요.
+자세한 발달 상태 파악을 위해 병원 진단 진단 및 상담이 필요합니다.
+""";
+
+  //FIXME: 테스트후 삭제
+  void qkfekf(int index) {
+    if (testScore[index] < 80) {
+      comment1 = "노력이 필요해요";
+    } else if (testScore[index] < 90) {
+      comment1 = "보통이에요";
+    } else {
+      comment1 = "잘하고있어요 ";
+    }
+    return;
+  }
+
+  void qkfekf2(int index) {
+    switch (index) {
+      case 0 : comment2 = """
+큰 근육을 이용한 운동발달이 또래보다 느릴 수 있어요. 대근육운동은 아이의 신경계 및 근골격계의 발달과 밀접하게 연관되어 있어요.
+아이들은 운동기능을 통해 세상을 탐색하며 신체,
+인지, 정서를 발달시켜나가요.
+자세한 발달 상태 파악을 위해 병원 진단 진단 및 상담이 필요합니다.
+""";
+      break;
+      case 1 : comment2 = """
+손의 작은 근육을 이용한 정밀한 조작과 협응능력의 발달이 또래보다 느릴 수 있어요. 소근육운동은 아이들이 세상을 탐색하고 지능을 발달시키는 일과 밀접하게 연관되어 있어요.
+자세한 발달 상태 파악을 위해 병원 진단 진단 및 상담이 필요합니다.
+      """;
+      break;
+      case 2 : comment2 = """
+인지발달이 또래와 비슷하거나 다소 느릴 수 있어요. 인지발달은 아이가
+경험한 세상을 이해하고 기억해서 문제해결에 활용하는 법을 배워나가는
+과정이에요. 운동, 언어, 사회성발달과 밀접하게 연관되어 있으면서 향후
+놀이와 학습의 기초가 됩니다.
+      """;
+      break;
+      case 3 : comment2 = """
+언어영역발달이 또래와 비슷하거나 다소 느릴 수
+있어요. 언어는 타인과의 소통을 통해 사회적 관계를 형성해나가는 기초가 되어요. 아이는 언어발달을 통해 시간과 공간의 제약을 넘어 사고의 범위를
+확장시켜 나가고 있어요.
+      """;
+      break;
+      case 4 : comment2 = """
+사회성이 또래보다 발달되어 있어요. 아이가 사회적 관계를 통해 가치관, 태도, 규범, 행동양상을 건강하게 형성해나가고, 이후 도덕심, 이타심, 올바른
+성의식을 발전시켜나가기에 유리한
+장점을 가지고 있어요.
+      """;
+      break;
+      case 5 : comment2 = """
+자조영역발달이 또래보다 높은 수준이예요. 자기조절능력과 자율성 및
+주도성을 습득하기에 유리한 장점을 가지고 있어요. 자조능력의 발달을
+위해서는 대근육운동, 소근육운동의 발달이 선행되어야 하고, 이는 훗날 사회성 형성의 든든한 기초가 됩니다.
+      """;
+      break;
+    }
+  }
+
 
   HomeGraphTallDto? dicHomeGraphTallInfo;
   HomeGraphWeightDto? dicHomeGraphWeightInfo;
@@ -458,6 +520,8 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
     return InkWell(
       onTap: () {
         setState(() {
+          qkfekf(index);
+          qkfekf2(index);
           subTabIndex = index;
         });
       },
@@ -545,6 +609,7 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
             cur_value: testScore[subTabIndex].toDouble(),
           ),
           Container(
+            width: MediaQuery.of(context).size.width - 64,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(6.0),
                 color: AppColor_Light_Gray),
@@ -554,9 +619,10 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                H16(text: "ㅁㄴㅇㅁㄴㅇㅁㄴㅇ"),
+                H16(text: comment1),
+                SizedBox(height: 10,),
                 Text(
-                  "우리 아이는 대근육 발달이 다소 늦은 편이에요. 대근육을 고르게 사용하는 여러 신체 활동을 꾸준히 한다면 더욱 잘 성장할 수 있어요.",
+                  comment2,
                   style: TextStyle(
                       color: AppColor_GrayText, fontSize: 16, height: 1.5),
                 )

@@ -3,6 +3,7 @@ import 'package:ourdoctor/global/app_colors.dart';
 import 'package:ourdoctor/global/app_styles.dart';
 import 'package:ourdoctor/pages/components/h16.dart';
 import 'package:ourdoctor/pages/components/h18.dart';
+import 'package:ourdoctor/pages/home/school_area.dart';
 
 class SolutionArea extends StatefulWidget {
   const SolutionArea({Key? key}) : super(key: key);
@@ -34,41 +35,42 @@ class _SolutionAreaState extends State<SolutionArea> {
         children: [
           const SizedBox(height: 20),
           H16(text: "솔루션 추천"),
-          Expanded(
-            child: ListView.builder(
-              itemCount: 2,
-              scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.all(10),
-              physics: const BouncingScrollPhysics(),
-              itemBuilder: (context, index) {
-                double s = 130;
-                return Padding(
-                  padding: const EdgeInsets.all(5),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        height: s,
-                        width: s,
-                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.0)),
-                        child: Image.asset("assets/icon_good.png",width: 84, height: 84, fit: BoxFit.fill,),
-                      ),
-                      const SizedBox(height: 16),
-                      Container(
-                        width: s,
-                        child: H18(
-                          text: "asdasdaskuygygygd",
-                          weight: FW.regular,
-                          maxLine: 2,
-                          align: TextAlign.center,
-                          height: 1.4,
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              },),
-          ),
+          SchoolArea(curCategory: 2),//교육
+          // Expanded(
+          //   child: ListView.builder(
+          //     itemCount: 2,
+          //     scrollDirection: Axis.horizontal,
+          //     padding: const EdgeInsets.all(10),
+          //     physics: const BouncingScrollPhysics(),
+          //     itemBuilder: (context, index) {
+          //       double s = 130;
+          //       return Padding(
+          //         padding: const EdgeInsets.all(5),
+          //         child: Column(
+          //           mainAxisAlignment: MainAxisAlignment.center,
+          //           children: [
+          //             Container(
+          //               height: s,
+          //               width: s,
+          //               decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.0)),
+          //               child: Image.asset("assets/icon_good.png",width: 84, height: 84, fit: BoxFit.fill,),
+          //             ),
+          //             const SizedBox(height: 16),
+          //             Container(
+          //               width: s,
+          //               child: H18(
+          //                 text: "asdasdaskuygygygd",
+          //                 weight: FW.regular,
+          //                 maxLine: 2,
+          //                 align: TextAlign.center,
+          //                 height: 1.4,
+          //               ),
+          //             ),
+          //           ],
+          //         ),
+          //       );
+          //     },),
+          // ),
         ],
       ),
     );

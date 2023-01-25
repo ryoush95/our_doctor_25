@@ -22,7 +22,12 @@ class _MonitoringTestResultState extends BaseState<MonitoringTestResult> {
   int tabIndex = 0;
   String option = "1";
   List<String> CATEGORY = ["개인위생", "구강교육", "감각", "안전사고", "영양", "전자미디어", "정서", "대소변", "수면교육"];
+  List<int> cateint = [26,16,7,11,21,15,13,27,19];
   ScrollController sc = ScrollController();
+  Color indiColor = AppColor_Primary;
+  String indiimage = "assets/icon_good.png";
+  String indiText = "성장과 발달에 적합한 생활습관을 잘 지키고 있는 편이에요. 놓치고 있었던 부분을 확인하여 더욱 좋은 생활 습관을 정립해 보세요.";
+
 
   Future<bool> onBackPressed() async {
     Navigator.pop(context);
@@ -35,6 +40,7 @@ class _MonitoringTestResultState extends BaseState<MonitoringTestResult> {
         sc.jumpTo(0.0);
         setState(() {
           tabIndex = index;
+          testIndicator();
         });
       },
       child: Container(
@@ -82,7 +88,7 @@ class _MonitoringTestResultState extends BaseState<MonitoringTestResult> {
         SizedBox(
           width: screenSize.width,
           child: H16(
-            text: "answpaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            text: "매일 손을 씻고있나요?",
             maxLine: 5,
             align: TextAlign.left,
             height: 1.5,
@@ -90,10 +96,10 @@ class _MonitoringTestResultState extends BaseState<MonitoringTestResult> {
           ),
         ),
         const SizedBox(height: 35),
-        FlutterLogo(
-          size: 100,
-        ),
-        const SizedBox(height: 35),
+        // FlutterLogo(
+        //   size: 100,
+        // ),
+        // const SizedBox(height: 35),
         Center(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -236,6 +242,22 @@ class _MonitoringTestResultState extends BaseState<MonitoringTestResult> {
     );
   }
 
+  void testIndicator() {
+    if (cateint[tabIndex] < 13) {
+      indiimage = "assets/icon_bad.png";
+      indiText = "성장, 발달에 노력이 필요한 생활 습관이에요.\n성장과 발달에 적합한 생활 습관을 잘 지키지 못하고 있어요. 놓치고 있는 부분들이 많으니 틀린 문제를 확인해 좋은 생활 습관을 정립해보세요.";
+      indiColor = AppColor_Red;
+    } else if (cateint[tabIndex] < 25) {
+      indiimage = "assets/icon_normal.png";
+      indiText = "성장, 발달에 보통인 생활습관이에요.\n성장과 발달에 적합한 생활 습관을 지키고 있는 편이지만, 놓치고 있는 부분들이 있어요. 틀린 문제를 확인해 좋은 생활 습관을 정립해 보세요.";
+      indiColor = AppColor_Oxygen;
+    } else {
+      indiimage = "assets/icon_good.png";
+      indiText = "성장, 발달에 좋은 생활습관이에요.\n성장과 발달에 적합한 생활습관을 잘 지키고 있는 편이에요. 놓치고 있었던 부분을 확인하여 더욱 좋은 생활 습관을 정립해 보세요.";
+      indiColor = AppColor_Primary;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -261,11 +283,11 @@ class _MonitoringTestResultState extends BaseState<MonitoringTestResult> {
               Center(
                 child: CircularPercentIndicator(
                   radius: 120.0,
-                  percent: 13/21,
+                  percent: cateint[tabIndex]/30,
                   center: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Image.asset("assets/icon_good.png",
+                      Image.asset(indiimage,
                         height: 60,
                         width: 70,
                       ),
@@ -274,16 +296,16 @@ class _MonitoringTestResultState extends BaseState<MonitoringTestResult> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text("16",style: TextStyle(
-                              color: AppColor_Primary,
+                            Text(cateint[tabIndex].toString(),style: TextStyle(
+                              color: indiColor,
                             ),),
-                            Text("/21")
+                            Text("/30")
                           ],
                         ),
                       )
                     ],
                   ),
-                  progressColor: AppColor_Primary,
+                  progressColor: indiColor,
                   backgroundColor: AppColor_Light_Gray,
                   circularStrokeCap: CircularStrokeCap.round,
                   animation: true,
@@ -291,31 +313,31 @@ class _MonitoringTestResultState extends BaseState<MonitoringTestResult> {
                 ),
               ),
               const SizedBox(height: 30),
-              RichText(
-                text: TextSpan(
-                    children: [
-                  TextSpan(
-                    text: "성장, 발달에 ",
-                    style:
-                        AppTextStyle.PD(AppColor_BlackText, 16, weight: FW.bold),
-                  ),
-                  TextSpan(
-                    text: "좋은 생활습관",
-                    style:
-                        AppTextStyle.PD(AppColor_Primary, 16, weight: FW.bold),
-                  ),
-                  TextSpan(
-                    text: "이에요",
-                    style:
-                        AppTextStyle.PD(AppColor_BlackText, 16, weight: FW.bold),
-                  ),
-                ]),
-              ),
+              // RichText(
+              //   text: TextSpan(
+              //       children: [
+              //     TextSpan(
+              //       text: "성장, 발달에 ",
+              //       style:
+              //           AppTextStyle.PD(AppColor_BlackText, 16, weight: FW.bold),
+              //     ),
+              //     TextSpan(
+              //       text: "좋은 생활습관",
+              //       style:
+              //           AppTextStyle.PD(AppColor_Primary, 16, weight: FW.bold),
+              //     ),
+              //     TextSpan(
+              //       text: "이에요",
+              //       style:
+              //           AppTextStyle.PD(AppColor_BlackText, 16, weight: FW.bold),
+              //     ),
+              //   ]),
+              // ),
               const SizedBox(height: 10),
               SizedBox(
                 height: 80,
                 child: H14(
-                  text: "성장과 발달에 적합한 생활습관을 잘 지키고 있는 편이에요. 놓치고 있었던 부분을 확인하여 더욱 좋은 생활 습관을 정립해 보세요.",
+                  text: indiText,
                   maxLine: 4,
                   height: 1.5,
                   align: TextAlign.start,
