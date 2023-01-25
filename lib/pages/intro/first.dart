@@ -298,24 +298,8 @@ class FirstPageState extends BaseState<FirstPage> {
                           width: MediaQuery.of(context).size.width,
                           height: 58,
                           margin: const EdgeInsets.only(left: 16.0, right: 16.0),
-                          decoration: const BoxDecoration(color: Color(0xFFFFEC00), borderRadius: BorderRadius.all(Radius.circular(16))),
-                          child: Stack(
-                            children: [
-                              Center(
-                                child: H18(
-                                  text: LanguageService.trans("kakao_login"),
-                                  weight: FW.medium,
-                                  height: 1.5,
-                                  color: const Color(0xFF401C1D),
-                                ),
-                              ),
-                              Positioned(
-                                child: Image.asset('assets/ic_kakaotalk.png', width: 26, height: 24),
-                                left: 24,
-                                top: 17,
-                              )
-                            ],
-                          )),
+                          // decoration: const BoxDecoration(color: Color(0xFFFFEC00), borderRadius: BorderRadius.all(Radius.circular(16))),
+                          child: Image.asset("assets/login_kakao.png")),
                     ],
                   ),
                 ),
@@ -330,24 +314,8 @@ class FirstPageState extends BaseState<FirstPage> {
                           width: MediaQuery.of(context).size.width,
                           height: 58,
                           margin: const EdgeInsets.only(left: 16.0, right: 16.0),
-                          decoration: const BoxDecoration(color: Color(0xFF5ECB6A), borderRadius: BorderRadius.all(Radius.circular(16))),
-                          child: Stack(
-                            children: [
-                              Center(
-                                child: H18(
-                                  text: LanguageService.trans("naver_login"),
-                                  weight: FW.medium,
-                                  height: 1.5,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              Positioned(
-                                child: Image.asset('assets/ic_naver.png', width: 24, height: 24),
-                                left: 24,
-                                top: 17,
-                              )
-                            ],
-                          )),
+                          // decoration: const BoxDecoration(color: Color(0xFF5ECB6A), borderRadius: BorderRadius.all(Radius.circular(16))),
+                          child: Image.asset("assets/login_naver.png")),
                     ],
                   ),
                 ),
@@ -404,30 +372,7 @@ class FirstPageState extends BaseState<FirstPage> {
                           width: MediaQuery.of(context).size.width,
                           height: 58,
                           margin: const EdgeInsets.only(left: 16.0, right: 16.0),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(16),
-                              color: Colors.white,
-                              border: Border.all(
-                                color: AppColor_BlackText.withOpacity(0.2),
-                                width: 1,
-                              )),
-                          child: Stack(
-                            children: [
-                              Center(
-                                child: H18(
-                                  text: LanguageService.trans("google_login"),
-                                  weight: FW.semi_bold,
-                                  height: 1.5,
-                                  color: AppColor_BlackText,
-                                ),
-                              ),
-                              Positioned(
-                                child: Image.asset('assets/ic_google.png', width: 24, height: 24),
-                                left: 24,
-                                top: 17,
-                              )
-                            ],
-                          )),
+                          child: Image.asset("assets/login_google.png")),
                     ],
                   ),
                 ),
@@ -442,15 +387,9 @@ class FirstPageState extends BaseState<FirstPage> {
                           width: MediaQuery.of(context).size.width,
                           height: 58,
                           margin: const EdgeInsets.only(left: 16.0, right: 16.0),
-                          decoration: const BoxDecoration(color: Color(0xFF4B9EFF), borderRadius: BorderRadius.all(Radius.circular(16))),
+                          // decoration: const BoxDecoration(color: Color(0xFF4B9EFF), borderRadius: BorderRadius.all(Radius.circular(16))),
                           child: Center(
-                            child: H18(
-                              text: LanguageService.trans("getting_started_another_way"),
-                              weight: FW.medium,
-                              height: 1.5,
-                              color: Colors.white,
-                            ),
-                          )),
+                            child: Image.asset("assets/login_local.png"))),
                     ],
                   ),
                 ),
