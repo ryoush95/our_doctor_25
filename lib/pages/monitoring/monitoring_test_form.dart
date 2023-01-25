@@ -37,13 +37,14 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
   List<String> list4 = ["할 수 없다", "잘못한다", "할 수 있다", "잘한다"];
   List<String> list4Img = [];
   List<String> cate = ["발달영역", "생활습관", "신체"];
-  List<String> subCate1 = ["대근육","소근육","인지", "언어", "사회성", "자조"];
+  List<String> subCate1 = ["대근육", "소근육", "인지", "언어", "사회성", "자조"];
+
   // List<String> subCate2 = ["개인위생", "구강교육", "감각", "안전사고", "영양", "전자미디어", "정서", "대소변", "수면교육"];
   int cateNum = 0;
   int subNum = 0;
   List<String> list = [];
-  late Data map;
-  late Data2 map2;
+  var map;
+  // late Data2 map2;
 
   ScrollController? _listSc;
   ScrollController? _listSc2;
@@ -91,11 +92,11 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
       if (value.result == 0) {
         // list = value.data!.empty!;
         map = value.data;
-        map.muscle1.forEach((key, value) {
+        map[0].forEach((key, value) {
           quizList.add(value.question);
         });
         for (int i = 0; i < quizList.length; i++) {
-          selList.add("0");
+          selList.add("");
         }
         setState(() {});
       }
@@ -116,19 +117,23 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
   }
 
   void goNext() {
-    if (selList.sublist(0, quizList.length).where((element) => element == "").toList().isNotEmpty) {
+    if (selList
+        .sublist(0, quizList.length)
+        .where((element) => element == "")
+        .toList()
+        .isNotEmpty) {
       showToast('모든 문항에 대한 답변이 필요합니다.');
       return;
     }
 
     selList.clear();
     for (int i = 0; i < quizList.length; i++) {
-      selList.add("1");
+      selList.add("");
     }
     if (cateNum == 1) {
       // list = subCate2;
     }
-    if (subNum == list.length-1) {
+    if (subNum == list.length - 1) {
       cateNum = 2;
       allList.addAll(selList);
       subNum = 0;
@@ -138,37 +143,39 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
     } else {
       subNum++;
       quizList.clear();
-        if (subNum == 1) {
-          map.muscle2.forEach((key, value) {
-            quizList.add(value.question);
-          });
-        } else if (subNum == 2) {
-          map.dlswl.forEach((key, value) {
-            quizList.add(value.question);
-          });
-        } else if (subNum == 3) {
-          map.djsdj.forEach((key, value) {
-            quizList.add(value.question);
-          });
-        } else if (subNum == 4) {
-          map.tkghltjd.forEach((key, value) {
-            quizList.add(value.question);
-          });
-        } else if (subNum == 5) {
-          map.wkwh.forEach((key, value) {
-            quizList.add(value.question);
-          });
-        } else {
-          map.dlswl.forEach((key, value) {
-            quizList.add(value.question);
-          });
-        }
-      print(quizList.length);
-      for (int i = 0; i < quizList.length; i++) {
-        selList.add("0");
+      if (subNum == 1) {
+        map.muscle2.forEach((key, value) {
+          print(value);
+          quizList.add(value.question);
+        });
+      } else if (subNum == 2) {
+        map.dlswl.forEach((key, value) {
+          quizList.add(value.question);
+        });
+      } else if (subNum == 3) {
+        map.djsdj.forEach((key, value) {
+          quizList.add(value.question);
+        });
+      } else if (subNum == 4) {
+        map.tkghltjd.forEach((key, value) {
+          quizList.add(value.question);
+        });
+      } else if (subNum == 5) {
+        map.wkwh.forEach((key, value) {
+          quizList.add(value.question);
+        });
+      } else {
+        map.dlswl.forEach((key, value) {
+          quizList.add(value.question);
+        });
       }
+      // print(quizList.length);
+      for (int i = 0; i < quizList.length; i++) {
+        selList.add("");
+      }
+      setState(() {});
     }
-    // _listSc2!.jumpTo(0.0);
+    _listSc2!.jumpTo(0.0);
   }
 
   @override
@@ -227,30 +234,35 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // testTile4(),
-                    cate[cateNum] != "신체" ? ListView.builder(
-                      itemCount: quizList.length,
-                      shrinkWrap: true,
-                      controller: _listSc,
-                      itemBuilder: (context, index) {
-                        return testTile2(index);
-                    },) : bodyCheck(),
+                    cate[cateNum] != "신체"
+                        ? ListView.builder(
+                            itemCount: quizList.length,
+                            shrinkWrap: true,
+                            controller: _listSc,
+                            itemBuilder: (context, index) {
+                              return testTile2(index);
+                            },
+                          )
+                        : bodyCheck(),
                     const SizedBox(height: 30),
                     Container(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Visibility(
-                            visible: list.length-1 == subNum,
+                            visible: list.length - 1 == subNum,
                             child: MainTextButton(
                               text: "검사 저장하기",
                               backgroundColor: AppColor_Green,
-                              style: AppTextStyle.PD(Colors.white, 18, weight: FW.bold),
+                              style: AppTextStyle.PD(Colors.white, 18,
+                                  weight: FW.bold),
                               radius: 6,
                               height: 55,
                               width: 150,
                               disable: !checkValid(),
-                              disableBackground:
-                              !checkValid() ? AppColor_Primary_Disable : Colors.transparent,
+                              disableBackground: !checkValid()
+                                  ? AppColor_Primary_Disable
+                                  : Colors.transparent,
                               onPressed: () {
                                 // goNext();
                                 showToast('저장되었습니다');
@@ -261,16 +273,24 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
                           MainTextButton(
                             text: cate[cateNum] == "신체" ? "완료" : "다음",
                             backgroundColor: AppColor_Primary,
-                            style: AppTextStyle.PD(Colors.white, 18, weight: FW.bold),
+                            style: AppTextStyle.PD(Colors.white, 18,
+                                weight: FW.bold),
                             radius: 6,
                             height: 55,
                             width: 150,
                             disable: !checkValid(),
-                            disableBackground: !checkValid() ? AppColor_Primary_Disable : Colors.transparent,
+                            disableBackground: !checkValid()
+                                ? AppColor_Primary_Disable
+                                : Colors.transparent,
                             onPressed: () {
-                              if(!checkValid()) return;
-                              if(cate[cateNum] == "신체"){
-                                Navigator.pushReplacement(context, SlideRightTransRoute(builder: (context) => const MonitorReport1(),));
+                              if (!checkValid()) return;
+                              if (cate[cateNum] == "신체") {
+                                Navigator.pushReplacement(
+                                    context,
+                                    SlideRightTransRoute(
+                                      builder: (context) =>
+                                          const MonitorReport1(),
+                                    ));
                                 return;
                               }
                               goNext();
@@ -350,38 +370,38 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
                           const SizedBox(height: 20),
                           selList[index] == "1"
                               ? Container(
-                            height: h,
-                            width: 50,
-                            padding: const EdgeInsets.fromLTRB(3, 3, 5, 3),
-                            // color: AppColor_Primary,
-                            decoration: const BoxDecoration(
-                                borderRadius: BorderRadius.all(Radius.circular(18)),
-                                color: AppColor_Primary
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Image.asset(
-                                  "assets/choose_check.png",
-
-                                ),
-                                const SizedBox(width: 5),
-                                H16(
-                                    text: "예 ",
-                                    weight: FW.medium,
-                                    color: AppColor_White),
-                              ],
-                            ),
-                          )
+                                  height: h,
+                                  width: 50,
+                                  padding:
+                                      const EdgeInsets.fromLTRB(3, 3, 5, 3),
+                                  // color: AppColor_Primary,
+                                  decoration: const BoxDecoration(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(18)),
+                                      color: AppColor_Primary),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Image.asset(
+                                        "assets/choose_check.png",
+                                      ),
+                                      const SizedBox(width: 5),
+                                      H16(
+                                          text: "예 ",
+                                          weight: FW.medium,
+                                          color: AppColor_White),
+                                    ],
+                                  ),
+                                )
                               : SizedBox(
-                              height: h,
-                              width: 50,
-                              child: Center(
-                                child: H16(
-                                    text: "예 ",
-                                    weight: FW.medium,
-                                    color: AppColor_BlackText),
-                              )),
+                                  height: h,
+                                  width: 50,
+                                  child: Center(
+                                    child: H16(
+                                        text: "예 ",
+                                        weight: FW.medium,
+                                        color: AppColor_BlackText),
+                                  )),
                         ],
                       ),
                     ],
@@ -410,34 +430,34 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
                         const SizedBox(height: 20),
                         selList[index] == "0"
                             ? Container(
-                          height: h,
-                          padding: const EdgeInsets.fromLTRB(3, 3, 5, 3),
-                          // color: AppColor_Primary,
-                          decoration: const BoxDecoration(
-                              borderRadius: BorderRadius.all(Radius.circular(18)),
-                              color: AppColor_Primary
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image.asset("assets/choose_check.png"),
-                              const SizedBox(width: 5),
-                              H16(
-                                  text: "아니오",
-                                  weight: FW.medium,
-                                  color: AppColor_White),
-                            ],
-                          ),
-                        )
+                                height: h,
+                                padding: const EdgeInsets.fromLTRB(3, 3, 5, 3),
+                                // color: AppColor_Primary,
+                                decoration: const BoxDecoration(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(18)),
+                                    color: AppColor_Primary),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Image.asset("assets/choose_check.png"),
+                                    const SizedBox(width: 5),
+                                    H16(
+                                        text: "아니오",
+                                        weight: FW.medium,
+                                        color: AppColor_White),
+                                  ],
+                                ),
+                              )
                             : SizedBox(
-                            height: h,
-                            width: w,
-                            child: Center(
-                              child: H16(
-                                  text: "아니오",
-                                  weight: FW.medium,
-                                  color: AppColor_BlackText),
-                            )),
+                                height: h,
+                                width: w,
+                                child: Center(
+                                  child: H16(
+                                      text: "아니오",
+                                      weight: FW.medium,
+                                      color: AppColor_BlackText),
+                                )),
                       ],
                     ),
                   ],
@@ -454,7 +474,7 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
   Widget testTile4() {
     var screenSize = MediaQuery.of(context).size;
     double h = 25;
-    double w = (MediaQuery.of(context).size.width-44) / 4;
+    double w = (MediaQuery.of(context).size.width - 44) / 4;
     return Container(
       padding: const EdgeInsets.all(18),
       child: Column(children: [
@@ -486,56 +506,56 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
         const SizedBox(height: 35),
         Center(
             child: Container(
-              width: screenSize.width,
-              height: 100,
-              child: ListView.builder(
-                physics: const NeverScrollableScrollPhysics(),
-                scrollDirection: Axis.horizontal,
-                itemCount: list4.length,
-                itemBuilder: (context, index) {
-                  return SizedBox(
-                    width: w,
-                    child: InkWell(
-                      onTap: () {
-                        setState(() {
-                          option4 = index;
-                        });
-                      },
-                      child: Column(
-                        children: [
-                          Image.asset(
-                            option4 == index
-                                ? "assets/choose_on.png"
-                                : "assets/choose_off.png",
-                            height: 25,
-                          ),
-                          const SizedBox(height: 20),
-                          option4 == index
-                              ? Container(
-                            height: h,
-                            width: index == 3 ? 70 : w + 3,
-                            padding: const EdgeInsets.fromLTRB(3, 3, 5, 3),
-                            // color: AppColor_Primary,
-                            decoration: const BoxDecoration(
-                                borderRadius: BorderRadius.all(Radius.circular(18)),
-                                color: AppColor_Primary
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Image.asset(
-                                  "assets/choose_check.png",
-                                  width: 18,
-                                ),
-                                const SizedBox(width: 5),
-                                H14(
-                                    text: list4[index],
-                                    weight: FW.medium,
-                                    color: AppColor_White),
-                              ],
-                            ),
-                          )
-                              : SizedBox(
+          width: screenSize.width,
+          height: 100,
+          child: ListView.builder(
+            physics: const NeverScrollableScrollPhysics(),
+            scrollDirection: Axis.horizontal,
+            itemCount: list4.length,
+            itemBuilder: (context, index) {
+              return SizedBox(
+                width: w,
+                child: InkWell(
+                  onTap: () {
+                    setState(() {
+                      option4 = index;
+                    });
+                  },
+                  child: Column(
+                    children: [
+                      Image.asset(
+                        option4 == index
+                            ? "assets/choose_on.png"
+                            : "assets/choose_off.png",
+                        height: 25,
+                      ),
+                      const SizedBox(height: 20),
+                      option4 == index
+                          ? Container(
+                              height: h,
+                              width: index == 3 ? 70 : w + 3,
+                              padding: const EdgeInsets.fromLTRB(3, 3, 5, 3),
+                              // color: AppColor_Primary,
+                              decoration: const BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(18)),
+                                  color: AppColor_Primary),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.asset(
+                                    "assets/choose_check.png",
+                                    width: 18,
+                                  ),
+                                  const SizedBox(width: 5),
+                                  H14(
+                                      text: list4[index],
+                                      weight: FW.medium,
+                                      color: AppColor_White),
+                                ],
+                              ),
+                            )
+                          : SizedBox(
                               height: h,
                               child: Center(
                                 child: H14(
@@ -543,13 +563,13 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
                                     weight: FW.medium,
                                     color: AppColor_BlackText),
                               )),
-                        ],
-                      ),
-                    ),
-                  );
-                },),
-            )
-        ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        )),
         const SizedBox(width: 55),
       ]),
     );
@@ -583,14 +603,11 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
                       Expanded(
                         child: OutlineNumInput(
                           controller: tallCon,
-                          keyboardType:
-                          const TextInputType
-                              .numberWithOptions(
+                          keyboardType: const TextInputType.numberWithOptions(
                             decimal: true,
                             signed: true,
                           ),
-                          textInputAction:
-                          TextInputAction.done,
+                          textInputAction: TextInputAction.done,
                           placeholder: "",
                           onChanged: (text) {
                             // monitoringData!.height = text;
@@ -617,14 +634,11 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
                       Expanded(
                         child: OutlineNumInput(
                           controller: weightCon,
-                          keyboardType:
-                          const TextInputType
-                              .numberWithOptions(
+                          keyboardType: const TextInputType.numberWithOptions(
                             decimal: true,
                             signed: true,
                           ),
-                          textInputAction:
-                          TextInputAction.done,
+                          textInputAction: TextInputAction.done,
                           placeholder: "",
                           onChanged: (text) {
                             // monitoringData!.weight = text;
@@ -648,5 +662,4 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
       ),
     );
   }
-
 }

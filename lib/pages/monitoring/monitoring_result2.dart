@@ -191,7 +191,7 @@ class _MonitoringResult2State extends BaseState<MonitoringResult2> {
       // CATE : 영양
       return Stack(
         children: [
-          firstPage(),
+          // firstPage(),
           secondPage(),
         ],
       );
@@ -358,61 +358,58 @@ class _MonitoringResult2State extends BaseState<MonitoringResult2> {
       )
   );
 
-  Widget secondPage() => Visibility(
-    visible: foodDetail,
-      child: Container(
-        margin: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            RichText(
-                text: TextSpan(children: [
-                  TextSpan(
-                    text: gSelChildInfo!.name!,
-                    style: AppTextStyle.PD(AppColor_Primary, 20, weight: FW.bold),
-                  ),
-                  TextSpan(
-                    text: "의 영양식단을 추천해요!",
-                    style: AppTextStyle.PD(Colors.black, 20, weight: FW.bold),
-                  )
-                ])),
-            const SizedBox(height: 20),
-            SizedBox(
-              height: 1100,
-              child: ListView.builder(
-                itemCount: subTitle.length,
-                physics: const ClampingScrollPhysics(),
-                itemBuilder: (context, index) {
-                  return Column(
-                    children: [
-                      Container(
-                        width: 300,
-                        height: 250,
-                        decoration: const BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(4)),
-                            color: AppColor_Light_Gray),
-                        child: Column(
-                          children: [
-                            const SizedBox(height: 20),
-                            H18(text: subTitle[index]),
-                            // Expanded(child: H18(text: "아침 식사")),
-                            // FIXME: 영양 이미지넣을때 주석 해제
-                            // const SizedBox(height: 10),
-                            // foodCheck ?
-                            // Image.asset("food_image${index}_down.png", width: 260,):
-                            // Image.asset("food_image${index}_up.png", width: 260),
-
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                    ],
-                  );
-                },
+  Widget secondPage() => Container(
+    margin: const EdgeInsets.all(20),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        RichText(
+            text: TextSpan(children: [
+              TextSpan(
+                text: gSelChildInfo!.name!,
+                style: AppTextStyle.PD(AppColor_Primary, 20, weight: FW.bold),
               ),
-            ),
-          ],
+              TextSpan(
+                text: "의 영양식단을 추천해요!",
+                style: AppTextStyle.PD(Colors.black, 20, weight: FW.bold),
+              )
+            ])),
+        const SizedBox(height: 20),
+        SizedBox(
+          height: 1100,
+          child: ListView.builder(
+            itemCount: subTitle.length,
+            physics: const ClampingScrollPhysics(),
+            itemBuilder: (context, index) {
+              return Column(
+                children: [
+                  Container(
+                    width: 300,
+                    height: 250,
+                    decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(4)),
+                        color: AppColor_Light_Gray),
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 20),
+                        H18(text: subTitle[index]),
+                        // Expanded(child: H18(text: "아침 식사")),
+                        // FIXME: 영양 이미지넣을때 주석 해제
+                        // const SizedBox(height: 10),
+                        // foodCheck ?
+                        // Image.asset("food_image${index}_down.png", width: 260,):
+                        // Image.asset("food_image${index}_up.png", width: 260),
+
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                ],
+              );
+            },
+          ),
         ),
-      )
+      ],
+    ),
   );
 }

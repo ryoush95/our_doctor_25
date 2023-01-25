@@ -42,7 +42,7 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
   int tabIndex = 0;
   int subTabIndex2 = 0;
   List<MonitorListDto>? arrMonitorList = [];
-  String comment1 = "또래보다 느릴 수 있어 심화평가 권고";
+  String comment1 = "노력이 필요해요 ";
   String comment2 = """
 큰 근육을 이용한 운동발달이 또래보다 느릴 수 있어요. 대근육운동은 아이의 신경계 및 근골격계의 발달과 밀접하게 연관되어 있어요.
 아이들은 운동기능을 통해 세상을 탐색하며 신체,

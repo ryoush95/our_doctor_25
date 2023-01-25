@@ -22,6 +22,7 @@ import 'package:ourdoctor/pages/home/bmi_bar1.dart';
 import 'package:ourdoctor/pages/home/height_line_chart.dart';
 import 'package:ourdoctor/pages/home/range_show.dart';
 import 'package:ourdoctor/pages/intro/first.dart';
+import 'package:ourdoctor/pages/monitoring/solution_area.dart';
 import 'package:show_more_text_popup/show_more_text_popup.dart';
 import 'package:sprintf/sprintf.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -349,24 +350,7 @@ class HeightReportState extends BaseState<HeightReport> {
             widget.result == 1 ? const SizedBox(height: 40) : const SizedBox(),
             widget.result == 1 ? ResultArea(type: 0, result: 2, diagnose: widget.data.monitoring!.diagnose!) : const SizedBox(),
             const SizedBox(height: 30,),
-            InkWell(
-              onTap:(){
-                if(arrBannerList[rnum].url != "") {
-                  Navigator.push(
-                      context, SlideRightTransRoute(builder: (context) =>
-                      ProductDetail(
-                        pid: arrBannerList[rnum].url!,
-                      )));
-                }
-              },
-              child: arrBannerList.isEmpty ? Container() :
-              ClipRRect(
-                borderRadius: BorderRadius.circular(6),
-                  child: Image.network(
-                      arrBannerList[rnum].image!
-                  ),
-              ),
-            )
+            SolutionArea()
           ],
         ));
   }

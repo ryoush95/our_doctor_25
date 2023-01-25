@@ -2,39 +2,37 @@
 //
 //     final monitoringTestListModel = monitoringTestListModelFromJson(jsonString);
 
-import 'package:meta/meta.dart';
-import 'dart:convert';
-
-MonitoringTestListModel monitoringTestListModelFromJson(String str) => MonitoringTestListModel.fromJson(json.decode(str));
-
-String monitoringTestListModelToJson(MonitoringTestListModel data) => json.encode(data.toJson());
-
 class MonitoringTestListModel {
-  MonitoringTestListModel({
-    required this.data,
-    required this.result,
-    required this.msg,
-    required this.reason,
-  });
 
-  Data data;
-  int result;
-  String msg;
-  String reason;
+  List<Data>? data;
+  int? result;
+  String? msg;
+  String? reason;
 
-  factory MonitoringTestListModel.fromJson(Map<String, dynamic> json) => MonitoringTestListModel(
-    data: Data.fromJson(json["data"]),
-    result: json["result"],
-    msg: json["msg"],
-    reason: json["reason"],
-  );
+  MonitoringTestListModel({this.data, this.result, this.msg, this.reason});
 
-  Map<String, dynamic> toJson() => {
-    "data": data.toJson(),
-    "result": result,
-    "msg": msg,
-    "reason": reason,
-  };
+  MonitoringTestListModel.fromJson(Map<String, dynamic> json) {
+    if (json['data'] != null) {
+      data = <Data>[];
+      json['data'].forEach((v) {
+        data!.add(new Data.fromJson(v));
+      });
+    }
+    result = json['result'];
+    msg = json['msg'];
+    reason = json['reason'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (this.data != null) {
+      data['data'] = this.data!.map((v) => v.toJson()).toList();
+    }
+    data['result'] = this.result;
+    data['msg'] = this.msg;
+    data['reason'] = this.reason;
+    return data;
+  }
 }
 
 class Data {

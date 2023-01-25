@@ -13,12 +13,15 @@ import 'package:ourdoctor/models/home_grapth_res_model.dart';
 import 'package:ourdoctor/models/homecare_banner_res_model.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
 import 'package:ourdoctor/pages/care/product_detail.dart';
+import 'package:ourdoctor/pages/components/h16.dart';
 import 'package:ourdoctor/pages/components/h18.dart';
 import 'package:ourdoctor/pages/components/result_area.dart';
 import 'package:ourdoctor/pages/home/bmi_bar.dart';
 import 'package:ourdoctor/pages/home/range_show.dart';
+import 'package:ourdoctor/pages/home/school_area.dart';
 import 'package:ourdoctor/pages/home/weight_line_chart.dart';
 import 'package:ourdoctor/pages/intro/first.dart';
+import 'package:ourdoctor/pages/monitoring/solution_area.dart';
 import 'package:show_more_text_popup/show_more_text_popup.dart';
 
 class WeightReport extends StatefulWidget {
@@ -236,23 +239,7 @@ class WeightReportState extends BaseState<WeightReport> {
                 : const SizedBox(),
             const SizedBox(height: 30,),
             arrBannerList.isEmpty ? Container() :
-            InkWell(
-              onTap:(){
-                if(arrBannerList[rnum].url! != "") {
-                  Navigator.push(
-                      context, SlideRightTransRoute(builder: (context) =>
-                      ProductDetail(
-                        pid: arrBannerList[rnum].url!,
-                      )));
-                }
-              },
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(6),
-                child: Image.network(
-                    arrBannerList[rnum].image!
-                ),
-              ),
-            )
+            SolutionArea()
           ],
         ));
   }
