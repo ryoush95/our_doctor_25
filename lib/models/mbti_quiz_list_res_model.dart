@@ -44,6 +44,7 @@ class MbtiQuizDto {
     quiz = json['quiz'];
     type = json['type'];
     result = json['results'];
+    // answer = json["type"] == "4"? "1": "4";
   }
 
   Map<String, dynamic> toJson() {

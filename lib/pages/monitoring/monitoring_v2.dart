@@ -48,7 +48,7 @@ class _MonitoringMain2State extends BaseState<MonitoringMain2> {
   bool isValid = false;
 
   ScrollController controller = ScrollController();
-  final bodyTempCont = TextEditingController();
+  TextEditingController bodyTempCont = TextEditingController();
   ScrollController _listController = ScrollController();
   List<TextEditingController> directInputController = [];
   List<TextEditingController> recordTimeControllerList = [];
@@ -56,7 +56,8 @@ class _MonitoringMain2State extends BaseState<MonitoringMain2> {
   List<TextEditingController> surgeryDateControllerList = [];
 
 
-  String mHeight = "";
+  String mTemp = "0";
+  Color borderColor = AppColor_Selector_Border;
   int hasTemp = 0;
   int hasDisease = 2;
   int disease_count = 1;
@@ -294,6 +295,8 @@ class _MonitoringMain2State extends BaseState<MonitoringMain2> {
   }
 
   void checkValid() {
+    isValid = false;
+
     isValid = true;
   }
 
@@ -523,7 +526,7 @@ class _MonitoringMain2State extends BaseState<MonitoringMain2> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           H24B(
-                            text: "오늘의 모니터링",
+                            text: "오늘의 진단",
                             color: AppColor_BlackText,
                             align: TextAlign.left,
                             height: 1.5,
@@ -584,6 +587,11 @@ class _MonitoringMain2State extends BaseState<MonitoringMain2> {
                     if (!isValid) {
                       return;
                     }
+                    if(double.parse(mTemp) <= 32 || double.parse(mTemp) > 42) {
+                      showToast("체온을 정확하게 입력해주세요");
+                      isValid = false;
+                      return;
+                    }
                     //FIXME : 모니터링 저장
                     // saveMonitor();
                     Navigator.push(context, SlideRightTransRoute(builder: (context) => MonitoringResult2(),));
@@ -594,6 +602,7 @@ class _MonitoringMain2State extends BaseState<MonitoringMain2> {
     );
   }
 
+  //체온
   Widget tempInfo (screenSize) {
     return SizedBox(
         width: (screenSize.width - 70) / 2,
@@ -604,6 +613,7 @@ class _MonitoringMain2State extends BaseState<MonitoringMain2> {
                 Expanded(
                   child: OutlineNumInput(
                     controller: bodyTempCont,
+                    borderColor: borderColor,
                     keyboardType:
                     const TextInputType
                         .numberWithOptions(
@@ -614,9 +624,14 @@ class _MonitoringMain2State extends BaseState<MonitoringMain2> {
                     TextInputAction.done,
                     placeholder: "",
                     onChanged: (text) {
-                      mHeight = text;
+                      mTemp = text;
+                      if(double.parse(mTemp) <= 32 || double.parse(mTemp) > 42) {
+                        borderColor = Colors.red;
+                      } else {
+                        borderColor = AppColor_Selector_Border;
+                      }
+                      checkValid();
                       setState(() {});
-                      // checkValid();
                     },
                   ),
                 ),
@@ -687,6 +702,7 @@ class _MonitoringMain2State extends BaseState<MonitoringMain2> {
     );
   }
 
+  //영양
   Widget foodInfo() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -749,6 +765,7 @@ class _MonitoringMain2State extends BaseState<MonitoringMain2> {
     );
   }
 
+  //수면
   Widget sleepInfo(screenSize) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

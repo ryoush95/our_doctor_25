@@ -99,6 +99,8 @@ dependencies:
   image_gallery_saver: ^1.7.1
   package_info_plus: ^1.0.4
   cached_network_image: ^3.2.0
+  freezed_annotation: any
+  freezed: any
 
 
 dev_dependencies:

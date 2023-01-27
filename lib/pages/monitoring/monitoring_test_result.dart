@@ -335,7 +335,7 @@ class _MonitoringTestResultState extends BaseState<MonitoringTestResult> {
               // ),
               const SizedBox(height: 10),
               SizedBox(
-                height: 80,
+                // height: 90,
                 child: H14(
                   text: indiText,
                   maxLine: 4,

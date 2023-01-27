@@ -10,7 +10,7 @@ class OutlineNumInput extends StatelessWidget {
   final onEditingComplete;
   final placeholder;
   final onChanged;
-  final borderColor;
+  Color? borderColor;
   final hintColor;
   bool? isSecure;
   int? maxLine;
@@ -31,6 +31,7 @@ class OutlineNumInput extends StatelessWidget {
     maxLength ??= -1;
     focus ??= FocusNode();
     readOnly ??= false;
+    borderColor ??= AppColor_Selector_Border;
   }
 
   @override
@@ -63,7 +64,7 @@ class OutlineNumInput extends StatelessWidget {
           // focusNode: focus,
           decoration: InputDecoration(
             counterText: "",
-            enabledBorder: const OutlineInputBorder(borderSide: BorderSide(color: AppColor_Selector_Border), borderRadius: BorderRadius.all(Radius.circular(15.0))),
+            enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: borderColor!), borderRadius: BorderRadius.all(Radius.circular(15.0))),
             focusedBorder: const OutlineInputBorder(borderSide: BorderSide(color: AppColor_BlackText), borderRadius: BorderRadius.all(Radius.circular(15.0))),
             hintText: placeholder,
             hintStyle: AppTextStyle.PD(hintColor ?? AppColor_Hint, 16, weight: FW.medium),

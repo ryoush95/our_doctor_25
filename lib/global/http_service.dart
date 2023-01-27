@@ -30,8 +30,8 @@ import 'package:ourdoctor/models/community_add_res_model.dart';
 import 'package:ourdoctor/models/community_detail_res_model.dart';
 import 'package:ourdoctor/models/community_list_res_model.dart';
 import 'package:ourdoctor/models/default_res_model.dart';
-import 'package:ourdoctor/models/develope/monitor_test_list.dart';
-import 'package:ourdoctor/models/develope/monitor_test_list2.dart';
+import 'package:ourdoctor/models/develope/heath_result_model.dart';
+import 'package:ourdoctor/models/monitor_test_list.dart';
 import 'package:ourdoctor/models/duplicate_res_model.dart';
 import 'package:ourdoctor/models/faq_res_model.dart';
 import 'package:ourdoctor/models/final_result_res_model.dart';
@@ -56,6 +56,7 @@ import 'package:ourdoctor/models/login_res_model.dart';
 import 'package:ourdoctor/models/mbti_quiz_list_res_model.dart';
 import 'package:ourdoctor/models/monitor_list_res_model.dart';
 import 'package:ourdoctor/models/monitor_result_res_model.dart';
+import 'package:ourdoctor/models/monitor_test_list2.dart';
 import 'package:ourdoctor/models/monitor_week_res_model.dart';
 import 'package:ourdoctor/models/monitor_write_res_model.dart';
 import 'package:ourdoctor/models/monitoring_all_res_model.dart';
@@ -2352,7 +2353,8 @@ class HttpService {
     }
   }
 
-  Future<MonitoringTestListModel> getMonitoringTestList() async {
+  //발달영역 모니터링 문제
+  Future<MonitoringHealthListModel> getMonitoringHealthList() async {
     String _url = API_BASE_URL + "api/monitoring/get_development_list";
     Map<String, String> body = {
       'access_token': gUserInfo!.accessToken!,
@@ -2360,7 +2362,7 @@ class HttpService {
     Uri myUri = Uri.parse(_url);
     final response = await http.post(myUri, body: body);
     if (response.statusCode == 200) {
-      return MonitoringTestListModel.fromJson(json.decode(response.body));
+      return MonitoringHealthListModel.fromJson(json.decode(response.body));
     } else {
       // If that call was not successful, throw an error.
       showToast(LanguageService.trans("server_fail"));
@@ -2368,7 +2370,8 @@ class HttpService {
     }
   }
 
-  Future<MonitoringTestListModel2> getMonitoringTestList2() async {
+  //생활습관 모니터링 문제
+  Future<MonitoringLifeListModel> getMonitoringLifeList2() async {
     String _url = API_BASE_URL + "api/monitoring/get_lifestyle_list";
     Map<String, String> body = {
       'access_token': gUserInfo!.accessToken!,
@@ -2376,7 +2379,24 @@ class HttpService {
     Uri myUri = Uri.parse(_url);
     final response = await http.post(myUri, body: body);
     if (response.statusCode == 200) {
-      return MonitoringTestListModel2.fromJson(json.decode(response.body));
+      return MonitoringLifeListModel.fromJson(json.decode(response.body));
+    } else {
+      // If that call was not successful, throw an error.
+      showToast(LanguageService.trans("server_fail"));
+      throw Exception(LanguageService.trans("server_fail"));
+    }
+  }
+
+  //발달영역 모니터링 결과 가져오기
+  Future<MonitorHealthResultModel> getMonitoringHealthResult() async {
+    String _url = API_BASE_URL + "api/monitoring/get_development_result";
+    Map<String, String> body = {
+      'access_token': gUserInfo!.accessToken!,
+    };
+    Uri myUri = Uri.parse(_url);
+    final response = await http.post(myUri, body: body);
+    if (response.statusCode == 200) {
+      return MonitorHealthResultModel.fromJson(json.decode(response.body));
     } else {
       // If that call was not successful, throw an error.
       showToast(LanguageService.trans("server_fail"));

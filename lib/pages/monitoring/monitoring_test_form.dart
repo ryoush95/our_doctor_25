@@ -5,8 +5,8 @@ import 'package:ourdoctor/global/http_service.dart';
 import 'package:ourdoctor/helpers/common_util.dart';
 import 'package:ourdoctor/helpers/transition.dart';
 import 'package:ourdoctor/language/language_service.dart';
-import 'package:ourdoctor/models/develope/monitor_test_list.dart';
-import 'package:ourdoctor/models/develope/monitor_test_list2.dart';
+import 'package:ourdoctor/models/monitor_test_list.dart';
+import 'package:ourdoctor/models/monitor_test_list2.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
 import 'package:ourdoctor/pages/base/page_layout.dart';
 import 'package:ourdoctor/pages/components/h14.dart';
@@ -31,20 +31,28 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
   HttpService httpService = HttpService();
   String option = "1";
   int option4 = 0;
+  bool isValid = false;
   List<String> allList = [];
   List<String> selList = [];
+  List<String> quizNum = [];
   List<String> quizList = [];
+  Map<String, String> answer = {};
   List<String> list4 = ["할 수 없다", "잘못한다", "할 수 있다", "잘한다"];
   List<String> list4Img = [];
   List<String> cate = ["발달영역", "생활습관", "신체"];
   List<String> subCate1 = ["대근육", "소근육", "인지", "언어", "사회성", "자조"];
+  List<String> subCate2 = ["개인위생", "구강교육", "감각", "안전사고", "영양", "전자미디어", "정서", "대소변", "수면교육"];
 
-  // List<String> subCate2 = ["개인위생", "구강교육", "감각", "안전사고", "영양", "전자미디어", "정서", "대소변", "수면교육"];
   int cateNum = 0;
   int subNum = 0;
   List<String> list = [];
-  var map;
-  // late Data2 map2;
+  late HealthTestDto map;
+  late LifeTestDto map2;
+
+  String tall = "";
+  String weight = "";
+  Color tallColor = AppColor_Selector_Border;
+  Color weightColor = AppColor_Selector_Border;
 
   ScrollController? _listSc;
   ScrollController? _listSc2;
@@ -73,30 +81,20 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
     _listSc2!.dispose();
   }
 
-  // void goNext() {
-  //   if (widget.list.sublist(0, widget.list.length).where((element) => element.answer == "").toList().isNotEmpty) {
-  //     showToast('모든 문항에 대한 답변이 필요합니다.');
-  //     return;
-  //   }
-  //   for(var i in widget.list){
-  //     Provider.of<ChildQuizProvider>(context, listen: false).updateList(i.id!, i.answer);
-  //   }
-  // }
-
   void getQuizList() async {
-    Future<MonitoringTestListModel> info = httpService.getMonitoringTestList();
+    Future<MonitoringHealthListModel> info = httpService.getMonitoringHealthList();
     info.then((value) async {
       setState(() {
         isLoading = false;
       });
       if (value.result == 0) {
-        // list = value.data!.empty!;
         map = value.data;
-        map[0].forEach((key, value) {
+        map.muscle1.forEach((key, value) {
+          quizNum.add(key);
           quizList.add(value.question);
         });
         for (int i = 0; i < quizList.length; i++) {
-          selList.add("");
+          selList.add("1");
         }
         setState(() {});
       }
@@ -105,9 +103,32 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
     });
   }
 
-  bool checkValid() {
-    if (selList
-        .sublist(0, selList.length)
+  getQuizList2() async {
+    Future<MonitoringLifeListModel> info2 =
+        httpService.getMonitoringLifeList2();
+    info2.then((value) async {
+      setState(() {
+        isLoading = false;
+      });
+      if (value.result == 0) {
+        map2 = value.data;
+        map2.a1.forEach((key, value) {
+          quizNum.add(key);
+          quizList.add(value.question);
+        });
+        for (int i = 0; i < quizList.length; i++) {
+          selList.add("1");
+        }
+        setState(() {});
+      }
+    }).catchError((onError) {
+      print(onError.toString());
+    });
+  }
+
+  bool checkBodyValid() {
+    if (quizList
+        .sublist(0, quizList.length)
         .where((element) => element == "")
         .toList()
         .isNotEmpty) {
@@ -117,65 +138,113 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
   }
 
   void goNext() {
-    if (selList
-        .sublist(0, quizList.length)
-        .where((element) => element == "")
-        .toList()
-        .isNotEmpty) {
+    if (selList.contains("-1")) {
       showToast('모든 문항에 대한 답변이 필요합니다.');
       return;
     }
-
+    allList.addAll(selList);
+    quizList.clear();
     selList.clear();
-    for (int i = 0; i < quizList.length; i++) {
-      selList.add("");
-    }
-    if (cateNum == 1) {
-      // list = subCate2;
-    }
+
     if (subNum == list.length - 1) {
-      cateNum = 2;
-      allList.addAll(selList);
+      cateNum++;
       subNum = 0;
-      // map2.a1.forEach((key, value) {
-      //   quizList.add(value.question);
-      // });
+      if (cateNum == 1) {
+        getQuizList2();
+        list = subCate2;
+      }
     } else {
       subNum++;
-      quizList.clear();
-      if (subNum == 1) {
-        map.muscle2.forEach((key, value) {
-          print(value);
-          quizList.add(value.question);
-        });
-      } else if (subNum == 2) {
-        map.dlswl.forEach((key, value) {
-          quizList.add(value.question);
-        });
-      } else if (subNum == 3) {
-        map.djsdj.forEach((key, value) {
-          quizList.add(value.question);
-        });
-      } else if (subNum == 4) {
-        map.tkghltjd.forEach((key, value) {
-          quizList.add(value.question);
-        });
-      } else if (subNum == 5) {
-        map.wkwh.forEach((key, value) {
-          quizList.add(value.question);
-        });
-      } else {
-        map.dlswl.forEach((key, value) {
-          quizList.add(value.question);
-        });
+      if (cateNum == 0) {
+        if (subNum == 1) {
+          map.muscle2.forEach((key, value) {
+            quizNum.add(key);
+            quizList.add(value.question);
+          });
+        } else if (subNum == 2) {
+          map.dlswl.forEach((key, value) {
+            quizNum.add(key);
+            quizList.add(value.question);
+          });
+        } else if (subNum == 3) {
+          map.djsdj.forEach((key, value) {
+            quizNum.add(key);
+            quizList.add(value.question);
+          });
+        } else if (subNum == 4) {
+          map.tkghltjd.forEach((key, value) {
+            quizNum.add(key);
+            quizList.add(value.question);
+          });
+        } else if (subNum == 5) {
+          map.wkwh.forEach((key, value) {
+            quizNum.add(key);
+            quizList.add(value.question);
+          });
+        }
+      } else if (cateNum == 1) {
+        if (subNum == 1) {
+          map2.b1.forEach((key, value) {
+            quizNum.add(key);
+            quizList.add(value.question);
+          });
+        } else if (subNum == 2) {
+          map2.c1.forEach((key, value) {
+            quizNum.add(key);
+            quizList.add(value.question);
+          });
+        } else if (subNum == 3) {
+          map2.d1.forEach((key, value) {
+            quizNum.add(key);
+            quizList.add(value.question);
+          });
+        } else if (subNum == 4) {
+          map2.e1.forEach((key, value) {
+            quizNum.add(key);
+            quizList.add(value.question);
+          });
+        } else if (subNum == 5) {
+          map2.f1.forEach((key, value) {
+            quizNum.add(key);
+            quizList.add(value.question);
+          });
+        } else if (subNum == 6) {
+          map2.g1.forEach((key, value) {
+            quizNum.add(key);
+            quizList.add(value.question);
+          });
+        } else if (subNum == 7) {
+          map2.h1.forEach((key, value) {
+            quizNum.add(key);
+            quizList.add(value.question);
+          });
+        } else if (subNum == 8) {
+          map2.i1.forEach((key, value) {
+            quizNum.add(key);
+            quizList.add(value.question);
+          });
+        }
       }
-      // print(quizList.length);
+
+      if (quizList.isEmpty) {
+        if (subNum == subCate1.length - 1) {
+          cateNum++;
+          subNum = 0;
+          if (cateNum == 1) {
+            getQuizList2();
+            list = subCate2;
+          }
+          return;
+        } else {
+          subNum++;
+        }
+      }
       for (int i = 0; i < quizList.length; i++) {
-        selList.add("");
+        selList.add("1");
       }
       setState(() {});
     }
-    _listSc2!.jumpTo(0.0);
+    // _listSc2!.jumpTo(0.0);
   }
 
   @override
@@ -240,7 +309,11 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
                             shrinkWrap: true,
                             controller: _listSc,
                             itemBuilder: (context, index) {
-                              return testTile2(index);
+                              if (cateNum == 0) {
+                                return testTile4(index);
+                              } else {
+                                return testTile2(index);
+                              }
                             },
                           )
                         : bodyCheck(),
@@ -259,8 +332,8 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
                               radius: 6,
                               height: 55,
                               width: 150,
-                              disable: !checkValid(),
-                              disableBackground: !checkValid()
+                              disable: !checkBodyValid(),
+                              disableBackground: !checkBodyValid()
                                   ? AppColor_Primary_Disable
                                   : Colors.transparent,
                               onPressed: () {
@@ -278,13 +351,17 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
                             radius: 6,
                             height: 55,
                             width: 150,
-                            disable: !checkValid(),
-                            disableBackground: !checkValid()
+                            disable: !checkBodyValid(),
+                            disableBackground: !checkBodyValid()
                                 ? AppColor_Primary_Disable
                                 : Colors.transparent,
                             onPressed: () {
-                              if (!checkValid()) return;
+                              if (!checkBodyValid()) return;
                               if (cate[cateNum] == "신체") {
+                                if (isValid == false) {
+                                  showToast("키와 체중을 정확히 입력해주세요");
+                                  return;
+                                }
                                 Navigator.pushReplacement(
                                     context,
                                     SlideRightTransRoute(
@@ -431,6 +508,7 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
                         selList[index] == "0"
                             ? Container(
                                 height: h,
+                                width: w,
                                 padding: const EdgeInsets.fromLTRB(3, 3, 5, 3),
                                 // color: AppColor_Primary,
                                 decoration: const BoxDecoration(
@@ -471,7 +549,7 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
     );
   }
 
-  Widget testTile4() {
+  Widget testTile4(int testNum) {
     var screenSize = MediaQuery.of(context).size;
     double h = 25;
     double w = (MediaQuery.of(context).size.width - 44) / 4;
@@ -481,7 +559,7 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
         SizedBox(
           width: screenSize.width,
           child: H16(
-            text: "Q1",
+            text: "Q ${testNum + 1}",
             maxLine: 1,
             color: AppColor_Gray,
             align: TextAlign.left,
@@ -492,7 +570,7 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
         SizedBox(
           width: screenSize.width,
           child: H16(
-            text: "answpaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            text: quizList[testNum],
             maxLine: 5,
             align: TextAlign.left,
             height: 1.5,
@@ -500,9 +578,7 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
           ),
         ),
         const SizedBox(height: 35),
-        FlutterLogo(
-          size: 100,
-        ),
+        // Image.network(map.muscle1[testNum]!.imageUrl!),
         const SizedBox(height: 35),
         Center(
             child: Container(
@@ -519,21 +595,22 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
                   onTap: () {
                     setState(() {
                       option4 = index;
+                      selList[testNum] = index.toString();
                     });
                   },
                   child: Column(
                     children: [
                       Image.asset(
-                        option4 == index
+                        selList[testNum] == index.toString()
                             ? "assets/choose_on.png"
                             : "assets/choose_off.png",
                         height: 25,
                       ),
                       const SizedBox(height: 20),
-                      option4 == index
+                      selList[testNum] == index.toString()
                           ? Container(
                               height: h,
-                              width: index == 3 ? 70 : w + 3,
+                              width: w + 3,
                               padding: const EdgeInsets.fromLTRB(3, 3, 5, 3),
                               // color: AppColor_Primary,
                               decoration: const BoxDecoration(
@@ -541,22 +618,28 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
                                       BorderRadius.all(Radius.circular(18)),
                                   color: AppColor_Primary),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
                                 children: [
                                   Image.asset(
                                     "assets/choose_check.png",
-                                    width: 18,
+                                    width: 16,
                                   ),
                                   const SizedBox(width: 5),
-                                  H14(
-                                      text: list4[index],
-                                      weight: FW.medium,
-                                      color: AppColor_White),
+                                  Expanded(
+                                    child: Center(
+                                      child: H14(
+                                          text: list4[index],
+                                          weight: FW.medium,
+                                          color: AppColor_White),
+                                    ),
+                                  ),
                                 ],
                               ),
                             )
                           : SizedBox(
                               height: h,
+                              width: w,
                               child: Center(
                                 child: H14(
                                     text: list4[index],
@@ -603,6 +686,7 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
                       Expanded(
                         child: OutlineNumInput(
                           controller: tallCon,
+                          borderColor: tallColor,
                           keyboardType: const TextInputType.numberWithOptions(
                             decimal: true,
                             signed: true,
@@ -610,9 +694,17 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
                           textInputAction: TextInputAction.done,
                           placeholder: "",
                           onChanged: (text) {
-                            // monitoringData!.height = text;
+                            tall = text;
+                            if (double.parse(tall) < 0 ||
+                                double.parse(tall) > 200) {
+                              isValid = false;
+                              tallColor = Colors.red;
+                            } else {
+                              isValid = false;
+                              tallColor = AppColor_Selector_Border;
+                            }
+                            checkBodyValid();
                             setState(() {});
-                            checkValid();
                           },
                         ),
                       ),
@@ -634,6 +726,7 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
                       Expanded(
                         child: OutlineNumInput(
                           controller: weightCon,
+                          borderColor: weightColor,
                           keyboardType: const TextInputType.numberWithOptions(
                             decimal: true,
                             signed: true,
@@ -641,9 +734,15 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
                           textInputAction: TextInputAction.done,
                           placeholder: "",
                           onChanged: (text) {
-                            // monitoringData!.weight = text;
+                            weight = text;
+                            if (double.parse(weight) < 0 ||
+                                double.parse(weight) > 200) {
+                              weightColor = Colors.red;
+                            } else {
+                              weightColor = AppColor_Selector_Border;
+                            }
+                            checkBodyValid();
                             setState(() {});
-                            checkValid();
                           },
                         ),
                       ),

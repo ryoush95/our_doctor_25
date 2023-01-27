@@ -42,16 +42,21 @@ class CustomMbtiInspectionResultPage extends StatefulWidget {
       CustomMbtiInspectionResultPageState();
 }
 
-class CustomMbtiInspectionResultPageState
-    extends BaseState<CustomMbtiInspectionResultPage>
-    with TickerProviderStateMixin {
+class CustomMbtiInspectionResultPageState extends BaseState<CustomMbtiInspectionResultPage> with TickerProviderStateMixin {
 
   ScreenshotController screenshotController = ScreenshotController();
   final GlobalKey _key = GlobalKey();
+  String mainImage = "";
+  String mainText = "";
+  String friend1 = "";
+  String friend1Text = "";
+  String friend2 = "";
+  String friend2Text = "";
 
   @override
   void initState() {
     super.initState();
+    selectImage(widget.mbti);
   }
 
   Future<bool> onBackPressed() async {
@@ -60,6 +65,152 @@ class CustomMbtiInspectionResultPageState
     }
     Navigator.of(context).pop();
     return true;
+  }
+  void selectImage(String mbti) {
+    // 1
+    if (mbti == "intj") {
+      mainImage = "assets/mbti_intj.png";
+      mainText = "assets/intj.png";
+      friend1 = "assets/mbti_enfp.png";
+      friend1Text = "assets/enfp.png";
+      friend2 = "assets/mbti_entp.png";
+      friend2Text = "assets/entp.png";
+    }
+    // 2
+    else if(mbti == "intp") {
+      mainImage = "assets/mbti_intp.png";
+      mainText = "assets/intp.png";
+      friend1 = "assets/mbti_entj.png";
+      friend1Text = "assets/entj.png";
+      friend2 = "assets/mbti_estj.png";
+      friend2Text = "assets/estj.png";
+    }
+    // 3
+    else if(mbti == "entj") {
+      mainImage = "assets/mbti_entj.png";
+      mainText = "assets/entj.png";
+      friend1 = "assets/mbti_infp.png";
+      friend1Text = "assets/infp.png";
+      friend2 = "assets/mbti_intp.png";
+      friend2Text = "assets/intp.png";
+    }
+    // 4
+    else if(mbti == "entp") {
+      mainImage = "assets/mbti_entp.png";
+      mainText = "assets/entp.png";
+      friend1 = "assets/mbti_infj.png";
+      friend1Text = "assets/infj.png";
+      friend2 = "assets/mbti_intj.png";
+      friend2Text = "assets/intj.png";
+    }
+    // 5
+    else if(mbti == "infj") {
+      mainImage = "assets/mbti_infj.png";
+      mainText = "assets/infj.png";
+      friend1 = "assets/mbti_enfp.png";
+      friend1Text = "assets/enfp.png";
+      friend2 = "assets/mbti_intp.png";
+      friend2Text = "assets/intp.png";
+    }
+    // 6
+    else if(mbti == "infp") {
+      mainImage = "assets/mbti_infp.png";
+      mainText = "assets/infp.png";
+      friend1 = "assets/mbti_enfj.png";
+      friend1Text = "assets/enfj.png";
+      friend2 = "assets/mbti_entj.png";
+      friend2Text = "assets/entj.png";
+    }
+    // 7
+    else if(mbti == "enfj") {
+      mainImage = "assets/mbti_enfj.png";
+      mainText = "assets/enfj.png";
+      friend1 = "assets/mbti_infp.png";
+      friend1Text = "assets/infp.png";
+      friend2 = "assets/mbti_intp.png";
+      friend2Text = "assets/intp.png";
+    }
+    // 8
+    else if(mbti == "enfp") {
+      mainImage = "assets/mbti_enfp.png";
+      mainText = "assets/enfp.png";
+      friend1 = "assets/mbti_intj.png";
+      friend1Text = "assets/intj.png";
+      friend2 = "assets/mbti_infj.png";
+      friend2Text = "assets/infj.png";
+    }
+    // 9
+    else if(mbti == "istj") {
+      mainImage = "assets/mbti_istj.png";
+      mainText = "assets/istj.png";
+      friend1 = "assets/mbti_esfp.png";
+      friend1Text = "assets/esfp.png";
+      friend2 = "assets/mbti_estp.png";
+      friend2Text = "assets/estp.png";
+    }
+    // 10
+    else if(mbti == "isfj") {
+      mainImage = "assets/mbti_isfj.png";
+      mainText = "assets/isfj.png";
+      friend1 = "assets/mbti_estp.png";
+      friend1Text = "assets/estp.png";
+      friend2 = "assets/mbti_esfp.png";
+      friend2Text = "assets/esfp.png";
+    }
+    // 11
+    else if(mbti == "estj") {
+      mainImage = "assets/mbti_estj.png";
+      mainText = "assets/estj.png";
+      friend1 = "assets/mbti_intp.png";
+      friend1Text = "assets/intp.png";
+      friend2 = "assets/mbti_infp.png";
+      friend2Text = "assets/infp.png";
+    }
+    // 12
+    else if(mbti == "esfj") {
+      mainImage = "assets/mbti_esfj.png";
+      mainText = "assets/esfj.png";
+      friend1 = "assets/mbti_isfj.png";
+      friend1Text = "assets/isfj.png";
+      friend2 = "assets/mbti_istp.png";
+      friend2Text = "assets/istp.png";
+    }
+    // 13
+    else if(mbti == "istp") {
+      mainImage = "assets/mbti_istp.png";
+      mainText = "assets/istp.png";
+      friend1 = "assets/mbti_esfj.png";
+      friend1Text = "assets/esfj.png";
+      friend2 = "assets/mbti_estj.png";
+      friend2Text = "assets/estj.png";
+    }
+    // 14
+    else if(mbti == "isfp") {
+      mainImage = "assets/mbti_isfp.png";
+      mainText = "assets/isfp.png";
+      friend1 = "assets/mbti_enfj.png";
+      friend1Text = "assets/enfj.png";
+      friend2 = "assets/mbti_esfj.png";
+      friend2Text = "assets/esfj.png";
+    }
+    // 15
+    else if(mbti == "estp") {
+      mainImage = "assets/mbti_estp.png";
+      mainText = "assets/estp.png";
+      friend1 = "assets/mbti_isfj.png";
+      friend1Text = "assets/isfj.png";
+      friend2 = "assets/mbti_istj.png";
+      friend2Text = "assets/istj.png";
+    }
+    // 16
+    else if(mbti == "esfp") {
+      mainImage = "assets/mbti_esfp.png";
+      mainText = "assets/esfp.png";
+      friend1 = "assets/mbti_istj.png";
+      friend1Text = "assets/istj.png";
+      friend2 = "assets/mbti_isfj.png";
+      friend2Text = "assets/isfj.png";
+    }
   }
 
   Future<bool> takeScreenshot() async {
@@ -102,29 +253,27 @@ class CustomMbtiInspectionResultPageState
                 onBackPressed: onBackPressed,
               ),
               Expanded(
-                  child: Container(
-                    child: SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          childRecommendation(),
-                          Container(
-                            height: 862,
-                            width: double.infinity,
-                            color: AppColor_Banner_Count,
-                            child: Column(
-                              children: [
-                                const SizedBox(height: 50),
-                                jobRecommendationBox(),
-                                const SizedBox(height: 60),
-                                bestFriendsBox(),
-                                const SizedBox(height: 40),
-                                backgroundImageButton(),
-                              ],
-                            ),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        childRecommendation(),
+                        Container(
+                          height: 862,
+                          width: double.infinity,
+                          color: AppColor_Banner_Count,
+                          child: Column(
+                            children: [
+                              const SizedBox(height: 50),
+                              jobRecommendationBox(),
+                              const SizedBox(height: 60),
+                              bestFriendsBox(),
+                              const SizedBox(height: 40),
+                              backgroundImageButton(),
+                            ],
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   )),
             ],
@@ -874,39 +1023,8 @@ class CustomMbtiInspectionResultPageState
                 ClipRRect(
                     borderRadius: const BorderRadius.vertical(
                         top: Radius.circular(15)),
-                    child: widget.mbti == "intj" ? Image.asset(
-                        "assets/intj.png", width: screenSize, fit: BoxFit.cover)
-                        : (widget.mbti == "intp" ? Image.asset(
-                        "assets/intp.png", width: screenSize, fit: BoxFit.cover)
-                        : (widget.mbti == "entj" ? Image.asset(
-                        "assets/entj.png", width: screenSize, fit: BoxFit.cover)
-                        : (widget.mbti == "entp" ? Image.asset(
-                        "assets/entp.png", width: screenSize, fit: BoxFit.cover)
-                        : (widget.mbti == "infj" ? Image.asset(
-                        "assets/infj.png", width: screenSize, fit: BoxFit.cover)
-                        : (widget.mbti == "infp" ? Image.asset(
-                        "assets/infp.png", width: screenSize, fit: BoxFit.cover)
-                        : (widget.mbti == "enfj" ? Image.asset(
-                        "assets/enfj.png", width: screenSize, fit: BoxFit.cover)
-                        : (widget.mbti == "enfp" ? Image.asset(
-                        "assets/enfp.png", width: screenSize, fit: BoxFit.cover)
-                        : (widget.mbti == "istj" ? Image.asset(
-                        "assets/istj.png", width: screenSize, fit: BoxFit.cover)
-                        : (widget.mbti == "isfj" ? Image.asset(
-                        "assets/isfj.png", width: screenSize, fit: BoxFit.cover)
-                        : (widget.mbti == "estj" ? Image.asset(
-                        "assets/estj.png", width: screenSize, fit: BoxFit.cover)
-                        : (widget.mbti == "esfj" ? Image.asset(
-                        "assets/esfj.png", width: screenSize, fit: BoxFit.cover)
-                        : (widget.mbti == "istp" ? Image.asset(
-                        "assets/istp.png", width: screenSize, fit: BoxFit.cover)
-                        : (widget.mbti == "isfp" ? Image.asset(
-                        "assets/isfp.png", width: screenSize, fit: BoxFit.cover)
-                        : (widget.mbti == "estp" ? Image.asset(
-                        "assets/estp.png", width: screenSize, fit: BoxFit.cover)
-                        : (widget.mbti == "esfp" ? Image.asset(
-                        "assets/esfp.png", width: screenSize, fit: BoxFit.cover)
-                        : const SizedBox())))))))))))))))
+                    child: Image.asset(
+                        mainText, width: screenSize, fit: BoxFit.cover)
                 ),
               ],
             ),
@@ -927,55 +1045,9 @@ class CustomMbtiInspectionResultPageState
                 ClipRRect(
                     borderRadius: const BorderRadius.vertical(
                         bottom: Radius.circular(15)),
-                    child: widget.mbti == "intj" ? Image.asset(
-                        "assets/mbti_intj.png", width: screenSize,
+                    child: Image.asset(
+                        mainImage, width: screenSize,
                         fit: BoxFit.cover)
-                        : (widget.mbti == "intp" ? Image.asset(
-                        "assets/mbti_intp.png", width: screenSize,
-                        fit: BoxFit.cover)
-                        : (widget.mbti == "entj" ? Image.asset(
-                        "assets/mbti_entj.png", width: screenSize,
-                        fit: BoxFit.cover)
-                        : (widget.mbti == "entp" ? Image.asset(
-                        "assets/mbti_entp.png", width: screenSize,
-                        fit: BoxFit.cover)
-                        : (widget.mbti == "infj" ? Image.asset(
-                        "assets/mbti_infj.png", width: screenSize,
-                        fit: BoxFit.cover)
-                        : (widget.mbti == "infp" ? Image.asset(
-                        "assets/mbti_infp.png", width: screenSize,
-                        fit: BoxFit.cover)
-                        : (widget.mbti == "enfj" ? Image.asset(
-                        "assets/mbti_enfj.png", width: screenSize,
-                        fit: BoxFit.cover)
-                        : (widget.mbti == "enfp" ? Image.asset(
-                        "assets/mbti_enfp.png", width: screenSize, fit: BoxFit
-                        .cover)
-                        : (widget.mbti == "istj" ? Image.asset(
-                        "assets/mbti_istj.png", width: screenSize,
-                        fit: BoxFit.cover)
-                        : (widget.mbti == "isfj" ? Image.asset(
-                        "assets/mbti_isfj.png", width: screenSize,
-                        fit: BoxFit.cover)
-                        : (widget.mbti == "estj" ? Image.asset(
-                        "assets/mbti_estj.png", width: screenSize,
-                        fit: BoxFit.cover)
-                        : (widget.mbti == "esfj" ? Image.asset(
-                        "assets/mbti_esfj.png", width: screenSize,
-                        fit: BoxFit.cover)
-                        : (widget.mbti == "istp" ? Image.asset(
-                        "assets/mbti_istp.png", width: screenSize,
-                        fit: BoxFit.cover)
-                        : (widget.mbti == "isfp" ? Image.asset(
-                        "assets/mbti_isfp.png", width: screenSize,
-                        fit: BoxFit.cover)
-                        : (widget.mbti == "estp" ? Image.asset(
-                        "assets/mbti_estp.png", width: screenSize,
-                        fit: BoxFit.cover)
-                        : (widget.mbti == "esfp" ? Image.asset(
-                        "assets/mbti_esfp.png", width: screenSize,
-                        fit: BoxFit.cover)
-                        : const SizedBox())))))))))))))))
                 ),
               ],
             ),
@@ -1086,92 +1158,12 @@ class CustomMbtiInspectionResultPageState
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Center(
-                        child: widget.mbti == "intj" ? CircleAvatar(
-                            backgroundImage: AssetImage("assets/mbti_enfp.png"),
+                        child: CircleAvatar(
+                            backgroundImage: AssetImage(friend1),
                             radius: 50)
-                            : (widget.mbti == "intp" ? CircleAvatar(
-                            backgroundImage: AssetImage("assets/mbti_entj.png"),
-                            radius: 50)
-                            : (widget.mbti == "entj" ? CircleAvatar(
-                            backgroundImage: AssetImage("assets/mbti_infp.png"),
-                            radius: 50)
-                            : (widget.mbti == "entp" ? CircleAvatar(
-                            backgroundImage: AssetImage("assets/mbti_infj.png"),
-                            radius: 50)
-                            : (widget.mbti == "infj" ? CircleAvatar(
-                            backgroundImage: AssetImage("assets/mbti_enfp.png"),
-                            radius: 50)
-                            : (widget.mbti == "infp" ? CircleAvatar(
-                            backgroundImage: AssetImage("assets/mbti_enfj.png"),
-                            radius: 50)
-                            : (widget.mbti == "enfj" ? CircleAvatar(
-                            backgroundImage: AssetImage("assets/mbti_infp.png"),
-                            radius: 50)
-                            : (widget.mbti == "enfp" ? CircleAvatar(
-                            backgroundImage: AssetImage("assets/mbti_intj.png"),
-                            radius: 50)
-                            : (widget.mbti == "istj" ? CircleAvatar(
-                            backgroundImage: AssetImage("assets/mbti_esfp.png"),
-                            radius: 50)
-                            : (widget.mbti == "isfj" ? CircleAvatar(
-                            backgroundImage: AssetImage("assets/mbti_estp.png"),
-                            radius: 50)
-                            : (widget.mbti == "estj" ? CircleAvatar(
-                            backgroundImage: AssetImage("assets/mbti_intp.png"),
-                            radius: 50)
-                            : (widget.mbti == "esfj" ? CircleAvatar(
-                            backgroundImage: AssetImage("assets/mbti_isfj.png"),
-                            radius: 50)
-                            : (widget.mbti == "istp" ? CircleAvatar(
-                            backgroundImage: AssetImage("assets/mbti_esfj.png"),
-                            radius: 50)
-                            : (widget.mbti == "isfp" ? CircleAvatar(
-                            backgroundImage: AssetImage("assets/mbti_enfj.png"),
-                            radius: 50)
-                            : (widget.mbti == "estp" ? CircleAvatar(
-                            backgroundImage: AssetImage("assets/mbti_isfj.png"),
-                            radius: 50)
-                            : (widget.mbti == "esfp" ? CircleAvatar(
-                            backgroundImage: AssetImage("assets/mbti_istj.png"),
-                            radius: 50)
-                            : const SizedBox())))))))))))))))
                     ),
                     const SizedBox(height: 8,),
-                    Container(
-                        child: widget.mbti == "intj" ? Image.asset(
-                            "assets/enfp.png", width: screenSize, height: 50)
-                            : (widget.mbti == "intp" ? Image.asset(
-                            "assets/entj.png", width: screenSize, height: 50)
-                            : (widget.mbti == "entj" ? Image.asset(
-                            "assets/infp.png", width: screenSize, height: 50)
-                            : (widget.mbti == "entp" ? Image.asset(
-                            "assets/infj.png", width: screenSize, height: 50)
-                            : (widget.mbti == "infj" ? Image.asset(
-                            "assets/enfp.png", width: screenSize, height: 50)
-                            : (widget.mbti == "infp" ? Image.asset(
-                            "assets/entj.png", width: screenSize, height: 50)
-                            : (widget.mbti == "enfj" ? Image.asset(
-                            "assets/infp.png", width: screenSize, height: 50)
-                            : (widget.mbti == "enfp" ? Image.asset(
-                            "assets/intj.png", width: screenSize, height: 50)
-                            : (widget.mbti == "istj" ? Image.asset(
-                            "assets/esfp.png", width: screenSize, height: 50)
-                            : (widget.mbti == "isfj" ? Image.asset(
-                            "assets/estp.png", width: screenSize, height: 50)
-                            : (widget.mbti == "estj" ? Image.asset(
-                            "assets/intp.png", width: screenSize, height: 50)
-                            : (widget.mbti == "esfj" ? Image.asset(
-                            "assets/isfj.png", width: screenSize, height: 50)
-                            : (widget.mbti == "istp" ? Image.asset(
-                            "assets/esfj.png", width: screenSize, height: 50)
-                            : (widget.mbti == "isfp" ? Image.asset(
-                            "assets/enfj.png", width: screenSize, height: 50)
-                            : (widget.mbti == "estp" ? Image.asset(
-                            "assets/isfj.png", width: screenSize, height: 50)
-                            : (widget.mbti == "esfp" ? Image.asset(
-                            "assets/istj.png", width: screenSize, height: 50)
-                            : const SizedBox())))))))))))))))
-                    )
+                    Image.asset(friend1Text, width: screenSize, height: 50)
                   ],
                 ),
                 const DottedLine(
@@ -1184,91 +1176,14 @@ class CustomMbtiInspectionResultPageState
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Center(
-                        child: widget.mbti == "intj" ? CircleAvatar(
-                            backgroundImage: AssetImage("assets/mbti_entp.png"),
+                        child: CircleAvatar(
+                            backgroundImage: AssetImage(friend2),
                             radius: 50)
-                            : (widget.mbti == "intp" ? CircleAvatar(
-                            backgroundImage: AssetImage("assets/mbti_estj.png"),
-                            radius: 50)
-                            : (widget.mbti == "entj" ? CircleAvatar(
-                            backgroundImage: AssetImage("assets/mbti_intp.png"),
-                            radius: 50)
-                            : (widget.mbti == "entp" ? CircleAvatar(
-                            backgroundImage: AssetImage("assets/mbti_intj.png"),
-                            radius: 50)
-                            : (widget.mbti == "infj" ? CircleAvatar(
-                            backgroundImage: AssetImage("assets/mbti_intp.png"),
-                            radius: 50)
-                            : (widget.mbti == "infp" ? CircleAvatar(
-                            backgroundImage: AssetImage("assets/mbti_entj.png"),
-                            radius: 50)
-                            : (widget.mbti == "enfj" ? CircleAvatar(
-                            backgroundImage: AssetImage("assets/mbti_intp.png"),
-                            radius: 50)
-                            : (widget.mbti == "enfp" ? CircleAvatar(
-                            backgroundImage: AssetImage("assets/mbti_infj.png"),
-                            radius: 50)
-                            : (widget.mbti == "istj" ? CircleAvatar(
-                            backgroundImage: AssetImage("assets/mbti_estp.png"),
-                            radius: 50)
-                            : (widget.mbti == "isfj" ? CircleAvatar(
-                            backgroundImage: AssetImage("assets/mbti_esfp.png"),
-                            radius: 50)
-                            : (widget.mbti == "estj" ? CircleAvatar(
-                            backgroundImage: AssetImage("assets/mbti_infp.png"),
-                            radius: 50)
-                            : (widget.mbti == "esfj" ? CircleAvatar(
-                            backgroundImage: AssetImage("assets/mbti_istp.png"),
-                            radius: 50)
-                            : (widget.mbti == "istp" ? CircleAvatar(
-                            backgroundImage: AssetImage("assets/mbti_estj.png"),
-                            radius: 50)
-                            : (widget.mbti == "isfp" ? CircleAvatar(
-                            backgroundImage: AssetImage("assets/mbti_esfj.png"),
-                            radius: 50)
-                            : (widget.mbti == "estp" ? CircleAvatar(
-                            backgroundImage: AssetImage("assets/mbti_istj.png"),
-                            radius: 50)
-                            : (widget.mbti == "esfp" ? CircleAvatar(
-                            backgroundImage: AssetImage("assets/mbti_isfj.png"),
-                            radius: 50)
-                            : const SizedBox())))))))))))))))
                     ),
                     const SizedBox(height: 8,),
                     Container(
-                        child: widget.mbti == "intj" ? Image.asset(
-                            "assets/entp.png", width: screenSize, height: 50)
-                            : (widget.mbti == "intp" ? Image.asset(
-                            "assets/estj.png", width: screenSize, height: 50)
-                            : (widget.mbti == "entj" ? Image.asset(
-                            "assets/intp.png", width: screenSize, height: 50)
-                            : (widget.mbti == "entp" ? Image.asset(
-                            "assets/intj.png", width: screenSize, height: 50)
-                            : (widget.mbti == "infj" ? Image.asset(
-                            "assets/intp.png", width: screenSize, height: 50)
-                            : (widget.mbti == "infp" ? Image.asset(
-                            "assets/entj.png", width: screenSize, height: 50)
-                            : (widget.mbti == "enfj" ? Image.asset(
-                            "assets/intp.png", width: screenSize, height: 50)
-                            : (widget.mbti == "enfp" ? Image.asset(
-                            "assets/infj.png", width: screenSize, height: 50)
-                            : (widget.mbti == "istj" ? Image.asset(
-                            "assets/estp.png", width: screenSize, height: 50)
-                            : (widget.mbti == "isfj" ? Image.asset(
-                            "assets/esfp.png", width: screenSize, height: 50)
-                            : (widget.mbti == "estj" ? Image.asset(
-                            "assets/infp.png", width: screenSize, height: 50)
-                            : (widget.mbti == "esfj" ? Image.asset(
-                            "assets/istp.png", width: screenSize, height: 50)
-                            : (widget.mbti == "istp" ? Image.asset(
-                            "assets/estj.png", width: screenSize, height: 50)
-                            : (widget.mbti == "isfp" ? Image.asset(
-                            "assets/esfj.png", width: screenSize, height: 50)
-                            : (widget.mbti == "estp" ? Image.asset(
-                            "assets/istj.png", width: screenSize, height: 50)
-                            : (widget.mbti == "esfp" ? Image.asset(
-                            "assets/isfj.png", width: screenSize, height: 50)
-                            : const SizedBox())))))))))))))))
+                        child: Image.asset(
+                            friend2Text, width: screenSize, height: 50)
                     )
                   ],
                 ),

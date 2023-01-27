@@ -178,48 +178,13 @@ class CustomMbtiInspectionMainPageState extends BaseState<CustomMbtiInspectionMa
 
     mbti = m;
 
-
-    // if(count < count1 && count2 < count3 && count4 < count5 && count6 < count7) {
-    //   mbti = "infp";
-    // } else if(count < count1 && count2 > count3 && count4 < count5 && count6 < count7) {
-    //   mbti = "isfp";
-    // } else if(count < count1 && count2 < count3 && count4 > count5 && count6 < count7) {
-    //   mbti = "intp";
-    // } else if(count < count1 && count2 < count3 && count4 < count5 && count6 > count7) {
-    //   mbti = "infj";
-    // } else if(count > count1 && count2 < count3 && count4 < count5 && count6 < count7) {
-    //   mbti = "enfp";
-    // } else if(count > count1 && count2 > count3 && count4 < count5 && count6 < count7) {
-    //   mbti = "esfp";
-    // } else if(count > count1 && count2 < count3 && count4 > count5 && count6 < count7) {
-    //   mbti = "entp";
-    // } else if(count > count1 && count2 < count3 && count4 < count5 && count6 > count7) {
-    //   mbti = "enfj";
-    // } else if(count > count1 && count2 > count3 && count4 > count5 && count6 < count7) {
-    //   mbti = "estp";
-    // } else if(count > count1 && count2 > count3 && count4 > count5 && count6 > count7) {
-    //   mbti = "estj";
-    // } else if(count < count1 && count2 < count3 && count4 > count5 && count6 > count7) {
-    //   mbti = "intj";
-    // } else if(count < count1 && count2 > count3 && count4 > count5 && count6 < count7) {
-    //   mbti = "istp";
-    // } else if(count > count1 && count2 < count3 && count4 > count5 && count6 > count7) {
-    //   mbti = "entj";
-    // } else if(count < count1 && count2 > count3 && count4 > count5 && count6 > count7) {
-    //   mbti = "istj";
-    // } else if(count > count1 && count2 > count3 && count4 < count5 && count6 > count7) {
-    //   mbti = "esfj";
-    // } else if(count < count1 && count2 > count3 && count4 < count5 && count6 > count7) {
-    //   mbti = "isfj";
-    // }
-
     Future<MbtiQuizSendResModel> insert = httpService.getMbtiSendResult(mbti_info, mbti);
     insert.then((value) async {
       setState(() {
         isLoading = false;
       });
       if (value.result == 0) {
-        Navigator.push(context, SlideRightTransRoute(builder: (context) => CustomMbtiInspectionResultPage(mbti: mbti)));
+        Navigator.pushReplacement(context, SlideRightTransRoute(builder: (context) => CustomMbtiInspectionResultPage(mbti: mbti)));
       }
     }).catchError((onError) {
       print(onError.toString());

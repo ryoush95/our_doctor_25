@@ -5,25 +5,25 @@
 import 'package:meta/meta.dart';
 import 'dart:convert';
 
-class MonitoringTestListModel2 {
-  MonitoringTestListModel2({
+class MonitoringLifeListModel {
+  MonitoringLifeListModel({
     required this.data,
     required this.result,
     required this.msg,
     required this.reason,
   });
 
-  Data2 data;
+  LifeTestDto data;
   int result;
   String msg;
   String reason;
 
-  factory MonitoringTestListModel2.fromRawJson(String str) => MonitoringTestListModel2.fromJson(json.decode(str));
+  factory MonitoringLifeListModel.fromRawJson(String str) => MonitoringLifeListModel.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
-  factory MonitoringTestListModel2.fromJson(Map<String, dynamic> json) => MonitoringTestListModel2(
-    data: Data2.fromJson(json["data"]),
+  factory MonitoringLifeListModel.fromJson(Map<String, dynamic> json) => MonitoringLifeListModel(
+    data: LifeTestDto.fromJson(json["data"]),
     result: json["result"],
     msg: json["msg"],
     reason: json["reason"],
@@ -37,8 +37,8 @@ class MonitoringTestListModel2 {
   };
 }
 
-class Data2 {
-  Data2({
+class LifeTestDto {
+  LifeTestDto({
     required this.a1,
     required this.b1,
     required this.c1,
@@ -66,11 +66,11 @@ class Data2 {
   Map<String, A1> l1;
   Map<String, A1> i1;
 
-  factory Data2.fromRawJson(String str) => Data2.fromJson(json.decode(str));
+  factory LifeTestDto.fromRawJson(String str) => LifeTestDto.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
-  factory Data2.fromJson(Map<String, dynamic> json) => Data2(
+  factory LifeTestDto.fromJson(Map<String, dynamic> json) => LifeTestDto(
     a1: Map.from(json["A1"]).map((k, v) => MapEntry<String, A1>(k, A1.fromJson(v))),
     b1: Map.from(json["B1"]).map((k, v) => MapEntry<String, A1>(k, A1.fromJson(v))),
     c1: Map.from(json["C1"]).map((k, v) => MapEntry<String, A1>(k, A1.fromJson(v))),

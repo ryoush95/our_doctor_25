@@ -7,6 +7,7 @@ import 'package:ourdoctor/global/http_service.dart';
 import 'package:ourdoctor/helpers/common_util.dart';
 import 'package:ourdoctor/helpers/transition.dart';
 import 'package:ourdoctor/language/language_service.dart';
+import 'package:ourdoctor/models/develope/heath_result_model.dart';
 import 'package:ourdoctor/models/home_grapth_res_model.dart';
 import 'package:ourdoctor/models/monitor_list_res_model.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
@@ -42,19 +43,15 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
   int tabIndex = 0;
   int subTabIndex2 = 0;
   List<MonitorListDto>? arrMonitorList = [];
-  String comment1 = "노력이 필요해요 ";
-  String comment2 = """
-큰 근육을 이용한 운동발달이 또래보다 느릴 수 있어요. 대근육운동은 아이의 신경계 및 근골격계의 발달과 밀접하게 연관되어 있어요.
-아이들은 운동기능을 통해 세상을 탐색하며 신체,
-인지, 정서를 발달시켜나가요.
-자세한 발달 상태 파악을 위해 병원 진단 진단 및 상담이 필요합니다.
-""";
+  String comment1 = "";
+  String comment2 = "";
+  List<Empty> healthList = [];
 
   //FIXME: 테스트후 삭제
   void qkfekf(int index) {
-    if (testScore[index] < 80) {
-      comment1 = "노력이 필요해요";
-    } else if (testScore[index] < 90) {
+    if (healthList[index].score < 80) {
+      comment1 = "노력이 필요해요 센터로 보내주세요";
+    } else if (healthList[index].score < 90) {
       comment1 = "보통이에요";
     } else {
       comment1 = "잘하고있어요 ";
@@ -64,46 +61,26 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
 
   void qkfekf2(int index) {
     switch (index) {
-      case 0 : comment2 = """
-큰 근육을 이용한 운동발달이 또래보다 느릴 수 있어요. 대근육운동은 아이의 신경계 및 근골격계의 발달과 밀접하게 연관되어 있어요.
-아이들은 운동기능을 통해 세상을 탐색하며 신체,
-인지, 정서를 발달시켜나가요.
-자세한 발달 상태 파악을 위해 병원 진단 진단 및 상담이 필요합니다.
-""";
-      break;
-      case 1 : comment2 = """
-손의 작은 근육을 이용한 정밀한 조작과 협응능력의 발달이 또래보다 느릴 수 있어요. 소근육운동은 아이들이 세상을 탐색하고 지능을 발달시키는 일과 밀접하게 연관되어 있어요.
-자세한 발달 상태 파악을 위해 병원 진단 진단 및 상담이 필요합니다.
-      """;
-      break;
-      case 2 : comment2 = """
-인지발달이 또래와 비슷하거나 다소 느릴 수 있어요. 인지발달은 아이가
-경험한 세상을 이해하고 기억해서 문제해결에 활용하는 법을 배워나가는
-과정이에요. 운동, 언어, 사회성발달과 밀접하게 연관되어 있으면서 향후
-놀이와 학습의 기초가 됩니다.
-      """;
-      break;
-      case 3 : comment2 = """
-언어영역발달이 또래와 비슷하거나 다소 느릴 수
-있어요. 언어는 타인과의 소통을 통해 사회적 관계를 형성해나가는 기초가 되어요. 아이는 언어발달을 통해 시간과 공간의 제약을 넘어 사고의 범위를
-확장시켜 나가고 있어요.
-      """;
-      break;
-      case 4 : comment2 = """
-사회성이 또래보다 발달되어 있어요. 아이가 사회적 관계를 통해 가치관, 태도, 규범, 행동양상을 건강하게 형성해나가고, 이후 도덕심, 이타심, 올바른
-성의식을 발전시켜나가기에 유리한
-장점을 가지고 있어요.
-      """;
-      break;
-      case 5 : comment2 = """
-자조영역발달이 또래보다 높은 수준이예요. 자기조절능력과 자율성 및
-주도성을 습득하기에 유리한 장점을 가지고 있어요. 자조능력의 발달을
-위해서는 대근육운동, 소근육운동의 발달이 선행되어야 하고, 이는 훗날 사회성 형성의 든든한 기초가 됩니다.
-      """;
-      break;
+      case 0:
+        comment2 = healthList[0].feedbackDescription;
+        break;
+      case 1:
+        comment2 = healthList[1].feedbackDescription;
+        break;
+      case 2:
+        comment2 = healthList[2].feedbackDescription;
+        break;
+      case 3:
+        comment2 = healthList[3].feedbackDescription;
+        break;
+      case 4:
+        comment2 = healthList[4].feedbackDescription;
+        break;
+      case 5:
+        comment2 = healthList[5].feedbackDescription;
+        break;
     }
   }
-
 
   HomeGraphTallDto? dicHomeGraphTallInfo;
   HomeGraphWeightDto? dicHomeGraphWeightInfo;
@@ -118,11 +95,11 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
     "monitor_icon5.png",
     "monitor_icon6.png",
   ];
-  List<int> testScore = [68, 72, 86, 86, 98, 100];
 
   @override
   void initState() {
     super.initState();
+    getHealthResult();
     getHomeGraphTall();
     getHomeGraphWeight();
   }
@@ -135,10 +112,10 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
     return true;
   }
 
-  Color changeColor(int p) {
-    if (p < 80) {
+  Color changeColor(String p) {
+    if (p == "R") {
       return AppColor_Red;
-    } else if (p < 90) {
+    } else if (p == "G") {
       return AppColor_Oxygen;
     } else {
       return AppColor_Primary;
@@ -158,6 +135,30 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
     }
 
     return result;
+  }
+
+  Future<void> getHealthResult() async {
+    Future<MonitorHealthResultModel> info =
+        httpService.getMonitoringHealthResult();
+    info.then((value) async {
+      if (value.result == 0) {
+        healthList.add(value.data.bigMuscle);
+        healthList.add(value.data.smallMuscle);
+        healthList.add(value.data.dlswl);
+        healthList.add(value.data.djsdj);
+        healthList.add(value.data.tkghltjd);
+        healthList.add(value.data.wkwh);
+
+        // healthList.add();
+        setState(() {
+          comment1 = value.data.bigMuscle.feedbackTitle;
+          comment2 = value.data.bigMuscle.feedbackDescription;
+          isLoading = false;
+        });
+      }
+    }).catchError((onError) {
+      print(onError.toString());
+    });
   }
 
   //홈 그래프 신장 얻기
@@ -549,10 +550,10 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
                 Container(
                   width: 50,
                   height: 20,
-                  color: changeColor(testScore[index]),
+                  color: changeColor(healthList[index].status),
                   child: Center(
                     child: Text(
-                      testScore[index].toString(),
+                      healthList[index].score.toString(),
                       style: TextStyle(
                         color: Colors.white,
                       ),
@@ -577,77 +578,87 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
 
   Widget _body() {
     if (tabIndex == 0) {
-      return Column(
-        children: [
-          SizedBox(
-            height: 360,
-            child: GridView.builder(
-              physics: const NeverScrollableScrollPhysics(),
-              itemBuilder: (BuildContext context, int index) {
-                return growTile(index);
-              },
-              itemCount: subCategory.length,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  childAspectRatio: 0.7,
-                  crossAxisSpacing: 0,
-                  mainAxisSpacing: 0),
-            ),
-          ),
-          // const SizedBox(height: 30),
-          H20(
-            text: "${subCategory[subTabIndex]} 발달 점수",
-            align: TextAlign.start,
-          ),
-          RangeShow(
-            isInspect: true,
-            start: "",
-            end: "",
-            rate: testScore[subTabIndex].toDouble(),
-            unit: "",
-            color: changeColor(testScore[subTabIndex]),
-            cur_value: testScore[subTabIndex].toDouble(),
-          ),
-          Container(
-            width: MediaQuery.of(context).size.width - 64,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(6.0),
-                color: AppColor_Light_Gray),
-            padding:
-                const EdgeInsets.only(left: 30, right: 30, top: 20, bottom: 20),
-            // margin: const EdgeInsets.symmetric(horizontal: 30),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+      return healthList.isNotEmpty
+          ? Column(
               children: [
-                H16(text: comment1),
-                SizedBox(height: 10,),
-                Text(
-                  comment2,
-                  style: TextStyle(
-                      color: AppColor_GrayText, fontSize: 16, height: 1.5),
-                )
-              ],
-            ),
-          ),
-          const SizedBox(
-            height: 30,
-          ),
-          testScore[subTabIndex] < 80
-              ? Center(
-                  child: MainTextButton(
-                    text: "카카오톡으로 상담하기",
-                    style: AppTextStyle.PD(Colors.white, 16, weight: FW.medium),
-                    width: 200,
-                    height: 40,
-                    radius: 20,
-                    onPressed: () {
-                      // Navigator.push(context, SlideRightTransRoute(builder: (context) => ,));
+                SizedBox(
+                  height: 360,
+                  child: GridView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemBuilder: (BuildContext context, int index) {
+                      return growTile(index);
                     },
+                    itemCount: subCategory.length,
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3,
+                            childAspectRatio: 0.7,
+                            crossAxisSpacing: 0,
+                            mainAxisSpacing: 0),
                   ),
-                )
-              : SolutionArea(),
-        ],
-      );
+                ),
+                // const SizedBox(height: 30),
+                H20(
+                  text: "${subCategory[subTabIndex]} 발달 점수",
+                  align: TextAlign.start,
+                ),
+                RangeShow(
+                  isInspect: true,
+                  start: "",
+                  end: "",
+                  rate: healthList[subTabIndex].score.toDouble(),
+                  unit: "",
+                  color: changeColor(healthList[subTabIndex].status),
+                  cur_value: healthList[subTabIndex].score.toDouble(),
+                ),
+
+                Container(
+                  width: MediaQuery.of(context).size.width - 64,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(6.0),
+                      color: AppColor_Light_Gray),
+                  padding: const EdgeInsets.only(
+                      left: 30, right: 30, top: 20, bottom: 20),
+                  // margin: const EdgeInsets.symmetric(horizontal: 30),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      H16(text: comment1),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        comment2,
+                        style: TextStyle(
+                            color: AppColor_GrayText,
+                            fontSize: 16,
+                            height: 1.5),
+                      )
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 30,
+                ),
+
+                healthList[subTabIndex].status == "R"
+                    ? Center(
+                        child: MainTextButton(
+                          text: "카카오톡으로 상담하기",
+                          style: AppTextStyle.PD(Colors.white, 16,
+                              weight: FW.medium),
+                          width: 200,
+                          height: 40,
+                          radius: 20,
+                          onPressed: () {
+                            // Navigator.push(context, SlideRightTransRoute(builder: (context) => ,));
+                          },
+                        ),
+                      )
+                    : SolutionArea()
+              ],
+            )
+          : const SizedBox();
     } else if (tabIndex == 1) {
       return MonitoringTestResult();
     } else if (tabIndex == 2) {
@@ -679,7 +690,7 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
               ),
               Container(
                 // width: MediaQuery.of(context).size.width - 64,
-                padding: const EdgeInsets.only(left: 20, right: 20,top: 10),
+                padding: const EdgeInsets.only(left: 20, right: 20, top: 10),
                 height: 50,
                 child: GridView.builder(
                   // scrollDirection: Axis.horizontal,
@@ -689,8 +700,7 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
                     return _getTiles1(index);
                   },
                   itemCount: CATEGORYS.length,
-                  gridDelegate:
-                  const SliverGridDelegateWithFixedCrossAxisCount(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 3,
                     childAspectRatio: 3 / 1,
                     crossAxisSpacing: 10,
@@ -702,8 +712,7 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
                 child: Container(
                   margin: const EdgeInsets.all(20),
                   child: SingleChildScrollView(
-                      physics: const BouncingScrollPhysics(),
-                      child: _body()),
+                      physics: const BouncingScrollPhysics(), child: _body()),
                 ),
               ),
             ],

@@ -1,42 +1,42 @@
-// To parse this JSON data, do
-//
-//     final monitoringTestListModel = monitoringTestListModelFromJson(jsonString);
+import 'dart:convert';
 
-class MonitoringTestListModel {
+import 'package:json_annotation/json_annotation.dart';
 
-  List<Data>? data;
-  int? result;
-  String? msg;
-  String? reason;
 
-  MonitoringTestListModel({this.data, this.result, this.msg, this.reason});
+class MonitoringHealthListModel {
+  MonitoringHealthListModel({
+    required this.data,
+    required this.result,
+    required this.msg,
+    required this.reason,
+  });
 
-  MonitoringTestListModel.fromJson(Map<String, dynamic> json) {
-    if (json['data'] != null) {
-      data = <Data>[];
-      json['data'].forEach((v) {
-        data!.add(new Data.fromJson(v));
-      });
-    }
-    result = json['result'];
-    msg = json['msg'];
-    reason = json['reason'];
-  }
+  HealthTestDto data;
+  int result;
+  String msg;
+  String reason;
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.data != null) {
-      data['data'] = this.data!.map((v) => v.toJson()).toList();
-    }
-    data['result'] = this.result;
-    data['msg'] = this.msg;
-    data['reason'] = this.reason;
-    return data;
-  }
+  factory MonitoringHealthListModel.fromRawJson(String str) => MonitoringHealthListModel.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
+  factory MonitoringHealthListModel.fromJson(Map<String, dynamic> json) => MonitoringHealthListModel(
+    data: HealthTestDto.fromJson(json["data"]),
+    result: json["result"],
+    msg: json["msg"],
+    reason: json["reason"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "data": data.toJson(),
+    "result": result,
+    "msg": msg,
+    "reason": reason,
+  };
 }
 
-class Data {
-  Data({
+class HealthTestDto {
+  HealthTestDto({
     required this.muscle1,
     required this.muscle2,
     required this.dlswl,
@@ -52,8 +52,8 @@ class Data {
   Map<String, Empty> tkghltjd;
   Map<String, Empty> wkwh;
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
-    muscle1: Map.from(json["대근육운동"]).map((k, v) => MapEntry<String, Empty>(k, Empty.fromJson(v))),
+  factory HealthTestDto.fromJson(Map<String, dynamic> json) => HealthTestDto(
+    muscle1:Map.from(json["대근육운동"]).map((k, v) => MapEntry<String, Empty>(k, Empty.fromJson(v))),
     muscle2: Map.from(json["소근육운동"]).map((k, v) => MapEntry<String, Empty>(k, Empty.fromJson(v))),
     dlswl: Map.from(json["인지"]).map((k, v) => MapEntry<String, Empty>(k, Empty.fromJson(v))),
     djsdj: Map.from(json["언어"]).map((k, v) => MapEntry<String, Empty>(k, Empty.fromJson(v))),
