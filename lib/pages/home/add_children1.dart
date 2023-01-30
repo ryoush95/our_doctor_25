@@ -18,6 +18,7 @@ import 'package:ourdoctor/models/upload_res_model.dart';
 import 'package:ourdoctor/pages/app_event.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
 import 'package:ourdoctor/pages/base/page_layout.dart';
+import 'package:ourdoctor/pages/base/page_layout1.dart';
 import 'package:ourdoctor/pages/components/app_checkbox.dart';
 import 'package:ourdoctor/pages/components/h14.dart';
 import 'package:ourdoctor/pages/components/h16.dart';
@@ -42,14 +43,14 @@ class AddChildren1PageState extends BaseState<AddChildren1Page> {
   final HttpService httpService = HttpService();
   final imagePicker = ImagePicker();
 
-  var birthInputController = TextEditingController();
-  var nameInputController = TextEditingController();
-  var childHeightInputController = TextEditingController();
-  var childWeightInputController = TextEditingController();
-  var directInputController = TextEditingController();
-  var address1InputController = TextEditingController();
-  var address2InputController = TextEditingController();
-  var address3InputController = TextEditingController();
+  TextEditingController birthInputController = TextEditingController();
+  TextEditingController nameInputController = TextEditingController();
+  TextEditingController childHeightInputController = TextEditingController();
+  TextEditingController childWeightInputController = TextEditingController();
+  TextEditingController directInputController = TextEditingController();
+  TextEditingController address1InputController = TextEditingController();
+  TextEditingController address2InputController = TextEditingController();
+  TextEditingController address3InputController = TextEditingController();
 
   bool valid = false;
   String birth = "";
@@ -69,6 +70,8 @@ class AddChildren1PageState extends BaseState<AddChildren1Page> {
   String address2 = ""; //주소 1
   String address3 = ""; //주소 2
   bool isSame = false;
+
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -336,11 +339,14 @@ class AddChildren1PageState extends BaseState<AddChildren1Page> {
     });
   }
 
+  FocusNode field1FocusNode = FocusNode(); //Create first FocusNode
+  FocusNode field2FocusNode = FocusNode(); //Create second FocusNode
+  FocusNode field3FocusNode = FocusNode(); //Create second FocusNode
+
   @override
   Widget build(BuildContext context) {
-    final node = FocusScope.of(context);
     var screenSize = MediaQuery.of(context).size;
-    return PageLayout(
+    return PageLayout1(
         isLoading: isLoading,
         child: Column(
           children: [
@@ -418,10 +424,10 @@ class AddChildren1PageState extends BaseState<AddChildren1Page> {
                                 color: AppColor_BlackText.withOpacity(0.5),
                               ),
                               UnderlineInput(
+                                focus: field1FocusNode,
                                 controller: nameInputController,
                                 keyboardType: TextInputType.text,
                                 textInputAction: TextInputAction.next,
-                                onEditingComplete: () => node.nextFocus(),
                                 placeholder: LanguageService.trans("enter_your_name"),
                                 onChanged: (text) => {name = text, checkValid()},
                               ),
@@ -500,8 +506,8 @@ class AddChildren1PageState extends BaseState<AddChildren1Page> {
                                                 child: OutlineInput(
                                                   controller: childHeightInputController,
                                                   keyboardType: TextInputType.number,
-                                                  textInputAction: TextInputAction.next,
-                                                  onEditingComplete: () => node.nextFocus(),
+                                                  textInputAction: TextInputAction.done,
+                                                  focus: field2FocusNode,
                                                   placeholder: LanguageService.trans("cm"),
                                                   onChanged: (text) => {child_height = text, checkValid()},
                                                 ),
@@ -535,8 +541,8 @@ class AddChildren1PageState extends BaseState<AddChildren1Page> {
                                                 child: OutlineInput(
                                                   controller: childWeightInputController,
                                                   keyboardType: TextInputType.number,
-                                                  textInputAction: TextInputAction.next,
-                                                  onEditingComplete: () => node.nextFocus(),
+                                                  textInputAction: TextInputAction.done,
+                                                  focus: field3FocusNode,
                                                   placeholder: LanguageService.trans("kg"),
                                                   onChanged: (text) => {child_weight = text, checkValid()},
                                                 ),
@@ -563,7 +569,7 @@ class AddChildren1PageState extends BaseState<AddChildren1Page> {
                                 child: TextField(
                                   style: AppTextStyle.PD(AppColor_BlackText, 16, weight: FW.medium),
                                   controller: birthInputController,
-                                  onEditingComplete: () => node.nextFocus(),
+                                  // onEditingComplete: () => node.nextFocus(),
                                   maxLines: 1,
                                   maxLength: -1,
                                   keyboardType: TextInputType.text,
@@ -585,128 +591,6 @@ class AddChildren1PageState extends BaseState<AddChildren1Page> {
                                   ),
                                 ),
                               ),
-                              // const SizedBox(height: 30),
-                              // H16(text: LanguageService.trans("address"), weight: FW.medium, color: AppColor_BlackText),
-                              // const SizedBox(height: 10),
-                              // SizedBox(
-                              //   height: 48,
-                              //   child: Row(
-                              //     children: [
-                              //       Expanded(
-                              //         child: SizedBox(
-                              //           height: MediaQuery.of(context).size.height,
-                              //           child: Stack(
-                              //             children: [
-                              //               UnderlineInput1(
-                              //                 height: MediaQuery.of(context).size.height,
-                              //                 controller: address1InputController,
-                              //                 keyboardType: TextInputType.text,
-                              //                 textInputAction: TextInputAction.done,
-                              //                 onEditingComplete: () => node.nextFocus(),
-                              //                 placeholder: LanguageService.trans("zip_code"),
-                              //                 onChanged: (text) => {address1 = text, checkValid()},
-                              //               ),
-                              //             ],
-                              //           ),
-                              //         ),
-                              //       ),
-                              //       const SizedBox(width: 15),
-                              //       MainTextButton(
-                              //         text: LanguageService.trans("search"),
-                              //         backgroundColor: AppColor_Primary,
-                              //         style: AppTextStyle.PD(Colors.white, 18, weight: FW.bold),
-                              //         width: 90,
-                              //         disable: true,
-                              //         disableBackground: AppColor_BlackText,
-                              //         onPressed: () async {
-                              //           Map received = await Navigator.push(context, SlideRightTransRoute(builder: (context) => AddressSearchPage()));
-                              //           node.requestFocus();
-                              //           address1 = received["postcode"];
-                              //           address2 = received["addr"];
-                              //           checkValid();
-                              //           address1InputController.text = address1;
-                              //           address2InputController.text = address2;
-                              //           //getHospitalFromAddress();
-                              //         },
-                              //       ),
-                              //     ],
-                              //   ),
-                              // ),
-                              // const SizedBox(height: 10),
-                              // UnderlineInput1(
-                              //   controller: address2InputController,
-                              //   keyboardType: TextInputType.text,
-                              //   textInputAction: TextInputAction.done,
-                              //   onEditingComplete: () => node.nextFocus(),
-                              //   placeholder: LanguageService.trans("address1"),
-                              //   onChanged: (text) => {address2 = text, checkValid()},
-                              // ),
-                              // const SizedBox(height: 10),
-                              // SizedBox(
-                              //     height: 40,
-                              //     child: Center(
-                              //       child: TextField(
-                              //         style: AppTextStyle.PD(AppColor_BlackText, 16, weight: FW.medium),
-                              //         maxLength: -1,
-                              //         controller: address3InputController,
-                              //         onEditingComplete: () => node.nextFocus(),
-                              //         keyboardType: TextInputType.text,
-                              //         obscureText: false,
-                              //         textAlignVertical: TextAlignVertical.center,
-                              //         textAlign: TextAlign.start,
-                              //         textInputAction: TextInputAction.done,
-                              //         // focusNode: detailAddrFocusNode,
-                              //         decoration: InputDecoration(
-                              //           counterText: "",
-                              //           enabledBorder: const UnderlineInputBorder(
-                              //             borderSide: BorderSide(color: AppColor_Selector_Border),
-                              //           ),
-                              //           focusedBorder: const UnderlineInputBorder(
-                              //             borderSide: BorderSide(color: AppColor_BlackText),
-                              //           ),
-                              //           hintText: LanguageService.trans("address2"),
-                              //           hintStyle: AppTextStyle.PD(AppColor_Hint, 16, weight: FW.medium),
-                              //           border: InputBorder.none,
-                              //         ),
-                              //         onChanged: (text) => {address3 = text, checkValid()},
-                              //       ),
-                              //     )),
-                              // const SizedBox(height: 30),
-                              // InkWell(
-                              //   onTap: () {
-                              //     isSame = !isSame;
-                              //     if (isSame) {
-                              //       address1 = gUserInfo!.postcode!;
-                              //       address2 = gUserInfo!.address!;
-                              //       address3 = gUserInfo!.addressDetail!;
-                              //       address1InputController.text = address1;
-                              //       address2InputController.text = address2;
-                              //       address3InputController.text = address3;
-                              //     }
-                              //     setState(() {});
-                              //     checkValid();
-                              //   },
-                              //   child: SizedBox(
-                              //     width: double.infinity,
-                              //     height: 24,
-                              //     child: Row(
-                              //       children: [
-                              //         Image.asset(
-                              //           isSame ? 'assets/ic_radio_on.png' : 'assets/ic_radio_off.png',
-                              //           width: 24,
-                              //           height: 24,
-                              //         ),
-                              //         const SizedBox(width: 10),
-                              //         H14(
-                              //           text: LanguageService.trans("same_as_address_guardian"),
-                              //           weight: FW.medium,
-                              //           height: 1.3,
-                              //           color: isSame ? AppColor_BlackText : AppColor_BlackText.withOpacity(0.2),
-                              //         ),
-                              //       ],
-                              //     ),
-                              //   ),
-                              // ),
                               const SizedBox(height: 35),
                               H16(text: LanguageService.trans("child_past_medical_history"), weight: FW.medium, color: AppColor_BlackText),
                               const SizedBox(height: 5),
@@ -734,8 +618,8 @@ class AddChildren1PageState extends BaseState<AddChildren1Page> {
                                 child: UnderlineInput(
                                   controller: directInputController,
                                   keyboardType: TextInputType.text,
-                                  textInputAction: TextInputAction.next,
-                                  onEditingComplete: () => node.nextFocus(),
+                                  textInputAction: TextInputAction.done,
+                                  // onEditingComplete: () => node.nextFocus(),
                                   placeholder: LanguageService.trans("direct_input"),
                                   onChanged: (text) => {direct = text, checkValid()},
                                 ),

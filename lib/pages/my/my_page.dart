@@ -39,7 +39,7 @@ class MyPagePageState extends BaseState<MyPagePage> {
     MyPageCategory(title: "my_info", icon: "ic_my_info.png", route: ProfileViewPage()),
     MyPageCategory(title: "order_history", icon: "ic_order_his.png", route: OrderHistoryPage()),
     MyPageCategory(title: "my_review", icon: "ic_my_review.png", route: ReviewFragment()),
-    MyPageCategory(title: "좋아요 게시물", icon: "ic_like_off.png", route: MyPostsPage()),
+    MyPageCategory(title: "좋아요 게시물", icon: "ic_jjim_product.png", route: MyPostsPage()),
     MyPageCategory(title: "family_child_history", icon: "ic_child_manage.png", route: ChildManagementPage()),
     MyPageCategory(title: "view_my_posts", icon: "ic_pencil.svg", route: MyPostsPage()),
   ];

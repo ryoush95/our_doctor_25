@@ -39,84 +39,84 @@ class MonitoringLifeListModel {
 
 class LifeTestDto {
   LifeTestDto({
-    required this.a1,
-    required this.b1,
-    required this.c1,
-    required this.d1,
-    required this.e1,
-    required this.f1,
-    required this.g1,
-    required this.h1,
-    required this.j1,
-    required this.k1,
-    required this.l1,
-    required this.i1,
+    this.a,
+    this.b,
+    this.c,
+    this.d,
+    this.e,
+    this.f,
+    this.g,
+    this.h,
+    this.j,
+    this.k,
+    this.l,
+    this.i,
   });
 
-  Map<String, A1> a1;
-  Map<String, A1> b1;
-  Map<String, A1> c1;
-  Map<String, A1> d1;
-  Map<String, A1> e1;
-  Map<String, A1> f1;
-  Map<String, A1> g1;
-  Map<String, A1> h1;
-  Map<String, A1> j1;
-  Map<String, A1> k1;
-  Map<String, A1> l1;
-  Map<String, A1> i1;
+  Map<String, A>? a;
+  Map<String, A>? b;
+  Map<String, A>? c;
+  Map<String, A>? d;
+  Map<String, A>? e;
+  Map<String, A>? f;
+  Map<String, A>? g;
+  Map<String, A>? h;
+  Map<String, A>? j;
+  Map<String, A>? k;
+  Map<String, A>? l;
+  Map<String, A>? i;
 
   factory LifeTestDto.fromRawJson(String str) => LifeTestDto.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
   factory LifeTestDto.fromJson(Map<String, dynamic> json) => LifeTestDto(
-    a1: Map.from(json["A1"]).map((k, v) => MapEntry<String, A1>(k, A1.fromJson(v))),
-    b1: Map.from(json["B1"]).map((k, v) => MapEntry<String, A1>(k, A1.fromJson(v))),
-    c1: Map.from(json["C1"]).map((k, v) => MapEntry<String, A1>(k, A1.fromJson(v))),
-    d1: Map.from(json["D1"]).map((k, v) => MapEntry<String, A1>(k, A1.fromJson(v))),
-    e1: Map.from(json["E1"]).map((k, v) => MapEntry<String, A1>(k, A1.fromJson(v))),
-    f1: Map.from(json["F1"]).map((k, v) => MapEntry<String, A1>(k, A1.fromJson(v))),
-    g1: Map.from(json["G1"]).map((k, v) => MapEntry<String, A1>(k, A1.fromJson(v))),
-    h1: Map.from(json["H1"]).map((k, v) => MapEntry<String, A1>(k, A1.fromJson(v))),
-    j1: Map.from(json["J1"]).map((k, v) => MapEntry<String, A1>(k, A1.fromJson(v))),
-    k1: Map.from(json["K1"]).map((k, v) => MapEntry<String, A1>(k, A1.fromJson(v))),
-    l1: Map.from(json["L1"]).map((k, v) => MapEntry<String, A1>(k, A1.fromJson(v))),
-    i1: Map.from(json["I1"]).map((k, v) => MapEntry<String, A1>(k, A1.fromJson(v))),
+    a: Map.from(json["A"]!).map((k, v) => MapEntry<String, A>(k, A.fromJson(v))),
+    b: Map.from(json["B"]!).map((k, v) => MapEntry<String, A>(k, A.fromJson(v))),
+    c: Map.from(json["C"]!).map((k, v) => MapEntry<String, A>(k, A.fromJson(v))),
+    d: Map.from(json["D"]!).map((k, v) => MapEntry<String, A>(k, A.fromJson(v))),
+    e: Map.from(json["E"]!).map((k, v) => MapEntry<String, A>(k, A.fromJson(v))),
+    f: Map.from(json["F"]!).map((k, v) => MapEntry<String, A>(k, A.fromJson(v))),
+    g: Map.from(json["G"]!).map((k, v) => MapEntry<String, A>(k, A.fromJson(v))),
+    h: Map.from(json["H"]!).map((k, v) => MapEntry<String, A>(k, A.fromJson(v))),
+    j: Map.from(json["J"]!).map((k, v) => MapEntry<String, A>(k, A.fromJson(v))),
+    k: Map.from(json["K"]!).map((k, v) => MapEntry<String, A>(k, A.fromJson(v))),
+    l: Map.from(json["L"]!).map((k, v) => MapEntry<String, A>(k, A.fromJson(v))),
+    i: Map.from(json["I"]!).map((k, v) => MapEntry<String, A>(k, A.fromJson(v))),
   );
 
   Map<String, dynamic> toJson() => {
-    "A1": Map.from(a1).map((k, v) => MapEntry<String, dynamic>(k, v.toJson())),
-    "B1": Map.from(b1).map((k, v) => MapEntry<String, dynamic>(k, v.toJson())),
-    "C1": Map.from(c1).map((k, v) => MapEntry<String, dynamic>(k, v.toJson())),
-    "D1": Map.from(d1).map((k, v) => MapEntry<String, dynamic>(k, v.toJson())),
-    "E1": Map.from(e1).map((k, v) => MapEntry<String, dynamic>(k, v.toJson())),
-    "F1": Map.from(f1).map((k, v) => MapEntry<String, dynamic>(k, v.toJson())),
-    "G1": Map.from(g1).map((k, v) => MapEntry<String, dynamic>(k, v.toJson())),
-    "H1": Map.from(h1).map((k, v) => MapEntry<String, dynamic>(k, v.toJson())),
-    "J1": Map.from(j1).map((k, v) => MapEntry<String, dynamic>(k, v.toJson())),
-    "K1": Map.from(k1).map((k, v) => MapEntry<String, dynamic>(k, v.toJson())),
-    "L1": Map.from(l1).map((k, v) => MapEntry<String, dynamic>(k, v.toJson())),
-    "I1": Map.from(i1).map((k, v) => MapEntry<String, dynamic>(k, v.toJson())),
+    "A": Map.from(a!).map((k, v) => MapEntry<String, dynamic>(k, v.toJson())),
+    "B": Map.from(b!).map((k, v) => MapEntry<String, dynamic>(k, v.toJson())),
+    "C": Map.from(c!).map((k, v) => MapEntry<String, dynamic>(k, v.toJson())),
+    "D": Map.from(d!).map((k, v) => MapEntry<String, dynamic>(k, v.toJson())),
+    "E": Map.from(e!).map((k, v) => MapEntry<String, dynamic>(k, v.toJson())),
+    "F": Map.from(f!).map((k, v) => MapEntry<String, dynamic>(k, v.toJson())),
+    "G": Map.from(g!).map((k, v) => MapEntry<String, dynamic>(k, v.toJson())),
+    "H": Map.from(h!).map((k, v) => MapEntry<String, dynamic>(k, v.toJson())),
+    "J": Map.from(j!).map((k, v) => MapEntry<String, dynamic>(k, v.toJson())),
+    "K": Map.from(k!).map((k, v) => MapEntry<String, dynamic>(k, v.toJson())),
+    "L": Map.from(l!).map((k, v) => MapEntry<String, dynamic>(k, v.toJson())),
+    "I": Map.from(i!).map((k, v) => MapEntry<String, dynamic>(k, v.toJson())),
   };
 }
 
-class A1 {
-  A1({
+class A {
+  A({
     required this.question,
     required this.imageUrl,
   });
 
   String question;
-  dynamic imageUrl;
+  String? imageUrl;
 
-  factory A1.fromRawJson(String str) => A1.fromJson(json.decode(str));
+  factory A.fromRawJson(String str) => A.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
-  factory A1.fromJson(Map<String, dynamic> json) => A1(
-    question: json["question"],
-    imageUrl: json["image_url"],
+  factory A.fromJson(Map<String, dynamic> json) => A(
+    question: json["question"] ?? "",
+    imageUrl: json["image_url"] ?? "",
   );
 
   Map<String, dynamic> toJson() => {

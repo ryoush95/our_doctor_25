@@ -1,7 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:ourdoctor/global/app_colors.dart';
 import 'package:ourdoctor/global/app_styles.dart';
+import 'package:ourdoctor/global/http_service.dart';
+import 'package:ourdoctor/models/develope/life_result_model.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
 import 'package:ourdoctor/pages/base/page_layout.dart';
 import 'package:ourdoctor/pages/components/h14.dart';
@@ -10,22 +13,24 @@ import 'package:ourdoctor/pages/components/main_text_button.dart';
 import 'package:ourdoctor/pages/components/simple_header.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
-class MonitoringTestResult extends StatefulWidget {
-  const MonitoringTestResult({Key? key}) : super(key: key);
+class MonitoringLifeResult extends StatefulWidget {
+  const MonitoringLifeResult({Key? key}) : super(key: key);
 
   @override
-  State<MonitoringTestResult> createState() => _MonitoringTestResultState();
+  State<MonitoringLifeResult> createState() => _MonitoringLifeResultState();
 }
 
-class _MonitoringTestResultState extends BaseState<MonitoringTestResult> {
-
+class _MonitoringLifeResultState extends BaseState<MonitoringLifeResult> {
+  final HttpService httpService = HttpService();
+  List<LifeCateDto> cateScroe = [];
+  List<WrongAnswer> wrongList = [];
   int tabIndex = 0;
   String option = "1";
   List<String> CATEGORY = ["개인위생", "구강교육", "감각", "안전사고", "영양", "전자미디어", "정서", "대소변", "수면교육"];
-  List<int> cateint = [26,16,7,11,21,15,13,27,19];
+  // List<int> cateint = [26,16,7,11,21,15,13,27,19];
   ScrollController sc = ScrollController();
   Color indiColor = AppColor_Primary;
-  String indiimage = "assets/icon_good.png";
+  String inidiImage = "assets/icon_good.png";
   String indiText = "성장과 발달에 적합한 생활습관을 잘 지키고 있는 편이에요. 놓치고 있었던 부분을 확인하여 더욱 좋은 생활 습관을 정립해 보세요.";
 
 
@@ -34,13 +39,39 @@ class _MonitoringTestResultState extends BaseState<MonitoringTestResult> {
     return false;
   }
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getLifeResult();
+  }
+
+  Future<void> getLifeResult() async {
+    Future<LifeResultModel> info =
+    httpService.getMonitoringLifeResult();
+    info.then((value) async {
+      if (value.result == 0) {
+        CATEGORY = value.data!.keys.toList();
+        cateScroe = value.data!.values.toList();
+        wrongList = cateScroe[0].wrongAnswers!.values.toList();
+        setStatus();
+        setState(() {
+          isLoading = false;
+        });
+      }
+    }).catchError((onError) {
+      print(onError.toString());
+    });
+  }
+
   Widget categoryTile(int index) {
     return InkWell(
       onTap: () {
         sc.jumpTo(0.0);
+        wrongList = cateScroe[index].wrongAnswers!.values.toList();
         setState(() {
           tabIndex = index;
-          testIndicator();
+          setStatus();
         });
       },
       child: Container(
@@ -67,7 +98,7 @@ class _MonitoringTestResultState extends BaseState<MonitoringTestResult> {
     );
   }
 
-  Widget testTile2() {
+  Widget testTile2(index) {
     var screenSize = MediaQuery.of(context).size;
     double h = 25;
     double w = 80;
@@ -77,7 +108,7 @@ class _MonitoringTestResultState extends BaseState<MonitoringTestResult> {
         SizedBox(
           width: screenSize.width,
           child: H16(
-            text: "Q1",
+            text: "Q${index +1}",
             maxLine: 1,
             color: AppColor_Gray,
             align: TextAlign.left,
@@ -88,7 +119,7 @@ class _MonitoringTestResultState extends BaseState<MonitoringTestResult> {
         SizedBox(
           width: screenSize.width,
           child: H16(
-            text: "매일 손을 씻고있나요?",
+            text: wrongList[index].question!,
             maxLine: 5,
             align: TextAlign.left,
             height: 1.5,
@@ -96,10 +127,14 @@ class _MonitoringTestResultState extends BaseState<MonitoringTestResult> {
           ),
         ),
         const SizedBox(height: 35),
-        // FlutterLogo(
-        //   size: 100,
-        // ),
-        // const SizedBox(height: 35),
+        // Text(wrongList[index].imageUrl!),
+        wrongList[index].imageUrl! != ""
+            ? CachedNetworkImage(
+                imageUrl: wrongList[index].imageUrl!,
+                // height: 100,
+                errorWidget: (context, url, error) => const SizedBox(height: 35),
+              )
+            : const SizedBox(height: 35),
         Center(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -111,7 +146,7 @@ class _MonitoringTestResultState extends BaseState<MonitoringTestResult> {
                       Opacity(
                         opacity: option == "1" ? 0.5 : 1,
                         child: Image.asset(
-                          option == "1"
+                          wrongList[index].answer! == 1
                               ? "assets/choose_on.png"
                               : "assets/choose_test_check.png",
                           width: 25,
@@ -119,7 +154,7 @@ class _MonitoringTestResultState extends BaseState<MonitoringTestResult> {
                         ),
                       ),
                       const SizedBox(height: 20),
-                      option == "1"
+                      wrongList[index].answer! == 1
                           ? Opacity(
                         opacity: 0.5,
                         child: Container(
@@ -166,9 +201,9 @@ class _MonitoringTestResultState extends BaseState<MonitoringTestResult> {
                   Column(
                     children: [
                       Opacity(
-                        opacity: option == "0" ? 0.5 : 1,
+                        opacity: wrongList[index].answer! == 0 ? 0.5 : 1,
                         child: Image.asset(
-                          option == "0"
+                          wrongList[index].answer! == 0
                               ? "assets/choose_on.png"
                               : "assets/choose_test_check.png",
                           width: 25,
@@ -176,7 +211,7 @@ class _MonitoringTestResultState extends BaseState<MonitoringTestResult> {
                         ),
                       ),
                       const SizedBox(height: 20),
-                      option == "0"
+                      wrongList[index].answer! == 0
                           ? Opacity(
                         opacity: 0.5,
                         child: Container(
@@ -227,7 +262,7 @@ class _MonitoringTestResultState extends BaseState<MonitoringTestResult> {
               const SizedBox(width: 10),
               SizedBox(
                 width: MediaQuery.of(context).size.width - 180,
-                child: H14(text: "손씻기는 습관화 되어야 설사 및 호흡기 감염을 예방 할 수 있습니다. 손세정제를 사용해서라도 위생을 지켜주세요.",
+                child: H14(text: wrongList[index].description!,
                   maxLine: 5,
                   height: 1.5,
                   align: TextAlign.start,
@@ -242,20 +277,23 @@ class _MonitoringTestResultState extends BaseState<MonitoringTestResult> {
     );
   }
 
-  void testIndicator() {
-    if (cateint[tabIndex] < 13) {
-      indiimage = "assets/icon_bad.png";
-      indiText = "성장, 발달에 노력이 필요한 생활 습관이에요.\n성장과 발달에 적합한 생활 습관을 잘 지키지 못하고 있어요. 놓치고 있는 부분들이 많으니 틀린 문제를 확인해 좋은 생활 습관을 정립해보세요.";
-      indiColor = AppColor_Red;
-    } else if (cateint[tabIndex] < 25) {
-      indiimage = "assets/icon_normal.png";
-      indiText = "성장, 발달에 보통인 생활습관이에요.\n성장과 발달에 적합한 생활 습관을 지키고 있는 편이지만, 놓치고 있는 부분들이 있어요. 틀린 문제를 확인해 좋은 생활 습관을 정립해 보세요.";
-      indiColor = AppColor_Oxygen;
-    } else {
-      indiimage = "assets/icon_good.png";
-      indiText = "성장, 발달에 좋은 생활습관이에요.\n성장과 발달에 적합한 생활습관을 잘 지키고 있는 편이에요. 놓치고 있었던 부분을 확인하여 더욱 좋은 생활 습관을 정립해 보세요.";
+  void setStatus() {
+    String s = cateScroe[tabIndex].status!;
+    indiText = cateScroe[tabIndex].feedbackDescription!;
+    if (s == "B") {
+      inidiImage = "assets/icon_good.png";
       indiColor = AppColor_Primary;
+    } else if (s == "R") {
+      inidiImage = "assets/icon_bad.png";
+      indiColor = AppColor_Red;
+    } else {
+      inidiImage = "assets/icon_normal.png";
+      indiColor = AppColor_Oxygen;
     }
+  }
+
+  void getWrongList() {
+
   }
 
   @override
@@ -280,14 +318,14 @@ class _MonitoringTestResultState extends BaseState<MonitoringTestResult> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Center(
+              cateScroe.isNotEmpty ? Center(
                 child: CircularPercentIndicator(
                   radius: 120.0,
-                  percent: cateint[tabIndex]/30,
+                  percent: cateScroe[tabIndex].score!/cateScroe[tabIndex].totalScore!,
                   center: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Image.asset(indiimage,
+                      Image.asset(inidiImage,
                         height: 60,
                         width: 70,
                       ),
@@ -296,10 +334,10 @@ class _MonitoringTestResultState extends BaseState<MonitoringTestResult> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(cateint[tabIndex].toString(),style: TextStyle(
+                            Text(cateScroe[tabIndex].score!.toString(),style: TextStyle(
                               color: indiColor,
                             ),),
-                            Text("/30")
+                            Text("/${cateScroe[tabIndex].totalScore!}")
                           ],
                         ),
                       )
@@ -311,7 +349,7 @@ class _MonitoringTestResultState extends BaseState<MonitoringTestResult> {
                   animation: true,
                   lineWidth: 8.0,
                 ),
-              ),
+              ) : const SizedBox(),
               const SizedBox(height: 30),
               // RichText(
               //   text: TextSpan(
@@ -347,7 +385,7 @@ class _MonitoringTestResultState extends BaseState<MonitoringTestResult> {
           ),
         ),
         const SizedBox(height: 20),
-        Container(
+        SizedBox(
           height: 150,
           child: GridView.builder(
             // scrollDirection: Axis.horizontal,
@@ -365,7 +403,14 @@ class _MonitoringTestResultState extends BaseState<MonitoringTestResult> {
             ),
           ),
         ),
-        testTile2(),
+        Container(
+          height: wrongList.length * 400,
+          child: ListView.builder(
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: wrongList.length,
+            itemBuilder: (context, index) => testTile2(index),
+          ),
+        ),
       ]),
     );
   }

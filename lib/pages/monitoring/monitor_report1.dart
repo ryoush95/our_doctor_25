@@ -8,6 +8,7 @@ import 'package:ourdoctor/helpers/common_util.dart';
 import 'package:ourdoctor/helpers/transition.dart';
 import 'package:ourdoctor/language/language_service.dart';
 import 'package:ourdoctor/models/develope/heath_result_model.dart';
+import 'package:ourdoctor/models/develope/life_result_model.dart';
 import 'package:ourdoctor/models/home_grapth_res_model.dart';
 import 'package:ourdoctor/models/monitor_list_res_model.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
@@ -46,6 +47,8 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
   String comment1 = "";
   String comment2 = "";
   List<Empty> healthList = [];
+  List<String> wrongListTitle = [];
+  List<LifeCateDto> wrongList = [];
 
   //FIXME: 테스트후 삭제
   void qkfekf(int index) {
@@ -517,7 +520,7 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
     return Container();
   }
 
-  Widget growTile(int index) {
+  Widget healthTile(int index) {
     return InkWell(
       onTap: () {
         setState(() {
@@ -586,7 +589,7 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
                   child: GridView.builder(
                     physics: const NeverScrollableScrollPhysics(),
                     itemBuilder: (BuildContext context, int index) {
-                      return growTile(index);
+                      return healthTile(index);
                     },
                     itemCount: subCategory.length,
                     gridDelegate:
@@ -660,7 +663,7 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
             )
           : const SizedBox();
     } else if (tabIndex == 1) {
-      return MonitoringTestResult();
+      return MonitoringLifeResult();
     } else if (tabIndex == 2) {
       return Container(
         child: Column(

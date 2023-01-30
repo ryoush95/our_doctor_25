@@ -81,17 +81,17 @@ class TabMainPageState extends BaseState<TabMainPage>
   final sideMenuList = [
     SideMenuCategory(
         icon: 'ic_ua_point.png', title: 'ua_point', route: MyPointPage()),
-    SideMenuCategory(
-        icon: 'ic_basket.png',
-        title: 'shopping_basket',
-        route: ShoppingBasketPage()),
+    // SideMenuCategory(
+    //     icon: 'ic_basket.png',
+    //     title: 'shopping_basket',
+    //     route: ShoppingBasketPage()),
     SideMenuCategory(
         icon: 'ic_jjim_product.png',
         title: 'favorite_product',
         route: FavoriteProductPage()),
     // SideMenuCategory(icon: 'ic_pencil.svg', title: 'view_my_posts', route: MyPostsPage()),
     SideMenuCategory(
-        icon: 'settings_black_24dp.png', title: 'my_page', route: MyPagePage()),
+        icon: 'ic_my_info.png', title: 'my_page', route: MyPagePage()),
     SideMenuCategory(
         icon: 'ic_faq.png', title: 'notice_faq', route: FaqListPage()),
     SideMenuCategory(icon: '9c_ask.png', title: 'inquiry'),
@@ -1556,7 +1556,7 @@ class TabMainPageState extends BaseState<TabMainPage>
 
   sideMenu(int idx) => Container(
         margin: const EdgeInsets.symmetric(horizontal: 22),
-        padding: idx != 3
+        padding: idx != 2
             ? const EdgeInsets.only(top: 15, bottom: 13)
             : const EdgeInsets.only(top: 40, bottom: 13),
         decoration: BoxDecoration(
@@ -1570,10 +1570,10 @@ class TabMainPageState extends BaseState<TabMainPage>
         child: GestureDetector(
           onTap: () {
             showLeftMenu();
-            if (idx == 6) {
-              _launchURL(KAKAOTALK_CHAT);
-            } else if (idx == 7) {
+            if (idx == 5) {
               _launchURL(DATEBOOK_URL);
+              // } else if (idx == 7) {
+            //   _launchURL(DATEBOOK_URL);
             } else {
               Navigator.push(
                   context,
@@ -1587,10 +1587,7 @@ class TabMainPageState extends BaseState<TabMainPage>
             children: [
               Row(
                 children: [
-                  idx != 3
-                      ? Image.asset('assets/${sideMenuList[idx].icon}',
-                          height: 20)
-                      : SvgPicture.asset('assets/${sideMenuList[idx].icon}',
+                  Image.asset('assets/${sideMenuList[idx].icon}',
                           height: 20),
                   const SizedBox(width: 12),
                   H16(
@@ -1618,24 +1615,24 @@ class TabMainPageState extends BaseState<TabMainPage>
                           ),
                         )
                       : const SizedBox(),
-                  idx == 1
-                      ? Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 7),
-                            decoration: BoxDecoration(
-                              color: AppColor_f4f5f7,
-                              borderRadius: BorderRadius.circular(15.0),
-                            ),
-                            child: H12(
-                              text: sprintf(
-                                  "%s 개", [(basketList.length.toString())]),
-                              weight: FW.regular,
-                            ),
-                          ),
-                        )
-                      : const SizedBox(),
+                  // idx == 1
+                  //     ? Container(
+                  //         padding: const EdgeInsets.symmetric(horizontal: 10),
+                  //         child: Container(
+                  //           padding: const EdgeInsets.symmetric(
+                  //               horizontal: 10, vertical: 7),
+                  //           decoration: BoxDecoration(
+                  //             color: AppColor_f4f5f7,
+                  //             borderRadius: BorderRadius.circular(15.0),
+                  //           ),
+                  //           child: H12(
+                  //             text: sprintf(
+                  //                 "%s 개", [(basketList.length.toString())]),
+                  //             weight: FW.regular,
+                  //           ),
+                  //         ),
+                  //       )
+                  //     : const SizedBox(),
                 ],
               ),
             ],

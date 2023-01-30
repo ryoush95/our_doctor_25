@@ -87,7 +87,7 @@ class _CommunityItemState extends State<CommunityItem> {
                         ),
                         H16(
                           text: " " + widget.data.likeCnt!,
-                          color: (widget.admin == "1") ? AppColor_White : Color(0xffA0A0A0),
+                          color: (widget.data.fixed == "1") ? AppColor_White : Color(0xffA0A0A0),
                           weight: FW.regular,
                         ),
                         const SizedBox(width: 20),
@@ -98,7 +98,7 @@ class _CommunityItemState extends State<CommunityItem> {
                         ),
                         H16(
                           text: " " + widget.data.commentCnt!,
-                          color: (widget.admin == "1") ? AppColor_White : Color(0xffA0A0A0),
+                          color: (widget.data.fixed == "1") ? AppColor_White : Color(0xffA0A0A0),
                           weight: FW.regular,
                         ),
                       ],

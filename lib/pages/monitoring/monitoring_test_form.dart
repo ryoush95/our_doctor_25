@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:ourdoctor/global/app_colors.dart';
 import 'package:ourdoctor/global/app_styles.dart';
@@ -5,6 +7,7 @@ import 'package:ourdoctor/global/http_service.dart';
 import 'package:ourdoctor/helpers/common_util.dart';
 import 'package:ourdoctor/helpers/transition.dart';
 import 'package:ourdoctor/language/language_service.dart';
+import 'package:ourdoctor/models/default_res_model.dart';
 import 'package:ourdoctor/models/monitor_test_list.dart';
 import 'package:ourdoctor/models/monitor_test_list2.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
@@ -29,7 +32,6 @@ class MonitoringTestForm extends StatefulWidget {
 
 class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
   HttpService httpService = HttpService();
-  String option = "1";
   int option4 = 0;
   bool isValid = false;
   List<String> allList = [];
@@ -42,15 +44,18 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
   List<String> cate = ["발달영역", "생활습관", "신체"];
   List<String> subCate1 = ["대근육", "소근육", "인지", "언어", "사회성", "자조"];
   List<String> subCate2 = ["개인위생", "구강교육", "감각", "안전사고", "영양", "전자미디어", "정서", "대소변", "수면교육"];
+  final List<String> bodyString = ["적정량의 식사를 하나요?", "매일 충분히 잠을 자나요?", "하루에 신체활동을 잘하나요?"];
+  List<int> _data = [0,0,0];
 
   int cateNum = 0;
   int subNum = 0;
   List<String> list = [];
   late HealthTestDto map;
-  late LifeTestDto map2;
+  LifeTestDto? map2;
 
   String tall = "";
   String weight = "";
+  String score = "";
   Color tallColor = AppColor_Selector_Border;
   Color weightColor = AppColor_Selector_Border;
 
@@ -72,6 +77,7 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
     _listSc = ScrollController();
     _listSc2 = ScrollController();
     getQuizList();
+    getQuizList2();
   }
 
   @override
@@ -94,7 +100,7 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
           quizList.add(value.question);
         });
         for (int i = 0; i < quizList.length; i++) {
-          selList.add("1");
+          selList.add("0");
         }
         setState(() {});
       }
@@ -103,22 +109,15 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
     });
   }
 
-  getQuizList2() async {
-    Future<MonitoringLifeListModel> info2 =
-        httpService.getMonitoringLifeList2();
+  void getQuizList2() async {
+    Future<MonitoringLifeListModel> info2 = httpService.getMonitoringLifeList2();
     info2.then((value) async {
       setState(() {
         isLoading = false;
       });
+      print(value.result);
       if (value.result == 0) {
         map2 = value.data;
-        map2.a1.forEach((key, value) {
-          quizNum.add(key);
-          quizList.add(value.question);
-        });
-        for (int i = 0; i < quizList.length; i++) {
-          selList.add("1");
-        }
         setState(() {});
       }
     }).catchError((onError) {
@@ -137,7 +136,7 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
     return true;
   }
 
-  void goNext() {
+  void goNext() async {
     if (selList.contains("-1")) {
       showToast('모든 문항에 대한 답변이 필요합니다.');
       return;
@@ -149,10 +148,21 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
     if (subNum == list.length - 1) {
       cateNum++;
       subNum = 0;
+
       if (cateNum == 1) {
-        getQuizList2();
         list = subCate2;
+        map2!.a!.forEach((key, value) {
+          quizNum.add(key);
+          quizList.add(value.question);
+        });
+        for (int i = 0; i < quizList.length; i++) {
+          selList.add("-1");
+        }
+        goSave();
+        setState(() {});
       }
+      allList.clear();
+
     } else {
       subNum++;
       if (cateNum == 0) {
@@ -184,59 +194,45 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
         }
       } else if (cateNum == 1) {
         if (subNum == 1) {
-          map2.b1.forEach((key, value) {
+          map2!.b!.forEach((key, value) {
             quizNum.add(key);
             quizList.add(value.question);
           });
         } else if (subNum == 2) {
-          map2.c1.forEach((key, value) {
+          map2!.c!.forEach((key, value) {
             quizNum.add(key);
             quizList.add(value.question);
           });
         } else if (subNum == 3) {
-          map2.d1.forEach((key, value) {
+          map2!.d!.forEach((key, value) {
             quizNum.add(key);
             quizList.add(value.question);
           });
         } else if (subNum == 4) {
-          map2.e1.forEach((key, value) {
+          map2!.e!.forEach((key, value) {
             quizNum.add(key);
             quizList.add(value.question);
           });
         } else if (subNum == 5) {
-          map2.f1.forEach((key, value) {
+          map2!.f!.forEach((key, value) {
             quizNum.add(key);
             quizList.add(value.question);
           });
         } else if (subNum == 6) {
-          map2.g1.forEach((key, value) {
+          map2!.g!.forEach((key, value) {
             quizNum.add(key);
             quizList.add(value.question);
           });
         } else if (subNum == 7) {
-          map2.h1.forEach((key, value) {
+          map2!.h!.forEach((key, value) {
             quizNum.add(key);
             quizList.add(value.question);
           });
         } else if (subNum == 8) {
-          map2.i1.forEach((key, value) {
+          map2!.i!.forEach((key, value) {
             quizNum.add(key);
             quizList.add(value.question);
           });
-        }
-      }
-
-      if (quizList.isEmpty) {
-        if (subNum == subCate1.length - 1) {
-          cateNum++;
-          subNum = 0;
-          if (cateNum == 1) {
-            getQuizList2();
-            list = subCate2;
-          }
-          return;
-        } else {
-          subNum++;
         }
       }
       for (int i = 0; i < quizList.length; i++) {
@@ -245,6 +241,48 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
       setState(() {});
     }
     // _listSc2!.jumpTo(0.0);
+  }
+
+  void goSave() async{
+    Future<DefaultResModel>? insert;
+    if (cateNum == 0) {
+      insert = httpService.inputHealthSendResult(jsonEncode(quizNum), jsonEncode(allList));
+
+    } else if (cateNum == 1){
+      insert = httpService.inputLifeSendResult(jsonEncode(quizNum), jsonEncode(allList));
+    }
+    insert!.then((value) async {
+      setState(() {
+        isLoading = false;
+      });
+      if (value.result == 0) {
+        // showToast("검사가 저장되었습니다");
+      }
+    }).catchError((onError) {
+      print(onError.toString());
+    });
+  }
+
+  void saveBody() async {
+    int s = _data.reduce((value, element) => value+element);
+    score = (s * 2).toString();
+    Future<DefaultResModel>? insert = httpService.inputBodySendResult(tall, weight, score);
+    insert.then((value) async {
+      setState(() {
+        isLoading = false;
+      });
+      print(value.result);
+      if (value.result == 0) {
+        Navigator.pushReplacement(
+            context,
+            SlideRightTransRoute(
+              builder: (context) =>
+              const MonitorReport1(),
+            ));
+      }
+    }).catchError((onError) {
+      print(onError.toString());
+    });
   }
 
   @override
@@ -337,7 +375,7 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
                                   ? AppColor_Primary_Disable
                                   : Colors.transparent,
                               onPressed: () {
-                                // goNext();
+                                goSave();
                                 showToast('저장되었습니다');
                               },
                             ),
@@ -358,16 +396,12 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
                             onPressed: () {
                               if (!checkBodyValid()) return;
                               if (cate[cateNum] == "신체") {
-                                if (isValid == false) {
+                                if (isValid == false || tall.isEmpty || weight.isEmpty) {
                                   showToast("키와 체중을 정확히 입력해주세요");
                                   return;
                                 }
-                                Navigator.pushReplacement(
-                                    context,
-                                    SlideRightTransRoute(
-                                      builder: (context) =>
-                                          const MonitorReport1(),
-                                    ));
+                                saveBody();
+
                                 return;
                               }
                               goNext();
@@ -695,15 +729,15 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
                           placeholder: "",
                           onChanged: (text) {
                             tall = text;
-                            if (double.parse(tall) < 0 ||
+                            if (double.parse(tall) < 20 ||
                                 double.parse(tall) > 200) {
                               isValid = false;
                               tallColor = Colors.red;
                             } else {
-                              isValid = false;
+                              isValid = true;
                               tallColor = AppColor_Selector_Border;
                             }
-                            checkBodyValid();
+                            // checkBodyValid();
                             setState(() {});
                           },
                         ),
@@ -735,14 +769,17 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
                           placeholder: "",
                           onChanged: (text) {
                             weight = text;
-                            if (double.parse(weight) < 0 ||
+                            if (double.parse(weight) < 20 ||
                                 double.parse(weight) > 200) {
+                              isValid = false;
                               weightColor = Colors.red;
                             } else {
+                              isValid = true;
                               weightColor = AppColor_Selector_Border;
                             }
-                            checkBodyValid();
-                            setState(() {});
+                            // checkBodyValid();
+                            setState(() {
+                            });
                           },
                         ),
                       ),
@@ -757,6 +794,45 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
             ],
           ),
           const SizedBox(height: 50),
+          Container(
+              height: 150,
+              padding: const EdgeInsets.all(25),
+              decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(8)),
+                  color: AppColor_Light_Gray),
+              child: ListView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: _data.length,
+                itemBuilder: (context, index) {
+                  return Column(
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          if (_data[index] == 0){
+                            _data[index] = 1;
+                          } else {
+                            _data[index] = 0;
+                          }
+                          setState(() {});
+                        },
+                        child: Row(children: [
+                          Image.asset(
+                            _data[index] == 0 ? "assets/ic_radio_off.png"
+                                :"assets/ic_radio_on.png",
+                            width: 20,
+                          ),
+                          const SizedBox(width: 8),
+                          H16(
+                            text: bodyString[index],
+                            weight: FW.regular,
+                          )
+                        ]),
+                      ),
+                      const SizedBox(height: 8),
+                    ],
+                  );
+                },
+              )),
         ],
       ),
     );

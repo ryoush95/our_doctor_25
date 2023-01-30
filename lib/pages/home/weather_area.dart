@@ -67,9 +67,9 @@ class WeatherAreaState extends BaseState<WeatherArea> {
         }
       }
     }).catchError((onError) {
-      setState(() {
-        isLoading = false;
-      });
+      // setState(() {
+      //   isLoading = false;
+      // });
       print(onError.toString());
     });
   }

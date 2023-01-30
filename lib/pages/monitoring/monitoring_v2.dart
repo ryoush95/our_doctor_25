@@ -306,6 +306,19 @@ class _MonitoringMain2State extends BaseState<MonitoringMain2> {
     setState(() {});
   }
 
+  void getSymtomList() {
+    for (int i = 0; i < gSymptomList!.length; i++) {
+      if (category[selSymtomidx] == gSymptomList![i].category) {
+        symptomList[selSymtomidx] = gSymptomList![i].list!;
+      }
+    }
+    if (symptomList[selSymtomidx].isNotEmpty) {
+      symptom[selSymtomidx] = symptomList[selSymtomidx][0];
+    }
+    setState(() {});
+    checkValid();
+  }
+
   void addSymptom() {
     MonitoringSymptomDto info = MonitoringSymptomDto();
     info.category = initCategory;
@@ -514,7 +527,7 @@ class _MonitoringMain2State extends BaseState<MonitoringMain2> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SimpleHeader(
-                  title: LanguageService.trans('diagnosis_of_the_day'),
+                  title: "우아 성장 노트",
                   onBackPressed: onBackPressed,
                 ),
                 Expanded(
@@ -526,7 +539,7 @@ class _MonitoringMain2State extends BaseState<MonitoringMain2> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           H24B(
-                            text: "오늘의 진단",
+                            text: "우아 성장 노트",
                             color: AppColor_BlackText,
                             align: TextAlign.left,
                             height: 1.5,
@@ -1037,7 +1050,7 @@ class _MonitoringMain2State extends BaseState<MonitoringMain2> {
                           if (selectedCategory == "직접입력") {
                             checkValid();
                           } else {
-                            // getSymtomList();
+                            getSymtomList();
                             monitoringData!.symptom_list![index].symptom = symptomList[selSymtomidx][0];
                           }
                         });

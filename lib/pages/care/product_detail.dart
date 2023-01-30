@@ -262,11 +262,12 @@ class ProductDetailtState extends BaseState<ProductDetail> {
       child: SizedBox(
         child: Column(
           children: [
-            SimpleHeader1(
+          // SimpleHeader1(
+            SimpleHeader(
               title: mData.name != null ? mData.name : "",
               onBackPressed: onBackPressed,
-              basket: goShoppingBasketPage,
-              basketList: basketList.length.toString(),
+              // basket: goShoppingBasketPage,
+              // basketList: basketList.length.toString(),
             ),
             Expanded(
               child: Container(

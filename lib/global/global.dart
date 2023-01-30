@@ -14,7 +14,8 @@ const String APPSTORE_URL = "http://itunes.apple.com/app/id1607310254?mt=8"; //�
 const String MARKET_URL = "https://play.google.com/store/apps/details?id=com.kyad.ourdoctor"; //구글 마캣
 const String ONESOTRE_URL = "https://onesto.re/0000761223"; //원스토어
 const String KAKAOTALK_CHAT = "https://pf.kakao.com/_JAjBb/chat"; //카톡 문의
-const String DATEBOOK_URL = "https://wooadoctor.com/databook"; //발달리포트 자료집
+// const String DATEBOOK_URL = "https://wooadoctor.com/databook"; //발달리포트 자료집
+const String DATEBOOK_URL = "https://blog.naver.com/mingling_2019/222999320667"; //발달리포트 자료집
 const String HEALTH_CALENDAR = "http://woorisoa.co.kr/clinic/clinic_07.php"; //검진캘린더  연결페이지
 const String vaccine_CALENDAR = "http://woorisoa.co.kr/bbs/board.php?bo_table=vaccine"; //예방접종클리닉 페이지(접종캘린더)
 const String HEALTH_URL1 = "https://nip.kdca.go.kr/irgd/index.html"; //예방 접종정보 확인하기

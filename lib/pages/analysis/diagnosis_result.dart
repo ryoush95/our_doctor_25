@@ -232,7 +232,7 @@ class DiagnosisResultPageState extends BaseState<DiagnosisResultPage> {
                           child: Container(
                             child: Center(
                               child: H18(
-                                text: LanguageService.trans("1_minute_free_diagnostic_results"),
+                                text: "1분 간단 체크 결과",
                                 weight: FW.medium,
                                 height: 1.2,
                                 color: AppColor_BlackText,

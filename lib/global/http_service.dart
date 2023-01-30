@@ -31,6 +31,7 @@ import 'package:ourdoctor/models/community_detail_res_model.dart';
 import 'package:ourdoctor/models/community_list_res_model.dart';
 import 'package:ourdoctor/models/default_res_model.dart';
 import 'package:ourdoctor/models/develope/heath_result_model.dart';
+import 'package:ourdoctor/models/develope/life_result_model.dart';
 import 'package:ourdoctor/models/monitor_test_list.dart';
 import 'package:ourdoctor/models/duplicate_res_model.dart';
 import 'package:ourdoctor/models/faq_res_model.dart';
@@ -2397,6 +2398,83 @@ class HttpService {
     final response = await http.post(myUri, body: body);
     if (response.statusCode == 200) {
       return MonitorHealthResultModel.fromJson(json.decode(response.body));
+    } else {
+      // If that call was not successful, throw an error.
+      showToast(LanguageService.trans("server_fail"));
+      throw Exception(LanguageService.trans("server_fail"));
+    }
+  }
+
+  //생활습관 모니터링 결과 가져오기
+  Future<LifeResultModel> getMonitoringLifeResult() async {
+    String _url = API_BASE_URL + "api/monitoring/get_lifestyle_result";
+    Map<String, String> body = {
+      'access_token': gUserInfo!.accessToken!,
+    };
+    Uri myUri = Uri.parse(_url);
+    final response = await http.post(myUri, body: body);
+    if (response.statusCode == 200) {
+      return LifeResultModel.fromJson(json.decode(response.body));
+    } else {
+      // If that call was not successful, throw an error.
+      showToast(LanguageService.trans("server_fail"));
+      throw Exception(LanguageService.trans("server_fail"));
+    }
+  }
+
+  //발달습관 결과 저장
+  Future<DefaultResModel> inputHealthSendResult(String quizNum, String answer) async {
+    String _url = API_BASE_URL + "api/monitoring/save_development_monitoring";
+    Map<String, String> body = {
+      'access_token': gUserInfo!.accessToken!,
+      'question' : quizNum,
+      'answer': answer,
+    };
+    Uri myUri = Uri.parse(_url);
+    print(body);
+    final response = await http.post(myUri, body: body);
+    if (response.statusCode == 200) {
+      return DefaultResModel.fromJson(json.decode(response.body));
+    } else {
+      // If that call was not successful, throw an error.
+      showToast(LanguageService.trans("server_fail"));
+      throw Exception(LanguageService.trans("server_fail"));
+    }
+  }
+
+  //생활습관 결과 저장
+  Future<DefaultResModel> inputLifeSendResult(String quizNum, String answer) async {
+    String _url = API_BASE_URL + "api/monitoring/save_lifestyle_monitoring";
+    Map<String, String> body = {
+      'access_token': gUserInfo!.accessToken!,
+      'question' : quizNum,
+      'answer': answer,
+    };
+    Uri myUri = Uri.parse(_url);
+    final response = await http.post(myUri, body: body);
+    if (response.statusCode == 200) {
+      return DefaultResModel.fromJson(json.decode(response.body));
+    } else {
+      // If that call was not successful, throw an error.
+      showToast(LanguageService.trans("server_fail"));
+      throw Exception(LanguageService.trans("server_fail"));
+    }
+  }
+
+  //발달습관 결과 저장
+  Future<DefaultResModel> inputBodySendResult(String tall, String weight, String score) async {
+    String _url = API_BASE_URL + "api/monitoring/save_health_monitoring";
+    Map<String, String> body = {
+      'access_token': gUserInfo!.accessToken!,
+      'tall' : tall,
+      'weight': weight,
+      'score': score,
+    };
+    Uri myUri = Uri.parse(_url);
+    print(body);
+    final response = await http.post(myUri, body: body);
+    if (response.statusCode == 200) {
+      return DefaultResModel.fromJson(json.decode(response.body));
     } else {
       // If that call was not successful, throw an error.
       showToast(LanguageService.trans("server_fail"));

@@ -310,19 +310,19 @@ class FavoriteProductPageState extends BaseState<FavoriteProductPage> {
                               },
                             ),
                             const SizedBox(width: 8),
-                            MainTextButton(
-                              text: LanguageService.trans("shopping_basket"),
-                              showBorder: true,
-                              borderColor: AppColor_Primary,
-                              width: (screenSize.width - 60 - 120 - 25) / 2,
-                              height: 36,
-                              radius: 8,
-                              backgroundColor: AppColor_White,
-                              style: AppTextStyle.PD(AppColor_Primary, 14, weight: FW.regular),
-                              onPressed: () {
-                                reqAddBasket(info);
-                              },
-                            )
+                            // MainTextButton(
+                            //   text: LanguageService.trans("shopping_basket"),
+                            //   showBorder: true,
+                            //   borderColor: AppColor_Primary,
+                            //   width: (screenSize.width - 60 - 120 - 25) / 2,
+                            //   height: 36,
+                            //   radius: 8,
+                            //   backgroundColor: AppColor_White,
+                            //   style: AppTextStyle.PD(AppColor_Primary, 14, weight: FW.regular),
+                            //   onPressed: () {
+                            //     reqAddBasket(info);
+                            //   },
+                            // )
                           ],
                         )
                       ],
