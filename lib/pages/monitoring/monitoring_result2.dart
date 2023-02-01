@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:ourdoctor/global/app_colors.dart';
 import 'package:ourdoctor/global/app_styles.dart';
 import 'package:ourdoctor/global/global.dart';
@@ -7,6 +8,7 @@ import 'package:ourdoctor/helpers/common_util.dart';
 import 'package:ourdoctor/helpers/transition.dart';
 import 'package:ourdoctor/models/dto/report_dto.dart';
 import 'package:ourdoctor/models/home_grapth_res_model.dart';
+import 'package:ourdoctor/models/monitoring/temp_graph_model.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
 import 'package:ourdoctor/pages/base/page_layout.dart';
 import 'package:ourdoctor/pages/components/h14.dart';
@@ -39,10 +41,12 @@ class _MonitoringResult2State extends BaseState<MonitoringResult2> {
   List<ReportDto> reportList = [];
   List<ReportDto> reportList1 = [];
   List<ReportDto> reportList2 = [];
+  Data? tempGraphList;
 
   int curYear = 0;
   int curMonth = 0;
   DateTime now = DateTime.now();
+  String newDate = "";
 
   bool foodDetail = false;
   bool foodCheck = true;
@@ -55,8 +59,11 @@ class _MonitoringResult2State extends BaseState<MonitoringResult2> {
     super.initState();
     dicHomeGraphLifeStyleInfo = null;
 
+    newDate = DateFormat('yyyy-MM-dd').format(now);
+
     curYear = now.year;
     curMonth = now.month;
+    getTempList();
     getHomeGraphLifeStyle();
   }
 
@@ -96,6 +103,30 @@ class _MonitoringResult2State extends BaseState<MonitoringResult2> {
     });
   }
 
+  Future<void> getTempList() async{
+    Future<TempGraphModel> info2 = httpService.getTempGraph(newDate);
+    info2.then((TempGraphModel value) async {
+      setState(() {
+        isLoading = false;
+      });
+      if (value.result == 0) {
+        tempGraphList = value.data!;
+        setState(() {});
+      } else {
+        showToast(value.msg ?? "");
+        if (value.result == 106) {
+          //token expired
+          Navigator.pushReplacement(context, SlideRightTransRoute(builder: (context) => FirstPage()));
+        }
+      }
+    }).catchError((onError) {
+      setState(() {
+        isLoading = false;
+      });
+      showToast(onError);
+    });
+  }
+
   bool isTomorrowMonth() {
     int year = curYear;
     int month = curMonth;
@@ -120,7 +151,9 @@ class _MonitoringResult2State extends BaseState<MonitoringResult2> {
         children: [
           Padding(
             padding: const EdgeInsets.all(20.0),
-            child: dicHomeGraphLifeStyleInfo == null ? Container(): LifestyleLineChart2(data:dicHomeGraphLifeStyleInfo!),
+            child: tempGraphList == null || tempGraphList!.graphTemperature!.isEmpty? Center(
+              child: H14(text: "체온 정보가 없습니다."),
+            ): LifestyleLineChart2(data:tempGraphList!),
           ),
           const SizedBox(height: 20),
           Container(

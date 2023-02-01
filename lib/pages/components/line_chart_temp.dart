@@ -23,17 +23,36 @@ class _LineChartTempState extends State<LineChartTemp> {
 
   List<String> d = [];
   List<Color> gradientColors = [];
+  DateTime now = DateTime.now();
 
 
   @override
   void initState() {
     showingTooltipSpot = -1;
     super.initState();
+    print(points[1].x);
+    print(points[1].y);
+
+    DateTime(now.year, now.month + 1, 0).day.toDouble();
 
     for (int i = 1; i <= 31; i++) {
       String a = i.toString();
       d.add(a);
     }
+  }
+
+  List<FlSpot> spotList() {
+    List<FlSpot> spotList = [];
+
+    double i = 0;
+    spotList.clear();
+      for (var report in points) {
+        if (report.y != 0.0) {
+          spotList.add(FlSpot(i, double.parse(report.y.toStringAsFixed(2))));
+        }
+        i += 1;
+      }
+    return spotList;
   }
 
   @override
@@ -49,8 +68,8 @@ class _LineChartTempState extends State<LineChartTemp> {
           margin: EdgeInsets.all(10),
           child: Stack(
             children: [
-              defaultData(widget.points2),
-              mainData(widget.points),
+              // defaultData(widget.points2),
+              mainData(widget.points, widget.points2),
             ],
           ),
         ),
@@ -58,10 +77,18 @@ class _LineChartTempState extends State<LineChartTemp> {
     );
   }
 
-  Widget mainData(List<PricePoint> points) {
+  Widget mainData(List<PricePoint> points, List<PricePoint> points2) {
     final _lineBarsData = [
       LineChartBarData(
-          spots: points.map((point) => FlSpot(point.x, point.y)).toList(),
+          spots: points2.map((point) => FlSpot(point.x, point.y)).toList(),
+          isCurved: false,
+          dotData: FlDotData(
+            show: false,
+          ),
+          color: AppColor_Oxygen
+      ),
+      LineChartBarData(
+          spots: spotList(),
           isCurved: false,
           barWidth: 2,
           isStrokeCapRound: true,
@@ -77,6 +104,7 @@ class _LineChartTempState extends State<LineChartTemp> {
           ),
           color: AppColor_Height
       ),
+
     ];
     return AspectRatio(
       aspectRatio: 6,
@@ -177,7 +205,7 @@ class _LineChartTempState extends State<LineChartTemp> {
     );
   }
 
-  Widget defaultData(List<PricePoint> points) {
+  /*Widget defaultData(List<PricePoint> points) {
     final _lineBarsData = [
       LineChartBarData(
           spots: points.map((point) => FlSpot(point.x, point.y)).toList(),
@@ -212,7 +240,7 @@ class _LineChartTempState extends State<LineChartTemp> {
                   if(title != "36.5") {
                     style = AppTextStyle.PD(
                         Colors.white, 11, weight: FW.medium);
-                    return SideTitleWidget(child: Text(title /*+ "°C"*/, style: style), axisSide: meta.axisSide);
+                    return SideTitleWidget(child: Text(title *//*+ "°C"*//*, style: style), axisSide: meta.axisSide);
                   }
 
                   return SideTitleWidget(child: Text(title, style: style), axisSide: meta.axisSide);
@@ -252,5 +280,5 @@ class _LineChartTempState extends State<LineChartTemp> {
         ),
       ),
     );
-  }
+  }*/
 }

@@ -1559,21 +1559,19 @@ class TabMainPageState extends BaseState<TabMainPage>
         padding: idx != 2
             ? const EdgeInsets.only(top: 15, bottom: 13)
             : const EdgeInsets.only(top: 40, bottom: 13),
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
             border: Border(
           bottom: BorderSide(
               width: 1,
-              color: idx != 2 && idx != sideMenuList.length - 1
-                  ? AppColor_Divider
-                  : Colors.transparent),
+              color: AppColor_Divider),
         )),
         child: GestureDetector(
           onTap: () {
             showLeftMenu();
-            if (idx == 5) {
+            if (idx == 4) {
               _launchURL(DATEBOOK_URL);
-              // } else if (idx == 7) {
-            //   _launchURL(DATEBOOK_URL);
+            } else if (idx == 5) {
+              _launchURL(DATEBOOK_URL);
             } else {
               Navigator.push(
                   context,

@@ -180,10 +180,8 @@ class WeightReportState extends BaseState<WeightReport> {
               subtext: widget.data.monitoring!.diagnose!.result!.contains("정상") ? "" : ((widget.data.monitoring!.diff! > 0 ? "+" : "") + convertScore(widget.data.monitoring!.diff!.toStringAsFixed(1)) + "kg"),
               weight: widget.data.monitoring!.value!,
               tiptext: "BMI는 체질량 지수를의미합니다. (kg/m2)",
-              res: widget.data.monitoring!.diagnose!.result!.contains("부모마음") ? getResFromString("") :
-              getResFromString(widget.data.monitoring!.diagnose!.color!),
-              color: widget.data.monitoring!.diagnose!.result!.contains("부모마음") ? getColorFromString(""):
-              getColorFromString(widget.data.monitoring!.diagnose!.color!),
+              res: getResFromString(widget.data.monitoring!.diagnose!.color!),
+              color: getColorFromString(widget.data.monitoring!.diagnose!.color!),
             ),
             const SizedBox(height: 30),
             const Divider(color: AppColor_Light_Gray, thickness: 3),

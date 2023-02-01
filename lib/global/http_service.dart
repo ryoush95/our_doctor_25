@@ -30,8 +30,6 @@ import 'package:ourdoctor/models/community_add_res_model.dart';
 import 'package:ourdoctor/models/community_detail_res_model.dart';
 import 'package:ourdoctor/models/community_list_res_model.dart';
 import 'package:ourdoctor/models/default_res_model.dart';
-import 'package:ourdoctor/models/develope/heath_result_model.dart';
-import 'package:ourdoctor/models/develope/life_result_model.dart';
 import 'package:ourdoctor/models/monitor_test_list.dart';
 import 'package:ourdoctor/models/duplicate_res_model.dart';
 import 'package:ourdoctor/models/faq_res_model.dart';
@@ -60,6 +58,12 @@ import 'package:ourdoctor/models/monitor_result_res_model.dart';
 import 'package:ourdoctor/models/monitor_test_list2.dart';
 import 'package:ourdoctor/models/monitor_week_res_model.dart';
 import 'package:ourdoctor/models/monitor_write_res_model.dart';
+import 'package:ourdoctor/models/monitoring/heath_result_model.dart';
+import 'package:ourdoctor/models/monitoring/life_result_model.dart';
+import 'package:ourdoctor/models/monitoring/note_profile_model.dart';
+import 'package:ourdoctor/models/monitoring/solution_area_model.dart';
+import 'package:ourdoctor/models/monitoring/temp_graph_model.dart';
+import 'package:ourdoctor/models/monitoring/top_area_model.dart';
 import 'package:ourdoctor/models/monitoring_all_res_model.dart';
 import 'package:ourdoctor/models/monitoring_list_res_model.dart';
 import 'package:ourdoctor/models/monitoring_record_res_model.dart';
@@ -1866,7 +1870,7 @@ class HttpService {
   }
 
   //모니터링 기록
-  Future<MonitoringRecordResModel> monitoringRecord(String monitoring_time, String height, String weight, String nutrition, String sleep_at_night, String sleep_at_lunch, String symptom_list, String language, String sociability, String work_out, String breakfast, String lunch, String snack, String dinner, String uid) async {
+  Future<MonitoringRecordResModel> monitoringRecord(String monitoring_time,String height, String weight, String nutrition, String sleep_at_night, String sleep_at_lunch, String symptom_list, String language, String sociability, String work_out, String breakfast, String lunch, String snack, String dinner, String uid) async {
     String _url = API_BASE_URL + "api/Monitor2/save";
     if (uid == "") {
       Map<String, String> body = {
@@ -1923,6 +1927,133 @@ class HttpService {
         showToast(LanguageService.trans("server_fail"));
         throw Exception(LanguageService.trans("server_fail"));
       }
+    }
+  }
+
+  //성장노트 저장하기
+  Future<DefaultResModel> monitoringRecord2(String temperature, String temp_location, String sleep_at_night, String sleep_at_lunch, String symptom_list) async {
+    String _url = API_BASE_URL + "api/monitoring/save_growth_note";
+
+    Map<String, String> body = {
+      'access_token': gUserInfo!.accessToken!,
+      'temperature' : temperature,
+      'location' : temp_location,
+      'sleep_at_night': sleep_at_night,
+      'sleep_at_lunch': sleep_at_lunch,
+      'symptom_list': symptom_list,
+    };
+    Uri myUri = Uri.parse(_url);
+    final response = await http.post(myUri, body: body);
+    if (response.statusCode == 200) {
+      print("success");
+      return DefaultResModel.fromJson(json.decode(response.body));
+    } else {
+      // If that call was not successful, throw an error.
+      showToast(LanguageService.trans("server_fail"));
+      throw Exception(LanguageService.trans("server_fail"));
+    }
+  }
+
+  //toparea 가져오기
+  Future<TopAreaModel> getToparea() async {
+    String _url = API_BASE_URL + "api/monitoring/get_home_status";
+    Map<String, String> body = {
+      'access_token': gUserInfo!.accessToken!,
+    };
+    Uri myUri = Uri.parse(_url);
+    final response = await http.post(myUri, body: body);
+    if (response.statusCode == 200) {
+      return TopAreaModel.fromJson(json.decode(response.body));
+    } else {
+      // If that call was not successful, throw an error.
+      showToast(LanguageService.trans("server_fail"));
+      throw Exception(LanguageService.trans("server_fail"));
+    }
+  }
+
+  // 성장노트 가져오기
+  Future<NoteProfileModel> getNoteProfile() async {
+    String _url = API_BASE_URL + "api/monitoring/get_monitoring_status";
+    Map<String, String> body = {
+      'access_token': gUserInfo!.accessToken!,
+    };
+    Uri myUri = Uri.parse(_url);
+    final response = await http.post(myUri, body: body);
+    if (response.statusCode == 200) {
+      return NoteProfileModel.fromJson(json.decode(response.body));
+    } else {
+      // If that call was not successful, throw an error.
+      showToast(LanguageService.trans("server_fail"));
+      throw Exception(LanguageService.trans("server_fail"));
+    }
+  }
+
+  //toparea 가져오기
+  Future<SolutionAreaModel> getSolutionArea() async {
+    String _url = API_BASE_URL + "api/";
+    Map<String, String> body = {
+      'access_token': gUserInfo!.accessToken!,
+    };
+    Uri myUri = Uri.parse(_url);
+    final response = await http.post(myUri, body: body);
+    if (response.statusCode == 200) {
+      return SolutionAreaModel.fromJson(json.decode(response.body));
+    } else {
+      // If that call was not successful, throw an error.
+      showToast(LanguageService.trans("server_fail"));
+      throw Exception(LanguageService.trans("server_fail"));
+    }
+  }
+
+  //체온 그래프 가져오기
+  Future<TempGraphModel> getTempGraph(String date) async {
+    String _url = API_BASE_URL + "api/monitoring/get_temperature_graph";
+    Map<String, String> body = {
+      'access_token': gUserInfo!.accessToken!,
+      'start_date': date,
+    };
+    Uri myUri = Uri.parse(_url);
+    final response = await http.post(myUri, body: body);
+    if (response.statusCode == 200) {
+      return TempGraphModel.fromJson(json.decode(response.body));
+    } else {
+      // If that call was not successful, throw an error.
+      showToast(LanguageService.trans("server_fail"));
+      throw Exception(LanguageService.trans("server_fail"));
+    }
+  }
+
+  //그래프 신장 v2
+  Future<HomeGraphTallResModel> monitorTallv2() async {
+    String _url = API_BASE_URL + "api/monitoring/get_tall_graph";
+    Map<String, String> body = {
+      'access_token': gUserInfo!.accessToken!,
+    };
+    Uri myUri = Uri.parse(_url);
+    final response = await http.post(myUri, body: body);
+    if (response.statusCode == 200) {
+      return HomeGraphTallResModel.fromJson(json.decode(response.body));
+    } else {
+      // If that call was not successful, throw an error.
+      showToast(LanguageService.trans("server_fail"));
+      throw Exception(LanguageService.trans("server_fail"));
+    }
+  }
+
+  //그래프 신장 v2
+  Future<HomeGraphWeightResModel> monitorWeightv2() async {
+    String _url = API_BASE_URL + "api/monitoring/get_weight_graph";
+    Map<String, String> body = {
+      'access_token': gUserInfo!.accessToken!,
+    };
+    Uri myUri = Uri.parse(_url);
+    final response = await http.post(myUri, body: body);
+    if (response.statusCode == 200) {
+      return HomeGraphWeightResModel.fromJson(json.decode(response.body));
+    } else {
+      // If that call was not successful, throw an error.
+      showToast(LanguageService.trans("server_fail"));
+      throw Exception(LanguageService.trans("server_fail"));
     }
   }
 
@@ -2431,7 +2562,6 @@ class HttpService {
       'answer': answer,
     };
     Uri myUri = Uri.parse(_url);
-    print(body);
     final response = await http.post(myUri, body: body);
     if (response.statusCode == 200) {
       return DefaultResModel.fromJson(json.decode(response.body));

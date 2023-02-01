@@ -7,9 +7,9 @@ import 'package:ourdoctor/global/http_service.dart';
 import 'package:ourdoctor/helpers/common_util.dart';
 import 'package:ourdoctor/helpers/transition.dart';
 import 'package:ourdoctor/language/language_service.dart';
-import 'package:ourdoctor/models/develope/heath_result_model.dart';
-import 'package:ourdoctor/models/develope/life_result_model.dart';
+import 'package:ourdoctor/models/monitoring/heath_result_model.dart';
 import 'package:ourdoctor/models/home_grapth_res_model.dart';
+import 'package:ourdoctor/models/monitoring/life_result_model.dart';
 import 'package:ourdoctor/models/monitor_list_res_model.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
 import 'package:ourdoctor/pages/base/page_layout.dart';
@@ -49,41 +49,6 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
   List<Empty> healthList = [];
   List<String> wrongListTitle = [];
   List<LifeCateDto> wrongList = [];
-
-  //FIXME: 테스트후 삭제
-  void qkfekf(int index) {
-    if (healthList[index].score < 80) {
-      comment1 = "노력이 필요해요 센터로 보내주세요";
-    } else if (healthList[index].score < 90) {
-      comment1 = "보통이에요";
-    } else {
-      comment1 = "잘하고있어요 ";
-    }
-    return;
-  }
-
-  void qkfekf2(int index) {
-    switch (index) {
-      case 0:
-        comment2 = healthList[0].feedbackDescription;
-        break;
-      case 1:
-        comment2 = healthList[1].feedbackDescription;
-        break;
-      case 2:
-        comment2 = healthList[2].feedbackDescription;
-        break;
-      case 3:
-        comment2 = healthList[3].feedbackDescription;
-        break;
-      case 4:
-        comment2 = healthList[4].feedbackDescription;
-        break;
-      case 5:
-        comment2 = healthList[5].feedbackDescription;
-        break;
-    }
-  }
 
   HomeGraphTallDto? dicHomeGraphTallInfo;
   HomeGraphWeightDto? dicHomeGraphWeightInfo;
@@ -170,7 +135,7 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
       isLoading = true;
     });
 
-    Future<HomeGraphTallResModel> info = httpService.homeGraphTall();
+    Future<HomeGraphTallResModel> info = httpService.monitorTallv2();
     info.then((HomeGraphTallResModel value) async {
       setState(() {
         isLoading = false;
@@ -200,7 +165,7 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
       isLoading = true;
     });
 
-    Future<HomeGraphWeightResModel> info = httpService.homeGraphWeight();
+    Future<HomeGraphWeightResModel> info = httpService.monitorWeightv2();
     info.then((HomeGraphWeightResModel value) async {
       setState(() {
         isLoading = false;
@@ -524,8 +489,8 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
     return InkWell(
       onTap: () {
         setState(() {
-          qkfekf(index);
-          qkfekf2(index);
+          comment1 = healthList[index].feedbackTitle;
+          comment2 = healthList[index].feedbackDescription;
           subTabIndex = index;
         });
       },

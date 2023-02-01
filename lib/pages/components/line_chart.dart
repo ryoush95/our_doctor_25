@@ -147,7 +147,7 @@ class _LineChartWidgetState extends State<LineChartWidget> {
           sideTitles: SideTitles(
             showTitles: true,
             reservedSize: 22,
-            //interval: ((maxY - minY) / 4) == 0 ? 1 : ((maxY - minY) / 4).ceil().toDouble(),
+            // interval: ((maxY - minY) / 4) == 0 ? 1 : ((maxY - minY) / 4).ceil().toDouble(),
             interval: ((getMaxY() - getMinY()) / 4) == 0 ? 1 : 1,
             getTitlesWidget: (value, meta) {
               return getBottomTitle(value.toInt(), meta);
@@ -158,13 +158,16 @@ class _LineChartWidgetState extends State<LineChartWidget> {
         rightTitles: AxisTitles(
           sideTitles: SideTitles(
             showTitles: true,
-            // interval: 10,
+            // interval: 20,
             getTitlesWidget: (value, meta) {
               String title = '';
               final style = AppTextStyle.PD(const Color(0xff585859), 11, weight: FW.medium);
               if (widget.type == 'food') {
                 title = sprintf("%.0f", [value]);
               } else if (widget.type == 'night' || widget.type == 'launch') {
+                if (meta.min == value || meta.max == value) {
+                  return SideTitleWidget(child: Text("", style: style), axisSide: meta.axisSide);
+                }
                 title = sprintf("%.1f", [value / 60.0]);
               } else {
                 title = value.toString();
@@ -173,7 +176,6 @@ class _LineChartWidgetState extends State<LineChartWidget> {
               return SideTitleWidget(child: Text(title, style: style), axisSide: meta.axisSide);
             },
             reservedSize: 32,
-            // margin: 12,
           ),
         )
 
@@ -181,7 +183,7 @@ class _LineChartWidgetState extends State<LineChartWidget> {
       borderData: FlBorderData(show: false),
       minX: 0,
       maxX: widget.data.isNotEmpty ? 13 : (widget.type == 'food' ? widget.data1!.graphFood!.length.toDouble() - 1 : widget.data1!.graphSleep!.length.toDouble() - 1),
-      minY: 0,
+      minY: getMinY().ceil() - 1.0,
       maxY: getMaxY().ceil() + 1.0,
       lineBarsData: [
         LineChartBarData(

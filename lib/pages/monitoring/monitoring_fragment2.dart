@@ -7,8 +7,10 @@ import 'package:ourdoctor/global/http_service.dart';
 import 'package:ourdoctor/helpers/common_util.dart';
 import 'package:ourdoctor/helpers/transition.dart';
 import 'package:ourdoctor/language/language_service.dart';
+import 'package:ourdoctor/models/default_res_model.dart';
 import 'package:ourdoctor/models/final_result_res_model.dart';
 import 'package:ourdoctor/models/home_monitor_res_model.dart';
+import 'package:ourdoctor/models/monitoring/note_profile_model.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
 import 'package:ourdoctor/pages/base/page_layout.dart';
 import 'package:ourdoctor/pages/components/h12.dart';
@@ -20,6 +22,7 @@ import 'package:ourdoctor/pages/components/h24_b.dart';
 import 'package:ourdoctor/pages/components/main_text_button.dart';
 import 'package:ourdoctor/pages/components/round_container.dart';
 import 'package:ourdoctor/pages/home/circular_progress2.dart';
+import 'package:ourdoctor/pages/home/circular_progress3.dart';
 import 'package:ourdoctor/pages/intro/first.dart';
 import 'package:ourdoctor/pages/monitoring/monitor_report1.dart';
 import 'package:ourdoctor/pages/monitoring/monitoring_result2.dart';
@@ -42,16 +45,22 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
   final HttpService httpService = HttpService();
   int curCategory1 = 0;
   HomeMonitorDto? dicHomeDataInfo;
+  MonitoringProfileDto? data;
+
+  String lifeIcon = "assets/icon_normal.png";
+  String lifeText = "";
 
 
   @override
   void initState(){
 
     getMonitor2HomeDataInfo();
+    getNoteInfo();
 
     eventBus.on<SelectChildEvent>().listen((event) {
       if (mounted) {
         getMonitor2HomeDataInfo();
+        getNoteInfo();
       }
     });
     super.initState();
@@ -92,6 +101,59 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
     });
   }
 
+  Future<void> getNoteInfo() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    Future<NoteProfileModel> info = httpService.getNoteProfile();
+    info.then((NoteProfileModel value) async {
+      setState(() {
+        isLoading = false;
+      });
+      if (value.result == 0) {
+        data = value.data!;
+        setState(() {});
+      } else {
+        showToast(value.msg ?? "");
+        if (value.result == 106) {
+          //token expired
+          Navigator.pushReplacement(
+              context, SlideRightTransRoute(builder: (context) => FirstPage()));
+        }
+      }
+    }).catchError((onError) {
+      setState(() {
+        isLoading = false;
+      });
+      print(onError.toString());
+    });
+  }
+
+  Color changeColor(String s) {
+    if(s == "R"){
+      return AppColor_Red;
+    } else if(s=="G"){
+      return AppColor_Oxygen;
+    } else {
+      return AppColor_Primary;
+    }
+  }
+
+  void changeLife(String s) {
+    if(s == "R"){
+      lifeIcon = "assets/icon_bad.png";
+      lifeText = "노력이 필요해요";
+    } else if(s=="G"){
+      lifeIcon = "assets/icon_normal.png";
+      lifeText = "보통이에요";
+    } else {
+      lifeIcon = "assets/icon_good.png";
+      lifeText = "아주 좋아요";
+    }
+    setState(() {});
+  }
+
   Widget monitor1() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -118,16 +180,16 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  SizedBox(width: 85,child: H16(text: "신체성장", align: TextAlign.center, weight: FW.medium)),
                   SizedBox(width: 85,child: H16(text: "발달영역", align: TextAlign.center, weight: FW.medium)),
+                  SizedBox(width: 85,child: H16(text: "신체성장", align: TextAlign.center, weight: FW.medium)),
                   SizedBox(width: 85,child: H16(text: "생활습관", align: TextAlign.center, weight: FW.medium)),
                 ],
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  CircularProgress2(type: 1, subType: curCategory1 = 0),
-                  Container(margin: EdgeInsets.all(5),child: CircularProgress2(type: 2, subType: curCategory1 = 1)),
+                  CircularProgress3(score: data!.development!.score ,status: data!.development!.status,),
+                  Container(margin: EdgeInsets.all(5),child: CircularProgress3(score: data!.health!.score ,status: data!.health!.status,)),
                   Container(
                     height: 85,
                     width: 85,
@@ -159,7 +221,7 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
                           style:
                               AppTextStyle.PD(AppColor_Primary, 16, weight: FW.bold)),
                       TextSpan(
-                          text: " 모니터링을 한지 42일 지났어요.",
+                          text: " 모니터링을 한지 ${data!.monitoringStatus!.lastMonitoring}일 지났어요.",
                           style: AppTextStyle.PD(
                             AppColor_BlackText,
                             16,
@@ -327,23 +389,24 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
                     ),
                     const SizedBox(width: 20),
                     Container(
-                      height: 130,
+                      // height: 130,
+                      height: 100,
                       width: MediaQuery.of(context).size.width - 200,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              H16(text: "영양", weight: FW.regular,),
-                              H16(text: "충분",color: AppColor_Primary,),
-                            ],
-                          ),
+                          // Row(
+                          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          //   children: [
+                          //     H16(text: "영양", weight: FW.regular,),
+                          //     H16(text: food, color: AppColor_Primary,),
+                          //   ],
+                          // ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               H16(text: "수면", weight: FW.regular,),
-                              H16(text: "충분",color: AppColor_Primary,),
+                              H16(text: data!.sleep!.status! =="R" ? "부족": "충분", color: changeColor(data!.sleep!.status!),),
                             ],
                           ),
                           Row(
@@ -352,7 +415,7 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
                               H16(text: "체온", weight: FW.regular,),
                               Row(
                                 children: [
-                                  H16(text: "충분",color: AppColor_Primary,),
+                                  H16(text: data!.temperature!.temperature.toString(), color: changeColor(data!.temperature!.status!),),
                                   H16(text: " °C"),
                                 ],
                               ),
@@ -365,7 +428,7 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
                               Row(
                                 children: [
                                   H16(text: "처방전+ "),
-                                  H16(text: "0",color: AppColor_Primary,),
+                                  H16(text: data!.symptomList!.length.toString(), color: AppColor_Primary,),
                                 ],
                               ),
                             ],

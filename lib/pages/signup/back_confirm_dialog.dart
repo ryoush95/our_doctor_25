@@ -46,7 +46,7 @@ class BackConfirmDialogState extends State<BackConfirmDialog> {
                   child: Column(
                     children: [
                       const SizedBox(height: 45),
-                      H24B(text: LanguageService.trans("go_to_main_page_dialog_title"), color: AppColor_BlackText, maxLine: 2, height: 1.3),
+                      H24B(text: "회원가입을 종료하시겠습니까?", color: AppColor_BlackText, maxLine: 2, height: 1.3),
                       const SizedBox(height: 10),
                       // H16(
                       //   text: LanguageService.trans("go_to_main_page_dialog_description"),
@@ -54,18 +54,18 @@ class BackConfirmDialogState extends State<BackConfirmDialog> {
                       //   weight: FW.medium,
                       // ),
                       // const SizedBox(height: 10),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          H16(
-                            text: LanguageService.trans("go_to_main_page_dialog_description"),
-                            color: AppColor_BlackText,
-                            weight: FW.medium,
-                          ),
-                          const SizedBox(width: 5),
-                          Image.asset('assets/ic_smile.png', width: 25),
-                        ],
-                      ),
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.center,
+                      //   children: [
+                      //     H16(
+                      //       text: LanguageService.trans("go_to_main_page_dialog_description"),
+                      //       color: AppColor_BlackText,
+                      //       weight: FW.medium,
+                      //     ),
+                      //     const SizedBox(width: 5),
+                      //     Image.asset('assets/ic_smile.png', width: 25),
+                      //   ],
+                      // ),
                       const SizedBox(height: 10),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,

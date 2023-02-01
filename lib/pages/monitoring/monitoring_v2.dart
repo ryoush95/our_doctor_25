@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
@@ -58,7 +60,7 @@ class _MonitoringMain2State extends BaseState<MonitoringMain2> {
 
   String mTemp = "0";
   Color borderColor = AppColor_Selector_Border;
-  int hasTemp = 0;
+  int locaTemp = 0;
   int hasDisease = 2;
   int disease_count = 1;
   List<String> imageList = [];
@@ -97,8 +99,6 @@ class _MonitoringMain2State extends BaseState<MonitoringMain2> {
     LanguageService.trans("snack"),
     LanguageService.trans("dinner"),
   ];
-
-  final provider = getIt.get<GlobalProvider>();
 
   @override
   void initState() {
@@ -296,7 +296,65 @@ class _MonitoringMain2State extends BaseState<MonitoringMain2> {
 
   void checkValid() {
     isValid = false;
+    if(mTemp.isEmpty)mTemp="0";
+    if(double.parse(mTemp) <= 32 || double.parse(mTemp) > 42 ) {
+      borderColor = Colors.red;
+      return;
+    } else {
+      borderColor = AppColor_Selector_Border;
+    }
+    if (hasDisease == 1) {
+      for (int i = 0; i < monitoringData!.symptom_list!.length; i++) {
+        //카테고리 체크
+        String? category = monitoringData!.symptom_list![i].category;
+        if (category == "") {
+          return;
+        }
+        String? symptom = monitoringData!.symptom_list![i].symptom;
+        if (symptom == "") {
+          return;
+        }
+        //질병 체크
+        if (category == "직접입력") {
+          String? symptom = directInputController[i].text;
+          if (symptom == "") {
+            return;
+          }
+        } else {
+          String? symptom = monitoringData!.symptom_list![i].symptom;
+          if (symptom == "") {
+            return;
+          }
+        }
 
+        //질병 진단 날짜 체크
+        String? record_time = monitoringData!.symptom_list![i].record_time;
+        if (record_time == "") {
+          return;
+        }
+
+        //수술/검사 여부
+        if (surgeryList[i] == 1) {
+          String? surgey_name = monitoringData!.symptom_list![i].surgey_name;
+          if (surgey_name == "") {
+            return;
+          }
+
+          String? surgey_time = monitoringData!.symptom_list![i].surgey_time;
+          if (surgey_time == "") {
+            return;
+          }
+        }
+
+        //복약 여부
+        if (hasphotoList[i] == 1) {
+          String? img = monitoringData!.symptom_list![i].medication;
+          if (img == "") {
+            return;
+          }
+        }
+      }
+    }
     isValid = true;
   }
 
@@ -488,14 +546,96 @@ class _MonitoringMain2State extends BaseState<MonitoringMain2> {
   }
 
   void saveMonitor() {
-    httpService.monitoringSaveV2(hasTemp == 0 ? "귀" : "이마");
-    Future<DefaultResModel> info = httpService.monitoringSave();
+    // mTemp;
+    // locaTemp.toString();
+
+    String symptom_list = ""; //질병데이터 json 리스트(예시대로 올려야 함)
+
+    //sleep time carculatate
+    final lunch_hour;
+    final launch_min;
+    if (sleep_launch_hour.contains("이상")) {
+      lunch_hour = int.parse(sleep_launch_hour.replaceAll("시간 이상", ""));
+      sleep_launch_min = "0분";
+      launch_min = int.parse(sleep_launch_min.replaceAll("분", ""));
+    } else {
+      lunch_hour = int.parse(sleep_launch_hour.replaceAll("시간", ""));
+      launch_min = int.parse(sleep_launch_min.replaceAll("분", ""));
+    }
+
+    // int launch_hour = int.parse(sleep_launch_hour.replaceAll("시간", ""));
+
+    final night_hour;
+    final night_min;
+    if (sleep_night_hour.contains("이상")) {
+      night_hour = int.parse(sleep_night_hour.replaceAll("시간 이상", ""));
+      sleep_night_min = "0분";
+      night_min = int.parse(sleep_night_min.replaceAll("분", ""));
+    } else {
+      night_hour = int.parse(sleep_night_hour.replaceAll("시간", ""));
+      night_min = int.parse(sleep_night_min.replaceAll("분", ""));
+    }
+    // int night_hour = int.parse(sleep_night_hour.replaceAll("시간", ""));
+    int sleep_launch = lunch_hour * 60 + launch_min;
+    int sleep_night = night_hour * 60 + night_min;
+
+    //symptom
+    if (hasDisease == 1) {
+      List<Map<String, String>> symptomList = [];
+      for (int i = 0; i < monitoringData!.symptom_list!.length; i++) {
+        //카테고리
+        String category = monitoringData!.symptom_list![i].category!;
+
+        //질병
+        String symptom = "";
+        if (category == "직접입력") {
+          symptom = directInputController[i].text;
+        } else {
+          symptom = monitoringData!.symptom_list![i].symptom!;
+        }
+
+        //질병 진단 날짜 체크
+        String record_time = monitoringData!.symptom_list![i].record_time!;
+
+        //수술/검사 여부
+        String surgey_name = "";
+        String surgey_time = "";
+        if (surgeryList[i] == 1) {
+          surgey_name = monitoringData!.symptom_list![i].surgey_name!;
+          surgey_time = monitoringData!.symptom_list![i].surgey_time!;
+        }
+
+        //복약 여부
+        String img = "";
+        if (hasphotoList[i] == 1) {
+          img = monitoringData!.symptom_list![i].medication!;
+          File file = File(img);
+          img = file.path.split('/').last;
+        }
+
+        Map<String, String> info = {
+          'category': category,
+          'symptom': symptom,
+          'record_time': record_time,
+          'surgery_name': surgey_name,
+          'surgery_time': surgey_time,
+          'medication': img,
+        };
+        symptomList.add(info);
+      }
+      symptom_list = json.encode(symptomList);
+
+    }
+
+    String loca = locaTemp ==0 ? "귀": "이마";
+    Future<DefaultResModel> info = httpService.monitoringRecord2(mTemp,loca,sleep_night.toString(), sleep_night.toString(), symptom_list);
     info.then((DefaultResModel value) async {
       setState(() {
         isLoading = false;
       });
       if (value.result == 0) {
-        showToast("success");
+        showToast("저장되었습니다");
+        Navigator.pushReplacement(context, SlideRightTransRoute(builder: (context) => MonitoringResult2(),));
       } else {
         showToast(value.msg ?? "");
         if (value.result == 106) {
@@ -602,12 +742,10 @@ class _MonitoringMain2State extends BaseState<MonitoringMain2> {
                     }
                     if(double.parse(mTemp) <= 32 || double.parse(mTemp) > 42) {
                       showToast("체온을 정확하게 입력해주세요");
-                      isValid = false;
                       return;
                     }
                     //FIXME : 모니터링 저장
-                    // saveMonitor();
-                    Navigator.push(context, SlideRightTransRoute(builder: (context) => MonitoringResult2(),));
+                    saveMonitor();
                   },
                 ),
               ],
@@ -638,11 +776,6 @@ class _MonitoringMain2State extends BaseState<MonitoringMain2> {
                     placeholder: "",
                     onChanged: (text) {
                       mTemp = text;
-                      if(double.parse(mTemp) <= 32 || double.parse(mTemp) > 42) {
-                        borderColor = Colors.red;
-                      } else {
-                        borderColor = AppColor_Selector_Border;
-                      }
                       checkValid();
                       setState(() {});
                     },
@@ -662,14 +795,14 @@ class _MonitoringMain2State extends BaseState<MonitoringMain2> {
                 children: [
                   InkWell(
                     onTap: () {
-                      hasTemp = 0;
+                      locaTemp = 0;
                       checkValid();
                       setState(() {});
                     },
                     child: Row(
                       children: [
                         Image.asset(
-                          hasTemp == 0
+                          locaTemp == 0
                               ? "assets/ic_option_on.png"
                               : "assets/ic_option_off.png",
                           width: 25,
@@ -686,14 +819,14 @@ class _MonitoringMain2State extends BaseState<MonitoringMain2> {
                   const SizedBox(width: 25),
                   InkWell(
                     onTap: () {
-                      hasTemp = 1;
+                      locaTemp = 1;
                       checkValid();
                       setState(() {});
                     },
                     child: Row(
                       children: [
                         Image.asset(
-                          hasTemp == 1
+                          locaTemp == 1
                               ? "assets/ic_option_on.png"
                               : "assets/ic_option_off.png",
                           width: 25,

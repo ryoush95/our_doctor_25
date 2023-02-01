@@ -19,9 +19,6 @@ import 'package:ourdoctor/pages/components/main_text_button.dart';
 import 'package:ourdoctor/pages/components/outline_num_input.dart';
 import 'package:ourdoctor/pages/components/simple_header.dart';
 import 'package:ourdoctor/pages/monitoring/monitor_report1.dart';
-import 'package:ourdoctor/pages/monitoring/monitoring_test_result.dart';
-import 'package:ourdoctor/provider/child_quiz_provider.dart';
-import 'package:provider/provider.dart';
 
 class MonitoringTestForm extends StatefulWidget {
   const MonitoringTestForm({Key? key}) : super(key: key);
@@ -87,7 +84,7 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
     _listSc2!.dispose();
   }
 
-  void getQuizList() async {
+  Future<void> getQuizList() async {
     Future<MonitoringHealthListModel> info = httpService.getMonitoringHealthList();
     info.then((value) async {
       setState(() {
@@ -100,7 +97,7 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
           quizList.add(value.question);
         });
         for (int i = 0; i < quizList.length; i++) {
-          selList.add("0");
+          selList.add("-1");
         }
         setState(() {});
       }
@@ -109,13 +106,12 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
     });
   }
 
-  void getQuizList2() async {
+  Future<void> getQuizList2() async {
     Future<MonitoringLifeListModel> info2 = httpService.getMonitoringLifeList2();
     info2.then((value) async {
       setState(() {
         isLoading = false;
       });
-      print(value.result);
       if (value.result == 0) {
         map2 = value.data;
         setState(() {});
@@ -146,6 +142,7 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
     selList.clear();
 
     if (subNum == list.length - 1) {
+      goSave();
       cateNum++;
       subNum = 0;
 
@@ -158,7 +155,6 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
         for (int i = 0; i < quizList.length; i++) {
           selList.add("-1");
         }
-        goSave();
         setState(() {});
       }
       allList.clear();
@@ -236,18 +232,18 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
         }
       }
       for (int i = 0; i < quizList.length; i++) {
-        selList.add("1");
+        selList.add("3");
       }
-      setState(() {});
     }
-    // _listSc2!.jumpTo(0.0);
+    _listSc2!.jumpTo(0.0);
   }
 
-  void goSave() async{
+  Future<void> goSave() async{
     Future<DefaultResModel>? insert;
     if (cateNum == 0) {
       insert = httpService.inputHealthSendResult(jsonEncode(quizNum), jsonEncode(allList));
-
+      print(quizNum.length);
+      print(allList.length);
     } else if (cateNum == 1){
       insert = httpService.inputLifeSendResult(jsonEncode(quizNum), jsonEncode(allList));
     }
@@ -263,7 +259,7 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
     });
   }
 
-  void saveBody() async {
+  Future<void> saveBody() async {
     int s = _data.reduce((value, element) => value+element);
     score = (s * 2).toString();
     Future<DefaultResModel>? insert = httpService.inputBodySendResult(tall, weight, score);
@@ -271,7 +267,6 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
       setState(() {
         isLoading = false;
       });
-      print(value.result);
       if (value.result == 0) {
         Navigator.pushReplacement(
             context,
@@ -308,7 +303,7 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
                   child: Center(
                     child: Text(
                       cate[cateNum],
-                      style: TextStyle(color: Colors.white),
+                      style: const TextStyle(color: Colors.white),
                     ),
                   ),
                 ),
@@ -325,7 +320,7 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
                     child: Center(
                       child: Text(
                         list[subNum],
-                        style: TextStyle(color: Colors.white),
+                        style: const TextStyle(color: Colors.white),
                       ),
                     ),
                   ),
@@ -356,34 +351,14 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
                           )
                         : bodyCheck(),
                     const SizedBox(height: 30),
-                    Container(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Visibility(
-                            visible: list.length - 1 == subNum,
-                            child: MainTextButton(
-                              text: "검사 저장하기",
-                              backgroundColor: AppColor_Green,
-                              style: AppTextStyle.PD(Colors.white, 18,
-                                  weight: FW.bold),
-                              radius: 6,
-                              height: 55,
-                              width: 150,
-                              disable: !checkBodyValid(),
-                              disableBackground: !checkBodyValid()
-                                  ? AppColor_Primary_Disable
-                                  : Colors.transparent,
-                              onPressed: () {
-                                goSave();
-                                showToast('저장되었습니다');
-                              },
-                            ),
-                          ),
-                          const SizedBox(width: 15),
-                          MainTextButton(
-                            text: cate[cateNum] == "신체" ? "완료" : "다음",
-                            backgroundColor: AppColor_Primary,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Visibility(
+                          visible: list.length - 1 == subNum,
+                          child: MainTextButton(
+                            text: "검사 저장하기",
+                            backgroundColor: AppColor_Green,
                             style: AppTextStyle.PD(Colors.white, 18,
                                 weight: FW.bold),
                             radius: 6,
@@ -394,23 +369,42 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
                                 ? AppColor_Primary_Disable
                                 : Colors.transparent,
                             onPressed: () {
-                              if (!checkBodyValid()) return;
-                              if (cate[cateNum] == "신체") {
-                                if (isValid == false || tall.isEmpty || weight.isEmpty) {
-                                  showToast("키와 체중을 정확히 입력해주세요");
-                                  return;
-                                }
-                                saveBody();
-
-                                return;
-                              }
-                              goNext();
-                              setState(() {});
-                              // Navigator.push(context, SlideRightTransRoute(builder: (context) => MonitoringTestResult(),));
+                              allList.addAll(selList);
+                              goSave();
+                              showToast('저장되었습니다');
+                              Navigator.pop(context);
                             },
                           ),
-                        ],
-                      ),
+                        ),
+                        const SizedBox(width: 15),
+                        MainTextButton(
+                          text: cate[cateNum] == "신체" ? "완료" : "다음",
+                          backgroundColor: AppColor_Primary,
+                          style: AppTextStyle.PD(Colors.white, 18,
+                              weight: FW.bold),
+                          radius: 6,
+                          height: 55,
+                          width: 150,
+                          disable: !checkBodyValid(),
+                          disableBackground: !checkBodyValid()
+                              ? AppColor_Primary_Disable
+                              : Colors.transparent,
+                          onPressed: () {
+                            if (!checkBodyValid()) return;
+                            if (cate[cateNum] == "신체") {
+                              if (isValid == false || tall.isEmpty || weight.isEmpty) {
+                                showToast("키와 체중을 정확히 입력해주세요");
+                                return;
+                              }
+                              saveBody();
+                              return;
+                            }
+                            goNext();
+                            setState(() {});
+                            // Navigator.push(context, SlideRightTransRoute(builder: (context) => MonitoringTestResult(),));
+                          },
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 50),
                   ],
@@ -695,7 +689,7 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
   Widget bodyCheck() {
     var screenSize = MediaQuery.of(context).size;
     return Container(
-      padding: EdgeInsets.all(20.0),
+      padding: const EdgeInsets.all(20.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

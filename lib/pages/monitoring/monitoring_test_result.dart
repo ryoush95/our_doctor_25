@@ -4,7 +4,7 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:ourdoctor/global/app_colors.dart';
 import 'package:ourdoctor/global/app_styles.dart';
 import 'package:ourdoctor/global/http_service.dart';
-import 'package:ourdoctor/models/develope/life_result_model.dart';
+import 'package:ourdoctor/models/monitoring/life_result_model.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
 import 'package:ourdoctor/pages/base/page_layout.dart';
 import 'package:ourdoctor/pages/components/h14.dart';
@@ -47,8 +47,7 @@ class _MonitoringLifeResultState extends BaseState<MonitoringLifeResult> {
   }
 
   Future<void> getLifeResult() async {
-    Future<LifeResultModel> info =
-    httpService.getMonitoringLifeResult();
+    Future<LifeResultModel> info = httpService.getMonitoringLifeResult();
     info.then((value) async {
       if (value.result == 0) {
         CATEGORY = value.data!.keys.toList();

@@ -8,8 +8,10 @@ import 'package:ourdoctor/helpers/common_util.dart';
 import 'package:ourdoctor/helpers/date_util.dart';
 import 'package:ourdoctor/helpers/transition.dart';
 import 'package:ourdoctor/language/language_service.dart';
+import 'package:ourdoctor/models/default_res_model.dart';
 import 'package:ourdoctor/models/final_result_res_model.dart';
 import 'package:ourdoctor/models/home_monitor_res_model.dart';
+import 'package:ourdoctor/models/monitoring/top_area_model.dart';
 import 'package:ourdoctor/pages/app_event.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
 import 'package:ourdoctor/pages/components/h14.dart';
@@ -44,6 +46,22 @@ class TopAreaState extends BaseState<TopArea> {
   String titleMsg1 = "";
   HomeMonitorDto? dicHomeDataInfo;
 
+  var days = [
+    LanguageService.trans('sunday'),
+    LanguageService.trans('monday'),
+    LanguageService.trans('tuesday'),
+    LanguageService.trans('wednesday'),
+    LanguageService.trans('thursday'),
+    LanguageService.trans('friday'),
+    LanguageService.trans('saturday'),
+  ];
+  var weekday = DateTime.now().weekday;
+  String month = DateTime.now().month.toString();
+  String day = DateTime.now().day.toString();
+  String dif = "";
+
+  TopAreaDto data = TopAreaDto(height: "111",weight: "222",lastMonitoring: "33");
+
   void showMoreText() {
     ShowMoreTextPopup popup = ShowMoreTextPopup(context,
         text: LanguageService.trans("monitoring_guie"),
@@ -72,7 +90,12 @@ class TopAreaState extends BaseState<TopArea> {
     titleMsg1 =
         sprintf(LanguageService.trans("childrens_growing_rapidly"), [95]);
     //getFinalResultInfo();
+    DateTime birth = DateTime.parse(gSelChildInfo!.birth!);
+    DateTime now = DateTime.now();
+    dif = now.difference(birth).inDays.toString();
+
     getMonitor2HomeDataInfo();
+    getTopareaData();
 
     Future.delayed(const Duration(milliseconds: 500), () {
       if (gSignupMonitoring) {
@@ -85,28 +108,17 @@ class TopAreaState extends BaseState<TopArea> {
     eventBus.on<SelectChildEvent>().listen((event) {
       if (mounted) {
         getMonitor2HomeDataInfo();
+        getTopareaData();
       }
     });
 
     eventBus.on<MonitoringFinishEvent>().listen((event) {
       if (mounted) {
         getMonitor2HomeDataInfo();
+        getTopareaData();
       }
     });
   }
-
-  var days = [
-    LanguageService.trans('sunday'),
-    LanguageService.trans('monday'),
-    LanguageService.trans('tuesday'),
-    LanguageService.trans('wednesday'),
-    LanguageService.trans('thursday'),
-    LanguageService.trans('friday'),
-    LanguageService.trans('saturday'),
-  ];
-  var weekday = DateTime.now().weekday;
-  String month = DateTime.now().month.toString();
-  String day = DateTime.now().day.toString();
 
   String getButtonName() {
     String result = "";
@@ -170,36 +182,6 @@ class TopAreaState extends BaseState<TopArea> {
 
   // Network functions
   //////////////////////////////////
-  //최종 모니터 정보 얻기
-  Future<void> getFinalResultInfo() async {
-    setState(() {
-      isLoading = true;
-    });
-
-    Future<FinalResultResModel> info = httpService.finalResult();
-    info.then((FinalResultResModel value) async {
-      setState(() {
-        isLoading = false;
-      });
-      if (value.result == 0) {
-        dicInfo = value.data!;
-        setState(() {});
-      } else {
-        showToast(value.msg ?? "");
-        if (value.result == 106) {
-          //token expired
-          Navigator.pushReplacement(
-              context, SlideRightTransRoute(builder: (context) => FirstPage()));
-        }
-      }
-    }).catchError((onError) {
-      setState(() {
-        isLoading = false;
-      });
-      showToast(onError);
-    });
-  }
-
   //홈 발달 리포트 얻기
   Future<void> getMonitor2HomeDataInfo() async {
     setState(() {
@@ -227,6 +209,36 @@ class TopAreaState extends BaseState<TopArea> {
         isLoading = false;
       });
       showToast(onError);
+    });
+  }
+
+  Future<void> getTopareaData() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    Future<TopAreaModel> info = httpService.getToparea();
+    info.then((value) async {
+
+      if (value.result == 0) {
+        data = value.data!;
+        setState(() {});
+      } else {
+        showToast(value.msg ?? "");
+        if (value.result == 106) {
+          //token expired
+          Navigator.pushReplacement(
+              context, SlideRightTransRoute(builder: (context) => FirstPage()));
+        }
+      }
+      setState(() {
+        isLoading = false;
+      });
+    }).catchError((onError) {
+      setState(() {
+        isLoading = false;
+      });
+      print(onError.toString());
     });
   }
 
@@ -268,7 +280,7 @@ class TopAreaState extends BaseState<TopArea> {
                                 ' ' +
                                 days[weekday % 7], weight: FW.bold,),
                         const SizedBox(height: 20),
-                        Row(
+                        dicHomeDataInfo == null ? CircularProgressIndicator():Row(
                           children: [
                             dicHomeDataInfo!.profileImgUrl! != ""
                                 ? CachedNetworkImage(
@@ -304,7 +316,7 @@ class TopAreaState extends BaseState<TopArea> {
                                   RichText(
                                       text: TextSpan(children: [
                                         TextSpan(
-                                            text: "100",
+                                            text: dif,
                                             style: AppTextStyle.PD(
                                                 AppColor_Primary, 16,
                                                 weight: FW.bold)),
@@ -350,7 +362,7 @@ class TopAreaState extends BaseState<TopArea> {
                                       RichText(
                                           text: TextSpan(children: [
                                         TextSpan(
-                                            text: "100",
+                                            text: data.height,
                                             style: AppTextStyle.PD(
                                                 AppColor_Primary, 16,
                                                 weight: FW.bold)),
@@ -375,7 +387,7 @@ class TopAreaState extends BaseState<TopArea> {
                                       RichText(
                                           text: TextSpan(children: [
                                         TextSpan(
-                                            text: "100",
+                                            text: data.weight,
                                             style: AppTextStyle.PD(
                                                 AppColor_Primary, 16,
                                                 weight: FW.bold)),
@@ -436,7 +448,7 @@ class TopAreaState extends BaseState<TopArea> {
                                         weight: FW.regular,
                                       )),
                                   TextSpan(
-                                      text: " 40일 후",
+                                      text: " ${data.nextMonitoring}일 후",
                                       style: AppTextStyle.PD(
                                           AppColor_Primary, 16,
                                           weight: FW.bold)),

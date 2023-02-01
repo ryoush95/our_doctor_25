@@ -1,16 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:ourdoctor/global/app_colors.dart';
 import 'package:ourdoctor/global/app_styles.dart';
-import 'package:ourdoctor/helpers/bind_json.dart';
-import 'package:ourdoctor/helpers/common_util.dart';
-import 'package:ourdoctor/language/language_service.dart';
-import 'package:ourdoctor/models/home_grapth_res_model.dart';
+import 'package:ourdoctor/models/monitoring/temp_graph_model.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
-import 'package:ourdoctor/pages/components/h14.dart';
-import 'package:ourdoctor/pages/components/h16.dart';
 import 'package:ourdoctor/pages/components/h18.dart';
-import 'package:ourdoctor/pages/components/line_chart.dart';
-import 'package:ourdoctor/pages/components/line_chart_test_3.dart';
+import 'package:ourdoctor/pages/components/line_chart_temp.dart';
 import 'package:ourdoctor/pages/components/price_point.dart';
 import 'package:ourdoctor/pages/components/round_container.dart';
 import 'package:sprintf/sprintf.dart';
@@ -18,7 +12,7 @@ import 'package:sprintf/sprintf.dart';
 class LifestyleLineChart2 extends StatefulWidget {
   LifestyleLineChart2({Key? key, required this.data}) : super(key: key);
 
-  final HomeGraphLifeStyleDto data;
+  final Data data;
 
   @override
   LifestyleLineChart2State createState() => LifestyleLineChart2State();
@@ -26,39 +20,23 @@ class LifestyleLineChart2 extends StatefulWidget {
 
 class LifestyleLineChart2State extends BaseState<LifestyleLineChart2> {
   DateTime now = DateTime.now();
+  List<PricePoint> tempList = [];
 
-  Widget _diagnoseContainer({
-    required String fText,
-    required bool isNormal,
-    String? calories,
-    required String sText,
-}) => Column(
-    crossAxisAlignment: CrossAxisAlignment.center, children: [
-    H16(text: fText),
-    const SizedBox(height: 6),
-    Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        isNormal 
-        ? H16(text: '섭취하고 있어요.', color: AppColor_BlackText)
-        : H16(
-          text: "${roundOff(calories!)}kcal", 
-          color: AppColor_BlackText,
-        ),
-        isNormal 
-        ? const SizedBox()
-        : Row(
-          children: [
-            const SizedBox(width: 5),
-            H16(text: sText, color: getColorFromString2(sText),),
-            H16(text: '해요. ', color: AppColor_BlackText),
-          ],
-        ),
-        Image.asset("assets/ic_icon2.png", width: 20),
-      ],
-    ),
-  ],
-);
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    for (var i = 0; i <= DateTime(now.year, now.month + 1, 0).day - 1; i++) {
+      tempList.add(PricePoint(x: i.toDouble(), y: 0));
+      // randomNumbers.add(random.nextDouble());
+    }
+
+    for (var element in widget.data.graphTemperature!) {
+      String s = element.date!.substring(element.date!.length-2, element.date!.length);
+      tempList[int.parse(s) - 1].y = element.temperature!;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -101,7 +79,7 @@ class LifestyleLineChart2State extends BaseState<LifestyleLineChart2> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        H18(text: sprintf("%.0f", [36.6]) + " °C", color: AppColor_BlackText, weight: FW.semi_bold),
+                        H18(text: sprintf("%.0f", [widget.data.avgTemperature!]) + " °C", color: AppColor_BlackText, weight: FW.semi_bold),
                         const SizedBox(height: 5),
                       ],
                     ),
@@ -113,7 +91,8 @@ class LifestyleLineChart2State extends BaseState<LifestyleLineChart2> {
                   child: Container(
                     // padding: const EdgeInsets.symmetric(horizontal: 15),
                     color: Colors.white,
-                    child: LineChartTemp(points: pricePoints, points2 : pricePoints2),
+                    // 체온 그래프
+                    child: LineChartTemp(points: tempList, points2 : pricePoints2),
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -121,62 +100,4 @@ class LifestyleLineChart2State extends BaseState<LifestyleLineChart2> {
             )));
   }
 
-  int getWeight() {
-    return 800;
-
-    // DateFormat dateFormat = DateFormat("yyyy-MM-dd");
-    // String date = dateFormat.format(now);
-    // int hour = now.hour;
-    // for (int i = 0; i < widget.data.length; i++) {
-    //   if (hour >= 12) {
-    //     if (widget.data.elementAt(i).pm_time.contains(date)) {
-    //       String data = widget.data.elementAt(i).afternoon_temperature;
-    //       if (data == "") {
-    //         return "미측정";
-    //       } else {
-    //         return data + '℃';
-    //       }
-    //     }
-    //   } else {
-    //     if (widget.data.elementAt(i).am_time.contains(date)) {
-    //       String data = widget.data.elementAt(i).morning_temperature;
-    //       if (data == "") {
-    //         return "미측정";
-    //       } else {
-    //         return data + '℃';
-    //       }
-    //     }
-    //   }
-    // }
-    // return "미측정";
-  }
-
-  String getCurTime() {
-    int hour = now.hour;
-    if (hour < 12) {
-      return "오늘 오전";
-    } else {
-      return "오늘 오후";
-    }
-  }
-
-  double lastKcal() {
-    return fromJsonDouble(widget.data.monitoringFood!.data!.breakfastKcal) +
-        fromJsonDouble(widget.data.monitoringFood!.data!.launchKcal) +
-        fromJsonDouble(widget.data.monitoringFood!.data!.snackKcal) +
-        fromJsonDouble(widget.data.monitoringFood!.data!.dinnerKcal);
-  }
-
-  String lastDay() {
-    DateTime date = DateTime.parse(widget.data.monitoringFood!.data!.foodInputTime!.substring(0, 10));
-    DateTime now = DateTime.now();
-    final difference = now.difference(date).inDays;
-    if (difference == 0) {
-      return '오늘 기준';
-    } else if (difference == 1) {
-      return '어제 기준';
-    } else {
-      return difference.toString() + "일전 기준";
-    }
-  }
 }
