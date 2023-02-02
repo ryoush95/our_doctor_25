@@ -647,7 +647,7 @@ class _MonitoringMain2State extends BaseState<MonitoringMain2> {
       setState(() {
         isLoading = false;
       });
-      showToast(onError);
+      print(onError.toString());
     });
   }
 

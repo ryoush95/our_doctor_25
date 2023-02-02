@@ -4,16 +4,18 @@ import 'package:ourdoctor/global/app_styles.dart';
 import 'package:ourdoctor/helpers/bind_json.dart';
 import 'package:ourdoctor/language/language_service.dart';
 import 'package:ourdoctor/models/home_grapth_res_model.dart';
+import 'package:ourdoctor/models/monitoring/sleep_graph_model.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
 import 'package:ourdoctor/pages/components/h14.dart';
 import 'package:ourdoctor/pages/components/h18.dart';
 import 'package:ourdoctor/pages/components/line_chart.dart';
+import 'package:ourdoctor/pages/components/line_chart2.dart';
 import 'package:sprintf/sprintf.dart';
 
 class SleepChart extends StatefulWidget {
   SleepChart({Key? key, required this.data}) : super(key: key);
 
-  final HomeGraphLifeStyleDto data;
+  final SleepDataDto data;
 
   @override
   SleepChartState createState() => SleepChartState();
@@ -70,9 +72,9 @@ class SleepChartState extends BaseState<SleepChart> {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         //H18(text: getHourFromMinutes(widget.data.monitoringFood!.data!.sleepAtNight!) + " " + LanguageService.trans('hour'), color: AppColor_BlackText, weight: FW.semi_bold),
-                        H18(text: getHourFromMinutes1(widget.data.monitoringFood!.data!.sleepAtNight!), color: AppColor_BlackText, weight: FW.semi_bold),
+                        H18(text: getHourFromMinutes1(widget.data.avgSleepNight.toString()), color: AppColor_BlackText, weight: FW.semi_bold),
                         const SizedBox(height: 5),
-                        H14(text: lastDay(), color: AppColor_GrayText, weight: FW.regular),
+                        H14(text: "1", color: AppColor_GrayText, weight: FW.regular),
                       ],
                     ),
                     const SizedBox(width: 4),
@@ -83,7 +85,7 @@ class SleepChartState extends BaseState<SleepChart> {
                   child: Container(
                     // padding: const EdgeInsets.symmetric(horizontal: 15),
                     color: Colors.white,
-                    child: LineChartWidget(gradientColor: AppColor_Primary, data: [], data1: widget.data, type: 'night'),
+                    child: LineChartWidget2(data1: widget.data, type: 'night'),
                   ),
                 ),
               ],
@@ -155,14 +157,4 @@ class SleepChartState extends BaseState<SleepChart> {
     }
   }
 
-  String lastDay() {
-    DateTime date = DateTime.parse(widget.data.monitoringFood!.data!.foodInputTime!.substring(0, 10));
-    DateTime now = DateTime.now();
-    final difference = now.difference(date).inDays + 1;
-    if (difference == 1) {
-      return '어제 기준';
-    } else {
-      return difference.toString() + "일전 기준";
-    }
-  }
 }

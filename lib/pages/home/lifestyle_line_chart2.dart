@@ -27,14 +27,13 @@ class LifestyleLineChart2State extends BaseState<LifestyleLineChart2> {
     // TODO: implement initState
     super.initState();
 
-    for (var i = 0; i <= DateTime(now.year, now.month + 1, 0).day - 1; i++) {
-      tempList.add(PricePoint(x: i.toDouble(), y: 0));
-      // randomNumbers.add(random.nextDouble());
-    }
+    // for (var i = 0; i <= DateTime(now.year, now.month + 1, 0).day - 1; i++) {
+    //   tempList.add(PricePoint(x: i.toDouble(), y: 0));
+    // }
 
     for (var element in widget.data.graphTemperature!) {
       String s = element.date!.substring(element.date!.length-2, element.date!.length);
-      tempList[int.parse(s) - 1].y = element.temperature!;
+      tempList.add(PricePoint(x: double.parse(s), y: element.temperature!));
     }
   }
 
@@ -79,7 +78,7 @@ class LifestyleLineChart2State extends BaseState<LifestyleLineChart2> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        H18(text: sprintf("%.0f", [widget.data.avgTemperature!]) + " °C", color: AppColor_BlackText, weight: FW.semi_bold),
+                        H18(text: widget.data.avgTemperature! + " °C", color: AppColor_BlackText, weight: FW.semi_bold),
                         const SizedBox(height: 5),
                       ],
                     ),

@@ -9,7 +9,6 @@ import 'package:ourdoctor/helpers/transition.dart';
 import 'package:ourdoctor/language/language_service.dart';
 import 'package:ourdoctor/models/monitoring/heath_result_model.dart';
 import 'package:ourdoctor/models/home_grapth_res_model.dart';
-import 'package:ourdoctor/models/monitoring/life_result_model.dart';
 import 'package:ourdoctor/models/monitor_list_res_model.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
 import 'package:ourdoctor/pages/base/page_layout.dart';
@@ -46,9 +45,8 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
   List<MonitorListDto>? arrMonitorList = [];
   String comment1 = "";
   String comment2 = "";
-  List<Empty> healthList = [];
-  List<String> wrongListTitle = [];
-  List<LifeCateDto> wrongList = [];
+  List<String> healthTitle = [];
+  List<DevelopmentScoreDto> healthList = [];
 
   HomeGraphTallDto? dicHomeGraphTallInfo;
   HomeGraphWeightDto? dicHomeGraphWeightInfo;
@@ -110,17 +108,15 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
         httpService.getMonitoringHealthResult();
     info.then((value) async {
       if (value.result == 0) {
-        healthList.add(value.data.bigMuscle);
-        healthList.add(value.data.smallMuscle);
-        healthList.add(value.data.dlswl);
-        healthList.add(value.data.djsdj);
-        healthList.add(value.data.tkghltjd);
-        healthList.add(value.data.wkwh);
+        value.data!.forEach((key, value) {
+          healthTitle.add(key);
+          healthList.add(value);
+        });
 
         // healthList.add();
         setState(() {
-          comment1 = value.data.bigMuscle.feedbackTitle;
-          comment2 = value.data.bigMuscle.feedbackDescription;
+          comment1 = healthList[0].feedbackTitle!;
+          comment2 = healthList[0].feedbackDescription!;
           isLoading = false;
         });
       }
@@ -339,7 +335,7 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
                     children: [
                       const SizedBox(width: 28),
                       H18(
-                        text: '신장 기록을 처음 완료했어요.😊\n한달 주기로 기록을 지속해주세요.',
+                        text: '신장 기록을 처음 완료했어요.😊',
                         weight: FW.regular,
                         maxLine: 2,
                         align: TextAlign.start,
@@ -489,8 +485,8 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
     return InkWell(
       onTap: () {
         setState(() {
-          comment1 = healthList[index].feedbackTitle;
-          comment2 = healthList[index].feedbackDescription;
+          comment1 = healthList[index].feedbackTitle!;
+          comment2 = healthList[index].feedbackDescription!;
           subTabIndex = index;
         });
       },
@@ -513,12 +509,12 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                H16(text: subCategory[index]),
+                H16(text: healthTitle[index]),
                 const SizedBox(height: 5),
                 Container(
                   width: 50,
                   height: 20,
-                  color: changeColor(healthList[index].status),
+                  color: changeColor(healthList[index].status!),
                   child: Center(
                     child: Text(
                       healthList[index].score.toString(),
@@ -556,7 +552,7 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
                     itemBuilder: (BuildContext context, int index) {
                       return healthTile(index);
                     },
-                    itemCount: subCategory.length,
+                    itemCount: healthTitle.length,
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 3,
@@ -567,17 +563,17 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
                 ),
                 // const SizedBox(height: 30),
                 H20(
-                  text: "${subCategory[subTabIndex]} 발달 점수",
+                  text: "${healthTitle[subTabIndex]} 발달 점수",
                   align: TextAlign.start,
                 ),
                 RangeShow(
                   isInspect: true,
                   start: "",
                   end: "",
-                  rate: healthList[subTabIndex].score.toDouble(),
+                  rate: healthList[subTabIndex].score!.toDouble(),
                   unit: "",
-                  color: changeColor(healthList[subTabIndex].status),
-                  cur_value: healthList[subTabIndex].score.toDouble(),
+                  color: changeColor(healthList[subTabIndex].status!),
+                  cur_value: healthList[subTabIndex].score!.toDouble(),
                 ),
 
                 Container(
@@ -623,7 +619,8 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
                           },
                         ),
                       )
-                    : SolutionArea()
+                    : const SizedBox()
+                // SolutionArea()
               ],
             )
           : const SizedBox();

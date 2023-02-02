@@ -8,6 +8,7 @@ import 'package:ourdoctor/helpers/common_util.dart';
 import 'package:ourdoctor/helpers/transition.dart';
 import 'package:ourdoctor/models/dto/report_dto.dart';
 import 'package:ourdoctor/models/home_grapth_res_model.dart';
+import 'package:ourdoctor/models/monitoring/sleep_graph_model.dart';
 import 'package:ourdoctor/models/monitoring/temp_graph_model.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
 import 'package:ourdoctor/pages/base/page_layout.dart';
@@ -21,6 +22,7 @@ import 'package:ourdoctor/pages/home/disease_report.dart';
 import 'package:ourdoctor/pages/home/inspection_report.dart';
 import 'package:ourdoctor/pages/home/lifestyle_line_chart2.dart';
 import 'package:ourdoctor/pages/home/lifestyle_report.dart';
+import 'package:ourdoctor/pages/home/sleep_report.dart';
 import 'package:ourdoctor/pages/intro/first.dart';
 import 'package:sprintf/sprintf.dart';
 
@@ -42,6 +44,7 @@ class _MonitoringResult2State extends BaseState<MonitoringResult2> {
   List<ReportDto> reportList1 = [];
   List<ReportDto> reportList2 = [];
   Data? tempGraphList;
+  SleepDataDto? sleepGraphList;
 
   int curYear = 0;
   int curMonth = 0;
@@ -65,6 +68,7 @@ class _MonitoringResult2State extends BaseState<MonitoringResult2> {
     curMonth = now.month;
     getTempList();
     getHomeGraphLifeStyle();
+    getSleepList();
   }
 
   Future<bool> onBackPressed() async {
@@ -111,6 +115,32 @@ class _MonitoringResult2State extends BaseState<MonitoringResult2> {
       });
       if (value.result == 0) {
         tempGraphList = value.data!;
+        // tempGraphList == null || tempGraphList!.graphTemperature!.isEmpty
+        print(tempGraphList!.graphTemperature!.length);
+        setState(() {});
+      } else {
+        showToast(value.msg ?? "");
+        if (value.result == 106) {
+          //token expired
+          Navigator.pushReplacement(context, SlideRightTransRoute(builder: (context) => FirstPage()));
+        }
+      }
+    }).catchError((onError) {
+      setState(() {
+        isLoading = false;
+      });
+      print(onError.toString());
+    });
+  }
+
+  Future<void> getSleepList() async{
+    Future<SleepGraphModel> info2 = httpService.getSleepGraph(newDate);
+    info2.then((SleepGraphModel value) async {
+      setState(() {
+        isLoading = false;
+      });
+      if (value.result == 0) {
+        sleepGraphList = value.data!;
         setState(() {});
       } else {
         showToast(value.msg ?? "");
@@ -151,7 +181,7 @@ class _MonitoringResult2State extends BaseState<MonitoringResult2> {
         children: [
           Padding(
             padding: const EdgeInsets.all(20.0),
-            child: tempGraphList == null || tempGraphList!.graphTemperature!.isEmpty? Center(
+            child: tempGraphList == null || tempGraphList!.graphTemperature!.isEmpty ? Center(
               child: H14(text: "체온 정보가 없습니다."),
             ): LifestyleLineChart2(data:tempGraphList!),
           ),
@@ -170,10 +200,10 @@ class _MonitoringResult2State extends BaseState<MonitoringResult2> {
     } else if (tabIndex == 1) {
       // CATE : 수면
       print(gUserInfo!.accessToken!);
-      return dicHomeGraphLifeStyleInfo!.monitoringSleep != null
+      return sleepGraphList != null
           ? Column(
         children: [
-          Row(
+          /*Row(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
@@ -190,14 +220,10 @@ class _MonitoringResult2State extends BaseState<MonitoringResult2> {
                   },
                   child: Image.asset('assets/chevron_left_black_24dp.png', width: 20)),
               const SizedBox(width: 18),
-              //H16(text: '${firstDate.month}월 ${numOfWeeks(firstDate)}주차' /*firstDateString + ' - ' + lastDateString*/, color: const Color(0xFF888888), weight: FW.semi_bold),
               H16(text: '$curYear년 $curMonth월', color: AppColor_BlackText.withOpacity(0.5), weight: FW.semi_bold),
               const SizedBox(width: 18),
               InkWell(
                   onTap: () {
-                    // if (firstDate.subtract(const Duration(days: -7)).isAfter(now)) {
-                    //   return;
-                    // }
                     if (isTomorrowMonth()) {
                       return;
                     }
@@ -214,8 +240,8 @@ class _MonitoringResult2State extends BaseState<MonitoringResult2> {
                   child: Opacity(opacity: (now.year == curYear && now.month == curMonth) ? 0.2 : 1.0, child: Image.asset('assets/chevron_right_black_24dp.png', width: 20))),
               // const SizedBox(width: 10),
             ],
-          ),
-          Container(padding: const EdgeInsets.symmetric(horizontal: 30), child: LifestyleReport(data: dicHomeGraphLifeStyleInfo!, result: 1)),
+          ),*/
+          Container(padding: const EdgeInsets.symmetric(horizontal: 30), child: SleepReport(data: sleepGraphList!, result: 1)),
         ],
       ) : const SizedBox(
         child: Text("검사결과 없음"),
@@ -409,7 +435,7 @@ class _MonitoringResult2State extends BaseState<MonitoringResult2> {
             ])),
         const SizedBox(height: 20),
         SizedBox(
-          height: 1100,
+          height: 1300,
           child: ListView.builder(
             itemCount: subTitle.length,
             physics: const ClampingScrollPhysics(),
@@ -417,8 +443,8 @@ class _MonitoringResult2State extends BaseState<MonitoringResult2> {
               return Column(
                 children: [
                   Container(
-                    width: 300,
-                    height: 250,
+                    width: 330,
+                    height: 300,
                     decoration: const BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(4)),
                         color: AppColor_Light_Gray),
@@ -426,11 +452,12 @@ class _MonitoringResult2State extends BaseState<MonitoringResult2> {
                       children: [
                         const SizedBox(height: 20),
                         H18(text: subTitle[index]),
+                        // const SizedBox(height: 20),
                         // Expanded(child: H18(text: "아침 식사")),
                         // FIXME: 영양 이미지넣을때 주석 해제
-                        // const SizedBox(height: 10),
+                        const SizedBox(height: 10),
                         // foodCheck ?
-                        // Image.asset("food_image${index}_down.png", width: 260,):
+                        Image.asset("assets/foodtest.png", height: 240, width: 326,)
                         // Image.asset("food_image${index}_up.png", width: 260),
 
                       ],

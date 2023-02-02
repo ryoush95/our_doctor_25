@@ -30,7 +30,7 @@ import 'package:ourdoctor/models/community_add_res_model.dart';
 import 'package:ourdoctor/models/community_detail_res_model.dart';
 import 'package:ourdoctor/models/community_list_res_model.dart';
 import 'package:ourdoctor/models/default_res_model.dart';
-import 'package:ourdoctor/models/monitor_test_list.dart';
+import 'package:ourdoctor/models/monitor_development_list_model.dart';
 import 'package:ourdoctor/models/duplicate_res_model.dart';
 import 'package:ourdoctor/models/faq_res_model.dart';
 import 'package:ourdoctor/models/final_result_res_model.dart';
@@ -55,12 +55,13 @@ import 'package:ourdoctor/models/login_res_model.dart';
 import 'package:ourdoctor/models/mbti_quiz_list_res_model.dart';
 import 'package:ourdoctor/models/monitor_list_res_model.dart';
 import 'package:ourdoctor/models/monitor_result_res_model.dart';
-import 'package:ourdoctor/models/monitor_test_list2.dart';
+import 'package:ourdoctor/models/monitor_life_list2_model.dart';
 import 'package:ourdoctor/models/monitor_week_res_model.dart';
 import 'package:ourdoctor/models/monitor_write_res_model.dart';
 import 'package:ourdoctor/models/monitoring/heath_result_model.dart';
 import 'package:ourdoctor/models/monitoring/life_result_model.dart';
 import 'package:ourdoctor/models/monitoring/note_profile_model.dart';
+import 'package:ourdoctor/models/monitoring/sleep_graph_model.dart';
 import 'package:ourdoctor/models/monitoring/solution_area_model.dart';
 import 'package:ourdoctor/models/monitoring/temp_graph_model.dart';
 import 'package:ourdoctor/models/monitoring/top_area_model.dart';
@@ -1942,6 +1943,7 @@ class HttpService {
       'sleep_at_lunch': sleep_at_lunch,
       'symptom_list': symptom_list,
     };
+    print(body);
     Uri myUri = Uri.parse(_url);
     final response = await http.post(myUri, body: body);
     if (response.statusCode == 200) {
@@ -1972,7 +1974,7 @@ class HttpService {
   }
 
   // 성장노트 가져오기
-  Future<NoteProfileModel> getNoteProfile() async {
+  Future<NoteProfileModel> getMonitoringStatus() async {
     String _url = API_BASE_URL + "api/monitoring/get_monitoring_status";
     Map<String, String> body = {
       'access_token': gUserInfo!.accessToken!,
@@ -2016,6 +2018,24 @@ class HttpService {
     final response = await http.post(myUri, body: body);
     if (response.statusCode == 200) {
       return TempGraphModel.fromJson(json.decode(response.body));
+    } else {
+      // If that call was not successful, throw an error.
+      showToast(LanguageService.trans("server_fail"));
+      throw Exception(LanguageService.trans("server_fail"));
+    }
+  }
+
+  //체온 그래프 가져오기
+  Future<SleepGraphModel> getSleepGraph(String date) async {
+    String _url = API_BASE_URL + "api/monitoring/get_sleep_graph";
+    Map<String, String> body = {
+      'access_token': gUserInfo!.accessToken!,
+      'start_date': date,
+    };
+    Uri myUri = Uri.parse(_url);
+    final response = await http.post(myUri, body: body);
+    if (response.statusCode == 200) {
+      return SleepGraphModel.fromJson(json.decode(response.body));
     } else {
       // If that call was not successful, throw an error.
       showToast(LanguageService.trans("server_fail"));
@@ -2503,7 +2523,7 @@ class HttpService {
   }
 
   //생활습관 모니터링 문제
-  Future<MonitoringLifeListModel> getMonitoringLifeList2() async {
+  Future<MonitoringHealthListModel> getMonitoringLifeList2() async {
     String _url = API_BASE_URL + "api/monitoring/get_lifestyle_list";
     Map<String, String> body = {
       'access_token': gUserInfo!.accessToken!,
@@ -2511,7 +2531,7 @@ class HttpService {
     Uri myUri = Uri.parse(_url);
     final response = await http.post(myUri, body: body);
     if (response.statusCode == 200) {
-      return MonitoringLifeListModel.fromJson(json.decode(response.body));
+      return MonitoringHealthListModel.fromJson(json.decode(response.body));
     } else {
       // If that call was not successful, throw an error.
       showToast(LanguageService.trans("server_fail"));

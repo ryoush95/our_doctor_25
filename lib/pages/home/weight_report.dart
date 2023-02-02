@@ -236,8 +236,8 @@ class WeightReportState extends BaseState<WeightReport> {
             widget.result == 1 ? ResultArea(type: 1, result: 2, diagnose: widget.data.monitoring!.diagnose!)
                 : const SizedBox(),
             const SizedBox(height: 30,),
-            arrBannerList.isEmpty ? Container() :
-            SolutionArea()
+            arrBannerList.isEmpty ? Container() : SizedBox()
+            // SolutionArea()
           ],
         ));
   }

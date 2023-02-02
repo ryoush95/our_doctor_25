@@ -42,7 +42,7 @@ class Data {
     this.graphTemperature,
   });
 
-  double? avgTemperature;
+  String? avgTemperature;
   List<GraphTemperature>? graphTemperature;
 
   factory Data.fromRawJson(String str) => Data.fromJson(json.decode(str));
@@ -50,7 +50,7 @@ class Data {
   String toRawJson() => json.encode(toJson());
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-    avgTemperature: json["avg_temperature"]?.toDouble(),
+    avgTemperature: json["avg_temperature"],
     graphTemperature: json["graph_temperature"] == null ? [] : List<GraphTemperature>.from(json["graph_temperature"]!.map((x) => GraphTemperature.fromJson(x))),
   );
 

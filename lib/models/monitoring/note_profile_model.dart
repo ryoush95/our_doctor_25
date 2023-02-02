@@ -38,6 +38,7 @@ class NoteProfileModel {
 
 class MonitoringProfileDto {
   MonitoringProfileDto({
+    this.monitoringProgress,
     this.monitoringStatus,
     this.todayNote,
     this.health,
@@ -48,6 +49,7 @@ class MonitoringProfileDto {
     this.symptomList,
   });
 
+  int? monitoringProgress;
   MonitoringStatus? monitoringStatus;
   bool? todayNote;
   Development? health;
@@ -62,6 +64,7 @@ class MonitoringProfileDto {
   String toRawJson() => json.encode(toJson());
 
   factory MonitoringProfileDto.fromJson(Map<String, dynamic> json) => MonitoringProfileDto(
+    monitoringProgress: json["monitoringProgress"],
     monitoringStatus: json["monitoringStatus"] == null ? null : MonitoringStatus.fromJson(json["monitoringStatus"]),
     todayNote: json["todayNote"],
     health: json["health"] == null ? null : Development.fromJson(json["health"]),
@@ -73,6 +76,7 @@ class MonitoringProfileDto {
   );
 
   Map<String, dynamic> toJson() => {
+    "monitoringProgress" : monitoringProgress,
     "monitoringStatus": monitoringStatus?.toJson(),
     "todayNote": todayNote,
     "health": health?.toJson(),
@@ -158,7 +162,7 @@ class Temperature {
     this.status,
   });
 
-  double? temperature;
+  String? temperature;
   String? status;
 
   factory Temperature.fromRawJson(String str) => Temperature.fromJson(json.decode(str));
@@ -166,7 +170,7 @@ class Temperature {
   String toRawJson() => json.encode(toJson());
 
   factory Temperature.fromJson(Map<String, dynamic> json) => Temperature(
-    temperature: json["temperature"]?.toDouble(),
+    temperature: json["temperature"],
     status: json["status"],
   );
 

@@ -22,12 +22,11 @@ class MonitoringLifeResult extends StatefulWidget {
 
 class _MonitoringLifeResultState extends BaseState<MonitoringLifeResult> {
   final HttpService httpService = HttpService();
-  List<LifeCateDto> cateScroe = [];
+  List<LifeCateDto> cateScore = [];
   List<WrongAnswer> wrongList = [];
   int tabIndex = 0;
   String option = "1";
   List<String> CATEGORY = ["개인위생", "구강교육", "감각", "안전사고", "영양", "전자미디어", "정서", "대소변", "수면교육"];
-  // List<int> cateint = [26,16,7,11,21,15,13,27,19];
   ScrollController sc = ScrollController();
   Color indiColor = AppColor_Primary;
   String inidiImage = "assets/icon_good.png";
@@ -51,8 +50,8 @@ class _MonitoringLifeResultState extends BaseState<MonitoringLifeResult> {
     info.then((value) async {
       if (value.result == 0) {
         CATEGORY = value.data!.keys.toList();
-        cateScroe = value.data!.values.toList();
-        wrongList = cateScroe[0].wrongAnswers!.values.toList();
+        cateScore = value.data!.values.toList();
+        wrongList = cateScore[0].wrongAnswers!.values.toList();
         setStatus();
         setState(() {
           isLoading = false;
@@ -67,7 +66,7 @@ class _MonitoringLifeResultState extends BaseState<MonitoringLifeResult> {
     return InkWell(
       onTap: () {
         sc.jumpTo(0.0);
-        wrongList = cateScroe[index].wrongAnswers!.values.toList();
+        wrongList = cateScore[index].wrongAnswers!.values.toList();
         setState(() {
           tabIndex = index;
           setStatus();
@@ -145,7 +144,7 @@ class _MonitoringLifeResultState extends BaseState<MonitoringLifeResult> {
                       Opacity(
                         opacity: option == "1" ? 0.5 : 1,
                         child: Image.asset(
-                          wrongList[index].answer! == 1
+                          wrongList[index].answer! == "1"
                               ? "assets/choose_on.png"
                               : "assets/choose_test_check.png",
                           width: 25,
@@ -153,7 +152,7 @@ class _MonitoringLifeResultState extends BaseState<MonitoringLifeResult> {
                         ),
                       ),
                       const SizedBox(height: 20),
-                      wrongList[index].answer! == 1
+                      wrongList[index].answer! == "1"
                           ? Opacity(
                         opacity: 0.5,
                         child: Container(
@@ -200,9 +199,9 @@ class _MonitoringLifeResultState extends BaseState<MonitoringLifeResult> {
                   Column(
                     children: [
                       Opacity(
-                        opacity: wrongList[index].answer! == 0 ? 0.5 : 1,
+                        opacity: wrongList[index].answer! == "0" ? 0.5 : 1,
                         child: Image.asset(
-                          wrongList[index].answer! == 0
+                          wrongList[index].answer! == "0"
                               ? "assets/choose_on.png"
                               : "assets/choose_test_check.png",
                           width: 25,
@@ -210,7 +209,7 @@ class _MonitoringLifeResultState extends BaseState<MonitoringLifeResult> {
                         ),
                       ),
                       const SizedBox(height: 20),
-                      wrongList[index].answer! == 0
+                      wrongList[index].answer! == "0"
                           ? Opacity(
                         opacity: 0.5,
                         child: Container(
@@ -277,8 +276,8 @@ class _MonitoringLifeResultState extends BaseState<MonitoringLifeResult> {
   }
 
   void setStatus() {
-    String s = cateScroe[tabIndex].status!;
-    indiText = cateScroe[tabIndex].feedbackDescription!;
+    String s = cateScore[tabIndex].status!;
+    indiText = cateScore[tabIndex].feedbackDescription!;
     if (s == "B") {
       inidiImage = "assets/icon_good.png";
       indiColor = AppColor_Primary;
@@ -317,10 +316,10 @@ class _MonitoringLifeResultState extends BaseState<MonitoringLifeResult> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              cateScroe.isNotEmpty ? Center(
+              cateScore.isNotEmpty ? Center(
                 child: CircularPercentIndicator(
                   radius: 120.0,
-                  percent: cateScroe[tabIndex].score!/cateScroe[tabIndex].totalScore!,
+                  percent: cateScore[tabIndex].score!/cateScore[tabIndex].totalScore!,
                   center: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -333,10 +332,10 @@ class _MonitoringLifeResultState extends BaseState<MonitoringLifeResult> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(cateScroe[tabIndex].score!.toString(),style: TextStyle(
+                            Text(cateScore[tabIndex].score!.toString(),style: TextStyle(
                               color: indiColor,
                             ),),
-                            Text("/${cateScroe[tabIndex].totalScore!}")
+                            Text("/${cateScore[tabIndex].totalScore!}")
                           ],
                         ),
                       )

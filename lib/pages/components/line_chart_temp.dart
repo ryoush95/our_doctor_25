@@ -30,8 +30,6 @@ class _LineChartTempState extends State<LineChartTemp> {
   void initState() {
     showingTooltipSpot = -1;
     super.initState();
-    print(points[1].x);
-    print(points[1].y);
 
     DateTime(now.year, now.month + 1, 0).day.toDouble();
 

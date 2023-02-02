@@ -5,17 +5,19 @@ import 'package:ourdoctor/helpers/bind_json.dart';
 import 'package:ourdoctor/helpers/common_util.dart';
 import 'package:ourdoctor/language/language_service.dart';
 import 'package:ourdoctor/models/home_grapth_res_model.dart';
+import 'package:ourdoctor/models/monitoring/sleep_graph_model.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
 import 'package:ourdoctor/pages/components/h14.dart';
 import 'package:ourdoctor/pages/components/h16.dart';
 import 'package:ourdoctor/pages/components/h18.dart';
 import 'package:ourdoctor/pages/components/line_chart.dart';
+import 'package:ourdoctor/pages/components/line_chart2.dart';
 import 'package:sprintf/sprintf.dart';
 
 class LaunchChart extends StatefulWidget {
   LaunchChart({Key? key, required this.data}) : super(key: key);
 
-  final HomeGraphLifeStyleDto data;
+  final SleepDataDto data;
 
   @override
   LaunchChartState createState() => LaunchChartState();
@@ -70,9 +72,9 @@ class LaunchChartState extends BaseState<LaunchChart> {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         //H18(text: getHourFromMinutes(widget.data.monitoringFood!.data!.sleepAtLunch!) + " " + LanguageService.trans('hour'), color: AppColor_BlackText, weight: FW.semi_bold),
-                        H18(text: getHourFromMinutes1(widget.data.monitoringFood!.data!.sleepAtLunch!), color: AppColor_BlackText, weight: FW.semi_bold),
+                        // H18(text: getHourFromMinutes1(widget.data.monitoringFood!.data!.sleepAtLunch!), color: AppColor_BlackText, weight: FW.semi_bold),
                         const SizedBox(height: 5),
-                        H14(text: lastDay(), color: AppColor_GrayText, weight: FW.regular),
+                        H14(text: "1", color: AppColor_GrayText, weight: FW.regular),
                       ],
                     ),
                     const SizedBox(width: 4),
@@ -83,7 +85,7 @@ class LaunchChartState extends BaseState<LaunchChart> {
                   child: Container(
                     // padding: const EdgeInsets.symmetric(horizontal: 15),
                     color: Colors.white,
-                    child: LineChartWidget(gradientColor: AppColor_Breath, data: [], data1: widget.data, type: 'launch'),
+                    child: LineChartWidget2(data1: widget.data, type: 'launch'),
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -94,11 +96,11 @@ class LaunchChartState extends BaseState<LaunchChart> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        H16(text: "수면시간이 ", color: AppColor_BlackText),
-                        H16(text: " " + widget.data.monitoringSleep!.diagnose!.result!, color: getColorFromString(widget.data.monitoringSleep!.diagnose!.color!)),
-                        H16(text: "해요.", color: AppColor_BlackText),
-                        const SizedBox(width: 4),
-                        Image.asset("assets/ic_icon2.png", width: 20),
+                        // H16(text: "수면시간이 ", color: AppColor_BlackText),
+                        // H16(text: " " + widget.data.monitoringSleep!.diagnose!.result!, color: getColorFromString(widget.data.monitoringSleep!.diagnose!.color!)),
+                        // H16(text: "해요.", color: AppColor_BlackText),
+                        // const SizedBox(width: 4),
+                        // Image.asset("assets/ic_icon2.png", width: 20),
                       ],
                     )),
               ],
@@ -187,14 +189,14 @@ class LaunchChartState extends BaseState<LaunchChart> {
   //   }
   // }
 
-  String lastDay() {
-    DateTime date = DateTime.parse(widget.data.monitoringFood!.data!.foodInputTime!.substring(0, 10));
-    DateTime now = DateTime.now();
-    final difference = now.difference(date).inDays + 1;
-    if (difference == 1) {
-      return '어제 기준';
-    } else {
-      return difference.toString() + "일전 기준";
-    }
-  }
+  // String lastDay() {
+  //   DateTime date = DateTime.parse(widget.data.monitoringFood!.data!.foodInputTime!.substring(0, 10));
+  //   DateTime now = DateTime.now();
+  //   final difference = now.difference(date).inDays + 1;
+  //   if (difference == 1) {
+  //     return '어제 기준';
+  //   } else {
+  //     return difference.toString() + "일전 기준";
+  //   }
+  // }
 }

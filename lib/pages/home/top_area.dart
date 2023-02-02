@@ -107,6 +107,8 @@ class TopAreaState extends BaseState<TopArea> {
 
     eventBus.on<SelectChildEvent>().listen((event) {
       if (mounted) {
+        birth = DateTime.parse(gSelChildInfo!.birth!);
+        dif = now.difference(birth).inDays.toString();
         getMonitor2HomeDataInfo();
         getTopareaData();
       }
@@ -280,7 +282,8 @@ class TopAreaState extends BaseState<TopArea> {
                                 ' ' +
                                 days[weekday % 7], weight: FW.bold,),
                         const SizedBox(height: 20),
-                        dicHomeDataInfo == null ? CircularProgressIndicator():Row(
+                        dicHomeDataInfo == null ? CircularProgressIndicator() :
+                        Row(
                           children: [
                             dicHomeDataInfo!.profileImgUrl! != ""
                                 ? CachedNetworkImage(
@@ -335,21 +338,6 @@ class TopAreaState extends BaseState<TopArea> {
                                               weight: FW.regular,
                                             )),
                                       ])),
-                                  // RichText(
-                                  //     text: TextSpan(children: [
-                                  //       TextSpan(
-                                  //           text: widget.name,
-                                  //           style: AppTextStyle.PD(
-                                  //               AppColor_Primary, 16,
-                                  //               weight: FW.bold)),
-                                  //       TextSpan(
-                                  //           text: " 어린이는 폭풍성장중!!",
-                                  //           style: AppTextStyle.PD(
-                                  //             AppColor_BlackText,
-                                  //             16,
-                                  //             weight: FW.regular,
-                                  //           )),
-                                  //     ])),
                                   const SizedBox(height: 32),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -466,7 +454,7 @@ class TopAreaState extends BaseState<TopArea> {
                                   children: [
                                     Center(
                                       child: MainTextButton(
-                                        text: "모니터링 시작하기",
+                                        text: "모니터링 하러가기",
                                         style: AppTextStyle.PD(
                                             Colors.white, 16,
                                             weight: FW.medium),
@@ -474,9 +462,7 @@ class TopAreaState extends BaseState<TopArea> {
                                         height: 40,
                                         radius: 6,
                                         onPressed: () {
-                                          // goMonitorStart();
-                                          Navigator.push(context,
-                                              SlideRightTransRoute(builder: (context) => MonitoringTestForm()));
+                                          goMonitorStart();
                                           // eventBus.fire(MoreMonitoring());
                                         },
                                       ),

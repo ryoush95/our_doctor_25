@@ -12,14 +12,17 @@ import 'package:ourdoctor/provider/global_provider.dart';
 import 'package:ourdoctor/provider/old_food_list_provider.dart';
 import 'package:ourdoctor/provider/convert_score_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'language/language_service.dart';
 
-void main() {
+void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   setupLocator();
   initFcm();
   initKakao();
+
+  await SharedPreferences.getInstance();
 
   runApp(MultiProvider(
     providers: [

@@ -56,10 +56,10 @@ class LifeCateDto {
   String toRawJson() => json.encode(toJson());
 
   factory LifeCateDto.fromJson(Map<String, dynamic> json) => LifeCateDto(
-    score: json["score"],
-    totalScore: json["total_score"],
-    feedbackDescription: json["feedback_description"],
-    status: json["status"],
+    score: json["score"] ?? 0,
+    totalScore: json["total_score"] ?? 0,
+    feedbackDescription: json["feedback_description"] ?? "",
+    status: json["status"] ?? "R",
     wrongAnswers: Map.from(json["wrong_answers"]!).map((k, v) => MapEntry<String, WrongAnswer>(k, WrongAnswer.fromJson(v))),
   );
 
@@ -82,7 +82,7 @@ class WrongAnswer {
 
   String? question;
   String? imageUrl;
-  int? answer;
+  String? answer;
   String? description;
 
   factory WrongAnswer.fromRawJson(String str) => WrongAnswer.fromJson(json.decode(str));
@@ -90,10 +90,10 @@ class WrongAnswer {
   String toRawJson() => json.encode(toJson());
 
   factory WrongAnswer.fromJson(Map<String, dynamic> json) => WrongAnswer(
-    question: json["question"],
+    question: json["question"] ?? "",
     imageUrl: json["image_url"] ?? "",
-    answer: json["answer"],
-    description: json["description"],
+    answer: json["answer"] ?? "",
+    description: json["description"] ?? "",
   );
 
   Map<String, dynamic> toJson() => {

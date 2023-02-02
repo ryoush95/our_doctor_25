@@ -1569,7 +1569,7 @@ class TabMainPageState extends BaseState<TabMainPage>
           onTap: () {
             showLeftMenu();
             if (idx == 4) {
-              _launchURL(DATEBOOK_URL);
+              _launchURL("http://pf.kakao.com/_JAjBb");
             } else if (idx == 5) {
               _launchURL(DATEBOOK_URL);
             } else {

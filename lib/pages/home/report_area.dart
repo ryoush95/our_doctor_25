@@ -488,7 +488,7 @@ class ReportAreaState extends BaseState<ReportArea> with TickerProviderStateMixi
                       children: [
                         const SizedBox(width: 28),
                         H18(
-                          text: '신장 기록을 처음 완료했어요.😊\n한달 주기로 기록을 지속해주세요.',
+                          text: '신장 기록을 처음 완료했어요.😊',
                           weight: FW.regular, 
                           maxLine: 2, 
                           align: TextAlign.start,

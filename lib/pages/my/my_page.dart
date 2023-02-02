@@ -22,6 +22,7 @@ import 'package:ourdoctor/pages/my/my_posts.dart';
 import 'package:ourdoctor/pages/my/order_history.dart';
 import 'package:ourdoctor/pages/my/profile_view.dart';
 import 'package:ourdoctor/pages/my/review_fragment.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MyPagePage extends StatefulWidget {
   @override
@@ -138,9 +139,13 @@ class MyPagePageState extends BaseState<MyPagePage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        ElevatedButton.icon(onPressed: (){}, icon: Icon(Icons.chat_bubble_rounded), label: Text("카카오 상담")),
+                        ElevatedButton.icon(onPressed: (){
+                          launch("http://pf.kakao.com/_JAjBb");
+                        }, icon: const Icon(Icons.chat_bubble_rounded), label: const Text("카카오 상담")),
                         const SizedBox(width: 15),
-                        ElevatedButton.icon(onPressed: (){}, icon: Icon(Icons.chat_bubble_rounded), label: Text("질문 게시판")),
+                        ElevatedButton.icon(onPressed: (){
+
+                        }, icon: const Icon(Icons.chat_bubble_rounded), label: const Text("질문 게시판")),
                       ],
                     ),
                     const SizedBox(height: 25),

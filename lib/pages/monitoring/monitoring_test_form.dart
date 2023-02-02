@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:ourdoctor/global/app_colors.dart';
 import 'package:ourdoctor/global/app_styles.dart';
 import 'package:ourdoctor/global/http_service.dart';
@@ -8,8 +9,9 @@ import 'package:ourdoctor/helpers/common_util.dart';
 import 'package:ourdoctor/helpers/transition.dart';
 import 'package:ourdoctor/language/language_service.dart';
 import 'package:ourdoctor/models/default_res_model.dart';
-import 'package:ourdoctor/models/monitor_test_list.dart';
-import 'package:ourdoctor/models/monitor_test_list2.dart';
+import 'package:ourdoctor/models/monitor_development_list_model.dart';
+import 'package:ourdoctor/models/monitor_life_list2_model.dart';
+import 'package:ourdoctor/models/monitoring_record_res_model.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
 import 'package:ourdoctor/pages/base/page_layout.dart';
 import 'package:ourdoctor/pages/components/h14.dart';
@@ -42,13 +44,13 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
   List<String> subCate1 = ["대근육", "소근육", "인지", "언어", "사회성", "자조"];
   List<String> subCate2 = ["개인위생", "구강교육", "감각", "안전사고", "영양", "전자미디어", "정서", "대소변", "수면교육"];
   final List<String> bodyString = ["적정량의 식사를 하나요?", "매일 충분히 잠을 자나요?", "하루에 신체활동을 잘하나요?"];
-  List<int> _data = [0,0,0];
+  List<int> bodyScore = [0,0,0];
 
   int cateNum = 0;
   int subNum = 0;
   List<String> list = [];
-  late HealthTestDto map;
-  LifeTestDto? map2;
+  List<Map<String, HealthTestDto>>? map;
+  List<Map<String, HealthTestDto>>? map2;
 
   String tall = "";
   String weight = "";
@@ -74,7 +76,6 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
     _listSc = ScrollController();
     _listSc2 = ScrollController();
     getQuizList();
-    getQuizList2();
   }
 
   @override
@@ -91,29 +92,29 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
         isLoading = false;
       });
       if (value.result == 0) {
-        map = value.data;
-        map.muscle1.forEach((key, value) {
-          quizNum.add(key);
-          quizList.add(value.question);
-        });
-        for (int i = 0; i < quizList.length; i++) {
-          selList.add("-1");
-        }
+        list = value.data!.keys.toList();
+        map = value.data!.values.toList();
+        changeList();
+
         setState(() {});
       }
     }).catchError((onError) {
+      showToast("검사기간이 아닙니다");
+      Navigator.pop(context);
       print(onError.toString());
     });
   }
 
   Future<void> getQuizList2() async {
-    Future<MonitoringLifeListModel> info2 = httpService.getMonitoringLifeList2();
+    Future<MonitoringHealthListModel> info2 = httpService.getMonitoringLifeList2();
     info2.then((value) async {
       setState(() {
         isLoading = false;
       });
       if (value.result == 0) {
-        map2 = value.data;
+        list = value.data!.keys.toList();
+        map2 = value.data!.values.toList();
+        changeList();
         setState(() {});
       }
     }).catchError((onError) {
@@ -132,6 +133,22 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
     return true;
   }
 
+  void changeList() {
+    if (cateNum == 0) {
+      map![subNum].forEach((key, value) {
+        quizNum.add(key);
+        quizList.add(value.question!);
+        selList.add("1");
+      });
+    } else if (cateNum == 1){
+      map2![subNum].forEach((key, value) {
+        quizNum.add(key);
+        quizList.add(value.question!);
+        selList.add("1");
+      });
+    }
+  }
+
   void goNext() async {
     if (selList.contains("-1")) {
       showToast('모든 문항에 대한 답변이 필요합니다.');
@@ -143,97 +160,19 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
 
     if (subNum == list.length - 1) {
       goSave();
+      quizNum.clear();
       cateNum++;
       subNum = 0;
 
       if (cateNum == 1) {
-        list = subCate2;
-        map2!.a!.forEach((key, value) {
-          quizNum.add(key);
-          quizList.add(value.question);
-        });
-        for (int i = 0; i < quizList.length; i++) {
-          selList.add("-1");
-        }
+        getQuizList2();
         setState(() {});
       }
       allList.clear();
 
     } else {
       subNum++;
-      if (cateNum == 0) {
-        if (subNum == 1) {
-          map.muscle2.forEach((key, value) {
-            quizNum.add(key);
-            quizList.add(value.question);
-          });
-        } else if (subNum == 2) {
-          map.dlswl.forEach((key, value) {
-            quizNum.add(key);
-            quizList.add(value.question);
-          });
-        } else if (subNum == 3) {
-          map.djsdj.forEach((key, value) {
-            quizNum.add(key);
-            quizList.add(value.question);
-          });
-        } else if (subNum == 4) {
-          map.tkghltjd.forEach((key, value) {
-            quizNum.add(key);
-            quizList.add(value.question);
-          });
-        } else if (subNum == 5) {
-          map.wkwh.forEach((key, value) {
-            quizNum.add(key);
-            quizList.add(value.question);
-          });
-        }
-      } else if (cateNum == 1) {
-        if (subNum == 1) {
-          map2!.b!.forEach((key, value) {
-            quizNum.add(key);
-            quizList.add(value.question);
-          });
-        } else if (subNum == 2) {
-          map2!.c!.forEach((key, value) {
-            quizNum.add(key);
-            quizList.add(value.question);
-          });
-        } else if (subNum == 3) {
-          map2!.d!.forEach((key, value) {
-            quizNum.add(key);
-            quizList.add(value.question);
-          });
-        } else if (subNum == 4) {
-          map2!.e!.forEach((key, value) {
-            quizNum.add(key);
-            quizList.add(value.question);
-          });
-        } else if (subNum == 5) {
-          map2!.f!.forEach((key, value) {
-            quizNum.add(key);
-            quizList.add(value.question);
-          });
-        } else if (subNum == 6) {
-          map2!.g!.forEach((key, value) {
-            quizNum.add(key);
-            quizList.add(value.question);
-          });
-        } else if (subNum == 7) {
-          map2!.h!.forEach((key, value) {
-            quizNum.add(key);
-            quizList.add(value.question);
-          });
-        } else if (subNum == 8) {
-          map2!.i!.forEach((key, value) {
-            quizNum.add(key);
-            quizList.add(value.question);
-          });
-        }
-      }
-      for (int i = 0; i < quizList.length; i++) {
-        selList.add("3");
-      }
+      changeList();
     }
     _listSc2!.jumpTo(0.0);
   }
@@ -242,8 +181,6 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
     Future<DefaultResModel>? insert;
     if (cateNum == 0) {
       insert = httpService.inputHealthSendResult(jsonEncode(quizNum), jsonEncode(allList));
-      print(quizNum.length);
-      print(allList.length);
     } else if (cateNum == 1){
       insert = httpService.inputLifeSendResult(jsonEncode(quizNum), jsonEncode(allList));
     }
@@ -260,9 +197,11 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
   }
 
   Future<void> saveBody() async {
-    int s = _data.reduce((value, element) => value+element);
+    int s = bodyScore.reduce((value, element) => value+element);
     score = (s * 2).toString();
-    Future<DefaultResModel>? insert = httpService.inputBodySendResult(tall, weight, score);
+    DateFormat dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss");
+    String monitoring_time = dateFormat.format(DateTime.now());
+    Future<MonitoringRecordResModel>? insert = httpService.monitoringRecord(monitoring_time, tall, weight, "", "", "", "", "", "", "", "", "", "", "", "");
     insert.then((value) async {
       setState(() {
         isLoading = false;
@@ -458,7 +397,7 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
                 child: InkWell(
                   onTap: () {
                     setState(() {
-                      selList[index] = "1";
+                      selList[index] = "0";
                     });
                   },
                   child: Row(
@@ -466,14 +405,14 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
                       Column(
                         children: [
                           Image.asset(
-                            selList[index] == "1"
+                            selList[index] == "0"
                                 ? "assets/choose_on.png"
                                 : "assets/choose_off.png",
                             width: 25,
                             height: 25,
                           ),
                           const SizedBox(height: 20),
-                          selList[index] == "1"
+                          selList[index] == "0"
                               ? Container(
                                   height: h,
                                   width: 50,
@@ -517,7 +456,7 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
               InkWell(
                 onTap: () {
                   setState(() {
-                    selList[index] = "0";
+                    selList[index] = "1";
                   });
                 },
                 child: Row(
@@ -526,14 +465,14 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
                     Column(
                       children: [
                         Image.asset(
-                          selList[index] == "0"
+                          selList[index] == "1"
                               ? "assets/choose_on.png"
                               : "assets/choose_off.png",
                           width: 25,
                           height: 25,
                         ),
                         const SizedBox(height: 20),
-                        selList[index] == "0"
+                        selList[index] == "1"
                             ? Container(
                                 height: h,
                                 width: w,
@@ -723,7 +662,7 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
                           placeholder: "",
                           onChanged: (text) {
                             tall = text;
-                            if (double.parse(tall) < 20 ||
+                            if (double.parse(tall) < 0 ||
                                 double.parse(tall) > 200) {
                               isValid = false;
                               tallColor = Colors.red;
@@ -763,7 +702,7 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
                           placeholder: "",
                           onChanged: (text) {
                             weight = text;
-                            if (double.parse(weight) < 20 ||
+                            if (double.parse(weight) < 0 ||
                                 double.parse(weight) > 200) {
                               isValid = false;
                               weightColor = Colors.red;
@@ -796,22 +735,22 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
                   color: AppColor_Light_Gray),
               child: ListView.builder(
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount: _data.length,
+                itemCount: bodyScore.length,
                 itemBuilder: (context, index) {
                   return Column(
                     children: [
                       InkWell(
                         onTap: () {
-                          if (_data[index] == 0){
-                            _data[index] = 1;
+                          if (bodyScore[index] == 0){
+                            bodyScore[index] = 1;
                           } else {
-                            _data[index] = 0;
+                            bodyScore[index] = 0;
                           }
                           setState(() {});
                         },
                         child: Row(children: [
                           Image.asset(
-                            _data[index] == 0 ? "assets/ic_radio_off.png"
+                            bodyScore[index] == 0 ? "assets/ic_radio_off.png"
                                 :"assets/ic_radio_on.png",
                             width: 20,
                           ),
@@ -822,7 +761,7 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
                           )
                         ]),
                       ),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: 18),
                     ],
                   );
                 },

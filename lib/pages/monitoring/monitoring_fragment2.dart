@@ -106,7 +106,7 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
       isLoading = true;
     });
 
-    Future<NoteProfileModel> info = httpService.getNoteProfile();
+    Future<NoteProfileModel> info = httpService.getMonitoringStatus();
     info.then((NoteProfileModel value) async {
       setState(() {
         isLoading = false;
@@ -216,12 +216,19 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
                   children: [
                     RichText(
                         text: TextSpan(children: [
+                          TextSpan(
+                              text: " 모니터링을 ",
+                              style: AppTextStyle.PD(
+                                AppColor_BlackText,
+                                16,
+                                weight: FW.semi_bold,
+                              )),
                       TextSpan(
-                          text: "발달",
+                          text: data!.monitoringProgress == 0? "시작": "완료",
                           style:
                               AppTextStyle.PD(AppColor_Primary, 16, weight: FW.bold)),
                       TextSpan(
-                          text: " 모니터링을 한지 ${data!.monitoringStatus!.lastMonitoring}일 지났어요.",
+                          text: data!.monitoringProgress == 0? "해볼까요?": "했어요!",
                           style: AppTextStyle.PD(
                             AppColor_BlackText,
                             16,
@@ -229,8 +236,10 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
                           )),
                     ])),
                     const SizedBox(height: 15),
-                    H16(
-                      text: "현재 개월 수에 맞는 모니터링을 해야할 시기가 지났어요\n모니터링을 시작해 볼까요?",
+                    H14(
+                      text: data!.monitoringProgress == 0
+                          ? "현재 개월 수에 맞는 모니터링을 해야할 시기가 지났어요"
+                          : "모니터링 결과를 통해 우리 아이 발달을 확인하세요",
                       weight: FW.regular,
                       maxLine: 3,
                       align: TextAlign.start,
@@ -242,7 +251,7 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
               const SizedBox(height: 15),
               Center(
                 child: MainTextButton(
-                  text: "모니터링 시작하기",
+                  text: data!.monitoringProgress == 0 ?"모니터링 시작하기":"모니터링 결과보기",
                   style: AppTextStyle.PD(
                       Colors.white, 16,
                       weight: FW.medium),
@@ -250,8 +259,11 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
                   height: 40,
                   radius: 6,
                   onPressed: () {
-                    Navigator.push(context, SlideRightTransRoute(builder: (context) => MonitorReport1(),));
-                    // Navigator.push(context, SlideRightTransRoute(builder: (context) => MonitoringTestForm(),));
+                    if(data!.monitoringProgress! == 0){
+                      Navigator.push(context, SlideRightTransRoute(builder: (context) => MonitoringTestForm(),));
+                    } else {
+                      Navigator.push(context, SlideRightTransRoute(builder: (context) => MonitorReport1(),));
+                    }
                   },
                 ),
               ),
@@ -406,7 +418,8 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               H16(text: "수면", weight: FW.regular,),
-                              H16(text: data!.sleep!.status! =="R" ? "부족": "충분", color: changeColor(data!.sleep!.status!),),
+                              H16(text: data!.sleep!.status! =="R" ? "부족": data!.sleep!.status! =="N" ? "-"
+                              : "충분", color: changeColor(data!.sleep!.status!),),
                             ],
                           ),
                           Row(
@@ -415,7 +428,9 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
                               H16(text: "체온", weight: FW.regular,),
                               Row(
                                 children: [
-                                  H16(text: data!.temperature!.temperature.toString(), color: changeColor(data!.temperature!.status!),),
+                                  H16(
+                                    text: data!.temperature!.temperature == null ? "-" : data!.temperature!.temperature.toString(),
+                                    color: changeColor(data!.temperature!.status!),),
                                   H16(text: " °C"),
                                 ],
                               ),
@@ -427,7 +442,7 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
                               H16(text: "질병", weight: FW.regular,),
                               Row(
                                 children: [
-                                  H16(text: "처방전+ "),
+                                  H16(text: "처방전 + "),
                                   H16(text: data!.symptomList!.length.toString(), color: AppColor_Primary,),
                                 ],
                               ),
@@ -453,7 +468,7 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
               const SizedBox(height: 15),
               Center(
                 child: MainTextButton(
-                  text: "성장 노트 기록하기",
+                  text: data!.todayNote == false ? "성장 노트 기록하기" : "지난 기록 보기",
                   style: AppTextStyle.PD(
                       Colors.white, 16,
                       weight: FW.medium),
@@ -461,7 +476,11 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
                   height: 40,
                   radius: 6,
                   onPressed: () {
-                    Navigator.push(context, SlideRightTransRoute(builder: (context) => MonitoringMain2(),));
+                    if(data!.todayNote == false) {
+                      Navigator.push(context, SlideRightTransRoute(builder: (context) => MonitoringMain2(),));
+                    } else {
+                      Navigator.push(context, SlideRightTransRoute(builder: (context) => MonitoringResult2(),));
+                    }
                   },
                 ),
               ),
@@ -481,7 +500,7 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
           physics: const BouncingScrollPhysics(),
           child: Container(
             margin: EdgeInsets.all(20.0),
-            child: Column(
+            child: data == null ? const SizedBox() : Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 monitor1(),

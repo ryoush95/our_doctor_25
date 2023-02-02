@@ -66,8 +66,8 @@ class LifestyleReportState extends BaseState<LifestyleReport> {
         children: [
           // LifestyleLineChart(data: widget.data),
           const SizedBox(height: 20),
-          SleepChart(data: widget.data),
-          LaunchChart(data: widget.data),
+          // SleepChart(data: widget.data),
+          // LaunchChart(data: widget.data),
           // widget.result == 1 ? const SizedBox(height: 40): const SizedBox(),
           // widget.result == 1 ? ResultArea(type: 2, result: 2): const SizedBox(),
           const SizedBox(height: 50),
