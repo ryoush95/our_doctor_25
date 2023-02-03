@@ -79,6 +79,7 @@ class ChildDto {
   String? alarmYn;
   String? selectedChildUid;
   String? weight;
+  String? height;
   List<ChildList>? childList;
   int? gender;
   List<EmergencyList1>? emergencyList;
@@ -137,6 +138,7 @@ class ChildDto {
       this.alarmYn,
       this.selectedChildUid,
       this.weight,
+      this.height,
       this.childList,
       this.gender,
       this.emergencyList,
@@ -195,6 +197,7 @@ class ChildDto {
     alarmYn = json['alarm_yn'] ?? "";
     selectedChildUid = json['selected_child_uid'] ?? "";
     weight = json['weight'] ?? "";
+    height = json['height'] ?? "";
     if (json['child_list'] != null) {
       childList = <ChildList>[];
       json['child_list'].forEach((v) {
@@ -270,6 +273,7 @@ class ChildDto {
     data['alarm_yn'] = this.alarmYn;
     data['selected_child_uid'] = this.selectedChildUid;
     data['weight'] = this.weight;
+    data['height'] = this.height;
     if (this.childList != null) {
       data['child_list'] = this.childList!.map((v) => v.toJson()).toList();
     }

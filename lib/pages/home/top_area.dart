@@ -24,6 +24,7 @@ import 'package:ourdoctor/pages/monitoring/monitoring_result.dart';
 import 'package:ourdoctor/pages/monitoring/monitoring_start.dart';
 import 'package:ourdoctor/pages/monitoring/monitoring_test_form.dart';
 import 'package:ourdoctor/provider/convert_score_provider.dart';
+import 'package:ourdoctor/provider/global_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:show_more_text_popup/show_more_text_popup.dart';
 import 'package:sprintf/sprintf.dart';
@@ -60,7 +61,7 @@ class TopAreaState extends BaseState<TopArea> {
   String day = DateTime.now().day.toString();
   String dif = "";
 
-  TopAreaDto data = TopAreaDto(height: "111",weight: "222",lastMonitoring: "33");
+  TopAreaDto? data;
 
   void showMoreText() {
     ShowMoreTextPopup popup = ShowMoreTextPopup(context,
@@ -223,7 +224,7 @@ class TopAreaState extends BaseState<TopArea> {
     info.then((value) async {
 
       if (value.result == 0) {
-        data = value.data!;
+        Provider.of<GlobalProvider>(context, listen: false).topAreaInfo(value.data!.height!, value.data!.weight!, value.data!.nextMonitoring!);
         setState(() {});
       } else {
         showToast(value.msg ?? "");
@@ -246,6 +247,7 @@ class TopAreaState extends BaseState<TopArea> {
 
   @override
   Widget build(BuildContext context) {
+    final p = Provider.of<GlobalProvider>(context, listen: false);
     return !isLoading
         ? Container(
             height: 330,
@@ -350,7 +352,7 @@ class TopAreaState extends BaseState<TopArea> {
                                       RichText(
                                           text: TextSpan(children: [
                                         TextSpan(
-                                            text: data.height,
+                                            text: p.topAreaHeight,
                                             style: AppTextStyle.PD(
                                                 AppColor_Primary, 16,
                                                 weight: FW.bold)),
@@ -375,7 +377,7 @@ class TopAreaState extends BaseState<TopArea> {
                                       RichText(
                                           text: TextSpan(children: [
                                         TextSpan(
-                                            text: data.weight,
+                                            text: p.topAreaWeight,
                                             style: AppTextStyle.PD(
                                                 AppColor_Primary, 16,
                                                 weight: FW.bold)),
@@ -436,7 +438,8 @@ class TopAreaState extends BaseState<TopArea> {
                                         weight: FW.regular,
                                       )),
                                   TextSpan(
-                                      text: " ${data.nextMonitoring}일 후",
+                                      text: " ${p.nextDate}일 후",
+                                      // text: " 40일 후",
                                       style: AppTextStyle.PD(
                                           AppColor_Primary, 16,
                                           weight: FW.bold)),
@@ -462,8 +465,8 @@ class TopAreaState extends BaseState<TopArea> {
                                         height: 40,
                                         radius: 6,
                                         onPressed: () {
-                                          goMonitorStart();
-                                          // eventBus.fire(MoreMonitoring());
+                                          // goMonitorStart();
+                                          eventBus.fire(MoreMonitoring());
                                         },
                                       ),
                                     ),

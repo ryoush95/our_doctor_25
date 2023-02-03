@@ -170,7 +170,7 @@ class Temperature {
   String toRawJson() => json.encode(toJson());
 
   factory Temperature.fromJson(Map<String, dynamic> json) => Temperature(
-    temperature: json["temperature"],
+    temperature: json["temperature"].toString(),
     status: json["status"],
   );
 

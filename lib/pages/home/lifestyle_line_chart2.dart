@@ -3,6 +3,7 @@ import 'package:ourdoctor/global/app_colors.dart';
 import 'package:ourdoctor/global/app_styles.dart';
 import 'package:ourdoctor/models/monitoring/temp_graph_model.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
+import 'package:ourdoctor/pages/components/h12.dart';
 import 'package:ourdoctor/pages/components/h18.dart';
 import 'package:ourdoctor/pages/components/line_chart_temp.dart';
 import 'package:ourdoctor/pages/components/price_point.dart';
@@ -95,6 +96,26 @@ class LifestyleLineChart2State extends BaseState<LifestyleLineChart2> {
                   ),
                 ),
                 const SizedBox(height: 20),
+                Row(
+                  children: [
+                    const SizedBox(width: 30,),
+                    Container(
+                      height: 8,
+                      width: 8,
+                      decoration: BoxDecoration(
+                        color: AppColor_Green,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    H12(
+                      text: "정상 체온",
+                      weight: FW.medium,
+                      height: 1.5,
+                      color: AppColor_Input_Title,
+                    ),
+                  ],
+                ),
               ],
             )));
   }

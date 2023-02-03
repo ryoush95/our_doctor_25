@@ -628,7 +628,7 @@ class _MonitoringMain2State extends BaseState<MonitoringMain2> {
     }
 
     String loca = locaTemp ==0 ? "귀": "이마";
-    Future<DefaultResModel> info = httpService.monitoringRecord2(mTemp,loca,sleep_night.toString(), sleep_night.toString(), symptom_list);
+    Future<DefaultResModel> info = httpService.monitoringRecord2(mTemp,loca,sleep_night.toString(), sleep_launch.toString(), symptom_list);
     info.then((DefaultResModel value) async {
       setState(() {
         isLoading = false;

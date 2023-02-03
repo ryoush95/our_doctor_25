@@ -81,7 +81,7 @@ class ChildManagementPageState extends BaseState<ChildManagementPage> {
 
     String _uid = gUserInfo!.childList![child].id!;
     if (_uid == gSelChildInfo!.id) {
-      showToast("선택된 자녀는 삭제하실 수 없습니다.");
+      showToast("현재 선택된 자녀는 삭제하실 수 없습니다.");
       return;
     }
     var _result = await showDialog(context: context, builder: (_) => TwoBtnTitleDialog(title: "알 림", content: "아이를 삭제하시겠습니까?", btn1: "아니요", btn2: "네"));

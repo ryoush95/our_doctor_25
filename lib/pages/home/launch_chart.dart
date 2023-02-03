@@ -74,7 +74,7 @@ class LaunchChartState extends BaseState<LaunchChart> {
                         //H18(text: getHourFromMinutes(widget.data.monitoringFood!.data!.sleepAtLunch!) + " " + LanguageService.trans('hour'), color: AppColor_BlackText, weight: FW.semi_bold),
                         // H18(text: getHourFromMinutes1(widget.data.monitoringFood!.data!.sleepAtLunch!), color: AppColor_BlackText, weight: FW.semi_bold),
                         const SizedBox(height: 5),
-                        H14(text: "1", color: AppColor_GrayText, weight: FW.regular),
+                        // H14(text: "1", color: AppColor_GrayText, weight: FW.regular),
                       ],
                     ),
                     const SizedBox(width: 4),

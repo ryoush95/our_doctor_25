@@ -24,8 +24,8 @@ import 'package:ourdoctor/pages/home/range_show.dart';
 import 'package:ourdoctor/pages/home/weight_report.dart';
 import 'package:ourdoctor/pages/intro/first.dart';
 import 'package:ourdoctor/pages/monitoring/monitoring_test_result.dart';
-import 'package:ourdoctor/pages/monitoring/solution_area.dart';
 import 'package:sprintf/sprintf.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MonitorReport1 extends StatefulWidget {
   const MonitorReport1({Key? key}) : super(key: key);
@@ -328,6 +328,7 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
       } else {
         return Column(
           children: [
+            const SizedBox(height: 10),
             dicHomeGraphTallInfo!.total_cnt! == 1
                 ? Row(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -518,7 +519,7 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
                   child: Center(
                     child: Text(
                       healthList[index].score.toString(),
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.white,
                       ),
                     ),
@@ -588,12 +589,12 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       H16(text: comment1),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       Text(
                         comment2,
-                        style: TextStyle(
+                        style: const TextStyle(
                             color: AppColor_GrayText,
                             fontSize: 16,
                             height: 1.5),
@@ -615,7 +616,7 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
                           height: 40,
                           radius: 20,
                           onPressed: () {
-                            // Navigator.push(context, SlideRightTransRoute(builder: (context) => ,));
+                            launch("http://pf.kakao.com/_JAjBb");
                           },
                         ),
                       )

@@ -41,7 +41,7 @@ class _LineChartWidget2State extends State<LineChartWidget2> {
   void initState() {
     super.initState();
     gradientColors = [
-      AppColor_Primary.withOpacity(0.8),
+    widget.type == "night" ? AppColor_Primary.withOpacity(0.8) : AppColor_Breath.withOpacity(0.8),
       const Color(0xffffffff),
       // widget.type == 'temperature'? const Color(0xffc3c9c7): widget.type == 'saturation'? const Color(0xffc9c8c3): const Color(0xffc9c9c4)
     ];
@@ -49,8 +49,7 @@ class _LineChartWidget2State extends State<LineChartWidget2> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.type == 'food' ||
-        widget.type == 'night' ||
+    if (widget.type == 'night' ||
         widget.type == 'launch') {
       return Scrollbar(
           thickness: 4,
@@ -189,7 +188,7 @@ class _LineChartWidget2State extends State<LineChartWidget2> {
         LineChartBarData(
           spots: spotList(),
           isCurved: false,
-          color: AppColor_Primary,
+          color: widget.type == "night" ? AppColor_Primary : AppColor_Breath,
           barWidth: 2,
           isStrokeCapRound: true,
           dotData: FlDotData(show: true, getDotPainter: customDotPainter),
@@ -215,7 +214,7 @@ class _LineChartWidget2State extends State<LineChartWidget2> {
       {double? size}) {
     return FlDotCirclePainter(
         radius: 3.0,
-        color: AppColor_Primary,
+        color: widget.type == "night" ? AppColor_Primary : AppColor_Breath,
         strokeColor: Colors.white,
         strokeWidth: 1);
   }
