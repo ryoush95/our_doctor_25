@@ -1,5 +1,7 @@
 import 'package:ourdoctor/helpers/bind_json.dart';
 
+import 'monitoring/heath_result_model.dart';
+
 class HomeGraphTallResModel {
   HomeGraphTallDto? data;
   int? result;
@@ -35,8 +37,9 @@ class HomeGraphTallDto {
   double? heightPredict;
   Monitoring? monitoring;
   List<Graph>? graph;
+  Map<String, RecommendList>? solutionList;
 
-  HomeGraphTallDto({this.total_cnt, this.height, this.diff, this.heightPrevDiff, this.heightPredict, this.monitoring, this.graph});
+  HomeGraphTallDto({this.total_cnt, this.height, this.diff, this.heightPrevDiff, this.heightPredict, this.monitoring, this.graph,    this.solutionList,});
 
   HomeGraphTallDto.fromJson(Map<String, dynamic> json) {
     total_cnt = fromJsonInt(json['total_cnt']);
@@ -67,6 +70,7 @@ class HomeGraphTallDto {
         graph!.add(new Graph.fromJson(v));
       });
     }
+    solutionList = Map.from(json["recommend_list"]!).map((k, v) => MapEntry<String, RecommendList>(k, RecommendList.fromJson(v)));
   }
 
   Map<String, dynamic> toJson() {
@@ -82,6 +86,7 @@ class HomeGraphTallDto {
     if (this.graph != null) {
       data['graph'] = this.graph!.map((v) => v.toJson()).toList();
     }
+    data['recommend_list'] = Map.from(solutionList!).map((k, v) => MapEntry<String, dynamic>(k, v.toJson()));
     return data;
   }
 }
@@ -233,8 +238,15 @@ class HomeGraphWeightDto {
   double? weightPrevDiff;
   Monitoring? monitoring;
   List<Graph>? graph;
+  Map<String, RecommendList>? solutionList;
 
-  HomeGraphWeightDto({this.total_cnt, this.weight, this.weightPrevDiff, this.monitoring, this.graph});
+  HomeGraphWeightDto({this.total_cnt,
+    this.weight,
+    this.weightPrevDiff,
+    this.monitoring,
+    this.graph,
+    this.solutionList,
+  });
 
   HomeGraphWeightDto.fromJson(Map<String, dynamic> json) {
     total_cnt = fromJsonInt(json['total_cnt']);
@@ -247,6 +259,7 @@ class HomeGraphWeightDto {
         graph!.add(new Graph.fromJson(v));
       });
     }
+    solutionList = Map.from(json["recommend_list"]!).map((k, v) => MapEntry<String, RecommendList>(k, RecommendList.fromJson(v)));
   }
 
   Map<String, dynamic> toJson() {
@@ -260,6 +273,7 @@ class HomeGraphWeightDto {
     if (this.graph != null) {
       data['graph'] = this.graph!.map((v) => v.toJson()).toList();
     }
+    data['recommend_list'] = Map.from(solutionList!).map((k, v) => MapEntry<String, dynamic>(k, v.toJson()));
     return data;
   }
 }

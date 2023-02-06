@@ -1,16 +1,21 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:ourdoctor/global/app_colors.dart';
 import 'package:ourdoctor/global/app_styles.dart';
 import 'package:ourdoctor/global/http_service.dart';
 import 'package:ourdoctor/helpers/common_util.dart';
 import 'package:ourdoctor/helpers/transition.dart';
+import 'package:ourdoctor/models/monitoring/heath_result_model.dart';
 import 'package:ourdoctor/models/monitoring/solution_area_model.dart';
+import 'package:ourdoctor/pages/care/product_detail.dart';
 import 'package:ourdoctor/pages/community/community_detail.dart';
 import 'package:ourdoctor/pages/components/h16.dart';
 import 'package:ourdoctor/pages/components/h18.dart';
 import 'package:ourdoctor/pages/home/school_area.dart';
 import 'package:ourdoctor/pages/intro/first.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:ourdoctor/models/monitor_development_list_model.dart';
+import 'package:ourdoctor/provider/monitoring_note_profile_provider.dart';
+import 'package:provider/provider.dart';
 
 class SolutionArea extends StatefulWidget {
   const SolutionArea({Key? key}) : super(key: key);
@@ -21,37 +26,13 @@ class SolutionArea extends StatefulWidget {
 
 class _SolutionAreaState extends State<SolutionArea> {
   final HttpService httpService = HttpService();
-  SolutionAreaDto data = SolutionAreaDto(communityUid: "2072", imgUrl: "https://mingles-dev.s3.ap-northeast-2.amazonaws.com/uploads/community/slide_images/2064/detail_CK_ta0111a1401_n.jpg",title: "솔루션1",type: "community", url: "");
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
-  Future<void> getSolution() async {
-    Future<SolutionAreaModel> info = httpService.getSolutionArea();
-    info.then((value) async {
-
-      if (value.result == 0) {
-        //input
-        data = value.data!;
-        setState(() {});
-      } else {
-        showToast(value.msg ?? "");
-        if (value.result == 106) {
-          //token expired
-          Navigator.pushReplacement(
-              context, SlideRightTransRoute(builder: (context) => FirstPage()));
-        }
-      }
-    }).catchError((onError) {
-      showToast(onError);
-    });
-  }
+  // SolutionAreaDto data = SolutionAreaDto(communityUid: "2072", imgUrl: "https://mingles-dev.s3.ap-northeast-2.amazonaws.com/uploads/community/slide_images/2064/detail_CK_ta0111a1401_n.jpg",title: "솔루션1",type: "community", url: "");
+  List<RecommendList> solList = [];
 
   @override
   Widget build(BuildContext context) {
+    final p = Provider.of<MonitoringNoteProfileProvider>(context, listen: false);
     return Container(
       height: 306,
       width: MediaQuery.of(context).size.width - 50,
@@ -73,18 +54,27 @@ class _SolutionAreaState extends State<SolutionArea> {
           // SchoolArea(curCategory: 2),//교육
           Expanded(
             child: ListView.builder(
-              itemCount: 2,
+              itemCount: solList.length,
               scrollDirection: Axis.horizontal,
               padding: const EdgeInsets.all(10),
               physics: const BouncingScrollPhysics(),
               itemBuilder: (context, index) {
                 return InkWell(
                   onTap: () {
-                    if(data.type == "community") {
-                      Navigator.push(context, SlideRightTransRoute(builder:
-                      (context) => CommunityDetailPage(uid: data.communityUid),));
+                    if (solList[index].type! == "community") {
+                      Navigator.push(
+                          context,
+                          SlideRightTransRoute(
+                            builder: (context) => CommunityDetailPage(
+                                uid: solList[index].id),
+                          ));
                     } else {
-                      launch(data.url!);
+                      Navigator.push(
+                          context,
+                          SlideRightTransRoute(
+                            builder: (context) =>
+                                ProductDetail(pid: solList[index].id!),
+                          ));
                     }
                   },
                   child: Padding(
@@ -95,14 +85,20 @@ class _SolutionAreaState extends State<SolutionArea> {
                         Container(
                           height: 150,
                           width: 150,
-                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.0)),
-                          child: Image.network(data.imgUrl!, width: 84, height: 84, fit: BoxFit.fill,),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10.0)),
+                          child: CachedNetworkImage(
+                            imageUrl: solList[index].imageUrl!,
+                            width: 84,
+                            height: 84,
+                            fit: BoxFit.fill,
+                          ),
                         ),
                         const SizedBox(height: 16),
                         SizedBox(
                           width: 150,
                           child: H18(
-                            text: data.title!,
+                            text: solList[index].title!,
                             weight: FW.regular,
                             maxLine: 2,
                             align: TextAlign.center,
@@ -113,7 +109,8 @@ class _SolutionAreaState extends State<SolutionArea> {
                     ),
                   ),
                 );
-              },),
+              },
+            ),
           ),
         ],
       ),

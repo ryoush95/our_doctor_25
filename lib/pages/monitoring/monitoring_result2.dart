@@ -48,7 +48,7 @@ class _MonitoringResult2State extends BaseState<MonitoringResult2> {
   List<ReportDto> reportList2 = [];
   Data? tempGraphList;
   SleepDataDto? sleepGraphList;
-  List<String> foodList = ["","","",""];
+  List<String> foodList = [];
   String foodComment = "";
 
   int curYear = 0;
@@ -172,6 +172,7 @@ class _MonitoringResult2State extends BaseState<MonitoringResult2> {
       setState(() {
         isLoading = false;
       });
+
       if (value.result == 0) {
         foodList.add(value.data!.breakfast!);
         foodList.add(value.data!.lunch!);
@@ -516,7 +517,8 @@ class _MonitoringResult2State extends BaseState<MonitoringResult2> {
               left: 30, right: 30, top: 20, bottom: 20),
           // margin: const EdgeInsets.symmetric(horizontal: 30),
           child: Text(
-            foodComment,
+            // foodComment,
+            "추천해요!",
             style: const TextStyle(
                 color: AppColor_GrayText,
                 fontSize: 16,

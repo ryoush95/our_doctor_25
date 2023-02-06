@@ -42,12 +42,14 @@ class DevelopmentScoreDto {
     this.status,
     this.feedbackTitle,
     this.feedbackDescription,
+    this.solutionList,
   });
 
   int? score;
   String? status;
   String? feedbackTitle;
   String? feedbackDescription;
+  Map<String, RecommendList>? solutionList;
 
   factory DevelopmentScoreDto.fromRawJson(String str) => DevelopmentScoreDto.fromJson(json.decode(str));
 
@@ -58,6 +60,7 @@ class DevelopmentScoreDto {
     status: json["status"],
     feedbackTitle: json["feedback_title"],
     feedbackDescription: json["feedback_description"],
+    solutionList: Map.from(json["recommend_list"]!).map((k, v) => MapEntry<String, RecommendList>(k, RecommendList.fromJson(v))),
   );
 
   Map<String, dynamic> toJson() => {
@@ -65,5 +68,38 @@ class DevelopmentScoreDto {
     "status": status,
     "feedback_title": feedbackTitle,
     "feedback_description": feedbackDescription,
+    "recommend_list": Map.from(solutionList!).map((k, v) => MapEntry<String, dynamic>(k, v.toJson())),
+  };
+}
+
+class RecommendList {
+  RecommendList({
+    this.type,
+    this.id,
+    this.imageUrl,
+    this.title,
+  });
+
+  String? type;
+  String? id;
+  String? imageUrl;
+  String? title;
+
+  factory RecommendList.fromRawJson(String str) => RecommendList.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
+  factory RecommendList.fromJson(Map<String, dynamic> json) => RecommendList(
+    type: json["type"] ?? "",
+    id: json["id"] ?? "",
+    imageUrl: json["image_url"] ?? "",
+    title: json["title"] ?? "",
+  );
+
+  Map<String, dynamic> toJson() => {
+    "type": type,
+    "id": id,
+    "image_url": imageUrl,
+    "title": title,
   };
 }

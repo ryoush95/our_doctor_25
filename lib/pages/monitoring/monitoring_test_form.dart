@@ -149,13 +149,13 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
       map![subNum].forEach((key, value) {
         quizNum.add(key);
         quizList.add(value);
-        selList.add("2");
+        selList.add("-1");
       });
     } else if (cateNum == 1){
       map2![subNum].forEach((key, value) {
         quizNum.add(key);
         quizList.add(value);
-        selList.add("1");
+        selList.add("-1");
       });
     }
   }
@@ -203,7 +203,7 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
         isLoading = false;
       });
       if (value.result == 0) {
-        // showToast("검사가 저장되었습니다");
+        await Provider.of<GlobalProvider>(context, listen: false).getNoteInfo(context);
       }
     }).catchError((onError) {
       print(onError.toString());
@@ -221,10 +221,10 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
         isLoading = false;
       });
       if (value.result == 0) {
+        await Provider.of<GlobalProvider>(context, listen: false).getNoteInfo(context);
         Navigator.pushReplacement(context, SlideRightTransRoute(
           builder: (context) => const MonitorReport1(),
         ));
-        Provider.of<GlobalProvider>(context, listen: false).getNoteInfo(context);
 
       }
     }).catchError((onError) {
@@ -353,7 +353,6 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
                               return;
                             }
                             goNext();
-                            p.getNoteInfo(context);
                             setState(() {});
                             // Navigator.push(context, SlideRightTransRoute(builder: (context) => MonitoringTestResult(),));
                           },

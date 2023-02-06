@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:ourdoctor/global/app_colors.dart';
 import 'package:ourdoctor/global/app_styles.dart';
@@ -12,6 +13,8 @@ import 'package:ourdoctor/models/home_grapth_res_model.dart';
 import 'package:ourdoctor/models/monitor_list_res_model.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
 import 'package:ourdoctor/pages/base/page_layout.dart';
+import 'package:ourdoctor/pages/care/product_detail.dart';
+import 'package:ourdoctor/pages/community/community_detail.dart';
 import 'package:ourdoctor/pages/components/h14.dart';
 import 'package:ourdoctor/pages/components/h16.dart';
 import 'package:ourdoctor/pages/components/h18.dart';
@@ -24,6 +27,7 @@ import 'package:ourdoctor/pages/home/range_show.dart';
 import 'package:ourdoctor/pages/home/weight_report.dart';
 import 'package:ourdoctor/pages/intro/first.dart';
 import 'package:ourdoctor/pages/monitoring/monitoring_test_result.dart';
+import 'package:ourdoctor/pages/monitoring/solution_area.dart';
 import 'package:sprintf/sprintf.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -47,6 +51,7 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
   String comment2 = "";
   List<String> healthTitle = [];
   List<DevelopmentScoreDto> healthList = [];
+  List<RecommendList> solList = [];
 
   HomeGraphTallDto? dicHomeGraphTallInfo;
   HomeGraphWeightDto? dicHomeGraphWeightInfo;
@@ -112,9 +117,8 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
           healthTitle.add(key);
           healthList.add(value);
         });
-
-        // healthList.add();
-        setState(() {
+      setState(() {
+          solList = healthList[0].solutionList!.values.toList();
           comment1 = healthList[0].feedbackTitle!;
           comment2 = healthList[0].feedbackDescription!;
           isLoading = false;
@@ -227,6 +231,7 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
             InkWell(
               onTap: () {
                 subTabIndex2 = 0;
+                solList = dicHomeGraphTallInfo!.solutionList!.values.toList();
                 setState(() {});
               },
               child: Container(
@@ -270,6 +275,7 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
             InkWell(
               onTap: () {
                 subTabIndex2 = 1;
+                solList = dicHomeGraphWeightInfo!.solutionList!.values.toList();
                 setState(() {});
               },
               child: Container(
@@ -394,6 +400,7 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
             Container(
                 // padding: const EdgeInsets.symmetric(horizontal: 30),
                 child: HeightReport(data: dicHomeGraphTallInfo!, result: 1)),
+            SolutionContainer(),
           ],
         );
       }
@@ -476,6 +483,7 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
             Container(
                 // padding: const EdgeInsets.symmetric(horizontal: 30),
                 child: WeightReport(data: dicHomeGraphWeightInfo!, result: 1)),
+            SolutionContainer(),
           ],
         );
       } //생활습관
@@ -489,6 +497,7 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
         setState(() {
           comment1 = healthList[index].feedbackTitle!;
           comment2 = healthList[index].feedbackDescription!;
+          solList = healthList[index].solutionList!.values.toList();
           subTabIndex = index;
         });
       },
@@ -606,7 +615,6 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
                 const SizedBox(
                   height: 30,
                 ),
-
                 healthList[subTabIndex].status == "R"
                     ? Center(
                         child: MainTextButton(
@@ -621,14 +629,16 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
                           },
                         ),
                       )
-                    : const SizedBox()
-                // SolutionArea()
+                    : const SizedBox(),
+                SolutionContainer(),
               ],
             )
           : const SizedBox();
     } else if (tabIndex == 1) {
       return MonitoringLifeResult();
     } else if (tabIndex == 2) {
+      solList = subTabIndex2 == 0 ? dicHomeGraphTallInfo!.solutionList!.values.toList() : dicHomeGraphWeightInfo!.solutionList!.values.toList();
+      setState(() {});
       return Container(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
@@ -640,6 +650,91 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
       );
     }
     return const CircularProgressIndicator();
+  }
+
+  Widget SolutionContainer() {
+    return Container(
+      height: 306,
+      width: MediaQuery.of(context).size.width - 50,
+      // margin: const EdgeInsets.all(20),
+      decoration: const BoxDecoration(
+          color: AppColor_White,
+          borderRadius: BorderRadius.all(Radius.circular(6)),
+          boxShadow: [
+            BoxShadow(
+              color: AppColor_Light_Gray,
+              blurRadius: 3.0, // soften the shadow
+              spreadRadius: 4.0, //extend the shadow
+            )
+          ]),
+      child: Column(
+        children: [
+          const SizedBox(height: 20),
+          H16(text: "솔루션 추천"),
+          // SchoolArea(curCategory: 2),//교육
+          Expanded(
+            child: ListView.builder(
+              itemCount: solList.length,
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.all(10),
+              physics: const BouncingScrollPhysics(),
+              itemBuilder: (context, index) {
+                return InkWell(
+                  onTap: () {
+                    if (solList[index].type! == "community") {
+                      Navigator.push(
+                          context,
+                          SlideRightTransRoute(
+                            builder: (context) => CommunityDetailPage(
+                                uid: solList[index].id),
+                          ));
+                    } else {
+                      Navigator.push(
+                          context,
+                          SlideRightTransRoute(
+                            builder: (context) =>
+                                ProductDetail(pid: solList[index].id!),
+                          ));
+                    }
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(5),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          height: 150,
+                          width: 150,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10.0)),
+                          child: CachedNetworkImage(
+                            imageUrl: solList[index].imageUrl!,
+                            width: 84,
+                            height: 84,
+                            fit: BoxFit.fill,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        SizedBox(
+                          width: 150,
+                          child: H18(
+                            text: solList[index].title!,
+                            weight: FW.regular,
+                            maxLine: 2,
+                            align: TextAlign.center,
+                            height: 1.4,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
