@@ -50,8 +50,8 @@ class HealthTestDto {
   String toRawJson() => json.encode(toJson());
 
   factory HealthTestDto.fromJson(Map<String, dynamic> json) => HealthTestDto(
-    question: json["question"],
-    imageUrl: json["image_url"],
+    question: json["question"] ?? "",
+    imageUrl: json["image_url"] ?? "",
   );
 
   Map<String, dynamic> toJson() => {

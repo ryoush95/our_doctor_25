@@ -58,6 +58,7 @@ import 'package:ourdoctor/models/monitor_result_res_model.dart';
 import 'package:ourdoctor/models/monitor_life_list2_model.dart';
 import 'package:ourdoctor/models/monitor_week_res_model.dart';
 import 'package:ourdoctor/models/monitor_write_res_model.dart';
+import 'package:ourdoctor/models/monitoring/food_list_model.dart';
 import 'package:ourdoctor/models/monitoring/heath_result_model.dart';
 import 'package:ourdoctor/models/monitoring/life_result_model.dart';
 import 'package:ourdoctor/models/monitoring/note_profile_model.dart';
@@ -1931,6 +1932,26 @@ class HttpService {
     }
   }
 
+  Future<MonitoringRecordResModel> monitoringBodyRecord(String monitoring_time,String height, String weight, String point) async {
+    String _url = API_BASE_URL + "api/Monitor2/save";
+      Map<String, String> body = {
+        'access_token': gUserInfo!.accessToken!,
+        'monitoring_time': monitoring_time,
+        'height': height,
+        'weight': weight,
+        'quiz_score': point,
+      };
+      Uri myUri = Uri.parse(_url);
+      final response = await http.post(myUri, body: body);
+      if (response.statusCode == 200) {
+        return MonitoringRecordResModel.fromJson(json.decode(response.body));
+      } else {
+        // If that call was not successful, throw an error.
+        showToast(LanguageService.trans("server_fail"));
+        throw Exception(LanguageService.trans("server_fail"));
+      }
+  }
+
   //성장노트 저장하기
   Future<DefaultResModel> monitoringRecord2(String temperature, String temp_location, String sleep_at_night, String sleep_at_lunch, String symptom_list) async {
     String _url = API_BASE_URL + "api/monitoring/save_growth_note";
@@ -1990,9 +2011,9 @@ class HttpService {
     }
   }
 
-  //toparea 가져오기
+  //솔루션 가져오기
   Future<SolutionAreaModel> getSolutionArea() async {
-    String _url = API_BASE_URL + "api/";
+    String _url = API_BASE_URL + "api/monitoring/get_solution";
     Map<String, String> body = {
       'access_token': gUserInfo!.accessToken!,
     };
@@ -2025,7 +2046,7 @@ class HttpService {
     }
   }
 
-  //체온 그래프 가져오기
+  //수면 그래프 가져오기
   Future<SleepGraphModel> getSleepGraph(String date) async {
     String _url = API_BASE_URL + "api/monitoring/get_sleep_graph";
     Map<String, String> body = {
@@ -2036,6 +2057,23 @@ class HttpService {
     final response = await http.post(myUri, body: body);
     if (response.statusCode == 200) {
       return SleepGraphModel.fromJson(json.decode(response.body));
+    } else {
+      // If that call was not successful, throw an error.
+      showToast(LanguageService.trans("server_fail"));
+      throw Exception(LanguageService.trans("server_fail"));
+    }
+  }
+
+  //영양 리스트 가져오기
+  Future<FoodListModel> getFoodList() async {
+    String _url = API_BASE_URL + "api/monitoring/get_meal_image";
+    Map<String, String> body = {
+      'access_token': gUserInfo!.accessToken!,
+    };
+    Uri myUri = Uri.parse(_url);
+    final response = await http.post(myUri, body: body);
+    if (response.statusCode == 200) {
+      return FoodListModel.fromJson(json.decode(response.body));
     } else {
       // If that call was not successful, throw an error.
       showToast(LanguageService.trans("server_fail"));

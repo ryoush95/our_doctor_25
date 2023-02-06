@@ -181,7 +181,7 @@ class _LineChartWidget2State extends State<LineChartWidget2> {
           )),
       borderData: FlBorderData(show: false),
       minX: 0,
-      maxX: 13,
+      maxX: DateTime(DateTime.now().year, DateTime.now().month + 1, 0).day - 1,
       minY: getMinY().ceil() - 1.0,
       maxY: getMaxY().ceil() + 1.0,
       lineBarsData: [

@@ -248,6 +248,7 @@ class TopAreaState extends BaseState<TopArea> {
   @override
   Widget build(BuildContext context) {
     final p = Provider.of<GlobalProvider>(context, listen: false);
+    p.getNoteInfo(context);
     return !isLoading
         ? Container(
             height: 330,

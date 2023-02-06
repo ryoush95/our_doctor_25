@@ -98,7 +98,23 @@ class LifestyleLineChart2State extends BaseState<LifestyleLineChart2> {
                 const SizedBox(height: 20),
                 Row(
                   children: [
-                    const SizedBox(width: 30,),
+                    const SizedBox(width: 10,),
+                    Container(
+                      height: 8,
+                      width: 8,
+                      decoration: BoxDecoration(
+                        color: AppColor_Primary,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    H12(
+                      text: "아이 체온",
+                      weight: FW.medium,
+                      height: 1.5,
+                      color: AppColor_Input_Title,
+                    ),
+                    const SizedBox(width: 40,),
                     Container(
                       height: 8,
                       width: 8,

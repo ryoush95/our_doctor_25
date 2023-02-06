@@ -60,7 +60,6 @@ class LaunchChartState extends BaseState<LaunchChart> {
                             softWrap: true,
                             textAlign: TextAlign.start,
                             text: TextSpan(children: [
-                              //TextSpan(text: LanguageService.trans('average') + ' ${getHourFromMinutes(widget.data.avgSleepLaunch!.toString())} ' + LanguageService.trans('hour'), style: AppTextStyle.PD(AppColor_GrayText, 14, weight: FW.regular)),
                               TextSpan(text: LanguageService.trans('average') + ' ${getHourFromMinutes1(widget.data.avgSleepLaunch!.toString())}', style: AppTextStyle.PD(AppColor_GrayText, 14, weight: FW.regular)),
                             ]),
                           ),

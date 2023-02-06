@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:ourdoctor/global/app_colors.dart';
@@ -8,6 +9,7 @@ import 'package:ourdoctor/helpers/common_util.dart';
 import 'package:ourdoctor/helpers/transition.dart';
 import 'package:ourdoctor/models/dto/report_dto.dart';
 import 'package:ourdoctor/models/home_grapth_res_model.dart';
+import 'package:ourdoctor/models/monitoring/food_list_model.dart';
 import 'package:ourdoctor/models/monitoring/sleep_graph_model.dart';
 import 'package:ourdoctor/models/monitoring/temp_graph_model.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
@@ -24,6 +26,7 @@ import 'package:ourdoctor/pages/home/lifestyle_line_chart2.dart';
 import 'package:ourdoctor/pages/home/lifestyle_report.dart';
 import 'package:ourdoctor/pages/home/sleep_report.dart';
 import 'package:ourdoctor/pages/intro/first.dart';
+import 'package:ourdoctor/pages/monitoring/solution_area.dart';
 import 'package:sprintf/sprintf.dart';
 
 class MonitoringResult2 extends StatefulWidget {
@@ -45,6 +48,8 @@ class _MonitoringResult2State extends BaseState<MonitoringResult2> {
   List<ReportDto> reportList2 = [];
   Data? tempGraphList;
   SleepDataDto? sleepGraphList;
+  List<String> foodList = ["","","",""];
+  String foodComment = "";
 
   int curYear = 0;
   int curMonth = 0;
@@ -68,6 +73,7 @@ class _MonitoringResult2State extends BaseState<MonitoringResult2> {
     curMonth = now.month;
     getTempList();
     getHomeGraphLifeStyle();
+    getFoodList();
     getSleepList();
   }
 
@@ -107,6 +113,7 @@ class _MonitoringResult2State extends BaseState<MonitoringResult2> {
     });
   }
 
+  //체온 그래프
   Future<void> getTempList() async{
     Future<TempGraphModel> info2 = httpService.getTempGraph(newDate);
     info2.then((TempGraphModel value) async {
@@ -133,6 +140,7 @@ class _MonitoringResult2State extends BaseState<MonitoringResult2> {
     });
   }
 
+  //수면 그래프
   Future<void> getSleepList() async{
     Future<SleepGraphModel> info2 = httpService.getSleepGraph(newDate);
     info2.then((SleepGraphModel value) async {
@@ -154,6 +162,36 @@ class _MonitoringResult2State extends BaseState<MonitoringResult2> {
         isLoading = false;
       });
       showToast(onError);
+    });
+  }
+
+  // 영양 리스트
+  Future<void> getFoodList() async{
+    Future<FoodListModel> info2 = httpService.getFoodList();
+    info2.then((FoodListModel value) async {
+      setState(() {
+        isLoading = false;
+      });
+      if (value.result == 0) {
+        foodList.add(value.data!.breakfast!);
+        foodList.add(value.data!.lunch!);
+        foodList.add(value.data!.snack!);
+        foodList.add(value.data!.dinner!);
+        foodComment = value.data!.comment!;
+
+        setState(() {});
+      } else {
+        showToast(value.msg ?? "");
+        if (value.result == 106) {
+          //token expired
+          Navigator.pushReplacement(context, SlideRightTransRoute(builder: (context) => FirstPage()));
+        }
+      }
+    }).catchError((onError) {
+      setState(() {
+        isLoading = false;
+      });
+      print(onError.toString());
     });
   }
 
@@ -452,14 +490,12 @@ class _MonitoringResult2State extends BaseState<MonitoringResult2> {
                       children: [
                         const SizedBox(height: 20),
                         H18(text: subTitle[index]),
-                        // const SizedBox(height: 20),
-                        // Expanded(child: H18(text: "아침 식사")),
-                        // FIXME: 영양 이미지넣을때 주석 해제
                         const SizedBox(height: 10),
-                        // foodCheck ?
-                        Image.asset("assets/foodtest.png", height: 240, width: 326,)
-                        // Image.asset("food_image${index}_up.png", width: 260),
-
+                        CachedNetworkImage(imageUrl: foodList[index],height: 240, width: 326,
+                          errorWidget: (context, url, error) => const SizedBox(
+                            child: Center(child: Text("검사결과가 없습니다"))
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -469,6 +505,26 @@ class _MonitoringResult2State extends BaseState<MonitoringResult2> {
             },
           ),
         ),
+        H18(text: "우리아이는?"),
+        const SizedBox(height: 20),
+        Container(
+          width: MediaQuery.of(context).size.width - 50,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(6.0),
+              color: AppColor_Light_Gray),
+          padding: const EdgeInsets.only(
+              left: 30, right: 30, top: 20, bottom: 20),
+          // margin: const EdgeInsets.symmetric(horizontal: 30),
+          child: Text(
+            foodComment,
+            style: const TextStyle(
+                color: AppColor_GrayText,
+                fontSize: 16,
+                height: 1.5),
+          ),
+        ),
+        SizedBox(height: 30,),
+        // SolutionArea(),
       ],
     ),
   );

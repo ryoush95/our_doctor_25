@@ -27,6 +27,8 @@ import 'package:ourdoctor/pages/intro/first.dart';
 import 'package:ourdoctor/pages/monitoring/monitor_report1.dart';
 import 'package:ourdoctor/pages/monitoring/monitoring_result2.dart';
 import 'package:ourdoctor/pages/monitoring/monitoring_v2.dart';
+import 'package:ourdoctor/provider/global_provider.dart';
+import 'package:provider/provider.dart';
 
 import '../app_event.dart';
 import 'monitoring_test_form.dart';
@@ -55,12 +57,10 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
   void initState(){
 
     getMonitor2HomeDataInfo();
-    getNoteInfo();
 
     eventBus.on<SelectChildEvent>().listen((event) {
       if (mounted) {
         getMonitor2HomeDataInfo();
-        getNoteInfo();
       }
     });
     super.initState();
@@ -102,32 +102,9 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
   }
 
   Future<void> getNoteInfo() async {
-    setState(() {
-      isLoading = true;
-    });
-
-    Future<NoteProfileModel> info = httpService.getMonitoringStatus();
-    info.then((NoteProfileModel value) async {
-      setState(() {
-        isLoading = false;
-      });
-      if (value.result == 0) {
-        data = value.data!;
-        setState(() {});
-      } else {
-        showToast(value.msg ?? "");
-        if (value.result == 106) {
-          //token expired
-          Navigator.pushReplacement(
-              context, SlideRightTransRoute(builder: (context) => FirstPage()));
-        }
-      }
-    }).catchError((onError) {
-      setState(() {
-        isLoading = false;
-      });
-      print(onError.toString());
-    });
+    final p = Provider.of<GlobalProvider>(context, listen: false);
+    await p.getNoteInfo(context);
+    data = p.profile;
   }
 
   Color changeColor(String s) {
@@ -251,7 +228,7 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
               const SizedBox(height: 15),
               Center(
                 child: MainTextButton(
-                  text: data!.monitoringProgress == 0 ?"모니터링 시작하기":"모니터링 결과보기",
+                  text: data!.monitoringProgress != 3 ?"모니터링 시작하기":"모니터링 결과보기",
                   style: AppTextStyle.PD(
                       Colors.white, 16,
                       weight: FW.medium),
@@ -259,10 +236,17 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
                   height: 40,
                   radius: 6,
                   onPressed: () {
-                    if(data!.monitoringProgress! == 0){
-                      Navigator.push(context, SlideRightTransRoute(builder: (context) => MonitoringTestForm(),));
+                    print(data!.monitoringProgress);
+                    if (data!.monitoringProgress! == 3) {
+                      Navigator.push(context, SlideRightTransRoute(
+                          builder: (context) => MonitorReport1(),
+                      ));
+                    } else if (data!.monitoringProgress! == 0) {
+                      Navigator.push(context, SlideRightTransRoute(
+                        builder: (context) => MonitoringTestForm(type: data!.monitoringProgress!),
+                          ));
                     } else {
-                      Navigator.push(context, SlideRightTransRoute(builder: (context) => MonitorReport1(),));
+                      showNewDialog(context);
                     }
                   },
                 ),
@@ -271,6 +255,36 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
           ),
         )
       ],
+    );
+  }
+
+  Future<bool?> showNewDialog(BuildContext context) {
+    return showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text("모니터링 계속하기"),
+          content: const Text("지난 기록이 있습니다.\n계속하시겠습니까?"),
+          actions: <Widget>[
+            TextButton(
+              child: Text("아니오"),
+              onPressed: () {
+                Navigator.pop(context);
+                Navigator.push(context, SlideRightTransRoute(builder: (context) =>
+                    MonitoringTestForm(type: 0),));
+              },
+            ),
+            TextButton(
+              child: Text("예"),
+              onPressed: () {
+                Navigator.pop(context);
+                Navigator.push(context, SlideRightTransRoute(builder: (context) =>
+                    MonitoringTestForm(type: data!.monitoringProgress!),));
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -493,6 +507,7 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
 
   @override
   Widget build(BuildContext context) {
+    getNoteInfo();
     return PageLayout(
         isLoading: isLoading,
         onBack: onBackPressed,

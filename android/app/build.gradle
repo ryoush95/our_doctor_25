@@ -39,7 +39,7 @@ android {
         targetSdkVersion 31
         multiDexEnabled true
         versionCode 4
-        versionName "1.0.2"  //onestore 1.0.0/2
+        versionName "1.0.6"  //onestore 1.0.0/2
     }
 
     buildTypes {

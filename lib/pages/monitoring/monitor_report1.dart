@@ -222,6 +222,7 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
             borderRadius: BorderRadius.circular(13),
             color: AppColor_Table_Border),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             InkWell(
               onTap: () {
@@ -355,7 +356,7 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             H18(
-                                text: LanguageService.trans('than_last_month'),
+                                text: "저번 기록보다",
                                 weight: FW.regular),
                             RichText(
                               softWrap: true,
@@ -417,7 +418,7 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
                     children: [
                       const SizedBox(width: 28),
                       H18(
-                        text: '체중 기록을 처음 완료했어요.😊\n일일 주기로 기록을 지속해주세요.',
+                        text: '체중 기록을 처음 완료했어요.',
                         weight: FW.regular,
                         maxLine: 2,
                         align: TextAlign.start,
@@ -437,7 +438,7 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             H18(
-                                text: LanguageService.trans('than_last_month'),
+                                text: "저번 기록보다",
                                 weight: FW.regular),
                             RichText(
                               softWrap: true,

@@ -21,9 +21,13 @@ import 'package:ourdoctor/pages/components/main_text_button.dart';
 import 'package:ourdoctor/pages/components/outline_num_input.dart';
 import 'package:ourdoctor/pages/components/simple_header.dart';
 import 'package:ourdoctor/pages/monitoring/monitor_report1.dart';
+import 'package:ourdoctor/provider/global_provider.dart';
+import 'package:provider/provider.dart';
 
 class MonitoringTestForm extends StatefulWidget {
-  const MonitoringTestForm({Key? key}) : super(key: key);
+  MonitoringTestForm({Key? key, this.type = 0}) : super(key: key);
+
+  int type;
 
   @override
   State<MonitoringTestForm> createState() => _MonitoringTestFormState();
@@ -36,7 +40,7 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
   List<String> allList = [];
   List<String> selList = [];
   List<String> quizNum = [];
-  List<String> quizList = [];
+  List<HealthTestDto> quizList = [];
   Map<String, String> answer = {};
   List<String> list4 = ["할 수 없다", "잘못한다", "할 수 있다", "잘한다"];
   List<String> list4Img = [];
@@ -75,7 +79,14 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
     list = subCate1;
     _listSc = ScrollController();
     _listSc2 = ScrollController();
-    getQuizList();
+    if(widget.type == 1) {
+      cateNum = 1;
+      getQuizList2();
+    } else if(widget.type == 2){
+      cateNum = 2;
+    } else {
+      getQuizList();
+    }
   }
 
   @override
@@ -137,14 +148,14 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
     if (cateNum == 0) {
       map![subNum].forEach((key, value) {
         quizNum.add(key);
-        quizList.add(value.question!);
-        selList.add("-1");
+        quizList.add(value);
+        selList.add("2");
       });
     } else if (cateNum == 1){
       map2![subNum].forEach((key, value) {
         quizNum.add(key);
-        quizList.add(value.question!);
-        selList.add("-1");
+        quizList.add(value);
+        selList.add("1");
       });
     }
   }
@@ -165,8 +176,11 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
       subNum = 0;
 
       if (cateNum == 1) {
+        showToast("생활습관 문항을 시작합니다.");
         getQuizList2();
         setState(() {});
+      }else {
+        showToast("신체 문항을 시작합니다.");
       }
       allList.clear();
 
@@ -201,18 +215,17 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
     score = (s * 2).toString();
     DateFormat dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss");
     String monitoring_time = dateFormat.format(DateTime.now());
-    Future<MonitoringRecordResModel>? insert = httpService.monitoringRecord(monitoring_time, tall, weight, "", "", "", "", "", "", "", "", "", "", "", "");
+    Future<MonitoringRecordResModel>? insert = httpService.monitoringBodyRecord(monitoring_time, tall, weight, score);
     insert.then((value) async {
       setState(() {
         isLoading = false;
       });
       if (value.result == 0) {
-        Navigator.pushReplacement(
-            context,
-            SlideRightTransRoute(
-              builder: (context) =>
-              const MonitorReport1(),
-            ));
+        Navigator.pushReplacement(context, SlideRightTransRoute(
+          builder: (context) => const MonitorReport1(),
+        ));
+        Provider.of<GlobalProvider>(context, listen: false).getNoteInfo(context);
+
       }
     }).catchError((onError) {
       print(onError.toString());
@@ -221,6 +234,7 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
 
   @override
   Widget build(BuildContext context) {
+    final p = Provider.of<GlobalProvider>(context, listen: false);
     return PageLayout(
         onBack: onBackPressed,
         child: Column(
@@ -339,6 +353,7 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
                               return;
                             }
                             goNext();
+                            p.getNoteInfo(context);
                             setState(() {});
                             // Navigator.push(context, SlideRightTransRoute(builder: (context) => MonitoringTestResult(),));
                           },
@@ -376,7 +391,7 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
         SizedBox(
           width: screenSize.width,
           child: H16(
-            text: quizList[index],
+            text: quizList[index].question!,
             maxLine: 5,
             align: TextAlign.left,
             height: 1.5,
@@ -384,9 +399,7 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
           ),
         ),
         const SizedBox(height: 35),
-        // FlutterLogo(
-        //   size: 100,
-        // ),
+        quizList[index].imageUrl! != "" ? Image.network(quizList[index].imageUrl!) : const SizedBox(),
         // const SizedBox(height: 35),
         Center(
           child: Row(
@@ -537,7 +550,7 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
         SizedBox(
           width: screenSize.width,
           child: H16(
-            text: quizList[testNum],
+            text: quizList[testNum].question!,
             maxLine: 5,
             align: TextAlign.left,
             height: 1.5,
@@ -545,7 +558,7 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
           ),
         ),
         const SizedBox(height: 35),
-        // Image.network(map.muscle1[testNum]!.imageUrl!),
+        quizList[testNum].imageUrl! != "" ? Image.network(quizList[testNum].imageUrl!) : const SizedBox(),
         const SizedBox(height: 35),
         Center(
             child: Container(

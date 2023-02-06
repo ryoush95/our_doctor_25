@@ -21,7 +21,7 @@ class SolutionArea extends StatefulWidget {
 
 class _SolutionAreaState extends State<SolutionArea> {
   final HttpService httpService = HttpService();
-  SolutionAreaDto data = SolutionAreaDto(communityUid: "201", imgUrl: "",title: "솔루션1",type: "community", url: "");
+  SolutionAreaDto data = SolutionAreaDto(communityUid: "2072", imgUrl: "https://mingles-dev.s3.ap-northeast-2.amazonaws.com/uploads/community/slide_images/2064/detail_CK_ta0111a1401_n.jpg",title: "솔루션1",type: "community", url: "");
 
   @override
   void initState() {
@@ -96,7 +96,7 @@ class _SolutionAreaState extends State<SolutionArea> {
                           height: 150,
                           width: 150,
                           decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.0)),
-                          child: Image.asset("assets/icon_good.png",width: 84, height: 84, fit: BoxFit.fill,),
+                          child: Image.network(data.imgUrl!, width: 84, height: 84, fit: BoxFit.fill,),
                         ),
                         const SizedBox(height: 16),
                         SizedBox(
