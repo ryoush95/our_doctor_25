@@ -64,7 +64,7 @@ class IntroHomePageState extends BaseState<IntroHomePage> {
                   maxLine: 2,
                 ),
                 // const SizedBox(height: 10),
-                H18(text: "우리 아이 맞춤 성장 솔루션", weight: FW.regular, maxLine: 2, height: 1.7),
+                H18(text: "우리 아이 키울 땐!", weight: FW.regular, maxLine: 2, height: 1.7),
                 const SizedBox(height: 33),
                 H18(
                   text: LanguageService.trans("intro2_description"),

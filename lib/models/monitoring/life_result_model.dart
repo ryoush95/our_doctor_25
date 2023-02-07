@@ -44,16 +44,16 @@ class LifeCateDto {
     this.totalScore,
     this.feedbackDescription,
     this.status,
-    this.wrongAnswers,
-    this.solutionList,
+    required this.wrongAnswers,
+    required this.solutionList,
   });
 
   int? score;
   int? totalScore;
   String? feedbackDescription;
   String? status;
-  Map<String, WrongAnswer>? wrongAnswers;
-  Map<String, RecommendList>? solutionList;
+  Map<String, WrongAnswer> wrongAnswers;
+  Map<String, RecommendList> solutionList;
 
   factory LifeCateDto.fromRawJson(String str) => LifeCateDto.fromJson(json.decode(str));
 
@@ -65,7 +65,7 @@ class LifeCateDto {
     feedbackDescription: json["feedback_description"] ?? "",
     status: json["status"] ?? "R",
     wrongAnswers: Map.from(json["wrong_answers"]!).map((k, v) => MapEntry<String, WrongAnswer>(k, WrongAnswer.fromJson(v))),
-    solutionList: Map.from(json["recommend_list"]!).map((k, v) => MapEntry<String, RecommendList>(k, RecommendList.fromJson(v))),
+    solutionList: json["recommend_list"] == null ? {} : Map.from(json["recommend_list"]!).map((k, v) => MapEntry<String, RecommendList>(k, RecommendList.fromJson(v))),
   );
 
   Map<String, dynamic> toJson() => {
@@ -73,8 +73,8 @@ class LifeCateDto {
     "total_score": totalScore,
     "feedback_description": feedbackDescription,
     "status": status,
-    "wrong_answers": Map.from(wrongAnswers!).map((k, v) => MapEntry<String, dynamic>(k, v.toJson())),
-    "recommend_list": Map.from(solutionList!).map((k, v) => MapEntry<String, dynamic>(k, v.toJson())),
+    "wrong_answers": Map.from(wrongAnswers).map((k, v) => MapEntry<String, dynamic>(k, v.toJson())),
+    "recommend_list": Map.from(solutionList).map((k, v) => MapEntry<String, dynamic>(k, v.toJson())),
   };
 }
 

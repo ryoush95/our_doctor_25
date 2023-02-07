@@ -55,12 +55,12 @@ class _MonitoringLifeResultState extends BaseState<MonitoringLifeResult> {
 
   Future<void> getLifeResult() async {
     Future<LifeResultModel> info = httpService.getMonitoringLifeResult();
-    info.then((value) async {
+    await info.then((value) async {
       if (value.result == 0) {
         CATEGORY = value.data!.keys.toList();
         cateScore = value.data!.values.toList();
-        wrongList = cateScore[0].wrongAnswers!.values.toList();
-        solList = cateScore[0].solutionList!.values.toList();
+        wrongList = cateScore[0].wrongAnswers.values.toList();
+        solList = cateScore[0].solutionList.values.toList();
         setStatus();
         setState(() {
           isLoading = false;
@@ -75,8 +75,8 @@ class _MonitoringLifeResultState extends BaseState<MonitoringLifeResult> {
     return InkWell(
       onTap: () {
         sc.jumpTo(0.0);
-        wrongList = cateScore[index].wrongAnswers!.values.toList();
-        solList = cateScore[index].solutionList!.values.toList();
+        wrongList = cateScore[index].wrongAnswers.values.toList();
+        solList = cateScore[index].solutionList.values.toList();
         setState(() {
           tabIndex = index;
           setStatus();
@@ -97,7 +97,7 @@ class _MonitoringLifeResultState extends BaseState<MonitoringLifeResult> {
                     maxLine: 1,
                     color: tabIndex == index
                         ? AppColor_White
-                        : AppColor_BlackText.withOpacity(0.2),
+                        : AppColor_GridText,
                   ),
                 ),
               ],
@@ -111,6 +111,7 @@ class _MonitoringLifeResultState extends BaseState<MonitoringLifeResult> {
     double h = 25;
     double w = 80;
     return Container(
+      height: 430,
       padding: const EdgeInsets.all(10),
       child: Column(children: [
         SizedBox(
@@ -274,7 +275,7 @@ class _MonitoringLifeResultState extends BaseState<MonitoringLifeResult> {
                   maxLine: 5,
                   height: 1.5,
                   align: TextAlign.start,
-                  color: AppColor_Red,
+                  color: AppColor_BlackText,
                   weight: FW.regular,
                 ),
               ),
@@ -475,7 +476,7 @@ class _MonitoringLifeResultState extends BaseState<MonitoringLifeResult> {
         ),
         const SizedBox(height: 20),
         SizedBox(
-          height: 150,
+          height: CATEGORY.length > 9 ? 200 : 150,
           child: GridView.builder(
             // scrollDirection: Axis.horizontal,
             // shrinkWrap: true,
@@ -493,14 +494,15 @@ class _MonitoringLifeResultState extends BaseState<MonitoringLifeResult> {
           ),
         ),
         Container(
-          height: wrongList.length * 400,
+          height: wrongList.length * 430,
           child: ListView.builder(
             physics: const NeverScrollableScrollPhysics(),
             itemCount: wrongList.length,
             itemBuilder: (context, index) => testTile2(index),
           ),
         ),
-        SolutionContainer(),
+        const SizedBox(height: 15),
+        solList.isNotEmpty ? SolutionContainer() : const SizedBox(),
       ]),
     );
   }

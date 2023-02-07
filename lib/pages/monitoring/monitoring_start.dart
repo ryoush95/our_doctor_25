@@ -18,7 +18,7 @@ import 'package:ourdoctor/pages/components/main_text_button.dart';
 import 'package:ourdoctor/pages/components/simple_header.dart';
 import 'package:ourdoctor/pages/intro/first.dart';
 import 'package:ourdoctor/pages/monitoring/first_step.dart';
-import 'package:ourdoctor/pages/monitoring/monitoring_v2.dart';
+import 'package:ourdoctor/pages/monitoring/monitoring_main2.dart';
 import 'package:ourdoctor/pages/monitoring/second_step.dart';
 import 'package:sprintf/sprintf.dart';
 

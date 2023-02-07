@@ -26,7 +26,7 @@ import 'package:ourdoctor/pages/home/circular_progress3.dart';
 import 'package:ourdoctor/pages/intro/first.dart';
 import 'package:ourdoctor/pages/monitoring/monitor_report1.dart';
 import 'package:ourdoctor/pages/monitoring/monitoring_result2.dart';
-import 'package:ourdoctor/pages/monitoring/monitoring_v2.dart';
+import 'package:ourdoctor/pages/monitoring/monitoring_main2.dart';
 import 'package:ourdoctor/provider/global_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -117,21 +117,9 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
     }
   }
 
-  void changeLife(String s) {
-    if(s == "R"){
-      lifeIcon = "assets/icon_bad.png";
-      lifeText = "노력이 필요해요";
-    } else if(s=="G"){
-      lifeIcon = "assets/icon_normal.png";
-      lifeText = "보통이에요";
-    } else {
-      lifeIcon = "assets/icon_good.png";
-      lifeText = "아주 좋아요";
-    }
-    setState(() {});
-  }
 
-  Widget monitor1() {
+  Widget monitor1(MonitoringProfileDto p) {
+    final life = Provider.of<GlobalProvider>(context, listen: false);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -165,19 +153,19 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  CircularProgress3(score: data!.development!.score ,status: data!.development!.status,),
-                  Container(margin: EdgeInsets.all(5),child: CircularProgress3(score: data!.health!.score ,status: data!.health!.status,)),
+                  CircularProgress3(score: p.monitoringProgress != 3 ? 0 : p.development!.score,status: p.development!.status,),
+                  Container(margin: EdgeInsets.all(5),child: CircularProgress3(score: p.monitoringProgress != 3 ? 0 : p.health!.score ,status: p.health!.status,)),
                   Container(
                     height: 85,
                     width: 85,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Image.asset("assets/icon_normal.png",height: 48,),
+                        Image.asset(p.monitoringProgress != 3 ? "assets/icon_bad.png" : life.lifeIcon, height: 48,),
                         const SizedBox(height: 7),
                         H12(
-                          text: "보통이예요",
-                          color: AppColor_Oxygen,
+                          text: p.monitoringProgress != 3 ? "결과가없어요" : life.lifeText,
+                          color: changeColor(p.lifestyle!.status!),
                           weight: FW.medium,
                         ),
                       ],
@@ -201,11 +189,11 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
                                 weight: FW.semi_bold,
                               )),
                       TextSpan(
-                          text: data!.monitoringProgress == 0? "시작": "완료",
+                          text: p.monitoringProgress != 3? "시작": "완료",
                           style:
                               AppTextStyle.PD(AppColor_Primary, 16, weight: FW.bold)),
                       TextSpan(
-                          text: data!.monitoringProgress == 0? "해볼까요?": "했어요!",
+                          text: p.monitoringProgress != 3? "해볼까요?": "했어요!",
                           style: AppTextStyle.PD(
                             AppColor_BlackText,
                             16,
@@ -214,7 +202,7 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
                     ])),
                     const SizedBox(height: 15),
                     H14(
-                      text: data!.monitoringProgress == 0
+                      text: p.monitoringProgress != 3
                           ? "현재 개월 수에 맞는 모니터링을 해야할 시기가 지났어요"
                           : "모니터링 결과를 통해 우리 아이 발달을 확인하세요",
                       weight: FW.regular,
@@ -228,7 +216,7 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
               const SizedBox(height: 15),
               Center(
                 child: MainTextButton(
-                  text: data!.monitoringProgress != 3 ?"모니터링 시작하기":"모니터링 결과보기",
+                  text: p.monitoringProgress != 3 ?"모니터링 시작하기":"모니터링 결과보기",
                   style: AppTextStyle.PD(
                       Colors.white, 16,
                       weight: FW.medium),
@@ -236,17 +224,16 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
                   height: 40,
                   radius: 6,
                   onPressed: () {
-                    print(data!.monitoringProgress);
-                    if (data!.monitoringProgress! == 3) {
+                    if (p.monitoringProgress! == 3) {
                       Navigator.push(context, SlideRightTransRoute(
                           builder: (context) => MonitorReport1(),
                       ));
-                    } else if (data!.monitoringProgress! == 0) {
+                    } else if (p.monitoringProgress! == 0) {
                       Navigator.push(context, SlideRightTransRoute(
-                        builder: (context) => MonitoringTestForm(type: data!.monitoringProgress!),
+                        builder: (context) => MonitoringTestForm(type: p.monitoringProgress!),
                           ));
                     } else {
-                      showNewDialog(context);
+                      showNewDialog(context,p);
                     }
                   },
                 ),
@@ -258,7 +245,7 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
     );
   }
 
-  Future<bool?> showNewDialog(BuildContext context) {
+  Future<bool?> showNewDialog(BuildContext context, MonitoringProfileDto p) {
     return showDialog<bool>(
       context: context,
       builder: (context) {
@@ -279,7 +266,7 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
               onPressed: () {
                 Navigator.pop(context);
                 Navigator.push(context, SlideRightTransRoute(builder: (context) =>
-                    MonitoringTestForm(type: data!.monitoringProgress!),));
+                    MonitoringTestForm(type: p.monitoringProgress!),));
               },
             ),
           ],
@@ -288,7 +275,7 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
     );
   }
 
-  Widget monitor2() {
+  Widget monitor2(MonitoringProfileDto p) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -432,8 +419,8 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               H16(text: "수면", weight: FW.regular,),
-                              H16(text: data!.sleep!.status! =="R" ? "부족": data!.sleep!.status! =="N" ? "-"
-                              : "충분", color: changeColor(data!.sleep!.status!),),
+                              H16(text: p.sleep!.status! =="R" ? "부족": p.sleep!.status! =="N" ? "-"
+                              : "충분", color: changeColor(p.sleep!.status!),),
                             ],
                           ),
                           Row(
@@ -443,8 +430,8 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
                               Row(
                                 children: [
                                   H16(
-                                    text: data!.temperature!.temperature == null ? "-" : data!.temperature!.temperature.toString(),
-                                    color: changeColor(data!.temperature!.status!),),
+                                    text: p.temperature!.temperature == null ? "-" : p.temperature!.temperature.toString(),
+                                    color: changeColor(p.temperature!.status!),),
                                   H16(text: " °C"),
                                 ],
                               ),
@@ -457,7 +444,7 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
                               Row(
                                 children: [
                                   H16(text: "처방전 + "),
-                                  H16(text: data!.symptomList!.length.toString(), color: AppColor_Primary,),
+                                  H16(text: p.symptomList!.length.toString(), color: AppColor_Primary,),
                                 ],
                               ),
                             ],
@@ -482,7 +469,7 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
               const SizedBox(height: 15),
               Center(
                 child: MainTextButton(
-                  text: data!.todayNote == false ? "성장 노트 기록하기" : "지난 기록 보기",
+                  text: p.todayNote == false ? "성장 노트 기록하기" : "지난 기록 보기",
                   style: AppTextStyle.PD(
                       Colors.white, 16,
                       weight: FW.medium),
@@ -490,7 +477,7 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
                   height: 40,
                   radius: 6,
                   onPressed: () {
-                    if(data!.todayNote == false) {
+                    if(p.todayNote == false) {
                       Navigator.push(context, SlideRightTransRoute(builder: (context) => MonitoringMain2(),));
                     } else {
                       Navigator.push(context, SlideRightTransRoute(builder: (context) => MonitoringResult2(),));
@@ -507,6 +494,7 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
 
   @override
   Widget build(BuildContext context) {
+    final p = Provider.of<GlobalProvider>(context, listen: false).profile;
     getNoteInfo();
     return PageLayout(
         isLoading: isLoading,
@@ -518,9 +506,9 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
             child: data == null ? const SizedBox() : Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                monitor1(),
+                monitor1(p!),
                 const SizedBox(height: 55),
-                monitor2(),
+                monitor2(p),
                 const SizedBox(height: 36),
               ],
             ),

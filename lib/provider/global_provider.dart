@@ -9,6 +9,8 @@ import 'package:ourdoctor/pages/intro/first.dart';
 class GlobalProvider extends ChangeNotifier {
   final HttpService httpService = HttpService();
   MonitoringProfileDto? profile;
+  String lifeIcon = "assets/icon_bad.png";
+  String lifeText = "노력이 필요해요";
 
   String homeWeatherTemp = "";
   String homeWeatherWater = "";
@@ -30,12 +32,25 @@ class GlobalProvider extends ChangeNotifier {
     nextDate = d == "null" ? "0" : d;
   }
 
-  Future<void> getNoteInfo(context) async {
+  void changeLife(String s) {
+    if(s == "R"){
+      lifeIcon = "assets/icon_bad.png";
+      lifeText = "노력이 필요해요";
+    } else if(s=="G"){
+      lifeIcon = "assets/icon_normal.png";
+      lifeText = "보통이에요";
+    } else {
+      lifeIcon = "assets/icon_good.png";
+      lifeText = "아주 좋아요";
+    }
+  }
 
+  Future<void> getNoteInfo(context) async {
     Future<NoteProfileModel> info = httpService.getMonitoringStatus();
-    info.then((NoteProfileModel value) async {
+    await info.then((NoteProfileModel value) async {
       if (value.result == 0) {
         profile = value.data!;
+        changeLife(profile!.lifestyle!.status!);
         notifyListeners();
       } else {
         showToast(value.msg ?? "");

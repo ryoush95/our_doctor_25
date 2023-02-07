@@ -266,7 +266,7 @@ class CareFragmentState extends BaseState<CareFragment>
                     maxLine: 1,
                     color: tabIndex == index
                         ? AppColor_White
-                        : AppColor_BlackText.withOpacity(0.2),
+                        : AppColor_GridText,
                   ),
                 ),
               ],

@@ -100,6 +100,10 @@ class _MonitoringMain2State extends BaseState<MonitoringMain2> {
     LanguageService.trans("dinner"),
   ];
 
+  List<String> foodString = ["편식하는 음식 없이 골고루 먹었나요?", "식사 시 김치를 제외한 다른 채소반찬을 1가지 이상 먹었나요?", "아침식사를 먹었나요?", "음식을 꼭꼭 씹어 먹었나요?",
+  "미디어나 보상없이 식사에 잘 집중해서 먹었나요?", "단 음식(사탕, 과자, 초콜릿, 아이스크림 등)을 하루에 한번 이상 먹었나요?", "인스턴트/패스트푸드나 가공식품을 일주일에 3번 이상 먹었나요?"];
+  List<int> foodScore = [0,0,0,0,0,0];
+
   @override
   void initState() {
     super.initState();
@@ -627,14 +631,21 @@ class _MonitoringMain2State extends BaseState<MonitoringMain2> {
 
     }
 
+    int normal_score = 0;
+    int control_score = foodScore[4] + foodScore[5];
+    for (int i = 0; i < 4; i++) {
+      normal_score += foodScore[i];
+    }
+
     String loca = locaTemp ==0 ? "귀": "이마";
-    Future<DefaultResModel> info = httpService.monitoringRecord2(mTemp,loca,sleep_night.toString(), sleep_launch.toString(), symptom_list);
+    Future<DefaultResModel> info = httpService.monitoringRecord2(mTemp,loca,sleep_night.toString(), sleep_launch.toString(), symptom_list, normal_score.toString(),control_score.toString());
     info.then((DefaultResModel value) async {
       setState(() {
         isLoading = false;
       });
       if (value.result == 0) {
         showToast("저장되었습니다");
+        await Provider.of<GlobalProvider>(context, listen: false).getNoteInfo(context);
         Navigator.pushReplacement(context, SlideRightTransRoute(builder: (context) => MonitoringResult2(),));
       } else {
         showToast(value.msg ?? "");
@@ -694,15 +705,16 @@ class _MonitoringMain2State extends BaseState<MonitoringMain2> {
                           const SizedBox(height: 20),
                           tempInfo(screenSize),
                           const SizedBox(height: 20),
-                          // H16(
-                          //   text: "2. 오늘의 영양상태를 기록해주세요.",
-                          //   weight: FW.medium,
-                          //   color: AppColor_BlackText,
-                          //   align: TextAlign.start,
-                          // ),
-                          // const SizedBox(height: 20),
+                          H16(
+                            text: "2. 오늘의 영양상태를 기록해주세요.",
+                            weight: FW.medium,
+                            color: AppColor_BlackText,
+                            align: TextAlign.start,
+                          ),
+                          const SizedBox(height: 20),
+                          foodInfo2(),
                           // foodInfo(),
-                          // const SizedBox(height: 20),
+                          const SizedBox(height: 20),
                           H16(
                             text: "오늘의 수면시간을 기록해주세요.",
                             weight: FW.medium,
@@ -909,6 +921,54 @@ class _MonitoringMain2State extends BaseState<MonitoringMain2> {
         const SizedBox(height: 50),
       ],
     );
+  }
+
+  Widget foodInfo2() {
+    return Container(
+        height: 320,
+        width: 400,
+        padding: const EdgeInsets.all(25),
+        decoration: const BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(8)),
+            color: AppColor_Light_Gray),
+        child: ListView.builder(
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: foodScore.length,
+          itemBuilder: (context, index) {
+            return Column(
+              children: [
+                InkWell(
+                  onTap: () {
+                    if (foodScore[index] == 0){
+                      foodScore[index] = 1;
+                    } else {
+                      foodScore[index] = 0;
+                    }
+                    setState(() {});
+                  },
+                  child: Row(children: [
+                    Image.asset(
+                      foodScore[index] == 0 ? "assets/ic_radio_off.png"
+                          :"assets/ic_radio_on.png",
+                      width: 20,
+                    ),
+                    const SizedBox(width: 8),
+                    Container(
+                      width: 250,
+                      child: H16(
+                        text: foodString[index],
+                        weight: FW.regular,
+                        maxLine: 3,
+                        align: TextAlign.start,
+                      ),
+                    )
+                  ]),
+                ),
+                const SizedBox(height: 18),
+              ],
+            );
+          },
+        ));
   }
 
   //수면

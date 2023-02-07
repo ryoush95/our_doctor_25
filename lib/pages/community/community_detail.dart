@@ -166,7 +166,8 @@ class CommunityDetailPageState extends BaseState<CommunityDetailPage> {
           context: context,
           builder: (BuildContext context) {
             return ActionSheet1(
-                action: LanguageService.trans('report'),
+                action: "신고하기",
+                action2: "차단하기",
                 onAction: () {
                   //FIXME: report
                   // onClickReport();
@@ -177,8 +178,21 @@ class CommunityDetailPageState extends BaseState<CommunityDetailPage> {
                                 uid: widget.uid.toString(),
                                 writer: dicDetailInfo!.nickname!,
                                 title: dicDetailInfo!.title!,
-                              )));
-                });
+                                type: '1',
+                          )));
+                },
+              onAction2: (){
+                Navigator.push(
+                    context,
+                    SlideRightTransRoute(
+                        builder: (context) => ReportPage(
+                          uid: widget.uid.toString(),
+                          writer: dicDetailInfo!.nickname!,
+                          title: dicDetailInfo!.title!,
+                          type : "2",
+                        )));
+              },
+            );
           });
     }
   }
@@ -237,8 +251,9 @@ class CommunityDetailPageState extends BaseState<CommunityDetailPage> {
           context: context,
           builder: (BuildContext context) {
             return ActionSheet(
-                action1: LanguageService.trans('add_reply_reply'),
-                action2: LanguageService.trans('report'),
+                action1: "댓글 추가",
+                action2: "신고하기",
+                action3: "차단하기",
                 onAction1: () {
                   parentUid = info.commentUid!;
                   replyFocusNode.requestFocus();
@@ -252,9 +267,22 @@ class CommunityDetailPageState extends BaseState<CommunityDetailPage> {
                                 writer: info.nickname!,
                                 title: info.content!,
                                 comment: true,
+                            type: '1',
                               )));
                   // onClickReplyReport(info.commentUid!);
-                });
+                },
+                onAction3: (){
+                  Navigator.push(
+                      context,
+                      SlideRightTransRoute(
+                          builder: (context) => ReportPage(
+                            uid: info.commentUid.toString(),
+                            writer: info.nickname!,
+                            title: info.content!,
+                            type : "2",
+                          )));
+                },
+            );
           });
     }
   }
@@ -893,12 +921,12 @@ class CommunityDetailPageState extends BaseState<CommunityDetailPage> {
   }
 
   //신고하기
-  void reqReport(String type, String uid, String content) {
+  void reqReport(String type, String uid, String content, String block) {
     setState(() {
       isLoading = true;
     });
 
-    Future<DefaultResModel> info = httpService.report(type, uid, content);
+    Future<DefaultResModel> info = httpService.report(type, uid, content, block);
     info.then((DefaultResModel value) {
       setState(() {
         isLoading = false;

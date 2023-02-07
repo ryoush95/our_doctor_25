@@ -149,13 +149,13 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
       map![subNum].forEach((key, value) {
         quizNum.add(key);
         quizList.add(value);
-        selList.add("-1");
+        selList.add("1");
       });
     } else if (cateNum == 1){
       map2![subNum].forEach((key, value) {
         quizNum.add(key);
         quizList.add(value);
-        selList.add("-1");
+        selList.add("1");
       });
     }
   }
@@ -243,27 +243,17 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
               onBackPressed: onBackPressed,
               title: "우아 발달 모니터링",
             ),
-            Row(
-              children: [
-                const SizedBox(width: 30),
-                Container(
-                  height: 35,
-                  width: 100,
-                  decoration: BoxDecoration(
-                    color: AppColor_Primary,
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: Center(
-                    child: Text(
-                      cate[cateNum],
-                      style: const TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 15),
-                Visibility(
-                  visible: cate[cateNum] != "신체",
-                  child: Container(
+            Visibility(
+              visible: cateNum == 0,
+              child: Image.asset("assets/m_progress${subNum}.png",width: MediaQuery.of(context).size.width-60,),
+            ),
+            const SizedBox(height: 30),
+            Visibility(
+              visible: cateNum != 0,
+              child: Row(
+                children: [
+                  const SizedBox(width: 30),
+                  Container(
                     height: 35,
                     width: 100,
                     decoration: BoxDecoration(
@@ -272,13 +262,31 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
                     ),
                     child: Center(
                       child: Text(
-                        list[subNum],
+                        cate[cateNum],
                         style: const TextStyle(color: Colors.white),
                       ),
                     ),
                   ),
-                ),
-              ],
+                  const SizedBox(width: 15),
+                  Visibility(
+                    visible: cate[cateNum] != "신체",
+                    child: Container(
+                      height: 35,
+                      width: 100,
+                      decoration: BoxDecoration(
+                        color: AppColor_Primary,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: Center(
+                        child: Text(
+                          list[subNum],
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
             const SizedBox(height: 15),
             Expanded(

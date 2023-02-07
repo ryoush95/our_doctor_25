@@ -21,6 +21,22 @@ class CommunityItem extends StatefulWidget {
 }
 
 class _CommunityItemState extends State<CommunityItem> {
+  String img = "";
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    convertImage();
+  }
+
+  void convertImage() {
+    img = widget.data.imgUrls!;
+    if (widget.data.imgUrls!.contains(",")){
+      List<String> result = img.split(",");
+      img = result[0];
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -106,11 +122,11 @@ class _CommunityItemState extends State<CommunityItem> {
                   ],
                 ),
               ),
-              widget.data.imgUrls != ""
+              img != ""
                   ? ClipRRect(
                       borderRadius: BorderRadius.circular(8.0),
                       child: CachedNetworkImage(
-                        imageUrl: widget.data.imgUrls!,
+                        imageUrl: img,
                         width: 85,
                         height: 85,
                         fit: BoxFit.fill,

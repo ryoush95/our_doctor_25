@@ -403,6 +403,8 @@ class TabMainPageState extends BaseState<TabMainPage>
        if (widget.pageIdx == 2) {
          changeTab(MainTab.monitoring);
         // eventBus.fire(InfoTabEvent(type: widget.infoTabIdx!));
+       } else if (widget.pageIdx == 4){
+         changeTab(MainTab.community);
        }
      });
     BasketList();

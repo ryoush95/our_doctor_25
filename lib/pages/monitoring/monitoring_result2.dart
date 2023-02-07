@@ -461,6 +461,7 @@ class _MonitoringResult2State extends BaseState<MonitoringResult2> {
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        foodList.isNotEmpty ?
         RichText(
             text: TextSpan(children: [
               TextSpan(
@@ -471,61 +472,91 @@ class _MonitoringResult2State extends BaseState<MonitoringResult2> {
                 text: "의 영양식단을 추천해요!",
                 style: AppTextStyle.PD(Colors.black, 20, weight: FW.bold),
               )
-            ])),
+            ]))
+         : Align(
+          alignment: Alignment.centerLeft,
+           child: RichText(
+              text: TextSpan(children: [
+                TextSpan(
+                  text: "1살",
+                  style: AppTextStyle.PD(AppColor_Primary, 20, weight: FW.bold),
+                ),
+                TextSpan(
+                  text: "부터 ",
+                  style: AppTextStyle.PD(Colors.black, 20, weight: FW.bold),
+                ),
+                TextSpan(
+                  text: "8살",
+                  style: AppTextStyle.PD(AppColor_Primary, 20, weight: FW.bold),
+                ),
+                TextSpan(
+                  text: "까지\n영양식단을 제공해요 😥",
+                  style: AppTextStyle.PD(Colors.black, 20, weight: FW.bold),
+                ),
+              ])),
+         ),
         const SizedBox(height: 20),
-        SizedBox(
-          height: 1300,
-          child: ListView.builder(
-            itemCount: subTitle.length,
-            physics: const ClampingScrollPhysics(),
-            itemBuilder: (context, index) {
-              return Column(
-                children: [
-                  Container(
-                    width: 330,
-                    height: 300,
-                    decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(4)),
-                        color: AppColor_Light_Gray),
-                    child: Column(
-                      children: [
-                        const SizedBox(height: 20),
-                        H18(text: subTitle[index]),
-                        const SizedBox(height: 10),
-                        CachedNetworkImage(imageUrl: foodList[index],height: 240, width: 326,
-                          errorWidget: (context, url, error) => const SizedBox(
-                            child: Center(child: Text("검사결과가 없습니다"))
+        Visibility(
+          visible: foodList.isNotEmpty,
+          child: SizedBox(
+            height: 1300,
+            child: ListView.builder(
+              itemCount: subTitle.length,
+              physics: const ClampingScrollPhysics(),
+              itemBuilder: (context, index) {
+                return Column(
+                  children: [
+                    Container(
+                      width: 330,
+                      height: 300,
+                      decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(4)),
+                          color: AppColor_Light_Gray),
+                      child: Column(
+                        children: [
+                          const SizedBox(height: 20),
+                          H18(text: subTitle[index]),
+                          const SizedBox(height: 10),
+                          CachedNetworkImage(imageUrl: foodList[index],height: 240, width: 326,
+                            errorWidget: (context, url, error) => const SizedBox(
+                              child: Center(child: Text("검사결과가 없습니다"))
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 20),
-                ],
-              );
-            },
+                    const SizedBox(height: 20),
+                  ],
+                );
+              },
+            ),
           ),
         ),
-        H18(text: "우리아이는?"),
+        Visibility(
+            visible: foodList.isNotEmpty,
+            child: H18(text: "우리아이는?"),
+        ),
         const SizedBox(height: 20),
-        Container(
-          width: MediaQuery.of(context).size.width - 50,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(6.0),
-              color: AppColor_Light_Gray),
-          padding: const EdgeInsets.only(
-              left: 30, right: 30, top: 20, bottom: 20),
-          // margin: const EdgeInsets.symmetric(horizontal: 30),
-          child: Text(
-            // foodComment,
-            "추천해요!",
-            style: const TextStyle(
-                color: AppColor_GrayText,
-                fontSize: 16,
-                height: 1.5),
+        Visibility(
+          visible: foodList.isNotEmpty,
+          child: Container(
+            width: MediaQuery.of(context).size.width - 50,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(6.0),
+                color: AppColor_Light_Gray),
+            padding: const EdgeInsets.only(
+                left: 30, right: 30, top: 20, bottom: 20),
+            // margin: const EdgeInsets.symmetric(horizontal: 30),
+            child: Text(
+              foodComment,
+              style: const TextStyle(
+                  color: AppColor_GrayText,
+                  fontSize: 16,
+                  height: 1.5),
+            ),
           ),
         ),
-        SizedBox(height: 30,),
+        const SizedBox(height: 30,),
         // SolutionArea(),
       ],
     ),

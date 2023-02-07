@@ -22,6 +22,9 @@ import 'package:ourdoctor/pages/my/my_posts.dart';
 import 'package:ourdoctor/pages/my/order_history.dart';
 import 'package:ourdoctor/pages/my/profile_view.dart';
 import 'package:ourdoctor/pages/my/review_fragment.dart';
+import 'package:ourdoctor/pages/tab_main.dart';
+import 'package:ourdoctor/provider/convert_score_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MyPagePage extends StatefulWidget {
@@ -135,7 +138,7 @@ class MyPagePageState extends BaseState<MyPagePage> {
                             )
                           ],
                         )),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -144,7 +147,8 @@ class MyPagePageState extends BaseState<MyPagePage> {
                         }, icon: const Icon(Icons.chat_bubble_rounded), label: const Text("카카오 상담")),
                         const SizedBox(width: 15),
                         ElevatedButton.icon(onPressed: (){
-
+                          Navigator.pushReplacement(context, SlideRightTransRoute(builder: (context) => TabMainPage(pageIdx: 4,),));
+                          Provider.of<ConvertScoreProvider>(context, listen: false).changeTab(4);
                         }, icon: const Icon(Icons.chat_bubble_rounded), label: const Text("질문 게시판")),
                       ],
                     ),

@@ -43,3 +43,4 @@ const AppColor_4b6eff = Color(0xFF4B6EFF);
 const AppColor_c8ffff = Color(0xFFD5EAFA);
 const AppColor_121215 = Color(0xFF121215);
 const AppColor_A497CC = Color(0xFF52B759);
+const AppColor_GridText = Color(0xFFA1A1A1);

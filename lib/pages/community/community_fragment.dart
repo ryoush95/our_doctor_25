@@ -57,7 +57,7 @@ class CommunityFragmenttState extends BaseState<CommunityFragment> {
   void initState() {
     super.initState();
 
-    controller = new ScrollController()..addListener(_scrollListener);
+    controller = ScrollController()..addListener(_scrollListener);
     getCommunityList();
 
     eventBus.on<AddCommunityEvent>().listen((event) {
@@ -313,7 +313,7 @@ class CommunityFragmenttState extends BaseState<CommunityFragment> {
             text: CATEGORYS[index],
             weight: FW.bold,
             align: TextAlign.center,
-            color: nTabIndex == index ? Colors.white : AppColor_BlackText.withOpacity(0.2),
+            color: nTabIndex == index ? Colors.white : AppColor_GridText,
           ),
         ),
       ),

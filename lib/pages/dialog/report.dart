@@ -20,12 +20,14 @@ class ReportPage extends StatefulWidget {
     required this.uid,
     required this.writer,
     required this.title,
+    this.type,
     this.comment = false,
   });
 
   String uid;
   String writer;
   String title;
+  String? type = "1";
   bool comment;
 
   @override
@@ -51,7 +53,7 @@ class _ReportPageState extends State<ReportPage> {
         _isLoading = true;
         setState(() {});
 
-      Future<DefaultResModel> info = httpService.report("community", widget.uid, _reason!);
+      Future<DefaultResModel> info = httpService.report("community", widget.uid, _reason!, widget.type == "1" ? "": "block");
       
       info.then((DefaultResModel value) {
         _isLoading = false;
@@ -111,11 +113,11 @@ class _ReportPageState extends State<ReportPage> {
             weight: FW.medium,
           ),
         ),
-        H18(text: LanguageService.trans('report'), color: AppColor_BlackText, weight: FW.medium,),
+        H18(text: widget.type =="1" ? "신고하기": "차단하기", color: AppColor_BlackText, weight: FW.medium,),
         GestureDetector(
           onTap: () => report(),
           child: H18(
-            text: LanguageService.trans('report1'), 
+            text: widget.type =="1" ? "신고": "차단",
             color: _reason != '' && _reason != null ? AppColor_Red : AppColor_Red.withOpacity(.2), 
             weight: FW.medium
           ),

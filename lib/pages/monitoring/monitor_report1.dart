@@ -26,7 +26,7 @@ import 'package:ourdoctor/pages/home/prev_monitoring.dart';
 import 'package:ourdoctor/pages/home/range_show.dart';
 import 'package:ourdoctor/pages/home/weight_report.dart';
 import 'package:ourdoctor/pages/intro/first.dart';
-import 'package:ourdoctor/pages/monitoring/monitoring_test_result.dart';
+import 'package:ourdoctor/pages/monitoring/monitoring_life_result.dart';
 import 'package:ourdoctor/pages/monitoring/solution_area.dart';
 import 'package:sprintf/sprintf.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -118,7 +118,7 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
           healthList.add(value);
         });
       setState(() {
-          solList = healthList[0].solutionList!.values.toList();
+          solList = healthList[0].solutionList.values.toList();
           comment1 = healthList[0].feedbackTitle!;
           comment2 = healthList[0].feedbackDescription!;
           isLoading = false;
@@ -211,7 +211,7 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
             align: TextAlign.center,
             color: tabIndex == index
                 ? Colors.white
-                : AppColor_BlackText.withOpacity(0.2),
+                : AppColor_GridText,
           ),
         ),
       ),
@@ -497,7 +497,7 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
         setState(() {
           comment1 = healthList[index].feedbackTitle!;
           comment2 = healthList[index].feedbackDescription!;
-          solList = healthList[index].solutionList!.values.toList();
+          solList = healthList[index].solutionList.values.toList();
           subTabIndex = index;
         });
       },
@@ -605,7 +605,8 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
                       Text(
                         comment2,
                         style: const TextStyle(
-                            color: AppColor_GrayText,
+                            color: Color(0xFF111112),
+                            fontWeight: FontWeight.normal,
                             fontSize: 16,
                             height: 1.5),
                       )
@@ -629,8 +630,7 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
                           },
                         ),
                       )
-                    : const SizedBox(),
-                SolutionContainer(),
+                    : SolutionContainer(),
               ],
             )
           : const SizedBox();
@@ -772,9 +772,14 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
               ),
               Expanded(
                 child: Container(
-                  margin: const EdgeInsets.all(20),
+                  margin: const EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 0),
                   child: SingleChildScrollView(
-                      physics: const BouncingScrollPhysics(), child: _body()),
+                      physics: const BouncingScrollPhysics(), child: Column(
+                        children: [
+                          _body(),
+                          const SizedBox(height: 40)
+                        ],
+                      )),
                 ),
               ),
             ],

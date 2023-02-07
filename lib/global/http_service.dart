@@ -1201,7 +1201,7 @@ class HttpService {
   }
 
   //신고하기
-  Future<DefaultResModel> report(String type, String uid, String content) async {
+  Future<DefaultResModel> report(String type, String uid, String content, String reportType) async {
     String _url = API_BASE_URL + "api/community/report";
 
     Map<String, String> body = {
@@ -1209,6 +1209,7 @@ class HttpService {
       'target_type': type,
       'target_uid': uid,
       'content': content,
+      'report_type': reportType,
     };
     Uri myUri = Uri.parse(_url);
     final response = await http.post(myUri, body: body);
@@ -1953,7 +1954,7 @@ class HttpService {
   }
 
   //성장노트 저장하기
-  Future<DefaultResModel> monitoringRecord2(String temperature, String temp_location, String sleep_at_night, String sleep_at_lunch, String symptom_list) async {
+  Future<DefaultResModel> monitoringRecord2(String temperature, String temp_location, String sleep_at_night, String sleep_at_lunch, String symptom_list, String normal_score, String control_score) async {
     String _url = API_BASE_URL + "api/monitoring/save_growth_note";
 
     Map<String, String> body = {
@@ -1963,6 +1964,8 @@ class HttpService {
       'sleep_at_night': sleep_at_night,
       'sleep_at_lunch': sleep_at_lunch,
       'symptom_list': symptom_list,
+      'normal_score' : normal_score,
+      'control_score' : control_score,
     };
     print(body);
     Uri myUri = Uri.parse(_url);

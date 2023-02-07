@@ -42,14 +42,14 @@ class DevelopmentScoreDto {
     this.status,
     this.feedbackTitle,
     this.feedbackDescription,
-    this.solutionList,
+    required this.solutionList,
   });
 
   int? score;
   String? status;
   String? feedbackTitle;
   String? feedbackDescription;
-  Map<String, RecommendList>? solutionList;
+  Map<String, RecommendList> solutionList;
 
   factory DevelopmentScoreDto.fromRawJson(String str) => DevelopmentScoreDto.fromJson(json.decode(str));
 
@@ -60,7 +60,7 @@ class DevelopmentScoreDto {
     status: json["status"],
     feedbackTitle: json["feedback_title"],
     feedbackDescription: json["feedback_description"],
-    solutionList: Map.from(json["recommend_list"]!).map((k, v) => MapEntry<String, RecommendList>(k, RecommendList.fromJson(v))),
+    solutionList: json["recommend_list"] == null ? {} : Map.from(json["recommend_list"]!).map((k, v) => MapEntry<String, RecommendList>(k, RecommendList.fromJson(v))),
   );
 
   Map<String, dynamic> toJson() => {
@@ -68,7 +68,7 @@ class DevelopmentScoreDto {
     "status": status,
     "feedback_title": feedbackTitle,
     "feedback_description": feedbackDescription,
-    "recommend_list": Map.from(solutionList!).map((k, v) => MapEntry<String, dynamic>(k, v.toJson())),
+    "recommend_list": Map.from(solutionList).map((k, v) => MapEntry<String, dynamic>(k, v.toJson())),
   };
 }
 
