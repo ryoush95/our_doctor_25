@@ -419,7 +419,7 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               H16(text: "수면", weight: FW.regular,),
-                              H16(text: p.sleep!.status! =="R" ? "부족": p.sleep!.status! =="N" ? "-"
+                              H16(text: p.sleep!.status! =="Y" ? "부족": p.sleep!.status! =="N" ? "-"
                               : "충분", color: changeColor(p.sleep!.status!),),
                             ],
                           ),

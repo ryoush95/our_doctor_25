@@ -149,13 +149,13 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
       map![subNum].forEach((key, value) {
         quizNum.add(key);
         quizList.add(value);
-        selList.add("1");
+        selList.add("-1");
       });
     } else if (cateNum == 1){
       map2![subNum].forEach((key, value) {
         quizNum.add(key);
         quizList.add(value);
-        selList.add("1");
+        selList.add("-1");
       });
     }
   }
