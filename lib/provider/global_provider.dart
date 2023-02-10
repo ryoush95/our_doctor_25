@@ -53,11 +53,12 @@ class GlobalProvider extends ChangeNotifier {
         changeLife(profile!.lifestyle!.status!);
         notifyListeners();
       } else {
-        showToast(value.msg ?? "");
-        if (value.result == 106) {
+        if (value.result != 106) {
+          showToast(value.msg ?? "");
           //token expired
-          Navigator.pushReplacement(
-              context, SlideRightTransRoute(builder: (context) => FirstPage()));
+          // Navigator.pushReplacement(context, SlideRightTransRoute(builder: (context) => FirstPage()));
+        } else {
+
         }
       }
     }).catchError((onError) {

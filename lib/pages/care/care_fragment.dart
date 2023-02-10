@@ -289,7 +289,7 @@ class CareFragmentState extends BaseState<CareFragment>
                     children: [
                   bannerList.isNotEmpty ? CareBanner() : const CircularProgressIndicator(),
                   bannerList.isNotEmpty ? Center(child: _dotIndicator()) : Container(),
-                  const SizedBox(height: 28),
+                  const SizedBox(height: 10),
                   CategoryShow(),
                   SearchBar(),
                   PersonalityType(),
@@ -427,6 +427,7 @@ class CareFragmentState extends BaseState<CareFragment>
   Widget CategoryShow() => Visibility(
         visible: tabIndex == 0 || tabIndex == 1,
         child: Container(
+            height: 80,
             padding: const EdgeInsets.symmetric(horizontal: 5),
             width: MediaQuery.of(context).size.width,
             child: Row(
@@ -451,15 +452,16 @@ class CareFragmentState extends BaseState<CareFragment>
                       children: [
                         tabIndex == 0
                             ? Image.asset('assets/cake_black_24dp.png',
-                                width: 40, height: 25)
+                                width: 40, height: 40)
                             : Image.asset('assets/cake_black_24dp1.png',
-                                width: 40, height: 25),
+                                width: 40, height: 40),
                         const SizedBox(height: 10),
                         H13(text: "전체", weight: FW.medium),
                       ],
                     ),
                   ),
                 ),
+                //신체
                 InkWell(
                   onTap: () async {
                     String recv = await Navigator.push(
@@ -482,17 +484,18 @@ class CareFragmentState extends BaseState<CareFragment>
                             ? Image.asset(
                                 'assets/face_retouching_natural_black_24dp.png',
                                 width: 40,
-                                height: 25)
+                                height: 40)
                             : Image.asset(
                                 'assets/face_retouching_natural_black_24dp1.png',
                                 width: 40,
-                                height: 25),
+                                height: 40),
                         const SizedBox(height: 10),
                         H13(text: "신체", weight: FW.medium),
                       ],
                     ),
                   ),
                 ),
+                //두뇌
                 InkWell(
                   onTap: () async {
                     String recv = await Navigator.push(
@@ -513,15 +516,16 @@ class CareFragmentState extends BaseState<CareFragment>
                       children: [
                         tabIndex == 0
                             ? Image.asset('assets/psychology_black_24dp.png',
-                                width: 40, height: 25)
+                                width: 40, height: 40)
                             : Image.asset('assets/psychology_black_24dp1.png',
-                                width: 40, height: 25),
+                                width: 40, height: 40),
                         const SizedBox(height: 10),
                         H13(text: "두뇌", weight: FW.medium),
                       ],
                     ),
                   ),
                 ),
+                // 맞춤추천
                 // InkWell(
                 //   onTap: () async {
                 //     String recv = await Navigator.push(

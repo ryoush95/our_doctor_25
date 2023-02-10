@@ -17,10 +17,13 @@ import 'package:ourdoctor/pages/components/h12.dart';
 import 'package:ourdoctor/pages/components/h14.dart';
 import 'package:ourdoctor/pages/components/h18.dart';
 import 'package:ourdoctor/pages/components/simple_header.dart';
+import 'package:ourdoctor/pages/intro/first.dart';
 import 'package:ourdoctor/stores/my_page_store.dart';
 
 class MyPostsPage extends StatefulWidget {
-  MyPostsPage({Key? key}) : super(key: key);
+  MyPostsPage({Key? key, required this.like}) : super(key: key);
+
+  int like;
 
   @override
   State<MyPostsPage> createState() => _MyPostsPageState();
@@ -45,6 +48,28 @@ class _MyPostsPageState extends State<MyPostsPage> {
     setState(() {});
   }
 
+  Future<void> loadLikeList() async {
+    Future<CommunityListResModel> info = httpService.getMyLikePosts(_page);
+    info.then((CommunityListResModel value) async {
+      if (value.result == 0) {
+        if (_page == 0 && myPageStore.posts.isNotEmpty) {
+          myPageStore.posts.clear();
+        }
+        _isLast = value.data!.isLast!;
+        myPageStore.posts.addAll(value.data!.contents!);
+        setState(() {});
+      } else {
+        showToast(value.msg ?? "");
+        if (value.result == 106) {
+          //token expired
+          Navigator.pushReplacement(context, SlideRightTransRoute(builder: (context) => FirstPage()));
+        }
+      }
+    }).catchError((onError) {
+      showToast(onError.toString());
+    });
+  }
+
   _scrollListener() {
     if (!_isLoading) {
       if (_controller.position.pixels == _controller.position.maxScrollExtent) {
@@ -52,7 +77,11 @@ class _MyPostsPageState extends State<MyPostsPage> {
           return;
         }
         _page = _page + 1;
-        _loadList();
+        if (widget.like == 1) {
+          loadLikeList();
+        } else {
+          _loadList();
+        }
       }
     }
   }
@@ -60,7 +89,11 @@ class _MyPostsPageState extends State<MyPostsPage> {
   @override
   void initState() {
     super.initState();
-    _loadList();
+    if (widget.like == 1) {
+      loadLikeList();
+    } else {
+      _loadList();
+    }
     _controller.addListener(() {
       _scrollListener();
     });

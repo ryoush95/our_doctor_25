@@ -97,10 +97,6 @@ class AddChildren1PageState extends BaseState<AddChildren1Page> {
     return true;
   }
 
-  void onChangeChild() {
-    reqChangeChild();
-  }
-
   void checkValid() {
     if (name.isEmpty || child_height.isEmpty || child_weight.isEmpty || birth.isEmpty /* selChildSymptom.isEmpty || (selChildSymptom.contains(4) && direct.isEmpty)*/) {
       setState(() {
@@ -216,28 +212,34 @@ class AddChildren1PageState extends BaseState<AddChildren1Page> {
   Future<void> reqChangeChild() async {
     String history = "";
     List<Map<String, String>> historyList = [];
-    for (int i = 0; i < gDiseaseList!.child!.length; i++) {
-      if (selChildSymptom.contains(i)) {
-        if (i < gDiseaseList!.child!.length - 1) {
-          // history = history + childSymptom[i];
-          Map<String, String> info = {
-            'id': gDiseaseList!.child!.elementAt(i).id!,
-            'name': gDiseaseList!.child!.elementAt(i).name!,
-            'detail': "",
-          };
-          historyList.add(info);
-        }
-        if (i == gDiseaseList!.child!.length - 1) {
-          // history = history + "(" + childSymptom[i] + ") " + direct;
-          Map<String, String> info = {
-            'id': gDiseaseList!.child!.elementAt(i).id!,
-            'name': gDiseaseList!.child!.elementAt(i).name!,
-            'detail': direct,
-          };
-          historyList.add(info);
-        }
-      }
-    }
+    // for (int i = 0; i < gDiseaseList!.child!.length; i++) {
+    //   if (selChildSymptom.contains(i)) {
+    //     if (i < gDiseaseList!.child!.length - 1) {
+    //       // history = history + childSymptom[i];
+    //       Map<String, String> info = {
+    //         'id': gDiseaseList!.child!.elementAt(i).id!,
+    //         'name': gDiseaseList!.child!.elementAt(i).name!,
+    //         'detail': "",
+    //       };
+    //       historyList.add(info);
+    //     }
+    //     if (i == gDiseaseList!.child!.length - 1) {
+    //       // history = history + "(" + childSymptom[i] + ") " + direct;
+    //       Map<String, String> info = {
+    //         'id': gDiseaseList!.child!.elementAt(i).id!,
+    //         'name': gDiseaseList!.child!.elementAt(i).name!,
+    //         'detail': direct,
+    //       };
+    //       historyList.add(info);
+    //     }
+    //   }
+    // }
+    Map<String, String> info = {
+      'id': gDiseaseList!.child!.elementAt(4).id!,
+      'name': gDiseaseList!.child!.elementAt(4).name!,
+      'detail': direct,
+    };
+    historyList.add(info);
     if (historyList.length > 0) {
       history = json.encode(historyList);
     }
@@ -594,41 +596,38 @@ class AddChildren1PageState extends BaseState<AddChildren1Page> {
                               const SizedBox(height: 35),
                               H16(text: LanguageService.trans("child_past_medical_history"), weight: FW.medium, color: AppColor_BlackText),
                               const SizedBox(height: 5),
-                              H14(text: "과거 병력이 없다면 체크하지 않아도 돼요", weight: FW.medium, color: AppColor_BlackText.withOpacity(0.3)),
-                              const SizedBox(height: 20),
-                              GridView.builder(
-                                  shrinkWrap: true,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  itemCount: childSymptom.length,
-                                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, childAspectRatio: 80 / 30, mainAxisSpacing: 10, crossAxisSpacing: 15),
-                                  itemBuilder: (BuildContext context, int index) {
-                                    return AppCheckbox(
-                                      text: childSymptom[index],
-                                      checked: selChildSymptom.contains(index) ? true : false,
-                                      padding: 20.0,
-                                      withBorder: true,
-                                      onChecked: (checked) => {
-                                        onSelect(index, checked!),
-                                      },
-                                    );
-                                  }),
-                              const SizedBox(height: 20),
-                              Visibility(
-                                visible: selChildSymptom.contains(gDiseaseList!.child!.length - 1),
-                                child: UnderlineInput(
-                                  controller: directInputController,
-                                  keyboardType: TextInputType.text,
-                                  textInputAction: TextInputAction.done,
-                                  // onEditingComplete: () => node.nextFocus(),
-                                  placeholder: LanguageService.trans("direct_input"),
-                                  onChanged: (text) => {direct = text, checkValid()},
-                                ),
+                              H14(text: "과거력, 수술병력, 알러지, 출생력(미숙아) 등\n있다면 적어주세요", weight: FW.medium, color: AppColor_BlackText.withOpacity(0.3), maxLine: 2, align: TextAlign.start,),
+                              const SizedBox(height: 10),
+                              // GridView.builder(
+                              //     shrinkWrap: true,
+                              //     physics: const NeverScrollableScrollPhysics(),
+                              //     itemCount: childSymptom.length,
+                              //     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, childAspectRatio: 80 / 30, mainAxisSpacing: 10, crossAxisSpacing: 15),
+                              //     itemBuilder: (BuildContext context, int index) {
+                              //       return AppCheckbox(
+                              //         text: childSymptom[index],
+                              //         checked: selChildSymptom.contains(index) ? true : false,
+                              //         padding: 20.0,
+                              //         withBorder: true,
+                              //         onChecked: (checked) => {
+                              //           onSelect(index, checked!),
+                              //         },
+                              //       );
+                              //     }),
+                              // const SizedBox(height: 20),
+                              UnderlineInput(
+                                controller: directInputController,
+                                keyboardType: TextInputType.text,
+                                textInputAction: TextInputAction.done,
+                                // onEditingComplete: () => node.nextFocus(),
+                                placeholder: "예시) 복숭아 알러지",
+                                onChanged: (text) => {direct = text, checkValid()},
                               ),
-                              const SizedBox(height: 20)
+                              const SizedBox(height: 30)
                             ]))),
                     const SizedBox(height: 25),
                     MainTextButton(
-                      text: LanguageService.trans("completed"),
+                      text: "작성 완료",
                       backgroundColor: AppColor_Primary,
                       style: AppTextStyle.PD(Colors.white, 18, weight: FW.semi_bold),
                       disable: !valid,
@@ -636,7 +635,7 @@ class AddChildren1PageState extends BaseState<AddChildren1Page> {
                       radius: 16,
                       disableBackground: !valid ? AppColor_Primary_Disable : Colors.transparent,
                       onPressed: () {
-                        onChangeChild();
+                        reqChangeChild();
                       },
                     ),
                     const SizedBox(height: 50),

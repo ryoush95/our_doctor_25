@@ -681,29 +681,35 @@ class SignupFamilyPageState extends BaseState<SignupFamilyPage> {
       String _add2 = address3InputController.elementAt(i).text;
 
       List<Map<String, String>> historyList = [];
-      for (int k = 0; k < childSymptoms[i].length; k++) {
-        int index = childSymptoms[i].elementAt(k);
-        if (index == gDiseaseList!.child!.length - 1) {
-          String content = childSymptomInputController.elementAt(i).text;
-          String? _iid = gDiseaseList!.child!.elementAt(index).id;
-          String? _nname = gDiseaseList!.child!.elementAt(index).name;
-          Map<String, String> info = {
-            'id': _iid!,
-            'name': _nname!,
-            'detail': content,
-          };
-          historyList.add(info);
-        } else {
-          String? _iid = gDiseaseList!.child!.elementAt(index).id;
-          String? _nname = gDiseaseList!.child!.elementAt(index).name;
-          Map<String, String> info = {
-            'id': _iid!,
-            'name': _nname!,
-            'detail': "",
-          };
-          historyList.add(info);
-        }
-      }
+      // for (int k = 0; k < childSymptoms[i].length; k++) {
+      //   int index = childSymptoms[i].elementAt(k);
+      //   if (index == gDiseaseList!.child!.length - 1) {
+      //     String content = childSymptomInputController.elementAt(i).text;
+      //     String? _iid = gDiseaseList!.child!.elementAt(index).id;
+      //     String? _nname = gDiseaseList!.child!.elementAt(index).name;
+      //     Map<String, String> info = {
+      //       'id': _iid!,
+      //       'name': _nname!,
+      //       'detail': content,
+      //     };
+      //     historyList.add(info);
+      //   } else {
+      //     String? _iid = gDiseaseList!.child!.elementAt(index).id;
+      //     String? _nname = gDiseaseList!.child!.elementAt(index).name;
+      //     Map<String, String> info = {
+      //       'id': _iid!,
+      //       'name': _nname!,
+      //       'detail': "",
+      //     };
+      //     historyList.add(info);
+      //   }
+      // }
+      Map<String, String> direct = {
+        'id': gDiseaseList!.child!.elementAt(4).id!,
+        'name': gDiseaseList!.child!.elementAt(4).name!,
+        'detail': childSymptomDirect.elementAt(i),
+      };
+      historyList.add(direct);
       Map<String, Object> info = {
         'profile_img': profileImageName[i],
         'name': _name,
@@ -1649,38 +1655,34 @@ class SignupFamilyPageState extends BaseState<SignupFamilyPage> {
               const SizedBox(height: 35),
               H16(text: LanguageService.trans("child_past_medical_history"), weight: FW.medium, color: AppColor_BlackText),
               const SizedBox(height: 5),
-              H14(text: "과거 병력이 없다면 체크하지 않아도 돼요.", weight: FW.medium, color: AppColor_BlackText.withOpacity(0.3)),
-              const SizedBox(height: 20),
-              GridView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: childSymptom.length,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, childAspectRatio: 80 / 30, mainAxisSpacing: 10, crossAxisSpacing: 15),
-                  itemBuilder: (BuildContext context, int ind) {
-                    return AppCheckbox(
-                      text: childSymptom[ind], 
-                      checked: childSymptoms[index].contains(ind) 
-                        ? true 
-                        : false, 
-                        padding: 20.0, 
-                        fontSize: 14,
-                        withBorder: true, 
-                        onChecked: (checked) => {onSelect(index, ind, checked!)}
-                    );
-                  }),
-              const SizedBox(height: 20),
-              Visibility(
-                visible: childSymptoms[index].contains(gDiseaseList!.child!.length - 1),
-                child: UnderlineInput(
-                  controller: childSymptomInputController[index],
-                  keyboardType: TextInputType.text,
-                  textInputAction: TextInputAction.next,
-                  onEditingComplete: () => node.nextFocus(),
-                  placeholder: LanguageService.trans("direct_input"),
-                  onChanged: (text) => {childSymptomDirect[index] = text, checkValid()},
-                ),
+              H14(text: "과거력, 수술병력, 알러지, 출생력(미숙아) 등\n있다면 적어주세요", weight: FW.medium, color: AppColor_BlackText.withOpacity(0.3), maxLine: 2, align: TextAlign.start,),
+              const SizedBox(height: 10),
+              // GridView.builder(
+              //     shrinkWrap: true,
+              //     physics: const NeverScrollableScrollPhysics(),
+              //     itemCount: childSymptom.length,
+              //     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, childAspectRatio: 80 / 30, mainAxisSpacing: 10, crossAxisSpacing: 15),
+              //     itemBuilder: (BuildContext context, int index) {
+              //       return AppCheckbox(
+              //         text: childSymptom[index],
+              //         checked: selChildSymptom.contains(index) ? true : false,
+              //         padding: 20.0,
+              //         withBorder: true,
+              //         onChecked: (checked) => {
+              //           onSelect(index, checked!),
+              //         },
+              //       );
+              //     }),
+              // const SizedBox(height: 20),
+              UnderlineInput(
+                controller: childSymptomInputController[index],
+                keyboardType: TextInputType.text,
+                textInputAction: TextInputAction.next,
+                onEditingComplete: () => node.nextFocus(),
+                placeholder: "예시) 복숭아 알러지",
+                onChanged: (text) => {childSymptomDirect[index] = text, checkValid()},
               ),
-              const SizedBox(height: 20)
+              const SizedBox(height: 30)
             ])));
   }
 

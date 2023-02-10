@@ -22,6 +22,7 @@ class CommunityItem extends StatefulWidget {
 
 class _CommunityItemState extends State<CommunityItem> {
   String img = "";
+  // late CommunityDto info;
 
   @override
   void initState() {
@@ -31,11 +32,16 @@ class _CommunityItemState extends State<CommunityItem> {
   }
 
   void convertImage() {
-    img = widget.data.imgUrls!;
-    if (widget.data.imgUrls!.contains(",")){
-      List<String> result = img.split(",");
-      img = result[0];
+    if (widget.data.imgUrls != "") {
+      img = widget.data.imgUrls!;
+      if (widget.data.imgUrls!.contains(",")) {
+        List<String> result = img.split(",");
+        img = result[0];
+      }
+    }else {
+      img = "";
     }
+    setState(() {});
   }
   @override
   Widget build(BuildContext context) {
@@ -123,6 +129,7 @@ class _CommunityItemState extends State<CommunityItem> {
                 ),
               ),
               img != ""
+                  // ? Image.network(img)
                   ? ClipRRect(
                       borderRadius: BorderRadius.circular(8.0),
                       child: CachedNetworkImage(
@@ -130,6 +137,8 @@ class _CommunityItemState extends State<CommunityItem> {
                         width: 85,
                         height: 85,
                         fit: BoxFit.fill,
+                        progressIndicatorBuilder: (context, url, downloadProgress) =>
+                            CircularProgressIndicator(value: downloadProgress.progress),
                       ),
                     )
                   : const SizedBox(width: 1),

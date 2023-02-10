@@ -429,7 +429,7 @@ class ProductDetailtState extends BaseState<ProductDetail> {
             InkWell(
               onTap: () async {
                 // showReviewDialog();
-                await launch(_url + mData.id!);
+                await launch(_url + mData.id! + "?" + gUserInfo!.accessToken!);
               },
               child: Container(
                 height: 58,
@@ -437,7 +437,7 @@ class ProductDetailtState extends BaseState<ProductDetail> {
                 width: double.infinity,
                 decoration: BoxDecoration(color: AppColor_Primary),
                 child: H20(
-                  text: LanguageService.trans("choose_an_opinion"),
+                  text: "옵션 선택하기",
                   color: Colors.white,
                   weight: FW.bold,
                   align: TextAlign.center,

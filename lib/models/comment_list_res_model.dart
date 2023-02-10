@@ -68,6 +68,7 @@ class ReplyDto {
   String? likeCnt;
   String? likeYn;
   String? delYn;
+  String? secret;
   List<ReplyReplyDto>? replyList;
 
   ReplyDto({
@@ -81,6 +82,7 @@ class ReplyDto {
     this.likeCnt, 
     this.likeYn, 
     this.delYn,
+    this.secret,
     this.replyList,
   });
 
@@ -95,6 +97,7 @@ class ReplyDto {
     likeCnt = json['like_cnt'] ?? "";
     likeYn = json['like_yn'] ?? "";
     delYn = json['del_yn'] ?? "";
+    secret = json['secret'] ?? "";
     if (json['reply_list'] != null) {
       replyList = <ReplyReplyDto>[];
       json['reply_list'].forEach((v) {
@@ -115,6 +118,7 @@ class ReplyDto {
     data['like_cnt'] = this.likeCnt;
     data['like_yn'] = this.likeYn;
     data['del_yn'] = this.delYn;
+    data['secret'] = this.secret;
     if (this.replyList != null) {
       data['reply_list'] = this.replyList!.map((v) => v.toJson()).toList();
     }
@@ -133,10 +137,21 @@ class ReplyReplyDto {
   String? likeCnt;
   String? likeYn;
   String? delYn;
+  String? secret;
 
-  ReplyReplyDto({
-    this.name, this.nickname, this.userType, this.id, this.content, this.commentUid, this.regTime, this.likeCnt, this.likeYn, this.delYn
-  });
+  ReplyReplyDto(
+      {this.name,
+      this.nickname,
+      this.userType,
+      this.id,
+      this.content,
+      this.commentUid,
+      this.regTime,
+      this.likeCnt,
+      this.likeYn,
+      this.delYn,
+        this.secret,
+      });
 
   ReplyReplyDto.fromJson(Map<String, dynamic> json) {
     name = json['name'] ?? "";
@@ -149,6 +164,7 @@ class ReplyReplyDto {
     likeCnt = json['like_cnt'] ?? "";
     likeYn = json['like_yn'] ?? "";
     delYn = json['del_yn'] ?? "";
+    secret = json['secret'] ?? "";
   }
 
   Map<String, dynamic> toJson() {
@@ -163,6 +179,7 @@ class ReplyReplyDto {
     data['like_cnt'] = this.likeCnt;
     data['like_yn'] = this.likeYn;
     data['del_yn'] = this.delYn;
+    data['secret'] = this.secret;
     return data;
   }
 }

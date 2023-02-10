@@ -16,7 +16,7 @@ import 'package:ourdoctor/pages/components/simple_header.dart';
 import 'package:ourdoctor/pages/intro/first.dart';
 
 class ProductList extends StatefulWidget {
-  ProductList({Key? key, this.category = "GROWTH", this.order = "like", this.keyword = ""}) : super(key: key);
+  ProductList({Key? key, required this.category, this.order = "like", this.keyword = ""}) : super(key: key);
 
   final String category;
   final String order;

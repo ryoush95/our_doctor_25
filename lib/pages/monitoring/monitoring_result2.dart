@@ -502,7 +502,7 @@ class _MonitoringResult2State extends BaseState<MonitoringResult2> {
             height: 1300,
             child: ListView.builder(
               itemCount: subTitle.length,
-              physics: const ClampingScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               itemBuilder: (context, index) {
                 return Column(
                   children: [

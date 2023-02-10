@@ -17,6 +17,7 @@ import 'package:ourdoctor/pages/components/h16.dart';
 import 'package:ourdoctor/pages/components/h18.dart';
 import 'package:ourdoctor/pages/components/result_area.dart';
 import 'package:ourdoctor/pages/home/bmi_bar.dart';
+import 'package:ourdoctor/pages/home/bmi_bar_weight.dart';
 import 'package:ourdoctor/pages/home/range_show.dart';
 import 'package:ourdoctor/pages/home/school_area.dart';
 import 'package:ourdoctor/pages/home/weight_line_chart.dart';
@@ -166,6 +167,32 @@ class WeightReportState extends BaseState<WeightReport> {
     });
   }
 
+  int getWeightResFromString(String s) {
+    switch (s) {
+      case "저체중" :
+        return 0;
+      case "의학적 저체중" :
+        return 1;
+      case "정상" :
+        return 2;
+      case "과체중" :
+        return 3;
+      case "비만" :
+        return 4;
+    }
+    return 0;
+  }
+
+  Color getWeightColorFromString(String status) {
+    if (status == "의학적 저체중" || status == "과체중") {
+      return const Color(0xFFFFCE20);
+    } else if (status == "저체중" || status == "비만") {
+      return const Color(0xFFFF3838);
+    } else {
+      return const Color(0xFF4B9EFF);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -174,14 +201,14 @@ class WeightReportState extends BaseState<WeightReport> {
           children: [
             WeightLineChart(data: widget.data),
             const SizedBox(height: 30),
-            BMIBar(
+            BMIBarWeight(
               type: 1,
               text: widget.data.monitoring!.diagnose!.result!,
               subtext: widget.data.monitoring!.diagnose!.result!.contains("정상") ? "" : ((widget.data.monitoring!.diff! > 0 ? "+" : "") + convertScore(widget.data.monitoring!.diff!.toStringAsFixed(1)) + "kg"),
               weight: widget.data.monitoring!.value!,
               tiptext: "BMI는 체질량 지수를의미합니다. (kg/m2)",
-              res: getResFromString(widget.data.monitoring!.diagnose!.color!),
-              color: getColorFromString(widget.data.monitoring!.diagnose!.color!),
+              res: getWeightResFromString(widget.data.monitoring!.diagnose!.result!),
+              color: getWeightColorFromString(widget.data.monitoring!.diagnose!.result!),
             ),
             const SizedBox(height: 30),
             const Divider(color: AppColor_Light_Gray, thickness: 3),

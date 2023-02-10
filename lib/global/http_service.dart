@@ -2933,4 +2933,22 @@ class HttpService {
       throw Exception(LanguageService.trans("server_fail"));
     }
   }
+
+  //내 좋아요 게시글 보기
+  Future<CommunityListResModel> getMyLikePosts(int page) async {
+    String _url = API_BASE_URL + "api/user/community_like_list";
+
+    Map<String, String> body = {
+      'access_token': gUserInfo!.accessToken!,
+      'page': page.toString(),
+    };
+    Uri myUri = Uri.parse(_url);
+    final response = await http.post(myUri, body: body);
+    if(response.statusCode == 200) {
+      return CommunityListResModel.fromJson(json.decode(response.body));
+    } else {
+      showToast(LanguageService.trans("server_fail"));
+      throw Exception(LanguageService.trans("server_fail"));
+    }
+  }
 }

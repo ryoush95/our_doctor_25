@@ -141,6 +141,7 @@ class CommunityFragmenttState extends BaseState<CommunityFragment> {
     CommunityDto info = arrCommunityList.elementAt(index);
     info.imgUrls = getImg(info);
     if (info.secret == "1") {
+      //비밀글 아이템
       return Column(
         children: [
           InkWell(
@@ -175,6 +176,7 @@ class CommunityFragmenttState extends BaseState<CommunityFragment> {
                     )
                   ]),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(children: [
                     Visibility(
@@ -185,26 +187,54 @@ class CommunityFragmenttState extends BaseState<CommunityFragment> {
                       visible: info.admin == "1",
                       child: const SizedBox(width: 2),
                     ),
+                    Image.asset('assets/ic_lock.png', width: 14),
                     H14(
                       text: info.nickname!,
                       color: const Color(0xffA0A0A0),
+                      weight: FW.regular,
                     ),
-                    const Spacer(),
+                    const SizedBox(width: 10),
                     H14(
-                      text: convertDate(info.regTime!),
+                      text: convertDate(info.regTime!).substring(5),
                       color: const Color(0xffA0A0A0),
                       weight: FW.regular,
                     ),
                     const SizedBox(width: 10),
                   ]),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 15),
+                  H16(
+                    text: info.title!,
+                    color: Colors.black,
+                    align: TextAlign.start,
+                  ),
+                  const SizedBox(height: 15),
                   Row(
                     children: [
-                      Image.asset('assets/ic_lock.png', width: 18),
-                      const SizedBox(width: 5),
-                      H16(text: "비밀글입니다.", weight: FW.semi_bold, color: AppColor_BlackText),
+                      Icon(
+                        info.likeYn! ==  "n" ?
+                        Icons.favorite_border_outlined :
+                        Icons.favorite_outlined,
+                        color: const Color(0xffFF5252),
+                        size: 18,
+                      ),
+                      H16(
+                        text: " " + info.likeCnt!,
+                        color: const Color(0xffA0A0A0),
+                        weight: FW.regular,
+                      ),
+                      const SizedBox(width: 20),
+                      const Icon(
+                        Icons.chat_bubble_outline,
+                        color: Color(0xffA0A0A0),
+                        size: 18,
+                      ),
+                      H16(
+                        text: " " + info.commentCnt!,
+                        color: (info.fixed == "1") ? AppColor_White : Color(0xffA0A0A0),
+                        weight: FW.regular,
+                      ),
                     ],
-                  ),
+                  )
                 ],
               ),
             ),
@@ -218,7 +248,9 @@ class CommunityFragmenttState extends BaseState<CommunityFragment> {
         ],
       );
     } else {
+      // 일반 유저 아이템
       final iText = info.title!;
+      String img = "";
       
       if(info.topic! != "notice" && keyword.isNotEmpty && iText.contains(keyword)) {
         final keywordIdx = iText.indexOf(keyword);
@@ -227,6 +259,17 @@ class CommunityFragmenttState extends BaseState<CommunityFragment> {
         final sText = iText.substring(keywordIdx + keyword.length, iText.length);
       }
 
+      if (info.imgUrls != "") {
+        img = info.imgUrls!;
+        if (info.imgUrls!.contains(",")) {
+          List<String> result = img.split(",");
+          img = result[0];
+        }
+      } else {
+        img = "";
+      }
+      setState(() {});
+
       return  info.topic! == "notice" && nTabIndex != 0
       ? const SizedBox()
       : Column(
@@ -234,16 +277,6 @@ class CommunityFragmenttState extends BaseState<CommunityFragment> {
         children: [
           InkWell(
             onTap: () async {
-              // if(info.topic! != "notice" && keyword.isNotEmpty && info.title!.contains(keyword)) {
-              //   final iText = info.title!;
-              //   final keywordIdx = iText.indexOf(keyword);     
-              //   final substringed = iText.substring(
-              //     keywordIdx, keywordIdx + keyword.length
-              //   );
-              //   final fText = iText.substring(0, keywordIdx);
-              //   final sText = iText.substring(keywordIdx+keyword.length, iText.length);
-              //   developer.log('$fText $substringed $sText');
-              // }
               final Map received;
               if(nTabIndex == 3) {
                 received = await Navigator.push(context, SlideRightTransRoute(builder: (context) => CommunityDetailPage(uid: info.uid, videoUrl: info.blogUrl)));
@@ -262,7 +295,108 @@ class CommunityFragmenttState extends BaseState<CommunityFragment> {
             },
             child: Container(
                 margin: const EdgeInsets.fromLTRB(25, 0, 25, 0),
-                child: CommunityItem(data: info, admin: info.admin!,),
+                child: Column(
+                  children: [
+                    Container(
+                      height: 120,
+                      padding: const EdgeInsets.all(20.0),
+                      decoration: BoxDecoration(
+                          color: info.fixed == "1" ? AppColor_Primary : Colors.white,
+                          borderRadius: BorderRadius.all(Radius.circular(6)),
+                          boxShadow: const [
+                            BoxShadow(
+                              color: AppColor_Light_Gray,
+                              blurRadius: 5.0, // soften the shadow
+                              spreadRadius: 5.0, //extend the shadow
+                            ),
+                          ]),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(children: [
+                                  Visibility(
+                                    visible: info.admin == "1",
+                                    child: Image.asset('assets/ic_answer.png', width: 12),
+                                  ),
+                                  Visibility(
+                                    visible: info.admin == "1",
+                                    child: const SizedBox(width: 2),
+                                  ),
+                                  H14(
+                                    text: info.nickname!,
+                                    color: info.fixed == "1" ? Color(0xffB6D7FE) : Color(0xffA0A0A0),
+                                    weight: FW.regular,
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  H14(
+                                    text: convertDate(info.regTime!).substring(5),
+                                    color: info.fixed == "1" ? Color(0xffB6D7FE) : Color(0xffA0A0A0),
+
+                                    weight: FW.regular,
+                                  ),
+                                  const SizedBox(width: 10),
+                                ]),
+                                const SizedBox(height: 15),
+                                H16(
+                                  text: info.title!,
+                                  color: info.fixed == "1" ? AppColor_White : Colors.black,
+                                  align: TextAlign.start,
+                                ),
+                                const SizedBox(height: 15),
+                                Row(
+                                  children: [
+                                    Icon(
+                                      info.likeYn! ==  "n" ?
+                                      Icons.favorite_border_outlined :
+                                      Icons.favorite_outlined,
+                                      color: Color(0xffFF5252),
+                                      size: 18,
+                                    ),
+                                    H16(
+                                      text: " " + info.likeCnt!,
+                                      color: (info.fixed == "1") ? AppColor_White : Color(0xffA0A0A0),
+                                      weight: FW.regular,
+                                    ),
+                                    const SizedBox(width: 20),
+                                    const Icon(
+                                      Icons.chat_bubble_outline,
+                                      color: Color(0xffA0A0A0),
+                                      size: 18,
+                                    ),
+                                    H16(
+                                      text: " " + info.commentCnt!,
+                                      color: (info.fixed == "1") ? AppColor_White : Color(0xffA0A0A0),
+                                      weight: FW.regular,
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                          ),
+                          img != ""
+                          // ? Image.network(img)
+                              ? ClipRRect(
+                            borderRadius: BorderRadius.circular(8.0),
+                            child: CachedNetworkImage(
+                              imageUrl: img,
+                              width: 85,
+                              height: 85,
+                              fit: BoxFit.fill,
+                              progressIndicatorBuilder: (context, url, downloadProgress) =>
+                                  CircularProgressIndicator(value: downloadProgress.progress),
+                            ),
+                          )
+                              : const SizedBox(width: 1),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
             ),
           ),
           Container(

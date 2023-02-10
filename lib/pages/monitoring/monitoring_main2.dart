@@ -138,159 +138,47 @@ class _MonitoringMain2State extends BaseState<MonitoringMain2> {
             monitoringData!.work_out == "") {
       //새로 추가
       monitoringData = MonitoringDayDto();
-
-      monitoringData!.sleep_at_night = "";
-      monitoringData!.sleep_at_lunch = "";
-      monitoringData!.language = "";
-      monitoringData!.sociability = "";
-      monitoringData!.work_out = "";
-
-      if (monitoringData!.symptom_list == null) {
-        monitoringData!.symptom_list = [];
-      } else {
-        monitoringData!.symptom_list!.clear();
-      }
-
-      for (int i = 0; i < gSymptomList!.length; i++) {
-        initCategoryList.add(gSymptomList!.elementAt(i).category!);
-      }
-      initCategoryList.add("직접입력");
-      directInputController.add(TextEditingController(text: ""));
-      if (initCategoryList.isNotEmpty) {
-        //category = categoryList[0];
-        initCategory = initCategoryList[0];
-        //getSymtomList();
-        symptomList.clear();
-        for (int i = 0; i < gSymptomList!.length; i++) {
-          if (initCategory == gSymptomList![i].category) {
-            initSymptomList = gSymptomList![i].list!;
-          }
-        }
-        if (initSymptomList.isNotEmpty) {
-          //symptom = symptomList[0];
-          initSymptom = initSymptomList[0];
-        }
-        setState(() {});
-      }
-      monitoringData!.foodAddList1!.clear();
-      monitoringData!.foodAddList2!.clear();
-      monitoringData!.foodAddList3!.clear();
-      monitoringData!.foodAddList4!.clear();
-      addSymptom();
-    } else {
-      int sleep_at_lunch = int.parse(monitoringData!.sleep_at_lunch! == ""
-          ? "0"
-          : monitoringData!.sleep_at_lunch!);
-      int sleep_at_night = int.parse(monitoringData!.sleep_at_night! == ""
-          ? "0"
-          : monitoringData!.sleep_at_night!);
-
-      if (sleep_at_night >= (60 * 13)) {
-        sleep_night_hour = (sleep_at_night ~/ 60).toString() + "시간 이상";
-      } else {
-        sleep_night_hour = (sleep_at_night ~/ 60).toString() + "시간";
-      }
-
-      if (sleep_at_lunch >= (60 * 7)) {
-        sleep_launch_hour = (sleep_at_lunch ~/ 60).toString() + "시간 이상";
-      } else {
-        sleep_launch_hour = (sleep_at_lunch ~/ 60).toString() + "시간";
-      }
-
-      // sleep_night_hour = (sleep_at_night ~/ 60).toString() + "시간";
-      sleep_night_min = (sleep_at_night % 60).toString() + "분";
-      // sleep_launch_hour = (sleep_at_lunch ~/ 60).toString() + "시간";
-      sleep_launch_min = (sleep_at_lunch % 60).toString() + "분";
-
-      for (int i = 0; i < gSymptomList!.length; i++) {
-        initCategoryList.add(gSymptomList!.elementAt(i).category!);
-      }
-      initCategoryList.add("직접입력");
-      directInputController.add(TextEditingController(text: ""));
-      if (initCategoryList.isNotEmpty) {
-        //category = categoryList[0];
-        initCategory = initCategoryList[0];
-        //getSymtomList();
-        symptomList.clear();
-        for (int i = 0; i < gSymptomList!.length; i++) {
-          if (initCategory == gSymptomList![i].category) {
-            initSymptomList = gSymptomList![i].list!;
-          }
-        }
-        if (initSymptomList.isNotEmpty) {
-          //symptom = symptomList[0];
-          initSymptom = initSymptomList[0];
-        }
-        setState(() {});
-      }
-
-      if (monitoringData!.symptom_list!.isNotEmpty) {
-        // hasDisease = 1;
-        for (int i = 0; i < monitoringData!.symptom_list!.length; i++) {
-          MonitoringSymptomDto item =
-          monitoringData!.symptom_list!.elementAt(i);
-
-          MonitoringSymptomDto info = MonitoringSymptomDto();
-          info.category = item.category;
-          info.symptom = item.symptom;
-          info.record_time = item.record_time;
-          info.surgey_name = item.surgey_name;
-          info.surgey_time = item.surgey_time;
-          info.medication = item.medication;
-
-          recordTimeControllerList
-              .add(TextEditingController(text: info.record_time));
-          surgeryControllerList
-              .add(TextEditingController(text: info.surgey_name));
-          surgeryDateControllerList
-              .add(TextEditingController(text: info.surgey_time));
-          if (info.category == "직접입력") {
-            directInputController
-                .add(TextEditingController(text: info.symptom));
-          } else {
-            directInputController.add(TextEditingController());
-          }
-
-          if (info.medication!.contains("img_photo_default")) {
-            info.medication = "";
-          }
-          hasphotoList.add(info.medication!.isEmpty ? 2 : 1);
-          imageList.add(info.medication!);
-
-          if (item.surgey_name!.isEmpty) {
-            surgeryList.add(2);
-          } else {
-            surgeryList.add(1);
-          }
-
-          category.add(item.category!);
-          categoryList.add(initCategoryList);
-          for (int i = 0; i < gSymptomList!.length; i++) {
-            if (item.category == gSymptomList![i].category) {
-              symptomList.add(gSymptomList![i].list!);
-              //try
-              if (!gSymptomList![i].list!.contains(item.symptom)) {
-                symptom.add(gSymptomList![i].list![0]);
-              } else {
-                symptom.add(item.symptom!);
-              }
-            }
-          }
-        }
-        setState(() {});
-      } else {
-        hasDisease = 2;
-        addSymptom();
-      }
     }
+
+    if (monitoringData!.symptom_list == null) {
+      monitoringData!.symptom_list = [];
+    } else {
+      monitoringData!.symptom_list!.clear();
+    }
+
+    for (int i = 0; i < gSymptomList!.length; i++) {
+      initCategoryList.add(gSymptomList!.elementAt(i).category!);
+    }
+    initCategoryList.add("직접입력");
+    directInputController.add(TextEditingController(text: ""));
+    if (initCategoryList.isNotEmpty) {
+      //category = categoryList[0];
+      initCategory = initCategoryList[0];
+      //getSymtomList();
+      symptomList.clear();
+      for (int i = 0; i < gSymptomList!.length; i++) {
+        if (initCategory == gSymptomList![i].category) {
+          initSymptomList = gSymptomList![i].list!;
+        }
+      }
+      if (initSymptomList.isNotEmpty) {
+        //symptom = symptomList[0];
+        initSymptom = initSymptomList[0];
+      }
+      setState(() {});
+    }
+
+    hasDisease = 2;
+    addSymptom();
 
     checkValid();
   }
 
   @override
   void dispose() {
-    super.dispose();
+    symptomList.clear();
     imageList.clear();
+    super.dispose();
   }
 
   Future<bool> onBackPressed() async {
@@ -531,7 +419,6 @@ class _MonitoringMain2State extends BaseState<MonitoringMain2> {
         askImage = value.data!.fileUrl!;
         monitoringData!.symptom_list![cur_symptom].medication = askImage;
         imageList[cur_symptom] = askImage;
-        imageList.add(value.data!.fileUrl!);
         setState(() {});
         checkValid();
       } else {
@@ -1187,6 +1074,7 @@ class _MonitoringMain2State extends BaseState<MonitoringMain2> {
     );
   }
 
+  // 질병 아이템
   Widget _itemBuilder(BuildContext context, int index) {
     final node = FocusScope.of(context);
     var screenSize = MediaQuery.of(context).size;
@@ -1216,9 +1104,9 @@ class _MonitoringMain2State extends BaseState<MonitoringMain2> {
                       InkWell(
                         onTap: () {
                           // foodAddList.removeAt(index);
-                          // checkValid();
-                          // setState(() {});
                           delSymptom(index);
+                          checkValid();
+                          setState(() {});
                         },
                         child: Visibility(
                           visible: index > 0,
@@ -1542,7 +1430,7 @@ class _MonitoringMain2State extends BaseState<MonitoringMain2> {
                                     width: 15),
                                 const SizedBox(width: 10),
                                 H14(
-                                  text: LanguageService.trans("add_prescription_photo"),
+                                  text: "처방전 사진 추가하기",
                                   weight: FW.medium,
                                 )
                               ],
@@ -1555,33 +1443,24 @@ class _MonitoringMain2State extends BaseState<MonitoringMain2> {
                           child: Container(
                             width: double.infinity,
                             height: 150,
-                            child:
-                            ReorderableListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              shrinkWrap: true,
-                              itemBuilder: (BuildContext context, int index) {
-                                return Container(
-                                  key: ValueKey(imageList[index]),
-                                  margin: const EdgeInsets.only(right: 10),
-                                  height: 150,
-                                  width: 150,
-                                  child: Stack(
-                                    children: [
-                                      ClipPath(
-                                        clipper: ShapeBorderClipper(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))),
-                                        child: ExtendedImage(
-                                          image: NetworkImage(imageList[index]),
-                                          height: 150,
-                                          width: 150,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                    ],
+                            child: Container(
+                              key: ValueKey(imageList[index]),
+                              margin: const EdgeInsets.only(right: 10),
+                              height: 150,
+                              width: 150,
+                              child: Stack(
+                                children: [
+                                  ClipPath(
+                                    clipper: ShapeBorderClipper(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))),
+                                    child: ExtendedImage(
+                                      image: NetworkImage(imageList[index]),
+                                      height: 150,
+                                      width: 150,
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
-                                );
-                              },
-                              itemCount: imageList.length,
-                              onReorder: reorderPictures,
+                                ],
+                              ),
                             ),
                           ),
                         ),

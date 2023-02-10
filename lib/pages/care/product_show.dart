@@ -11,6 +11,8 @@ import 'package:ourdoctor/pages/care/item_product.dart';
 import 'package:ourdoctor/pages/care/product_list.dart';
 import 'package:ourdoctor/pages/components/h14.dart';
 import 'package:ourdoctor/pages/components/h18.dart';
+import 'package:ourdoctor/provider/convert_score_provider.dart';
+import 'package:provider/provider.dart';
 
 class ProductShow extends StatefulWidget {
   ProductShow({Key? key, this.category = 0, this.title = "items", required this.list}) : super(key: key);
@@ -53,6 +55,8 @@ class ProductShowState extends BaseState<ProductShow> {
 
   @override
   Widget build(BuildContext context) {
+    int cate = Provider.of<ConvertScoreProvider>(context, listen: false).careTab;
+
     var screenSize = MediaQuery.of(context).size;
     return Container(
         height: 380,
@@ -69,11 +73,11 @@ class ProductShowState extends BaseState<ProductShow> {
                         context,
                         SlideRightTransRoute(
                             builder: (context) => ProductList(
-                                  category: widget.category == 0 ? "GROWTH" : "DEVELOPMENT",
+                                  category: cate == 0 ? "GROWTH" : "DEVELOPMENT",
                                   order: widget.title == "인기 상품" ? "like" : "new",
                                 )));
                     if (recv == "200") {
-                      eventBus.fire(HomeCareTabEvent(type: widget.category));
+                      eventBus.fire(HomeCareTabEvent(type: cate));
                     }
                   },
                   child: Container(

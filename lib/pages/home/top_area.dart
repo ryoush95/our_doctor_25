@@ -429,7 +429,9 @@ class TopAreaState extends BaseState<TopArea> {
                                 child: H16(text: widget.name, color: AppColor_Primary,),
                               )
                             ),
-                            RichText(text: TextSpan(
+                            p.nextDate == "-1"?
+                                H16(text: "검사가 가능해요")
+                                : RichText(text: TextSpan(
                                 children: [
                                   TextSpan(
                                       text: "다음검사 ",

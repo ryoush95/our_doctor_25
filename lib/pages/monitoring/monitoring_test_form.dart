@@ -43,7 +43,6 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
   List<HealthTestDto> quizList = [];
   Map<String, String> answer = {};
   List<String> list4 = ["할 수 없다", "잘못한다", "할 수 있다", "잘한다"];
-  List<String> list4Img = [];
   List<String> cate = ["발달영역", "생활습관", "신체"];
   List<String> subCate1 = ["대근육", "소근육", "인지", "언어", "사회성", "자조"];
   List<String> subCate2 = ["개인위생", "구강교육", "감각", "안전사고", "영양", "전자미디어", "정서", "대소변", "수면교육"];

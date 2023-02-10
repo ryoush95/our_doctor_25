@@ -74,6 +74,7 @@ class FindInfoPageState extends BaseState<FindInfoPage> {
   void dispose() {
     super.dispose();
     timer.cancel();
+    FocusScope.of(context).requestFocus(FocusNode());
   }
 
   Future<bool> onBackPressed() async {
@@ -752,8 +753,7 @@ class FindInfoPageState extends BaseState<FindInfoPage> {
   @override
   Widget build(BuildContext context) {
     Size scsize = MediaQuery.of(context).size;
-    return Scaffold(
-      body: PageLayout(
+    return PageLayout(
           isLoading: isLoading,
           isAvoidResize: false,
           child: Stack(children: [
@@ -839,7 +839,7 @@ class FindInfoPageState extends BaseState<FindInfoPage> {
                 bottomButton(),
               ],
             )
-          ])),
+          ]),
     );
   }
 }

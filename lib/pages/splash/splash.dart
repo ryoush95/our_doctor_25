@@ -57,33 +57,32 @@ class SplashPageState extends BaseState<SplashPage> {
   void checkVersion() async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
 
-    String myVer = packageInfo.version;
+    int myVer = int.parse(packageInfo.buildNumber);
     String appName = packageInfo.appName;
     String packageName = packageInfo.packageName;
-    String updateVer = "";
+    int updateVer = 0;
 
     gAppVer = packageInfo.version;
 
     Future<String> data = httpService.getVersion();
-    data.then((value) async {
+    await data.then((value) async {
       Map<String, dynamic> map = jsonDecode(value);
       if(map['result'] == 0) {
-        updateVer = map['data']['version'];
-        print(updateVer);
+        updateVer = int.parse(map['data']['build_version']);
 
-        if (myVer != updateVer) {
+        if (myVer < updateVer) {
           showDialog(
             context: context,
             builder: (context) {
               return AlertDialog(
-                title: Text('필수 업데이트가 있습니다'),
-                content: Text('${updateVer} 버전으로 업데이트 하시겠습니까?'),
+                title: const Text('필수 업데이트가 있습니다'),
+                content: const Text('업데이트 하시겠습니까?'),
                 actions: [
                   TextButton(
                       onPressed: () {
                         Navigator.pop(context);
                       },
-                      child: Text('취소')),
+                      child: const Text('취소')),
                   TextButton(
                       onPressed: () {
                         if (Platform.isAndroid) {
@@ -93,7 +92,7 @@ class SplashPageState extends BaseState<SplashPage> {
                           launch("https://apps.apple.com/kr/app/$appName/id1626735427");
                         }
                       },
-                      child: Text('업데이트'))
+                      child: const Text('업데이트'))
                 ],
               );
             },

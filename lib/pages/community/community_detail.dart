@@ -437,22 +437,54 @@ class CommunityDetailPageState extends BaseState<CommunityDetailPage> {
                       //   align: TextAlign.left,
                       //   height: 1.3,
                       // ),
-                      Linkify(
-                        text: info.delYn == "y"
-                            ? LanguageService.trans("deleted_comment")
-                            : info.content!,
-                        maxLines: 150,
-                        style: TextStyle(
-                          fontSize: 14,
-                        ),
-                        textAlign: TextAlign.left,
-                        onOpen: (link) async {
-                          if (await canLaunch(link.url)) {
-                            await launch(link.url);
-                          } else {
-                            throw 'Could not launch $link';
-                          }
-                        },
+                      Stack(
+                        children: [
+                          Visibility(
+                            visible: info.secret == "n" || info.id == gUserInfo!.id || dicDetailInfo!.userUid == gUserInfo!.uid,
+                            child: Linkify(
+                              text: info.delYn == "y"
+                                  ? LanguageService.trans("deleted_comment")
+                                  : info.content!,
+                              maxLines: 150,
+                              style: TextStyle(
+                                fontSize: 14,
+                              ),
+                              textAlign: TextAlign.left,
+                              onOpen: (link) async {
+                                if (await canLaunch(link.url)) {
+                                  await launch(link.url);
+                                } else {
+                                  throw 'Could not launch $link';
+                                }
+                              },
+                            ),
+                          ),
+                          Visibility(
+                            visible: info.secret == "y" && info.id != gUserInfo!.id && dicDetailInfo!.userUid != gUserInfo!.id,
+                            child: Row(
+                              children: [
+                                Image.asset('assets/ic_lock.png', width: 14),
+                                Linkify(
+                                  text: info.delYn == "y"
+                                      ? LanguageService.trans("deleted_comment")
+                                      : "비밀글입니다.",
+                                  maxLines: 150,
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                  ),
+                                  textAlign: TextAlign.left,
+                                  onOpen: (link) async {
+                                    if (await canLaunch(link.url)) {
+                                      await launch(link.url);
+                                    } else {
+                                      throw 'Could not launch $link';
+                                    }
+                                  },
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
                       ),
                       const SizedBox(height: 10),
                       Row(
@@ -467,7 +499,9 @@ class CommunityDetailPageState extends BaseState<CommunityDetailPage> {
                               ],
                             ),
                           ),
-                          H12(
+                          info.userType != "normal" ?
+                              H12(text: "우아닥터")
+                              : H12(
                             //text: info.userType != "normal" ? info.name! : getMaskName(info.name!) + " : " + diffTime(info.regTime!),
                             text: info.nickname! +
                                 " ・ " +
@@ -574,13 +608,54 @@ class CommunityDetailPageState extends BaseState<CommunityDetailPage> {
                         align: TextAlign.left,
                       ),
                       const SizedBox(height: 4),
-                      H14(
-                        text: info.content!,
-                        weight: FW.regular,
-                        maxLine: 100,
-                        color: AppColor_BlackText,
-                        align: TextAlign.left,
-                        height: 1.3,
+                      Stack(
+                        children: [
+                          Visibility(
+                            visible: info.secret == "n" || info.id == gUserInfo!.id || dicDetailInfo!.userUid == gUserInfo!.uid,
+                            child: Linkify(
+                              text: info.delYn == "y"
+                                  ? LanguageService.trans("deleted_comment")
+                                  : info.content!,
+                              maxLines: 150,
+                              style: TextStyle(
+                                fontSize: 14,
+                              ),
+                              textAlign: TextAlign.left,
+                              onOpen: (link) async {
+                                if (await canLaunch(link.url)) {
+                                  await launch(link.url);
+                                } else {
+                                  throw 'Could not launch $link';
+                                }
+                              },
+                            ),
+                          ),
+                          Visibility(
+                            visible: info.secret == "y" && info.id != gUserInfo!.id && dicDetailInfo!.userUid != gUserInfo!.id,
+                            child: Row(
+                              children: [
+                                Image.asset('assets/ic_lock.png', width: 14),
+                                Linkify(
+                                  text: info.delYn == "y"
+                                      ? LanguageService.trans("deleted_comment")
+                                      : "비밀글입니다.",
+                                  maxLines: 150,
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                  ),
+                                  textAlign: TextAlign.left,
+                                  onOpen: (link) async {
+                                    if (await canLaunch(link.url)) {
+                                      await launch(link.url);
+                                    } else {
+                                      throw 'Could not launch $link';
+                                    }
+                                  },
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
                       ),
                       const SizedBox(height: 10),
                       Row(
@@ -595,7 +670,9 @@ class CommunityDetailPageState extends BaseState<CommunityDetailPage> {
                               ],
                             ),
                           ),
-                          H12(
+                          info.userType != "normal" ?
+                          H12(text: "우아닥터")
+                          : H12(
                             //text: info.userType != "normal" ? info.name! : getMaskName(info.name!) + " : " + diffTime(info.regTime!),
                             text: info.nickname! +
                                 " ・ " +
