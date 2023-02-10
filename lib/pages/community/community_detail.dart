@@ -437,53 +437,44 @@ class CommunityDetailPageState extends BaseState<CommunityDetailPage> {
                       //   align: TextAlign.left,
                       //   height: 1.3,
                       // ),
-                      Stack(
+                      info.secret == "n" || info.id == gUserInfo!.id || dicDetailInfo!.userUid == gUserInfo!.id
+                      ? Linkify(
+                        text: info.delYn == "y"
+                            ? LanguageService.trans("deleted_comment")
+                            : info.content!,
+                        maxLines: 150,
+                        style: TextStyle(
+                          fontSize: 14,
+                        ),
+                        textAlign: TextAlign.left,
+                        onOpen: (link) async {
+                          if (await canLaunch(link.url)) {
+                            await launch(link.url);
+                          } else {
+                            throw 'Could not launch $link';
+                          }
+                        },
+                      )
+                      : Row(
                         children: [
-                          Visibility(
-                            visible: info.secret == "n" || info.id == gUserInfo!.id || dicDetailInfo!.userUid == gUserInfo!.uid,
-                            child: Linkify(
-                              text: info.delYn == "y"
-                                  ? LanguageService.trans("deleted_comment")
-                                  : info.content!,
-                              maxLines: 150,
-                              style: TextStyle(
-                                fontSize: 14,
-                              ),
-                              textAlign: TextAlign.left,
-                              onOpen: (link) async {
-                                if (await canLaunch(link.url)) {
-                                  await launch(link.url);
-                                } else {
-                                  throw 'Could not launch $link';
-                                }
-                              },
+                          Image.asset('assets/ic_lock.png', width: 14),
+                          Linkify(
+                            text: info.delYn == "y"
+                                ? LanguageService.trans("deleted_comment")
+                                : "비밀글입니다.",
+                            maxLines: 150,
+                            style: const TextStyle(
+                              fontSize: 14,
                             ),
+                            textAlign: TextAlign.left,
+                            onOpen: (link) async {
+                              if (await canLaunch(link.url)) {
+                                await launch(link.url);
+                              } else {
+                                throw 'Could not launch $link';
+                              }
+                            },
                           ),
-                          Visibility(
-                            visible: info.secret == "y" && info.id != gUserInfo!.id && dicDetailInfo!.userUid != gUserInfo!.id,
-                            child: Row(
-                              children: [
-                                Image.asset('assets/ic_lock.png', width: 14),
-                                Linkify(
-                                  text: info.delYn == "y"
-                                      ? LanguageService.trans("deleted_comment")
-                                      : "비밀글입니다.",
-                                  maxLines: 150,
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                  ),
-                                  textAlign: TextAlign.left,
-                                  onOpen: (link) async {
-                                    if (await canLaunch(link.url)) {
-                                      await launch(link.url);
-                                    } else {
-                                      throw 'Could not launch $link';
-                                    }
-                                  },
-                                ),
-                              ],
-                            ),
-                          )
                         ],
                       ),
                       const SizedBox(height: 10),
@@ -601,60 +592,51 @@ class CommunityDetailPageState extends BaseState<CommunityDetailPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       H12(
-                        text: '@$_parentNickname ',
+                        text: info.userType != "normal" ? "@ 우아닥터" : '@ $_parentNickname ',
                         weight: FW.regular,
                         maxLine: 100,
                         color: AppColor_BlackText.withOpacity(.4),
                         align: TextAlign.left,
                       ),
                       const SizedBox(height: 4),
-                      Stack(
+                      info.secret == "n" || info.id == gUserInfo!.id || dicDetailInfo!.userUid == gUserInfo!.id
+                      ? Linkify (
+                        text: info.delYn == "y"
+                            ? LanguageService.trans("deleted_comment")
+                            : info.content!,
+                        maxLines: 150,
+                        style: TextStyle(
+                          fontSize: 14,
+                        ),
+                        textAlign: TextAlign.left,
+                        onOpen: (link) async {
+                          if (await canLaunch(link.url)) {
+                            await launch(link.url);
+                          } else {
+                            throw 'Could not launch $link';
+                          }
+                        },
+                      )
+                      : Row(
                         children: [
-                          Visibility(
-                            visible: info.secret == "n" || info.id == gUserInfo!.id || dicDetailInfo!.userUid == gUserInfo!.uid,
-                            child: Linkify(
-                              text: info.delYn == "y"
-                                  ? LanguageService.trans("deleted_comment")
-                                  : info.content!,
-                              maxLines: 150,
-                              style: TextStyle(
-                                fontSize: 14,
-                              ),
-                              textAlign: TextAlign.left,
-                              onOpen: (link) async {
-                                if (await canLaunch(link.url)) {
-                                  await launch(link.url);
-                                } else {
-                                  throw 'Could not launch $link';
-                                }
-                              },
+                          Image.asset('assets/ic_lock.png', width: 14),
+                          Linkify(
+                            text: info.delYn == "y"
+                                ? LanguageService.trans("deleted_comment")
+                                : "비밀글입니다.",
+                            maxLines: 150,
+                            style: const TextStyle(
+                              fontSize: 14,
                             ),
+                            textAlign: TextAlign.left,
+                            onOpen: (link) async {
+                              if (await canLaunch(link.url)) {
+                                await launch(link.url);
+                              } else {
+                                throw 'Could not launch $link';
+                              }
+                            },
                           ),
-                          Visibility(
-                            visible: info.secret == "y" && info.id != gUserInfo!.id && dicDetailInfo!.userUid != gUserInfo!.id,
-                            child: Row(
-                              children: [
-                                Image.asset('assets/ic_lock.png', width: 14),
-                                Linkify(
-                                  text: info.delYn == "y"
-                                      ? LanguageService.trans("deleted_comment")
-                                      : "비밀글입니다.",
-                                  maxLines: 150,
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                  ),
-                                  textAlign: TextAlign.left,
-                                  onOpen: (link) async {
-                                    if (await canLaunch(link.url)) {
-                                      await launch(link.url);
-                                    } else {
-                                      throw 'Could not launch $link';
-                                    }
-                                  },
-                                ),
-                              ],
-                            ),
-                          )
                         ],
                       ),
                       const SizedBox(height: 10),

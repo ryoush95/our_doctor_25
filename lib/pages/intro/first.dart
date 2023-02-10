@@ -335,28 +335,8 @@ class FirstPageState extends BaseState<FirstPage> {
                             width: MediaQuery.of(context).size.width,
                             height: 58,
                             margin: const EdgeInsets.only(left: 16.0, right: 16.0),
-                            decoration: const BoxDecoration(
-                                color: AppColor_BlackText,
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(16),
-                                )),
-                            child: Stack(
-                              children: [
-                                Center(
-                                  child: H18(
-                                    text: LanguageService.trans("apple_login"),
-                                    weight: FW.medium,
-                                    height: 1.5,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                Positioned(
-                                  child: Image.asset('assets/ic_apple.png', width: 24, height: 29),
-                                  left: 24,
-                                  top: 17,
-                                )
-                              ],
-                            )),
+                            // decoration: const BoxDecoration(color: Color(0xFF5ECB6A), borderRadius: BorderRadius.all(Radius.circular(16))),
+                            child: Image.asset("assets/login_apple.png")),
                       ],
                     ),
                   ),

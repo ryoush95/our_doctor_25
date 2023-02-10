@@ -193,7 +193,7 @@ class InspectionTest2AnswerPageState extends BaseState<InspectionTest2AnswerPage
                           style: TextStyle(
                               fontSize: 18,
                               fontFamily: 'Recipekorea',
-                              color: Colors.red),
+                              color: AppColor_Red),
                         ),
                       ),
                     ),

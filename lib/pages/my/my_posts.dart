@@ -116,7 +116,7 @@ class _MyPostsPageState extends State<MyPostsPage> {
   }
 
   header() => SimpleHeader(
-    title: LanguageService.trans("view_my_posts"),
+    title: widget.like == 1 ? "좋아요 게시물" : LanguageService.trans("view_my_posts"),
     onBackPressed: () => Navigator.pop(context),
   );
 

@@ -540,7 +540,7 @@ class InfoAreaState extends BaseState<InfoArea> {
                                 ? " 질병 없음"
                                 : " $firstSym",
                             weight: FW.regular,
-                            color: Colors.red,
+                            color: AppColor_Red,
                           ),
                           type == 1 && dicDiseaseInfo!.symptomList!.length > 1
                               ? Row(
@@ -552,7 +552,7 @@ class InfoAreaState extends BaseState<InfoArea> {
                                   H16(
                                     text: " ${dicDiseaseInfo!.symptomList!.length -1}",
                                     weight: FW.regular,
-                                    color: Colors.red,
+                                    color: AppColor_Red,
                                   )
                                 ],
                               ):const SizedBox(),

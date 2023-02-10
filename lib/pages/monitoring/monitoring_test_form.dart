@@ -684,7 +684,7 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
                             if (double.parse(tall) < 0 ||
                                 double.parse(tall) > 200) {
                               isValid = false;
-                              tallColor = Colors.red;
+                              tallColor = AppColor_Red;
                             } else {
                               isValid = true;
                               tallColor = AppColor_Selector_Border;
@@ -724,7 +724,7 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
                             if (double.parse(weight) < 0 ||
                                 double.parse(weight) > 200) {
                               isValid = false;
-                              weightColor = Colors.red;
+                              weightColor = AppColor_Red;
                             } else {
                               isValid = true;
                               weightColor = AppColor_Selector_Border;
