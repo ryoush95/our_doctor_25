@@ -700,7 +700,7 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
                   child: Padding(
                     padding: const EdgeInsets.all(5),
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Container(
                           height: 150,

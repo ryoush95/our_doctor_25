@@ -30,6 +30,7 @@ import 'package:ourdoctor/pages/home/talk_area.dart';
 import 'package:ourdoctor/pages/home/top_area.dart';
 import 'package:ourdoctor/pages/home/weather_area.dart';
 import 'package:ourdoctor/pages/intro/first.dart';
+import 'package:ourdoctor/provider/convert_score_provider.dart';
 import 'package:ourdoctor/provider/monitoring_note_profile_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:show_more_text_popup/show_more_text_popup.dart';
@@ -179,6 +180,8 @@ class HomeFragmentState extends BaseState<HomeFragment> {
 
   @override
   Widget build(BuildContext context) {
+    final p = Provider.of<ConvertScoreProvider>(context, listen: false);
+    p.changeCareTab(1);
     return PageLayout(
         isLoading: isLoading,
         child: Stack(

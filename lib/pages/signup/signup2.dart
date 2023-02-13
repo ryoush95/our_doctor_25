@@ -250,6 +250,7 @@ class SignupFamilyPageState extends BaseState<SignupFamilyPage> {
   void dispose() {
     // Clean up the focus node when the Form is disposed.
     // detailAddrFocusNode!.dispose();
+    FocusScope.of(context).unfocus();
     _listController.dispose();
     _listController1.dispose();
     _listController2.dispose();
@@ -753,7 +754,7 @@ class SignupFamilyPageState extends BaseState<SignupFamilyPage> {
 
   @override
   Widget build(BuildContext context) {
-    final node = FocusScope.of(context);
+    // final node = FocusScope.of(context);
     var screenSize = MediaQuery.of(context).size;
     return PageLayout(
         isLoading: isLoading,
@@ -1236,6 +1237,7 @@ class SignupFamilyPageState extends BaseState<SignupFamilyPage> {
                                 decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColor_Light_Gray),
                                 child: InkWell(
                                     onTap: () {
+                                      FocusScope.of(context).unfocus();
                                       onAddDisease();
                                     },
                                     child: Center(
@@ -1317,7 +1319,6 @@ class SignupFamilyPageState extends BaseState<SignupFamilyPage> {
   }
 
   Widget _itemBuilder(BuildContext context, int index) {
-    final node = FocusScope.of(context);
     var screenSize = MediaQuery.of(context).size;
     return Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
@@ -1478,7 +1479,6 @@ class SignupFamilyPageState extends BaseState<SignupFamilyPage> {
                                   signed: true,
                                 ),
                                 textInputAction: TextInputAction.next,
-                                onEditingComplete: () => node.nextFocus(),
                                 placeholder: "",
                                 onChanged: (text) => {child_height[index] = text, checkValid()},
                               ),
@@ -1512,7 +1512,6 @@ class SignupFamilyPageState extends BaseState<SignupFamilyPage> {
                                   signed: true,
                                 ),
                                 textInputAction: TextInputAction.next,
-                                onEditingComplete: () => node.nextFocus(),
                                 placeholder: "",
                                 onChanged: (text) => {child_weight[index] = text, checkValid()},
                               ),
@@ -1538,7 +1537,6 @@ class SignupFamilyPageState extends BaseState<SignupFamilyPage> {
                 child: TextField(
                   style: AppTextStyle.PD(AppColor_BlackText, 16, weight: FW.medium),
                   controller: birthInputController1[index],
-                  onEditingComplete: () => node.nextFocus(),
                   maxLines: 1,
                   maxLength: -1,
                   keyboardType: TextInputType.text,
@@ -1580,7 +1578,6 @@ class SignupFamilyPageState extends BaseState<SignupFamilyPage> {
                                     controller: address1InputController[index],
                                     keyboardType: TextInputType.text,
                                     textInputAction: TextInputAction.done,
-                                    onEditingComplete: () => node.nextFocus(),
                                     placeholder: LanguageService.trans("zip_code"),
                                     onChanged: (text) => {address1[index] = text, checkValid()},
                                   ),
@@ -1598,7 +1595,6 @@ class SignupFamilyPageState extends BaseState<SignupFamilyPage> {
                             disableBackground: AppColor_BlackText,
                             onPressed: () async {
                               Map received = await Navigator.push(context, SlideRightTransRoute(builder: (context) => AddressSearchPage()));
-                              node.requestFocus();
                               address1[index] = received["postcode"];
                               address2[index] = received["addr"];
                               checkValid();
@@ -1617,7 +1613,6 @@ class SignupFamilyPageState extends BaseState<SignupFamilyPage> {
                       controller: address2InputController[index],
                       keyboardType: TextInputType.text,
                       textInputAction: TextInputAction.done,
-                      onEditingComplete: () => node.nextFocus(),
                       placeholder: LanguageService.trans("address1"),
                       onChanged: (text) => {address2[index] = text, checkValid()},
                     ),
@@ -1629,7 +1624,6 @@ class SignupFamilyPageState extends BaseState<SignupFamilyPage> {
                             style: AppTextStyle.PD(AppColor_BlackText, 16, weight: FW.medium),
                             maxLength: -1,
                             controller: address3InputController[index],
-                            onEditingComplete: () => node.nextFocus(),
                             keyboardType: TextInputType.text,
                             obscureText: false,
                             textAlignVertical: TextAlignVertical.center,
@@ -1678,7 +1672,6 @@ class SignupFamilyPageState extends BaseState<SignupFamilyPage> {
                 controller: childSymptomInputController[index],
                 keyboardType: TextInputType.text,
                 textInputAction: TextInputAction.next,
-                onEditingComplete: () => node.nextFocus(),
                 placeholder: "예시) 복숭아 알러지",
                 onChanged: (text) => {childSymptomDirect[index] = text, checkValid()},
               ),
@@ -1711,18 +1704,31 @@ class SignupFamilyPageState extends BaseState<SignupFamilyPage> {
         Row(
           children: [
             Expanded(
-              child: OutlineInput(
-                controller: directInputController[index],
-                keyboardType: TextInputType.text,
-                textInputAction: TextInputAction.next,
-                //onEditingComplete: () => node.nextFocus(),
-                placeholder: "가족력 질병 직접입력",
-                onChanged: (text) => {
-                  sDirect[index] = text,
-                  allDiseaseContent[index] = text,
-                  checkValid(),
-                },
-              ),
+              child:
+                TextField(
+                  controller: directInputController[index],
+                  keyboardType: TextInputType.text,
+                  textInputAction: TextInputAction.done,
+                  decoration: InputDecoration(
+                    counterText: "",
+                    enabledBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(color: AppColor_Selector_Border),
+                        borderRadius: BorderRadius.all(Radius.circular(15.0))
+                    ),
+                    focusedBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(color: AppColor_BlackText),
+                        borderRadius: BorderRadius.all(Radius.circular(15.0))
+                    ),
+                    hintText: "가족력 질병 직접입력",
+                    hintStyle: AppTextStyle.PD(AppColor_Hint, 16, weight: FW.medium),
+                    border: InputBorder.none,
+                  ),
+                  onChanged: (text) => {
+                    sDirect[index] = text,
+                    allDiseaseContent[index] = text,
+                    checkValid(),
+                  },
+                ),
             ),
             const SizedBox(
               width: 8,

@@ -193,7 +193,7 @@ class HomeCareListPageState extends BaseState<HomeCareListPage> {
       });
       if (value.result == 0) {
         arrPdtList1 = value.data!.list1;
-        arrPdtList2 = value.data!.list2;
+        // arrPdtList1!.addAll(value.data!.list2!);
         setState(() {});
       } else {
         showToast(value.msg ?? "");
@@ -295,76 +295,25 @@ class HomeCareListPageState extends BaseState<HomeCareListPage> {
                             ),
                             const SizedBox(height: 42),
                             Container(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Container(
-                                    width: screenSize.width - 200,
-                                    child: H20(text: getList1Name(), weight: FW.bold, maxLine: 2, align: TextAlign.start),
-                                  ),
-                                  InkWell(
-                                    onTap: () async {
-                                      String recv = await Navigator.push(context, SlideRightTransRoute(builder: (context) => ProductList(category: widget.category_1!)));
-                                      if (recv == "200") {
-                                        getStoreList();
-                                      }
-                                    },
-                                    child: H14(text: LanguageService.trans("view_more"), weight: FW.medium),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Container(
-                              height: getList1height(),
-                              child: GridView.builder(
-                                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2,
-                                  childAspectRatio: ((MediaQuery.of(context).size.width - 64 - 10) / 2) / ((MediaQuery.of(context).size.width - 64 - 10) / 2 + 120),
-                                  crossAxisSpacing: 10,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.white,
                                 ),
-                                // primary: false,
-                                physics: const NeverScrollableScrollPhysics(),
-                                padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
-                                itemCount: arrPdtList1!.length,
-                                itemBuilder: Itembuild1,
-                              ),
-                            ),
-                            const SizedBox(height: 40),
-                            Container(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Container(
-                                    width: screenSize.width - 200,
-                                    child: H20(text: getList2Name(), weight: FW.bold, maxLine: 2, align: TextAlign.start),
-                                  ),
-                                  InkWell(
-                                    onTap: () async {
-                                      String recv = await Navigator.push(context, SlideRightTransRoute(builder: (context) => ProductList(category: widget.category_1!)));
-                                      if (recv == "200") {
-                                        getStoreList();
-                                      }
-                                    },
-                                    child: widget.category_2 == "RECOMMEND" ? Text("") :H14(text: LanguageService.trans("view_more"), weight: FW.medium),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Container(
-                              height: getList2height(),
-                              child: GridView.builder(
-                                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2,
-                                  childAspectRatio: 0.65,
-                                  crossAxisSpacing: 10,
-                                ),
-                                // primary: false,
-                                physics: const NeverScrollableScrollPhysics(),
-                                padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
-                                itemCount: arrPdtList2!.length,
-                                itemBuilder: Itembuild2,
-                              ),
-                            )
+                                height: screenSize.height - 220,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Expanded(
+                                        child: GridView.builder(
+                                          // controller: scrollController,
+                                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, childAspectRatio: 0.65, crossAxisSpacing: 10),
+                                          padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
+                                          itemCount: arrPdtList1!.length,
+                                          itemBuilder: Itembuild1,
+                                        ))
+                                  ],
+                                ))
                           ],
                         ),
                       ),

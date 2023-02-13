@@ -174,6 +174,7 @@ class BMIBarState extends BaseState<BMIBar> {
         Stack(
           children: [
             widget.type == 1 ? Center(child: Image.asset('assets/weight_bar_' + widget.res.toString() + '.png', width: screenSize.width - 120)) : const SizedBox(),
+            // widget.type == 1 ? Center(child: Image.asset('assets/weight_infograph' + widget.res.toString() + '.png', width: screenSize.width - 120)) : const SizedBox(),
             widget.type == 2 ? Center(child: Image.asset('assets/img_sleep' + widget.res.toString() + '.png', width: screenSize.width - 120)) : const SizedBox(),
             Container(
                 width: double.infinity,

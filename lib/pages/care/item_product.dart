@@ -132,11 +132,11 @@ class ItemProductState extends BaseState<ItemProduct> {
                           //     'assets/ic_heart_off.png',
                           //     width: 40,
                           //   ),
-                          ? Icon(
+                          ? const Icon(
                               Icons.favorite,
                               color: Colors.pinkAccent,
                             )
-                          : Icon(Icons.favorite_border, color: Colors.black26),
+                          : const Icon(Icons.favorite_border, color: Colors.black26),
                     ),
                     right: 5,
                     top: 5),
