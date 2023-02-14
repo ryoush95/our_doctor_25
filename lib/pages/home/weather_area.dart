@@ -106,6 +106,8 @@ class WeatherAreaState extends BaseState<WeatherArea> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           H18(text: '오늘의 건강 정보'),
+          const SizedBox(height: 10),
+          H16(text: '집주소를 기반으로 날씨를 알려드려요.',weight: FW.medium, color: AppColor_GrayText,),
           const SizedBox(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,

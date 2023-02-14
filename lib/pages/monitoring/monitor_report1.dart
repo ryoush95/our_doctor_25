@@ -67,6 +67,8 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
     "monitor_icon6.png",
   ];
 
+  ScrollController sc = ScrollController();
+
   @override
   void initState() {
     super.initState();
@@ -194,6 +196,7 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: () {
+        sc.jumpTo(0.0);
         setState(() {
           tabIndex = index;
         });
@@ -494,6 +497,7 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
   Widget healthTile(int index) {
     return InkWell(
       onTap: () {
+        sc.jumpTo(0.0);
         setState(() {
           comment1 = healthList[index].feedbackTitle!;
           comment2 = healthList[index].feedbackDescription!;
@@ -602,14 +606,12 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
                       const SizedBox(
                         height: 10,
                       ),
-                      Text(
-                        comment2,
-                        style: const TextStyle(
-                            color: Color(0xFF111112),
-                            fontWeight: FontWeight.normal,
-                            fontSize: 16,
-                            height: 1.5),
-                      )
+                      H14(
+                        text: comment2,
+                        maxLine: 10,
+                        height: 1.5,
+                        align: TextAlign.start,
+                      ),
                     ],
                   ),
                 ),
@@ -635,7 +637,7 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
             )
           : const SizedBox();
     } else if (tabIndex == 1) {
-      return MonitoringLifeResult();
+      return MonitoringLifeResult(controller: sc);
     } else if (tabIndex == 2) {
       solList = subTabIndex2 == 0 ? dicHomeGraphTallInfo!.solutionList!.values.toList() : dicHomeGraphWeightInfo!.solutionList!.values.toList();
       setState(() {});
@@ -712,6 +714,8 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
                             width: 84,
                             height: 84,
                             fit: BoxFit.fill,
+                            progressIndicatorBuilder: (context, url, downloadProgress) =>
+                                CircularProgressIndicator(value: downloadProgress.progress),
                           ),
                         ),
                         const SizedBox(height: 16),
@@ -774,6 +778,7 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
                 child: Container(
                   margin: const EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 0),
                   child: SingleChildScrollView(
+                      controller: sc,
                       physics: const BouncingScrollPhysics(), child: Column(
                         children: [
                           _body(),

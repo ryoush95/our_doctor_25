@@ -200,7 +200,7 @@ class Login1PageState extends BaseState<Login1Page> {
                     children: [
                       InkWell(
                         onTap: () {
-                          node.nextFocus();
+                          // node.nextFocus();
                           Navigator.push(context, SlideRightTransRoute(builder: (context) => FindInfoPage(type: 1)));
                         },
                         child: H14(
@@ -218,7 +218,7 @@ class Login1PageState extends BaseState<Login1Page> {
                       const SizedBox(width: 10),
                       InkWell(
                         onTap: () {
-                          node.nextFocus();
+                          // node.nextFocus();
                           Navigator.push(context, SlideRightTransRoute(builder: (context) => FindInfoPage(type: 2)));
                         },
                         child: H14(

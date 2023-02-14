@@ -203,13 +203,18 @@ class InspectionTest2AnswerPageState extends BaseState<InspectionTest2AnswerPage
                           selectQuiz('1');
                         },
                         child:
-                        CachedNetworkImage(imageUrl: list[quizNum].quiz2Image!))
+                        CachedNetworkImage(
+                          imageUrl: list[quizNum].quiz2Image!,
+                          progressIndicatorBuilder: (context, url, downloadProgress) =>
+                              Center(child: CircularProgressIndicator(value: downloadProgress.progress)),))
                         // Image.network(list[quizNum].quiz2Image!))
                         : GestureDetector(
                         onTap: () {
                           selectQuiz('0');
                         },
-                        child: CachedNetworkImage(imageUrl: list[quizNum].quiz1Image!))
+                        child: CachedNetworkImage(imageUrl: list[quizNum].quiz1Image!
+                        ,progressIndicatorBuilder: (context, url, downloadProgress) =>
+                              Center(child: CircularProgressIndicator(value: downloadProgress.progress)),))
                         // Image.network(list[quizNum].quiz1Image!)),
                   ],
                 ),

@@ -1,5 +1,6 @@
 import 'dart:developer' as developer;
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
@@ -763,10 +764,11 @@ class CommunityDetailPageState extends BaseState<CommunityDetailPage> {
                         PhotoViewPage(imgs: arrImgList, type: 0)));
           }
         },
-        child: ExtendedImage.network(
-          img,
+        child: CachedNetworkImage(
+          imageUrl: img,
           fit: BoxFit.contain,
-          cache: true,
+          progressIndicatorBuilder: (context, url, downloadProgress) =>
+              Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
         ),
       ),
     );

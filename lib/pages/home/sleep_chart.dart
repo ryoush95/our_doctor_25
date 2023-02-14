@@ -47,7 +47,7 @@ class SleepChartState extends BaseState<SleepChart> {
                               textAlign: TextAlign.start,
                               text: TextSpan(children: [
                                 TextSpan(
-                                    text: LanguageService.trans('sleep_time'),
+                                    text: "밤잠 시간",
                                     style: AppTextStyle.PD(
                                       AppColor_BlackText,
                                       16,
@@ -72,7 +72,7 @@ class SleepChartState extends BaseState<SleepChart> {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         //H18(text: getHourFromMinutes(widget.data.monitoringFood!.data!.sleepAtNight!) + " " + LanguageService.trans('hour'), color: AppColor_BlackText, weight: FW.semi_bold),
-                        H18(text: getHourFromMinutes1(widget.data.avgSleepNight.toString()), color: AppColor_BlackText, weight: FW.semi_bold),
+                        H18(text: getHourFromMinutes1((widget.data.avgSleepLaunch! + widget.data.avgSleepNight!).toString()), color: AppColor_BlackText, weight: FW.semi_bold),
                         const SizedBox(height: 5),
                         // H14(text: "1", color: AppColor_GrayText, weight: FW.regular),
                       ],

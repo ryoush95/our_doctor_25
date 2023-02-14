@@ -45,6 +45,11 @@ class GlobalProvider extends ChangeNotifier {
     }
   }
 
+  void changeReTest(int i) {
+    profile!.monitoringProgress = i;
+    notifyListeners();
+  }
+
   Future<void> getNoteInfo(context) async {
     Future<NoteProfileModel> info = httpService.getMonitoringStatus();
     await info.then((NoteProfileModel value) async {

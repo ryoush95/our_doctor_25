@@ -165,7 +165,7 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
                         const SizedBox(height: 7),
                         H12(
                           text: p.monitoringProgress != 3 ? "결과가없어요" : life.lifeText,
-                          color: changeColor(p.lifestyle!.status!),
+                          color: p.monitoringProgress != 3 ? AppColor_Red : changeColor(p.lifestyle!.status!),
                           weight: FW.medium,
                         ),
                       ],

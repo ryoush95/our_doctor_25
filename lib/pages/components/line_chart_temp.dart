@@ -62,8 +62,7 @@ class _LineChartTempState extends State<LineChartTemp> {
         scrollDirection: Axis.horizontal,
         child: Container(
           height: 150,
-          width: 900,
-          margin: EdgeInsets.all(10),
+          margin: const EdgeInsets.all(10),
           child: Stack(
             children: [
               // defaultData(widget.points2),

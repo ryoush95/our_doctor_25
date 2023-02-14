@@ -544,12 +544,11 @@ class CommunityFragmenttState extends BaseState<CommunityFragment> {
     String sort = _selection == "좋아요순" ? "like" : "recent";
 
     Future<CommunityListResModel> info = httpService.communityList(keyword, nPage, topic, sort, age);
-    info.then((CommunityListResModel value) async {
+    await info.then((CommunityListResModel value) async {
       setState(() {
         isLoading = false;
       });
       if (value.result == 0) {
-        
         if (nPage == 0 && arrCommunityList.isNotEmpty) {
           arrCommunityList.clear();
         }

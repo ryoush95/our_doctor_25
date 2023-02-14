@@ -273,14 +273,15 @@ class PointBuyingDialogState extends State<PointBuyingDialog> {
                               onPressed: () {
                                 savePoint();
                                 Navigator.pop(context);
+                                Navigator.pop(context);
                                 Navigator.push(
                                   context,
                                   SlideRightTransRoute(
                                       builder: (context) {
-                                        if (widget.pid == '36') {
+                                        if (widget.pid == "36") {
                                           return CustomMbtiInspectionMainPage();
                                         }
-                                        if (mData.category2 == 'TEST2'){
+                                        if (mData.category2 == "TEST2"){
                                           return InspectionTest2FirstPage(data: mData,);
                                         }
                                         return InspectionFirstPage2(list: []);

@@ -93,7 +93,9 @@ class InspectionTest2FirstPageState
                 title: widget.data.name,
                 onBackPressed: onBackPressed,
               ),
-              CachedNetworkImage(imageUrl: widget.data.detailImage!),
+              CachedNetworkImage(imageUrl: widget.data.detailImage!,
+                progressIndicatorBuilder: (context, url, downloadProgress) =>
+                    Center(child: CircularProgressIndicator(value: downloadProgress.progress)),),
               // Image.network(widget.data.detailImage!),
               Container(
                 padding: EdgeInsets.all(30),

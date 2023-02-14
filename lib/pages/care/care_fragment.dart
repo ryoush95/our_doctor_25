@@ -17,6 +17,7 @@ import 'package:ourdoctor/pages/app_event.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
 import 'package:ourdoctor/pages/base/page_layout.dart';
 import 'package:ourdoctor/pages/care/homecare_list.dart';
+import 'package:ourdoctor/pages/care/item_product2.dart';
 import 'package:ourdoctor/pages/care/product_detail.dart';
 import 'package:ourdoctor/pages/care/product_list.dart';
 import 'package:ourdoctor/pages/care/product_show.dart';
@@ -31,6 +32,8 @@ import 'package:ourdoctor/pages/components/noline_input.dart';
 import 'package:ourdoctor/pages/intro/first.dart';
 import 'package:ourdoctor/provider/convert_score_provider.dart';
 import 'package:provider/provider.dart';
+
+import 'item_product1.dart';
 
 class CareFragment extends StatefulWidget {
   @override
@@ -216,8 +219,20 @@ class CareFragmentState extends BaseState<CareFragment>
         isLoading = false;
       });
       if (value.result == 0) {
-        arrLikeList = value.data!.pdtLikeList;
-        arrNewList = value.data!.pdtNewList;
+        if (tabIndex == 2){
+          arrLikeList!.clear();
+          arrNewList!.clear();
+          for (var i in value.data!.pdtLikeList!) {
+            if (i.category2 == "SOON") {
+              arrNewList!.add(i);
+            } else {
+              arrLikeList!.add(i);
+            }
+          }
+        } else {
+          arrLikeList = value.data!.pdtLikeList;
+          arrNewList = value.data!.pdtNewList;
+        }
         setState(() {});
       } else {
         showToast(value.msg ?? "");
@@ -310,6 +325,15 @@ class CareFragmentState extends BaseState<CareFragment>
                 title: "인기 검사",
                 list: arrLikeList,
               ) : const SizedBox(),
+              tabIndex == 2
+              ? Visibility(
+                visible: arrNewList!.isNotEmpty,
+                child: ProductShow1(
+                  category: category,
+                  title: "오픈 예정",
+                  list: arrNewList,
+                ),
+              ) : const SizedBox(),
             ],
           ),
       );
@@ -396,6 +420,8 @@ class CareFragmentState extends BaseState<CareFragment>
                     width: screen.width,
                     height: screen.width / 2,
                     fit: BoxFit.fill,
+                    progressIndicatorBuilder: (context, url, downloadProgress) =>
+                        Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
                   ),
                 );
               },

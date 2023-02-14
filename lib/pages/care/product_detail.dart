@@ -90,7 +90,7 @@ class ProductDetailtState extends BaseState<ProductDetail> {
       keepPage: false,
     );
 
-    _items = [mData.mainImage!, mData.mainImage!];
+    _items = [mData.mainImage!];
 
     eventBus.on<AddReviewEvent>().listen((event) {
       if (mounted) {
@@ -429,7 +429,7 @@ class ProductDetailtState extends BaseState<ProductDetail> {
             InkWell(
               onTap: () async {
                 // showReviewDialog();
-                await launch(_url + mData.id! + "?" + gUserInfo!.accessToken!);
+                await launch(_url + mData.id! + "?token=" + gUserInfo!.accessToken!);
               },
               child: Container(
                 height: 58,
@@ -881,7 +881,6 @@ class ProductDetailtState extends BaseState<ProductDetail> {
   int position = 0;
 
   _dotIndicator() {
-    List _items = [mData.mainImage!, mData.mainImage!];
     return Positioned(
       left: 0.0,
       right: 0.0,

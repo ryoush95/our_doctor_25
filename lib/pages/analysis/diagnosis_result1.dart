@@ -221,7 +221,7 @@ class DiagnosisResult1PageState extends BaseState<DiagnosisResult1Page> {
                         Container(
                             child: Center(
                               child: H18(
-                                text: "1분 간단 체크 결과",
+                                text: "1분 간편 체크 결과",
                                 weight: FW.medium,
                                 height: 1.2,
                                 color: AppColor_BlackText,
@@ -390,13 +390,13 @@ class DiagnosisResult1PageState extends BaseState<DiagnosisResult1Page> {
                             BMIBar(
                               type: 1,
                               weight: widget.data!.wEIGHT!.predict!,
-                              res: widget.data!.wEIGHT!.diagnose!.color! == "Y" ? 0 : (widget.data!.wEIGHT!.diagnose!.color! == "R" ? 2 : 1),
+                              res: int.parse(widget.data!.wEIGHT!.diagnose!.value!),
                               color: getStatusColor(widget.data!.wEIGHT!.diagnose!.color!),
                               text: getWeightContent(widget.data!.wEIGHT!.diagnose!.result!),
                               subtext: widget.data!.wEIGHT!.diagnose!.result!.contains("정상") ? "" : (widget.data!.wEIGHT!.diff! >= 0 ? "+" : "") + convertScore(widget.data!.wEIGHT!.diff!.toStringAsFixed(2)) + "kg",
                               tiptext: "BMI는 체질량 지수를의미합니다. (kg/m2)",
                             ),
-                            // weight_estimation == 1 ? BMIBar(type: 1, we  ight: widget.data!.child_weight!, res: 0, color: weight_color, text: LanguageService.trans("minute_weight_category" + weight_estimation.toString()), subtext: weight_hint) : const SizedBox(),
+                            // weight_estimation == 1 ? BMIBar(type: 1, weight: widget.data!.child_weight!, res: 0, color: weight_color, text: LanguageService.trans("minute_weight_category" + weight_estimation.toString()), subtext: weight_hint) : const SizedBox(),
                             // weight_estimation == 2 ? BMIBar(type: 1, weight: widget.data!.child_weight!, res: 1, color: weight_color, text: LanguageService.trans("minute_weight_category" + weight_estimation.toString())) : const SizedBox(),
                             // weight_estimation == 3 ? BMIBar(type: 1, weight: widget.data!.child_weight!, res: 2, color: weight_color, text: LanguageService.trans("minute_weight_category" + weight_estimation.toString())) : const SizedBox(),
                             // weight_estimation == 4 ? BMIBar(type: 1, weight: widget.data!.child_weight!, res: 3, color: weight_color, text: LanguageService.trans("minute_weight_category" + weight_estimation.toString())) : const SizedBox(),

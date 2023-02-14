@@ -167,22 +167,6 @@ class WeightReportState extends BaseState<WeightReport> {
     });
   }
 
-  int getWeightResFromString(String s) {
-    switch (s) {
-      case "저체중" :
-        return 0;
-      case "의학적 저체중" :
-        return 1;
-      case "정상" :
-        return 2;
-      case "과체중" :
-        return 3;
-      case "비만" :
-        return 4;
-    }
-    return 0;
-  }
-
   Color getWeightColorFromString(String status) {
     if (status == "의학적 저체중" || status == "과체중") {
       return const Color(0xFFFFCE20);
@@ -207,7 +191,7 @@ class WeightReportState extends BaseState<WeightReport> {
               subtext: widget.data.monitoring!.diagnose!.result!.contains("정상") ? "" : ((widget.data.monitoring!.diff! > 0 ? "+" : "") + convertScore(widget.data.monitoring!.diff!.toStringAsFixed(1)) + "kg"),
               weight: widget.data.monitoring!.value!,
               tiptext: "BMI는 체질량 지수를의미합니다. (kg/m2)",
-              res: getWeightResFromString(widget.data.monitoring!.diagnose!.result!),
+              res: int.parse(widget.data.monitoring!.diagnose!.value!) - 1,
               color: getWeightColorFromString(widget.data.monitoring!.diagnose!.result!),
             ),
             const SizedBox(height: 30),

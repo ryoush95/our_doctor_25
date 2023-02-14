@@ -813,7 +813,7 @@ class _MonitoringMain2State extends BaseState<MonitoringMain2> {
   Widget foodInfo2() {
     return Container(
         height: 320,
-        width: 400,
+        width: MediaQuery.of(context).size.width - 20,
         padding: const EdgeInsets.all(25),
         decoration: const BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(8)),
@@ -841,7 +841,7 @@ class _MonitoringMain2State extends BaseState<MonitoringMain2> {
                     ),
                     const SizedBox(width: 8),
                     Container(
-                      width: 250,
+                      width: MediaQuery.of(context).size.width - 140,
                       child: H16(
                         text: foodString[index],
                         weight: FW.regular,

@@ -78,6 +78,7 @@ class FindInfoPageState extends BaseState<FindInfoPage> {
   }
 
   Future<bool> onBackPressed() async {
+    FocusScope.of(context).requestFocus(FocusNode());
     Navigator.pop(context);
     return true;
   }

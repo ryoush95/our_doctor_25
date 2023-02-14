@@ -150,41 +150,41 @@ PODS:
     - Flutter
   - kakao_flutter_sdk_common (1.2.2):
     - Flutter
-  - KakaoSDK (2.13.1):
-    - KakaoSDKAuth (= 2.13.1)
-    - KakaoSDKCommon (= 2.13.1)
-    - KakaoSDKFriend (= 2.13.1)
-    - KakaoSDKNavi (= 2.13.1)
-    - KakaoSDKShare (= 2.13.1)
-    - KakaoSDKStory (= 2.13.1)
-    - KakaoSDKTalk (= 2.13.1)
-    - KakaoSDKTemplate (= 2.13.1)
-    - KakaoSDKUser (= 2.13.1)
-  - KakaoSDKAuth (2.13.1):
-    - KakaoSDKCommon (= 2.13.1)
-  - KakaoSDKCommon (2.13.1):
-    - KakaoSDKCommon/Common (= 2.13.1)
-    - KakaoSDKCommon/Network (= 2.13.1)
-  - KakaoSDKCommon/Common (2.13.1)
-  - KakaoSDKCommon/Network (2.13.1):
+  - KakaoSDK (2.14.0):
+    - KakaoSDKAuth (= 2.14.0)
+    - KakaoSDKCommon (= 2.14.0)
+    - KakaoSDKFriend (= 2.14.0)
+    - KakaoSDKNavi (= 2.14.0)
+    - KakaoSDKShare (= 2.14.0)
+    - KakaoSDKStory (= 2.14.0)
+    - KakaoSDKTalk (= 2.14.0)
+    - KakaoSDKTemplate (= 2.14.0)
+    - KakaoSDKUser (= 2.14.0)
+  - KakaoSDKAuth (2.14.0):
+    - KakaoSDKCommon (= 2.14.0)
+  - KakaoSDKCommon (2.14.0):
+    - KakaoSDKCommon/Common (= 2.14.0)
+    - KakaoSDKCommon/Network (= 2.14.0)
+  - KakaoSDKCommon/Common (2.14.0)
+  - KakaoSDKCommon/Network (2.14.0):
     - Alamofire (~> 5.1)
-    - KakaoSDKCommon/Common (= 2.13.1)
-  - KakaoSDKFriend (2.13.1):
-    - KakaoSDKUser (= 2.13.1)
-  - KakaoSDKNavi (2.13.1):
-    - KakaoSDKCommon/Common (= 2.13.1)
-  - KakaoSDKShare (2.13.1):
-    - KakaoSDKCommon (= 2.13.1)
-    - KakaoSDKTemplate (= 2.13.1)
-  - KakaoSDKStory (2.13.1):
-    - KakaoSDKUser (= 2.13.1)
-  - KakaoSDKTalk (2.13.1):
-    - KakaoSDKTemplate (= 2.13.1)
-    - KakaoSDKUser (= 2.13.1)
-  - KakaoSDKTemplate (2.13.1):
-    - KakaoSDKCommon/Common (= 2.13.1)
-  - KakaoSDKUser (2.13.1):
-    - KakaoSDKAuth (= 2.13.1)
+    - KakaoSDKCommon/Common (= 2.14.0)
+  - KakaoSDKFriend (2.14.0):
+    - KakaoSDKUser (= 2.14.0)
+  - KakaoSDKNavi (2.14.0):
+    - KakaoSDKCommon/Common (= 2.14.0)
+  - KakaoSDKShare (2.14.0):
+    - KakaoSDKCommon (= 2.14.0)
+    - KakaoSDKTemplate (= 2.14.0)
+  - KakaoSDKStory (2.14.0):
+    - KakaoSDKUser (= 2.14.0)
+  - KakaoSDKTalk (2.14.0):
+    - KakaoSDKTemplate (= 2.14.0)
+    - KakaoSDKUser (= 2.14.0)
+  - KakaoSDKTemplate (2.14.0):
+    - KakaoSDKCommon/Common (= 2.14.0)
+  - KakaoSDKUser (2.14.0):
+    - KakaoSDKAuth (= 2.14.0)
   - nanopb (2.30908.0):
     - nanopb/decode (= 2.30908.0)
     - nanopb/encode (= 2.30908.0)
@@ -379,16 +379,16 @@ SPEC CHECKSUMS:
   image_gallery_saver: 259eab68fb271cfd57d599904f7acdc7832e7ef2
   image_picker: 9aa50e1d8cdacdbed739e925b7eea16d014367e6
   kakao_flutter_sdk_common: 2fcd2c17ef69300497b9369f390766dd9af0514c
-  KakaoSDK: c898c01a07ea78081f618c676664ea15596ad573
-  KakaoSDKAuth: d9de0cb0c723441ced3616d481952bde34438dcb
-  KakaoSDKCommon: a16807e19984a0a208c3117c7ef117f101a9a128
-  KakaoSDKFriend: 3bfc8e3c620661365b237b1c839ae4873ec66116
-  KakaoSDKNavi: bc3c7b5fc8fe4a958fc0a392a5918b0a51bcc849
-  KakaoSDKShare: c5d7f1cf9dc38a0a084892f3cab3469c3a8a789d
-  KakaoSDKStory: f4f7e5159766ce1896e44b81f631a06450f4cff8
-  KakaoSDKTalk: 4e43ecb1484191783bf7439da536be8677a0619b
-  KakaoSDKTemplate: 9732b6123946efd1dbafacd0e807ac76c1b3d71c
-  KakaoSDKUser: 92d34cf6af7b123c22a7ee44424332123e356901
+  KakaoSDK: c294f30452701752c0b8a283e88ed97c36e80006
+  KakaoSDKAuth: 8fca87815de22062a23297983f327613b087b8bb
+  KakaoSDKCommon: 0ce638f7a2e49704943c0b74a087a9f8067bba1c
+  KakaoSDKFriend: 9b742a3a4d96ba9b8c20958476e3a871685fa607
+  KakaoSDKNavi: 5dbacc78b915ddb80359b3f041e7428a44e11a82
+  KakaoSDKShare: 342acc83d47a26c73855555ce070c6d55db37f83
+  KakaoSDKStory: 61472ba65d11945796635652a2e200487d279e91
+  KakaoSDKTalk: 6843127498cc01d4bda598e3da96e4c16070deb6
+  KakaoSDKTemplate: 37fe90573759d54843da54fa66b8e21023b41fea
+  KakaoSDKUser: 2ca18314ce72e6690f76cb1f6f9fbc771d31a803
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
   naveridlogin-sdk-ios: 4351fe7162cd6b8b6dbb37bd7cc205304fa1d889
   OrderedSet: aaeb196f7fef5a9edf55d89760da9176ad40b93c
@@ -411,4 +411,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 1a86548498d60763049774970dc7cb0a3eb1b668
 
-COCOAPODS: 1.11.3
+COCOAPODS: 1.11.2

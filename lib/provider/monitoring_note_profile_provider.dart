@@ -6,7 +6,6 @@ class MonitoringNoteProfileProvider extends ChangeNotifier{
   List<RecommendList> list = [];
 
   void changeSolution() {
-    print(list);
     list.clear();
     solMapList.forEach((key, value) {
       list.add(value);

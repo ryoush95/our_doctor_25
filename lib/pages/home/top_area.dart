@@ -87,7 +87,7 @@ class TopAreaState extends BaseState<TopArea> {
     super.initState();
     // titleMsg = sprintf(LanguageService.trans("childrens") + " \n" + LanguageService.trans("what_future_height"), [isMorning() ? LanguageService.trans("am") : LanguageService.trans("pm")]);
     // titleMsg1 = sprintf(LanguageService.trans("childrens_growing_rapidly"), [95]);
-    titleMsg = "어린이는 폭풍성장중 \n 종합 발달스코어 ";
+    titleMsg = "어린이는 쑥쑥 성장 중 \n 종합 발달스코어 ";
     titleMsg1 =
         sprintf(LanguageService.trans("childrens_growing_rapidly"), [95]);
     //getFinalResultInfo();
@@ -299,6 +299,8 @@ class TopAreaState extends BaseState<TopArea> {
                                       backgroundImage: image,
                                       radius: 64,
                                     ),
+                              progressIndicatorBuilder: (context, url, downloadProgress) =>
+                                  Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
                                   )
                                 : RoundContainer(
                                     width: 128,
@@ -334,7 +336,7 @@ class TopAreaState extends BaseState<TopArea> {
                                               weight: FW.regular,
                                             )),
                                         TextSpan(
-                                            text: " 폭풍성장중!!",
+                                            text: " 쑥쑥성장중!!",
                                             style: AppTextStyle.PD(
                                               AppColor_BlackText,
                                               16,

@@ -204,8 +204,9 @@ class TalkAreaState extends BaseState<TalkArea> {
                               ClipRRect(
                                   borderRadius: BorderRadius.circular(16),
                                   child: CachedNetworkImage(
-                                      imageUrl:
-                                          arrNewsList.elementAt(0).imgUrl!)),
+                                      imageUrl: arrNewsList.elementAt(0).imgUrl!,
+                                    progressIndicatorBuilder: (context, url, downloadProgress) =>
+                                        Center(child: CircularProgressIndicator(value: downloadProgress.progress)),)),
                             ],
                           ),
                         ),

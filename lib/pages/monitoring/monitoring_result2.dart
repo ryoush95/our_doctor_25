@@ -496,7 +496,9 @@ class _MonitoringResult2State extends BaseState<MonitoringResult2> {
               ])),
          ),
         const SizedBox(height: 20),
-        Visibility(
+        foodList.isEmpty
+            ? Image.asset("assets/food_next.png")
+            : Visibility(
           visible: foodList.isNotEmpty,
           child: SizedBox(
             height: 1300,

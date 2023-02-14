@@ -52,7 +52,12 @@ class TestStoreAreaState extends BaseState<TestStoreArea> {
         isLoading = false;
       });
       if (value.result == 0) {
-        arrTestList = value.data!.testList;
+        for (var i in value.data!.testList!) {
+         if(i.category2 != "SOON") {
+           arrTestList!.add(i);
+         }
+        }
+        // arrTestList = value.data!.testList;
         setState(() {});
       } else {
         showToast(value.msg ?? "");

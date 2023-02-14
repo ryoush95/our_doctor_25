@@ -92,6 +92,8 @@ class _SolutionAreaState extends State<SolutionArea> {
                             width: 84,
                             height: 84,
                             fit: BoxFit.fill,
+                            progressIndicatorBuilder: (context, url, downloadProgress) =>
+                                Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
                           ),
                         ),
                         const SizedBox(height: 16),

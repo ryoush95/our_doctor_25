@@ -20,8 +20,9 @@ import 'package:ourdoctor/pages/monitoring/solution_area.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
 class MonitoringLifeResult extends StatefulWidget {
-  const MonitoringLifeResult({Key? key}) : super(key: key);
+  MonitoringLifeResult({Key? key, required this.controller}) : super(key: key);
 
+  ScrollController controller;
   @override
   State<MonitoringLifeResult> createState() => _MonitoringLifeResultState();
 }
@@ -74,7 +75,7 @@ class _MonitoringLifeResultState extends BaseState<MonitoringLifeResult> {
   Widget categoryTile(int index) {
     return InkWell(
       onTap: () {
-        sc.jumpTo(0.0);
+        widget.controller.jumpTo(0.0);
         wrongList = cateScore[index].wrongAnswers.values.toList();
         solList = cateScore[index].solutionList.values.toList();
         setState(() {
@@ -111,7 +112,7 @@ class _MonitoringLifeResultState extends BaseState<MonitoringLifeResult> {
     double h = 25;
     double w = 80;
     return Container(
-      height: 430,
+      height: 470,
       padding: const EdgeInsets.all(10),
       child: Column(children: [
         SizedBox(
@@ -141,7 +142,8 @@ class _MonitoringLifeResultState extends BaseState<MonitoringLifeResult> {
             ? CachedNetworkImage(
                 imageUrl: wrongList[index].imageUrl!,
                 // height: 100,
-                errorWidget: (context, url, error) => const SizedBox(height: 35),
+          progressIndicatorBuilder: (context, url, downloadProgress) =>
+              Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
               )
             : const SizedBox(height: 35),
         Center(
@@ -153,7 +155,7 @@ class _MonitoringLifeResultState extends BaseState<MonitoringLifeResult> {
                   Column(
                     children: [
                       Opacity(
-                        opacity: option == "1" ? 0.5 : 1,
+                        opacity: wrongList[index].answer! == "0" ? 1 : 0.5,
                         child: Image.asset(
                           wrongList[index].answer! == "1"
                               ? "assets/choose_on.png"
@@ -272,7 +274,7 @@ class _MonitoringLifeResultState extends BaseState<MonitoringLifeResult> {
               SizedBox(
                 width: MediaQuery.of(context).size.width - 180,
                 child: H14(text: wrongList[index].description!,
-                  maxLine: 5,
+                  maxLine: 7,
                   height: 1.5,
                   align: TextAlign.start,
                   color: AppColor_BlackText,
@@ -349,7 +351,7 @@ class _MonitoringLifeResultState extends BaseState<MonitoringLifeResult> {
                   child: Padding(
                     padding: const EdgeInsets.all(5),
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Container(
                           height: 150,
@@ -361,6 +363,8 @@ class _MonitoringLifeResultState extends BaseState<MonitoringLifeResult> {
                             width: 84,
                             height: 84,
                             fit: BoxFit.fill,
+                            progressIndicatorBuilder: (context, url, downloadProgress) =>
+                                Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
                           ),
                         ),
                         const SizedBox(height: 16),
@@ -389,7 +393,7 @@ class _MonitoringLifeResultState extends BaseState<MonitoringLifeResult> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      controller: sc,
+      controller: widget.controller,
       child: Column(children: [
         Container(
           width: MediaQuery.of(context).size.width - 40,
@@ -494,7 +498,7 @@ class _MonitoringLifeResultState extends BaseState<MonitoringLifeResult> {
           ),
         ),
         Container(
-          height: wrongList.length * 430,
+          height: wrongList.length * 470,
           child: ListView.builder(
             physics: const NeverScrollableScrollPhysics(),
             itemCount: wrongList.length,

@@ -215,7 +215,11 @@ class ItemTestProductState extends BaseState<ItemTestProduct> {
             ],
           )),
       onTap: () async {
-        showReviewDialog();
+        if (widget.likeInfo!.category2 == "SOON"){
+          showToast("comming soon 우리 곧 만나요 ~");
+        } else {
+          showReviewDialog();
+        }
       },
     );
   }

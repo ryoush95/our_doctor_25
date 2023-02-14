@@ -331,6 +331,7 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
                             onPressed: () {
                               allList.addAll(selList);
                               goSave();
+                              p.changeReTest(cateNum +1);
                               showToast('저장되었습니다');
                               Navigator.pop(context);
                             },
