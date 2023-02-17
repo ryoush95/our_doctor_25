@@ -89,6 +89,7 @@ class AgreePageState extends BaseState<AgreePage> {
       strAgreeUrl = AD_URL;
     } else if(type == 5) {
       strAgreeTitle = "마케팅 수신 동의 처리방침";
+      strAgreeUrl = MAKETING_URL;
     }
 
     bDlgAgree = true;

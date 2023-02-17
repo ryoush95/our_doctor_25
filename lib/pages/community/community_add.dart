@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'dart:developer';
+import 'dart:typed_data';
 
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
@@ -148,21 +150,50 @@ class AddCommunityPageState extends BaseState<AddCommunityPage> {
 
   void getGalleryImageAndCrop() async {
     Navigator.pop(context);
-    final selectedImages = await imagePicker.pickMultiImage();
-    if(selectedImages != null && selectedImages != []) {
-      for(var i=0; i<selectedImages.length; i++) {
-        var _convertedFile = File(selectedImages[i].path);
-        uploadFile(_convertedFile);
+    final List<XFile>? selectedImages = await imagePicker.pickMultiImage();
+    if (selectedImages != null) {
+      List<File> compressedImages = [];
+      for (XFile image in selectedImages) {
+        Uint8List imageBytes = await image.readAsBytes();
+        int imageBytesLength = imageBytes.length;
+        // 용량이 1MB를 초과하면 압축
+        Uint8List compressedBytes = await FlutterImageCompress.compressWithList(
+          imageBytes,
+          quality: 50,
+          minHeight: 1024,
+          minWidth: 1024,
+        );
+        File compressedImage = File(image.path)
+          ..writeAsBytesSync(compressedBytes);
+        compressedImages.add(compressedImage);
+      }
+
+      if (compressedImages != []) {
+        for (var i = 0; i < compressedImages.length; i++) {
+          var _convertedFile = File(compressedImages[i].path);
+          uploadFile(_convertedFile);
+        }
       }
     }
   }
 
   void getCameraImageAndCrop() async {
     Navigator.pop(context);
-    final image = await imagePicker.getImage(source: ImageSource.camera);
+    final image = await imagePicker.pickImage(source: ImageSource.camera);
     if (image == null) return;
 
-    var croppedImage = await cropImage(image.path);
+    Uint8List imageBytes = await image.readAsBytes();
+    int imageBytesLength = imageBytes.length;
+    // 용량이 1MB를 초과하면 압축
+    Uint8List compressedBytes = await FlutterImageCompress.compressWithList(
+      imageBytes,
+      quality: 50,
+      minHeight: 1024,
+      minWidth: 1024,
+    );
+    File compressedImage = File(image.path)..writeAsBytesSync(compressedBytes);
+
+    var croppedImage = await cropImage(compressedImage.path);
     if (croppedImage != null) {
       uploadFile(croppedImage);
     }
@@ -314,7 +345,7 @@ class AddCommunityPageState extends BaseState<AddCommunityPage> {
       setState(() {
         isLoading = false;
       });
-      showToast(onError);
+      print(onError.toString());
     });
     }
   }
@@ -499,29 +530,32 @@ class AddCommunityPageState extends BaseState<AddCommunityPage> {
                             onChanged: (text) => {title = text},
                           ),
                           const SizedBox(height: 10),
-                          SizedBox(
-                              height: 200,
-                              child: KeyboardActions(
-                                config: _buildConfig(context),
-                                child: TextField(
-                                  focusNode: _nodeText,
-                                  controller: contentsController,
-                                  style: AppTextStyle.PD(AppColor_BlackText, 16, weight: FW.regular, height: 1.2),
-                                  keyboardType: TextInputType.multiline,
-                                  maxLines: 50,
-                                  onEditingComplete: () => node.unfocus(),
-                                  decoration: InputDecoration(
-                                    hintText: LanguageService.trans("input_content"),
-                                    counterText: "",
-                                    border: InputBorder.none,
-                                    hintStyle: AppTextStyle.PD(AppColor_Hint, 16, weight: FW.regular),
+                          Expanded(
+                            child: Container(
+                                width: MediaQuery.of(context).size.width - 20,
+                                // height: MediaQuery.of(context).size.height - 290,
+                                child: KeyboardActions(
+                                  config: _buildConfig(context),
+                                  child: TextFormField(
+                                    focusNode: _nodeText,
+                                    controller: contentsController,
+                                    style: AppTextStyle.PD(AppColor_BlackText, 16, weight: FW.regular, height: 1.2),
+                                    keyboardType: TextInputType.multiline,
+                                    maxLines: null,
+                                    onEditingComplete: () => node.unfocus(),
+                                    decoration: InputDecoration(
+                                      hintText: LanguageService.trans("input_content"),
+                                      counterText: "",
+                                      border: InputBorder.none,
+                                      hintStyle: AppTextStyle.PD(AppColor_Hint, 16, weight: FW.regular),
+                                    ),
+                                    onChanged: (text) {
+                                      content = text;
+                                    },
                                   ),
-                                  onChanged: (text) {
-                                    content = text;
-                                  },
                                 ),
                               ),
-                            ),
+                          ),
                           const SizedBox(height: 10),
                           // Visibility(
                           //   visible: topicImage != "",
@@ -537,7 +571,6 @@ class AddCommunityPageState extends BaseState<AddCommunityPage> {
                           //     ),
                           //   ),
                           // ),
-                          Expanded(child: Container()),
                           Visibility(
                             visible: imgList.isNotEmpty,
                             child: Container(

@@ -116,14 +116,21 @@ class CommunityFragmenttState extends BaseState<CommunityFragment> {
 
   //page 더보기
   void _scrollListener() {
-    if (!isLoading) {
-      if (controller.position.pixels == controller.position.maxScrollExtent) {
-        if (isLast) {
-          return;
-        }
-        nPage = nPage + 1;
-        getCommunityList();
+    if (controller.position.pixels == controller.position.maxScrollExtent) {
+      if (isLast) {
+        return;
       }
+
+      setState(() {
+        isLoading = true;
+      });
+      Future.delayed(
+          const Duration(milliseconds: 1500),
+          () {
+            nPage = nPage + 1;
+            getCommunityList();
+          },
+      );
     }
   }
 
@@ -230,7 +237,7 @@ class CommunityFragmenttState extends BaseState<CommunityFragment> {
                       ),
                       H16(
                         text: " " + info.commentCnt!,
-                        color: (info.fixed == "1") ? AppColor_White : Color(0xffA0A0A0),
+                        color: (info.fixed == "1") ? AppColor_White : const Color(0xffA0A0A0),
                         weight: FW.regular,
                       ),
                     ],
@@ -268,7 +275,6 @@ class CommunityFragmenttState extends BaseState<CommunityFragment> {
       } else {
         img = "";
       }
-      setState(() {});
 
       return  info.topic! == "notice" && nTabIndex != 0
       ? const SizedBox()
@@ -302,7 +308,7 @@ class CommunityFragmenttState extends BaseState<CommunityFragment> {
                       padding: const EdgeInsets.all(20.0),
                       decoration: BoxDecoration(
                           color: info.fixed == "1" ? AppColor_Primary : Colors.white,
-                          borderRadius: BorderRadius.all(Radius.circular(6)),
+                          borderRadius: const BorderRadius.all(Radius.circular(6)),
                           boxShadow: const [
                             BoxShadow(
                               color: AppColor_Light_Gray,
@@ -327,7 +333,7 @@ class CommunityFragmenttState extends BaseState<CommunityFragment> {
                                   ),
                                   H14(
                                     text: info.nickname!,
-                                    color: info.fixed == "1" ? Color(0xffB6D7FE) : Color(0xffA0A0A0),
+                                    color: info.fixed == "1" ? const Color(0xffB6D7FE) : const Color(0xffA0A0A0),
                                     weight: FW.regular,
                                   ),
                                   const SizedBox(
@@ -335,7 +341,7 @@ class CommunityFragmenttState extends BaseState<CommunityFragment> {
                                   ),
                                   H14(
                                     text: convertDate(info.regTime!).substring(5),
-                                    color: info.fixed == "1" ? Color(0xffB6D7FE) : Color(0xffA0A0A0),
+                                    color: info.fixed == "1" ? const Color(0xffB6D7FE) : const Color(0xffA0A0A0),
 
                                     weight: FW.regular,
                                   ),
@@ -382,14 +388,27 @@ class CommunityFragmenttState extends BaseState<CommunityFragment> {
                           // ? Image.network(img)
                               ? ClipRRect(
                             borderRadius: BorderRadius.circular(8.0),
-                            child: CachedNetworkImage(
-                              imageUrl: img,
-                              width: 85,
-                              height: 85,
-                              fit: BoxFit.fill,
-                              progressIndicatorBuilder: (context, url, downloadProgress) =>
-                                  CircularProgressIndicator(value: downloadProgress.progress),
-                            ),
+                            child: FutureBuilder(
+                                  future: precacheImage(CachedNetworkImageProvider(img), context),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState == ConnectionState.done) {
+                                      return CachedNetworkImage(
+                                      imageUrl: img,
+                                      width: 85,
+                                      height: 85,
+                                      fit: BoxFit.fill,
+                                      progressIndicatorBuilder: (context, url, downloadProgress) =>
+                                          Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
+                                    );
+                                    } else {
+                                      return const SizedBox(
+                                        height: 85,
+                                        child: Center(
+                                            child: CircularProgressIndicator()),
+                                      );
+                                    }
+                                  }
+                            )
                           )
                               : const SizedBox(width: 1),
                         ],
@@ -554,7 +573,9 @@ class CommunityFragmenttState extends BaseState<CommunityFragment> {
         }
         isLast = value.data!.isLast!;
         arrCommunityList.addAll(value.data!.contents!);
-        setState(() {});
+        setState(() {
+          isLoading = false;
+        });
         if (nPage == 0) {
           moveScroll();
         }
@@ -654,26 +675,21 @@ class CommunityFragmenttState extends BaseState<CommunityFragment> {
                       ],
                     ),
                   ),
+                  ageFilters(),
+                  searchBar(),
                   Expanded(
                     child: Container(
                       margin: const EdgeInsets.only(top: 16.0),
                       child: RefreshIndicator(
                         onRefresh: refresh,
-                        child: ListView(
+                        child: ListView.builder(
                           shrinkWrap: true,
                           controller: controller,
                           physics: const ClampingScrollPhysics(),
-                          children:[
-                            ageFilters(),
-                            searchBar(),
-                            Column(
-                              children: arrCommunityList
-                                .asMap()
-                                .map((idx, e) => MapEntry(idx, _getTiles(idx)))
-                                .values
-                                .toList(),
-                            ),
-                          ],
+                          itemCount: arrCommunityList.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return _getTiles(index);
+                          }
                         ),
                       ),
                     ),

@@ -138,7 +138,7 @@ class _CommunityItemState extends State<CommunityItem> {
                         height: 85,
                         fit: BoxFit.fill,
                         progressIndicatorBuilder: (context, url, downloadProgress) =>
-                            CircularProgressIndicator(value: downloadProgress.progress),
+                            Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
                       ),
                     )
                   : const SizedBox(width: 1),

@@ -121,9 +121,9 @@ class HomeCareListPageState extends BaseState<HomeCareListPage> {
   String getSubTitle() {
     String result = "";
     if (widget.category_2 == "BODY") {
-      result = "신체를 건강하게 만들어 줄 클래스를 추천드릴게요";
+      result = "신체 발달에 도움이 되는 상품을 추천 드릴게요";
     } else if (widget.category_2 == "BRAIN") {
-      result = "두뇌를 건강하게 만들어 줄 클래스를 추천드릴게요";
+      result = "두뇌 발달에 도움이 되는 상품을 추천 드릴게요";
     } else if (widget.category_2 == "RECOMMEND") {
       result = "우리 아이에게 딱 맞는 발달클래스";
     }

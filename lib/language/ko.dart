@@ -405,7 +405,7 @@ final Map<String, String> ko_lang = {
   "intro2_description1_2": "신장/체중/영양/수면/질병",
   "intro2_description1_3": "- 두뇌 4대 항목 케어",
   "intro2_description1_4": "언어/운동/사회성/맞춤검사",
-  "growth_and_development_home_care_mode": "의료진과 함께하는\n데일리 홈케어",
+  "growth_and_development_home_care_mode": "의료진과 함께하는\n홈케어",
   "intro3_title": "성장·발달 개인별 맞춤 솔루션을 집에서",
   "intro3_description": "발달, 생활습관, 신체\n모니터링을 통한\n우리 아이의 정확한 상태 파악\n소아청소년 전문 의료진의\n맞춤형 솔루션까지!",
   "analysis_beta": "1분만에 우리아이\n미래키/BMI/수면\n1분 체크하기",

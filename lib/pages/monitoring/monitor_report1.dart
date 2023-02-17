@@ -715,7 +715,7 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
                             height: 84,
                             fit: BoxFit.fill,
                             progressIndicatorBuilder: (context, url, downloadProgress) =>
-                                CircularProgressIndicator(value: downloadProgress.progress),
+                                Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
                           ),
                         ),
                         const SizedBox(height: 16),

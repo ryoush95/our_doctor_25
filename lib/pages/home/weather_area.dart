@@ -3,29 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:ourdoctor/global/app_colors.dart';
 import 'package:ourdoctor/global/app_get_it.dart';
 import 'package:ourdoctor/global/app_styles.dart';
-import 'package:ourdoctor/global/global.dart';
 import 'package:ourdoctor/global/http_service.dart';
 import 'package:ourdoctor/helpers/common_util.dart';
 import 'package:ourdoctor/helpers/transition.dart';
 import 'package:ourdoctor/models/home_weather_model.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
-import 'package:ourdoctor/pages/community/community_detail.dart';
-import 'package:ourdoctor/pages/components/h14.dart';
 import 'package:ourdoctor/pages/components/h16.dart';
 import 'package:ourdoctor/pages/components/h18.dart';
-import 'package:ourdoctor/pages/components/h20.dart';
-import 'package:ourdoctor/pages/components/h24_b.dart';
-import 'package:ourdoctor/pages/home/item_news.dart';
-import 'package:ourdoctor/pages/home/test_store_area.dart';
 import 'package:ourdoctor/pages/intro/first.dart';
-import 'package:ourdoctor/pages/app_event.dart';
-import 'package:ourdoctor/pages/base/base_state.dart';
 import 'package:ourdoctor/provider/global_provider.dart';
-import 'package:provider/provider.dart';
-
-import '../app_event.dart';
-import 'item_community.dart';
-import 'item_news.dart';
 
 class WeatherArea extends StatefulWidget {
   WeatherArea({Key? key, this.curCategory = 0}) : super(key: key);

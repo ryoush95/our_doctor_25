@@ -444,7 +444,7 @@ class CommunityDetailPageState extends BaseState<CommunityDetailPage> {
                             ? LanguageService.trans("deleted_comment")
                             : info.content!,
                         maxLines: 150,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 14,
                         ),
                         textAlign: TextAlign.left,

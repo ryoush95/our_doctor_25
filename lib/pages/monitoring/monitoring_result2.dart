@@ -123,7 +123,6 @@ class _MonitoringResult2State extends BaseState<MonitoringResult2> {
       if (value.result == 0) {
         tempGraphList = value.data!;
         // tempGraphList == null || tempGraphList!.graphTemperature!.isEmpty
-        print(tempGraphList!.graphTemperature!.length);
         setState(() {});
       } else {
         showToast(value.msg ?? "");

@@ -164,7 +164,7 @@ class SignUpParentPageState extends BaseState<SignUpParentPage> {
         pwd != pwd1 ||
         name.isEmpty ||
         nickname.isEmpty ||
-        birth.isEmpty ||
+        // birth.isEmpty ||
         phone.isEmpty ||
         dad_height.isEmpty ||
         // dad_weight.isEmpty ||
@@ -193,7 +193,7 @@ class SignUpParentPageState extends BaseState<SignUpParentPage> {
         pwd != pwd1 ||
         name.isEmpty ||
         nickname.isEmpty ||
-        birth.isEmpty ||
+        // birth.isEmpty ||
         phone.isEmpty ||
         dad_height.isEmpty ||
         // dad_weight.isEmpty ||

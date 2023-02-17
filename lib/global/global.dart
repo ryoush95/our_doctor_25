@@ -25,6 +25,7 @@ const String POLICY_URL = "http://wooadoctor.com/privacy"; //개인정보처리�
 const String TERMS_URL = "http://wooadoctor.com/terms"; //서비스 이용약관
 const String HEALTH_URL = "http://wooadoctor.com/privacy2"; //고유식별정보 수집동의 및 처리방침
 const String AD_URL = "http://wooadoctor.com/privacy3"; //개인 민감(건강)정보 처리방침 동의
+const String MAKETING_URL = "http://wooadoctor.com/privacy4";
 
 String gLangCode = "en";
 // List<AreaList>? gAreaList;
