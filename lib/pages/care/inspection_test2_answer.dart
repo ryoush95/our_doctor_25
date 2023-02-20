@@ -169,21 +169,45 @@ class InspectionTest2AnswerPageState extends BaseState<InspectionTest2AnswerPage
                             onTap: () {
                               selectQuiz('0');
                             },
-                            child:CachedNetworkImage(
-                              imageUrl: list[quizNum].quiz1Image!,
-                              progressIndicatorBuilder: (context, url, downloadProgress) =>
-                                  Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
+                            child:FutureBuilder(
+                                future: precacheImage(CachedNetworkImageProvider(list[quizNum].quiz1Image!), context),
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState == ConnectionState.done) {
+                                    return CachedNetworkImage(
+                                      imageUrl: list[quizNum].quiz1Image!,
+                                      progressIndicatorBuilder: (context, url, downloadProgress) =>
+                                          Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
+                                    );
+                                  } else {
+                                    return const SizedBox(
+                                      child: Center(
+                                          child: CircularProgressIndicator()),
+                                    );
+                                  }
+                                }
                             ))
                             // Image.network(list[quizNum].quiz1Image!))
                         : GestureDetector(
                             onTap: () {
                               selectQuiz('1');
                             },
-                            child:CachedNetworkImage(
-                              imageUrl: list[quizNum].quiz2Image!,
-                              progressIndicatorBuilder: (context, url, downloadProgress) =>
-                                  Center(child: CircularProgressIndicator(value: downloadProgress.progress)),)),
-                            // Image.network(list[quizNum].quiz2Image!)),
+                            child:FutureBuilder(
+                                future: precacheImage(CachedNetworkImageProvider(list[quizNum].quiz2Image!), context),
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState == ConnectionState.done) {
+                                    return CachedNetworkImage(
+                                      imageUrl: list[quizNum].quiz2Image!,
+                                      progressIndicatorBuilder: (context, url, downloadProgress) =>
+                                          Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
+                                    );
+                                  } else {
+                                    return const SizedBox(
+                                      child: Center(
+                                          child: CircularProgressIndicator()),
+                                    );
+                                  }
+                                }
+                            )),
                     SizedBox(
                       width: screenSize.width,
                       height: 40,

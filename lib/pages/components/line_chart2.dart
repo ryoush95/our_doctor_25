@@ -22,6 +22,8 @@ class LineChartWidget2 extends StatefulWidget {
 
 class _LineChartWidget2State extends State<LineChartWidget2> {
   List<Color> gradientColors = [];
+  ScrollController sc = ScrollController();
+  DateTime now = DateTime.now();
 
   Widget getBottomTitle(int value, TitleMeta meta) {
     String title = '';
@@ -40,6 +42,9 @@ class _LineChartWidget2State extends State<LineChartWidget2> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      sc.jumpTo(now.day.toDouble() * 22);
+    });
     gradientColors = [
     widget.type == "night" ? AppColor_Primary.withOpacity(0.8) : AppColor_Breath.withOpacity(0.8),
       const Color(0xffffffff),
@@ -55,6 +60,7 @@ class _LineChartWidget2State extends State<LineChartWidget2> {
           thickness: 4,
           radius: const Radius.circular(2),
           child: SingleChildScrollView(
+            controller: sc,
             scrollDirection: Axis.horizontal,
             // aspectRatio: 1.70,
             child: Container(

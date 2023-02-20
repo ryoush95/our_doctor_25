@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:ourdoctor/global/app_colors.dart';
@@ -406,7 +407,28 @@ class _MonitoringTestFormState extends BaseState<MonitoringTestForm> {
           ),
         ),
         const SizedBox(height: 35),
-        quizList[index].imageUrl! != "" ? Image.network(quizList[index].imageUrl!) : const SizedBox(),
+        quizList[index].imageUrl! != "" ?
+        FutureBuilder(
+            future: precacheImage(CachedNetworkImageProvider(quizList[index].imageUrl!), context),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                return CachedNetworkImage(
+                  imageUrl: quizList[index].imageUrl!,
+                  width: 85,
+                  height: 85,
+                  fit: BoxFit.fill,
+                  progressIndicatorBuilder: (context, url, downloadProgress) =>
+                      Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
+                );
+              } else {
+                return const SizedBox(
+                  height: 85,
+                  child: Center(
+                      child: CircularProgressIndicator()),
+                );
+              }
+            }
+        ) : const SizedBox(),
         // const SizedBox(height: 35),
         Center(
           child: Row(

@@ -52,7 +52,6 @@ class _LineChartWidgetState extends State<LineChartWidget> {
     gradientColors = [
       widget.gradientColor.withOpacity(0.8),
       const Color(0xffffffff),
-      // widget.type == 'temperature'? const Color(0xffc3c9c7): widget.type == 'saturation'? const Color(0xffc9c8c3): const Color(0xffc9c9c4)
     ];
   }
 

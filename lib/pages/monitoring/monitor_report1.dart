@@ -709,13 +709,26 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
                           width: 150,
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10.0)),
-                          child: CachedNetworkImage(
-                            imageUrl: solList[index].imageUrl!,
-                            width: 84,
-                            height: 84,
-                            fit: BoxFit.fill,
-                            progressIndicatorBuilder: (context, url, downloadProgress) =>
-                                Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
+                          child: FutureBuilder(
+                              future: precacheImage(CachedNetworkImageProvider(solList[index].imageUrl!), context),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState == ConnectionState.done) {
+                                  return CachedNetworkImage(
+                                    imageUrl: solList[index].imageUrl!,
+                                    width: 84,
+                                    height: 84,
+                                    fit: BoxFit.fill,
+                                    progressIndicatorBuilder: (context, url, downloadProgress) =>
+                                        Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
+                                  );
+                                } else {
+                                  return const SizedBox(
+                                    height: 85,
+                                    child: Center(
+                                        child: CircularProgressIndicator()),
+                                  );
+                                }
+                              }
                           ),
                         ),
                         const SizedBox(height: 16),

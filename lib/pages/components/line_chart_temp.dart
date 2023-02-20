@@ -23,33 +23,38 @@ class _LineChartTempState extends State<LineChartTemp> {
 
   List<String> d = [];
   List<Color> gradientColors = [];
+  ScrollController sc = ScrollController();
   DateTime now = DateTime.now();
+  int dateCount = DateTime(DateTime.now().year, DateTime.now().month + 1, 0).day - 1;
 
 
   @override
   void initState() {
     showingTooltipSpot = -1;
     super.initState();
-
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      sc.jumpTo(now.day.toDouble() * 22);
+    });
     DateTime(now.year, now.month + 1, 0).day.toDouble();
 
-    for (int i = 1; i <= 31; i++) {
-      String a = i.toString();
+    for (int i = 0; i <= dateCount; i++) {
+      String a = (i +1).toString();
       d.add(a);
     }
   }
 
-  List<FlSpot> spotList() {
-    List<FlSpot> spotList = [];
+  List<FlSpot>? spotList() {
+    List<FlSpot>? spotList = [];
 
     double i = 0;
     spotList.clear();
-      for (var report in points) {
-        if (report.y != 0.0) {
-          spotList.add(FlSpot(i, double.parse(report.y.toStringAsFixed(2))));
-        }
-        i += 1;
+    for (var report in points) {
+      if (report.y != 0.0) {
+        spotList.add(FlSpot(i, double.parse(report.y.toStringAsFixed(2))));
       }
+      i += 1;
+    }
+    // print();
     return spotList;
   }
 
@@ -59,14 +64,15 @@ class _LineChartTempState extends State<LineChartTemp> {
     return Scrollbar(
       thickness: 4,
       child: SingleChildScrollView(
+        controller: sc,
         scrollDirection: Axis.horizontal,
         child: Container(
           height: 150,
           margin: const EdgeInsets.all(10),
           child: Stack(
             children: [
-              // defaultData(widget.points2),
-              mainData(widget.points, widget.points2),
+              defaultData(widget.points2),
+              mainData(widget.points),
             ],
           ),
         ),
@@ -74,16 +80,8 @@ class _LineChartTempState extends State<LineChartTemp> {
     );
   }
 
-  Widget mainData(List<PricePoint> points, List<PricePoint> points2) {
+  Widget mainData(List<PricePoint> points) {
     final _lineBarsData = [
-      LineChartBarData(
-          spots: points2.map((point) => FlSpot(point.x, point.y)).toList(),
-          isCurved: false,
-          dotData: FlDotData(
-            show: false,
-          ),
-          color: AppColor_Oxygen
-      ),
       LineChartBarData(
           spots: spotList(),
           isCurved: false,
@@ -101,7 +99,6 @@ class _LineChartTempState extends State<LineChartTemp> {
           ),
           color: AppColor_Height
       ),
-
     ];
     return AspectRatio(
       aspectRatio: 6,
@@ -110,6 +107,7 @@ class _LineChartTempState extends State<LineChartTemp> {
           minY: 34,
           maxY: 42,
           minX: 0,
+          maxX: dateCount.toDouble(),
           lineBarsData: _lineBarsData,
           borderData: FlBorderData(show: false),
           // 회색 가로줄
@@ -162,7 +160,7 @@ class _LineChartTempState extends State<LineChartTemp> {
           ])] : [],
           lineTouchData: LineTouchData(
             touchTooltipData: LineTouchTooltipData(
-              tooltipBgColor: Colors.blue,
+              tooltipBgColor: AppColor_Primary,
               tooltipRoundedRadius: 20.0,
               fitInsideHorizontally: true,
               tooltipMargin: 0,
@@ -175,7 +173,7 @@ class _LineChartTempState extends State<LineChartTemp> {
                       color: Colors.white,
                     );
                     return LineTooltipItem(
-                      points[touchedSpot.spotIndex].y.toStringAsFixed(2),
+                      touchedSpot.y.toStringAsFixed(2),
                       textStyle,
                     );
                   },
@@ -202,7 +200,7 @@ class _LineChartTempState extends State<LineChartTemp> {
     );
   }
 
-  /*Widget defaultData(List<PricePoint> points) {
+  Widget defaultData(List<PricePoint> points) {
     final _lineBarsData = [
       LineChartBarData(
           spots: points.map((point) => FlSpot(point.x, point.y)).toList(),
@@ -236,8 +234,8 @@ class _LineChartTempState extends State<LineChartTemp> {
                   String title = value.toString();
                   if(title != "36.5") {
                     style = AppTextStyle.PD(
-                        Colors.white, 11, weight: FW.medium);
-                    return SideTitleWidget(child: Text(title *//*+ "°C"*//*, style: style), axisSide: meta.axisSide);
+                        Colors.transparent, 11, weight: FW.medium);
+                    return SideTitleWidget(child: Text(title, style: style), axisSide: meta.axisSide);
                   }
 
                   return SideTitleWidget(child: Text(title, style: style), axisSide: meta.axisSide);
@@ -252,7 +250,7 @@ class _LineChartTempState extends State<LineChartTemp> {
                 //interval: ((maxY - minY) / 4) == 0 ? 1 : ((maxY - minY) / 4).ceil().toDouble(),
                 interval:  1,
                 getTitlesWidget: (value, meta) {
-                  final style = AppTextStyle.PD(Colors.white, 11, weight: FW.medium);
+                  final style = AppTextStyle.PD(Colors.transparent, 11, weight: FW.medium);
                   return SideTitleWidget(child: Text(d[value.toInt()] + "일", style: style), axisSide: meta.axisSide);
                 },
               ),
@@ -277,5 +275,5 @@ class _LineChartTempState extends State<LineChartTemp> {
         ),
       ),
     );
-  }*/
+  }
 }

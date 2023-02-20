@@ -93,9 +93,23 @@ class InspectionTest2FirstPageState
                 title: widget.data.name,
                 onBackPressed: onBackPressed,
               ),
-              CachedNetworkImage(imageUrl: widget.data.detailImage!,
-                progressIndicatorBuilder: (context, url, downloadProgress) =>
-                    Center(child: CircularProgressIndicator(value: downloadProgress.progress)),),
+              FutureBuilder(
+                  future: precacheImage(CachedNetworkImageProvider(widget.data.detailImage!), context),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      return CachedNetworkImage(imageUrl: widget.data.detailImage!,
+                        progressIndicatorBuilder: (context, url, downloadProgress) =>
+                            Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
+                      );
+                    } else {
+                      return const SizedBox(
+                        height: 85,
+                        child: Center(
+                            child: CircularProgressIndicator()),
+                      );
+                    }
+                  }
+              ),
               // Image.network(widget.data.detailImage!),
               Container(
                 padding: EdgeInsets.all(30),

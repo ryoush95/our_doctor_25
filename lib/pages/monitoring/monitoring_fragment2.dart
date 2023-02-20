@@ -204,7 +204,8 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
                     H14(
                       text: p.monitoringProgress != 3
                           ? "현재 개월 수에 맞는 모니터링을 해야할 시기가 지났어요"
-                          : "모니터링 결과를 통해 우리 아이 발달을 확인하세요",
+                          : "모니터링 결과를 통해 우리 아이 발달을 확인하세요"
+                          "\n결과는 의학적 소견과 관련이 없습니다",
                       weight: FW.regular,
                       maxLine: 3,
                       align: TextAlign.start,

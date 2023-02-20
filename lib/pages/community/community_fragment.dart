@@ -402,7 +402,6 @@ class CommunityFragmenttState extends BaseState<CommunityFragment> {
                                     );
                                     } else {
                                       return const SizedBox(
-                                        height: 85,
                                         child: Center(
                                             child: CircularProgressIndicator()),
                                       );
