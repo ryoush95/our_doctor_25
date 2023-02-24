@@ -229,14 +229,13 @@ class _LineChartTempState extends State<LineChartTemp> {
                 showTitles: true,
                 interval: 0.5,
                 getTitlesWidget: (value, meta) {
-                  var style = AppTextStyle.PD(const Color(0xff585859), 11, weight: FW.medium);
-                  // String title = sprintf("%.0f", [value]);
+                  var style = AppTextStyle.PD(Colors.transparent, 11, weight: FW.medium);
                   String title = value.toString();
-                  if(title != "36.5") {
-                    style = AppTextStyle.PD(
-                        Colors.transparent, 11, weight: FW.medium);
-                    return SideTitleWidget(child: Text(title, style: style), axisSide: meta.axisSide);
-                  }
+                  // 정상체온 표시
+                  // if(title == "36.5") {
+                  //   style = AppTextStyle.PD(const Color(0xff585859), 11, weight: FW.medium);
+                  //   return SideTitleWidget(child: Text(title, style: style), axisSide: meta.axisSide);
+                  // }
 
                   return SideTitleWidget(child: Text(title, style: style), axisSide: meta.axisSide);
                 },

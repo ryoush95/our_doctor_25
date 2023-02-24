@@ -125,7 +125,7 @@ class LifestyleLineChart2State extends BaseState<LifestyleLineChart2> {
                     ),
                     const SizedBox(width: 8),
                     H12(
-                      text: "정상 체온",
+                      text: "정상 체온 (36.5°C)",
                       weight: FW.medium,
                       height: 1.5,
                       color: AppColor_Input_Title,

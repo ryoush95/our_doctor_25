@@ -11,7 +11,7 @@ const String API_BASE_URL = "http://wooadoctor.com:3000/"; //real server
 // const String API_BASE_URL = "http://192.168.0.22:8207/"; //local server
 //마캣 url
 const String APPSTORE_URL = "http://itunes.apple.com/app/id1607310254?mt=8"; //앱스토어
-const String MARKET_URL = "https://play.google.com/store/apps/details?id=com.kyad.ourdoctor"; //구글 마캣
+const String MARKET_URL = "https://play.google.com/store/apps/details?id=com.kyad.wooadoctor"; //구글 마캣
 const String ONESOTRE_URL = "https://onesto.re/0000761223"; //원스토어
 const String KAKAOTALK_CHAT = "https://pf.kakao.com/_JAjBb/chat"; //카톡 문의
 // const String DATEBOOK_URL = "https://wooadoctor.com/databook"; //발달리포트 자료집

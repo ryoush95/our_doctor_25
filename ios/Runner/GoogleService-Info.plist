@@ -3,21 +3,23 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>989949984258-i0gsd8mhaatga1b7fl773qh2cjmr4gvc.apps.googleusercontent.com</string>
+	<string>769011525677-qedvia108gcmtierruf5t82474pqmk5n.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.989949984258-i0gsd8mhaatga1b7fl773qh2cjmr4gvc</string>
+	<string>com.googleusercontent.apps.769011525677-qedvia108gcmtierruf5t82474pqmk5n</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>769011525677-2gb89vh4fn2p301jthvnk77dgu86gk4a.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
-	<string>AIzaSyDow718IuBhSFp8yjfxtjNpaN2KrcMK1o0</string>
+	<string>AIzaSyCOaoT9w1fM7K1u87_H8YSGSB9uv6jm5lc</string>
 	<key>GCM_SENDER_ID</key>
-	<string>989949984258</string>
+	<string>769011525677</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.kyad.wooadoctor</string>
 	<key>PROJECT_ID</key>
-	<string>wooadoctor</string>
+	<string>ourdoctor-27fa9</string>
 	<key>STORAGE_BUCKET</key>
-	<string>wooadoctor.appspot.com</string>
+	<string>ourdoctor-27fa9.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,6 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:989949984258:ios:de43277e21bcc21038711b</string>
+	<string>1:769011525677:ios:d831812818afdb1dce70a4</string>
 </dict>
 </plist>

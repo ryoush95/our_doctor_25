@@ -188,8 +188,8 @@ class _LineChartWidget2State extends State<LineChartWidget2> {
       borderData: FlBorderData(show: false),
       minX: 0,
       maxX: DateTime(DateTime.now().year, DateTime.now().month + 1, 0).day - 1,
-      minY: getMinY().ceil() - 1.0,
-      maxY: getMaxY().ceil() + 1.0,
+      minY: 0,
+      maxY: widget.type == "night" ? 900 : 480,
       lineBarsData: [
         LineChartBarData(
           spots: spotList(),

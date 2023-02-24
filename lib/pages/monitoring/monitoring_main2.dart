@@ -189,7 +189,7 @@ class _MonitoringMain2State extends BaseState<MonitoringMain2> {
   void checkValid() {
     isValid = false;
     if(mTemp.isEmpty)mTemp="0";
-    if(double.parse(mTemp) <= 32 || double.parse(mTemp) > 42 ) {
+    if(double.parse(mTemp) <= 34 || double.parse(mTemp) > 42 ) {
       borderColor = AppColor_Red;
       return;
     } else {

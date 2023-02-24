@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:ourdoctor/global/app_colors.dart';
@@ -5,7 +7,10 @@ import 'package:ourdoctor/global/app_styles.dart';
 import 'package:ourdoctor/global/http_service.dart';
 import 'package:ourdoctor/helpers/common_util.dart';
 import 'package:ourdoctor/helpers/transition.dart';
-import 'package:ourdoctor/models/test2_quiz_list_model.dart';
+import 'package:ourdoctor/models/product/test2_quiz_list_model.dart';
+import 'package:ourdoctor/models/product/test4_quiz_model.dart';
+import 'package:ourdoctor/models/product/test_quiz_result_model.dart';
+import 'package:ourdoctor/models/product_detail_res_model.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
 import 'package:ourdoctor/pages/base/page_layout.dart';
 import 'package:ourdoctor/pages/care/inspection_test2_final.dart';
@@ -14,9 +19,9 @@ import 'package:percent_indicator/linear_percent_indicator.dart';
 
 class InspectionTest2AnswerPage extends StatefulWidget {
   final List<Test2QuizDto> listData;
-  final String testName;
+  final ProductDetailDto info;
 
-  InspectionTest2AnswerPage({Key? key, required this.listData, required this.testName}) : super(key: key);
+  InspectionTest2AnswerPage({Key? key, required this.listData, required this.info}) : super(key: key);
 
   @override
   InspectionTest2AnswerPageState createState() => InspectionTest2AnswerPageState();
@@ -66,16 +71,30 @@ class InspectionTest2AnswerPageState extends BaseState<InspectionTest2AnswerPage
         Future.delayed(const Duration(milliseconds: 200));
       });
     } else {
-      String r = '0';
-      if(quizResult.indexOf('0') < quizResult.indexOf('1')){
-        r = '1';
-      }
+      String r = jsonEncode(quizResult);
+      // String r = jsonEncode(["1","1","1"]);
 
-      Navigator.of(context).pushReplacement(SlideRightTransRoute(builder: (context) =>
-          InspectionTest2FinalPage(list: widget.listData, testName : widget.testName, result: r)),);
-      quizNum = 0;
-      quizResult.clear();
+      getResult(r);
     }
+  }
+
+  Future<void> getResult(String r) async {
+    Future<TestQuizResultModel> info = httpService.getTestQuizResult(widget.info.id!, r);
+    info.then((value) async {
+      setState(() {
+        isLoading = false;
+      });
+      if (value.result == 0) {
+        value.data!;
+        Navigator.of(context).pushReplacement(SlideRightTransRoute(builder: (context) =>
+            InspectionTest2FinalPage(list: widget.listData, testName : widget.info.name!, result: value.data!)),);
+        quizNum = 0;
+        quizResult.clear();
+        setState(() {});
+      }
+    }).catchError((onError) {
+      print(onError.toString());
+    });
   }
 
   void backQuiz() {
@@ -142,7 +161,7 @@ class InspectionTest2AnswerPageState extends BaseState<InspectionTest2AnswerPage
                             child : const Icon(Icons.arrow_back_ios),
                           ),
                         ),
-                        Center(child: H18(text: widget.testName, color: AppColor_Primary,)),
+                        Center(child: H18(text: widget.info.name!, color: AppColor_Primary,)),
                         const SizedBox(width: 40,),
                       ],
                     ),

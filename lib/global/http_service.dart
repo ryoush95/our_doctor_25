@@ -76,6 +76,8 @@ import 'package:ourdoctor/models/order_list_res_model.dart';
 import 'package:ourdoctor/models/order_start_res_model.dart';
 import 'package:ourdoctor/models/pass_set_res_model.dart';
 import 'package:ourdoctor/models/point_his_list_res_model.dart';
+import 'package:ourdoctor/models/product/test4_quiz_model.dart';
+import 'package:ourdoctor/models/product/test_quiz_result_model.dart';
 import 'package:ourdoctor/models/product_detail_res_model.dart';
 import 'package:ourdoctor/models/product_like_res_model.dart';
 import 'package:ourdoctor/models/product_list_res_model.dart';
@@ -86,7 +88,7 @@ import 'package:ourdoctor/models/review_detail_res_model.dart';
 import 'package:ourdoctor/models/review_list_res_model.dart';
 import 'package:ourdoctor/models/signup_parent_model.dart';
 import 'package:ourdoctor/models/story_res_model.dart';
-import 'package:ourdoctor/models/test2_quiz_list_model.dart';
+import 'package:ourdoctor/models/product/test2_quiz_list_model.dart';
 import 'package:ourdoctor/models/upload_res_model.dart';
 import 'package:ourdoctor/models/userinfo_res_model.dart';
 import 'package:path/path.dart';
@@ -2539,6 +2541,44 @@ class HttpService {
     final response = await http.post(myUri, body: body);
     if (response.statusCode == 200) {
       return Test2QuizListModel.fromJson(json.decode(response.body));
+    } else {
+      // If that call was not successful, throw an error.
+      showToast(LanguageService.trans("server_fail"));
+      throw Exception(LanguageService.trans("server_fail"));
+    }
+  }
+
+  //test4 퀴즈 불러오기
+  Future<Test4QuizModel> getTest4QuizList(String quizName) async {
+    String _url = API_BASE_URL + "api/Monitor2/test4_quiz_list";
+    Map<String, String> body = {
+      'access_token': gUserInfo!.accessToken!,
+      'quiz_id' : quizName,
+    };
+    Uri myUri = Uri.parse(_url);
+    final response = await http.post(myUri, body: body);
+    if (response.statusCode == 200) {
+      return Test4QuizModel.fromJson(json.decode(response.body));
+    } else {
+      // If that call was not successful, throw an error.
+      showToast(LanguageService.trans("server_fail"));
+      throw Exception(LanguageService.trans("server_fail"));
+    }
+  }
+
+  //test 결과 가져오기
+  Future<TestQuizResultModel> getTestQuizResult(String quizName, String quizResult) async {
+    String _url = API_BASE_URL + "api/Monitor2/test_quiz_result";
+    Map<String, String> body = {
+      'access_token': gUserInfo!.accessToken!,
+      'quiz_id' : quizName,
+      'quiz_result' : quizResult,
+    };
+    Uri myUri = Uri.parse(_url);
+    final response = await http.post(myUri, body: body);
+    if (response.statusCode == 200) {
+    print(response.body);
+      return TestQuizResultModel.fromJson(json.decode(response.body));
     } else {
       // If that call was not successful, throw an error.
       showToast(LanguageService.trans("server_fail"));

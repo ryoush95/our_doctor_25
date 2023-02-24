@@ -158,7 +158,7 @@ class Login1PageState extends BaseState<Login1Page> {
                 ),
                 const SizedBox(height: 50),
                 H24B(
-                  text: LanguageService.trans("login"),
+                  text: "로그인",
                   color: AppColor_Primary,
                 ),
                 const SizedBox(height: 40),
@@ -233,7 +233,7 @@ class Login1PageState extends BaseState<Login1Page> {
                 const SizedBox(height: 40),
                 Center(
                   child: MainTextButton(
-                    text: LanguageService.trans("login"),
+                    text: "로그인",
                     backgroundColor: AppColor_Primary,
                     style: AppTextStyle.PD(Colors.white, 18, weight: FW.semi_bold),
                     width: MediaQuery.of(context).size.width - 60,
@@ -268,7 +268,7 @@ class Login1PageState extends BaseState<Login1Page> {
                         )),
                     child: Center(
                       child: H18(
-                        text: LanguageService.trans("signup"),
+                        text: "회원가입",
                         weight: FW.semi_bold,
                         color: Colors.white,
                       ),

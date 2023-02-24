@@ -1,11 +1,12 @@
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:ourdoctor/global/app_colors.dart';
 import 'package:ourdoctor/global/app_styles.dart';
 import 'package:ourdoctor/global/http_service.dart';
 import 'package:ourdoctor/helpers/common_util.dart';
-import 'package:ourdoctor/models/mbti_quiz_list_res_model.dart';
-import 'package:ourdoctor/models/test2_quiz_list_model.dart';
+import 'package:ourdoctor/models/product/test2_quiz_list_model.dart';
+import 'package:ourdoctor/models/product/test_quiz_result_model.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
 import 'package:ourdoctor/pages/base/page_layout.dart';
 import 'package:ourdoctor/pages/components/h18.dart';
@@ -15,7 +16,7 @@ import 'package:percent_indicator/linear_percent_indicator.dart';
 class InspectionTest2FinalPage extends StatefulWidget {
   final List<Test2QuizDto> list;
   final String testName;
-  final String result;
+  final TestResultDto result;
 
   InspectionTest2FinalPage({Key? key, required this.list, required this.testName, required this.result}) : super(key: key);
 
@@ -65,13 +66,29 @@ class InspectionTest2FinalPageState
               LinearPercentIndicator(progressColor: AppColor_Primary, percent: 1),
               const SizedBox(height: 20,),
               Center(
-                child: Image.network(
-                  widget.result == '0'? res.quiz1Image! : res.quiz2Image!,
-                  width: MediaQuery.of(context).size.width - 60,
+                child: FutureBuilder(
+                    future: precacheImage(CachedNetworkImageProvider(widget.result.resultImage!), context),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        return CachedNetworkImage(
+                          imageUrl: widget.result.resultImage!,
+                          width: MediaQuery.of(context).size.width - 60,
+                          fit: BoxFit.fill,
+                          progressIndicatorBuilder: (context, url, downloadProgress) =>
+                              Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
+                        );
+                      } else {
+                        return const SizedBox(
+                          height: 85,
+                          child: Center(
+                              child: CircularProgressIndicator()),
+                        );
+                      }
+                    }
                 ),
               ),
               Container(
-                padding: EdgeInsets.all(30),
+                padding: const EdgeInsets.all(30),
                 child: MainTextButton(
                   text: "홈으로",
                   backgroundColor: AppColor_Primary,

@@ -4,12 +4,14 @@ import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:ourdoctor/global/global.dart';
 import 'package:ourdoctor/global/local_service.dart';
 import 'package:ourdoctor/helpers/common_util.dart';
 import 'package:ourdoctor/pages/app_event.dart';
 
+late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
   'ourdoctor', // id
   'High Importance Notifications',
@@ -20,16 +22,14 @@ const AndroidNotificationChannel channel = AndroidNotificationChannel(
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   initFcm();
 
-  showNotification(message.data);
-
-  print(message.data);
+  await showNotification(message.data);
 }
 
 // main.dart에서 실행
 initFcm() async {
   await Firebase.initializeApp();
 
-  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
   final FirebaseMessaging messaging = FirebaseMessaging.instance;
 
   // 권한 및 채널 설정
@@ -69,11 +69,35 @@ initFcm() async {
   // });
   LocalService.setToken(token);
 
+  FirebaseMessaging.onMessage.listen(showFlutterNotification);
+
   // 백그라운드 리스너
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   // 토픽설정
   // await FirebaseMessaging.instance.subscribeToTopic('udoctor');
+}
+
+void showFlutterNotification(RemoteMessage message) {
+  RemoteNotification? notification = message.notification;
+  AndroidNotification? android = message.notification?.android;
+  if (notification != null && android != null && !kIsWeb) { // 웹이 아니면서 안드로이드이고, 알림이 있는경우
+    flutterLocalNotificationsPlugin.show(
+      notification.hashCode,
+      notification.title,
+      notification.body,
+      NotificationDetails(
+        android: AndroidNotificationDetails(
+          channel.id,
+          channel.name,
+          channelDescription: channel.description,
+          // TODO add a proper drawable resource to android, for now using
+          //      one that already exists in example app.
+          icon: '@mipmap/ic_launcher',
+        ),
+      ),
+    );
+  }
 }
 
 // main activity에서 설정
@@ -86,7 +110,7 @@ Future<void> setupFcmListener(void Function(Map<String, dynamic> data) onReceive
     // If `onMessage` is triggered with a notification, construct our own
     // local notification to show to users using the created channel.
     eventBus.fire(ReceivePushEvent());
-    showNotification(data);
+    await showNotification(data);
     onReceive(message.data);
   });
 
@@ -175,10 +199,22 @@ showNotification(Map<String, dynamic> data) async {
   if (Platform.isIOS) {
     return;
   }
-  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-  AndroidNotificationDetails androidPlatformChannelSpecifics = AndroidNotificationDetails(channel.id, channel.name, channelDescription: channel.description, importance: Importance.max, priority: Priority.high, ticker: 'ticker');
-  const IOSNotificationDetails iOSPlatformChannelSpecifics = IOSNotificationDetails(presentSound: true);
-  NotificationDetails platformChannelSpecifics = NotificationDetails(android: androidPlatformChannelSpecifics, iOS: iOSPlatformChannelSpecifics);
+  if (data.isEmpty){
+    return;
+  }
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+  AndroidNotificationDetails androidPlatformChannelSpecifics =
+      AndroidNotificationDetails(channel.id, channel.name,
+          channelDescription: channel.description,
+          importance: Importance.max,
+          priority: Priority.high,
+          ticker: 'ticker');
+  const IOSNotificationDetails iOSPlatformChannelSpecifics =
+      IOSNotificationDetails(presentSound: true);
+  NotificationDetails platformChannelSpecifics = NotificationDetails(
+      android: androidPlatformChannelSpecifics,
+      iOS: iOSPlatformChannelSpecifics);
 
   await flutterLocalNotificationsPlugin.show(0, data["title"], data["body"], platformChannelSpecifics, payload: json.encode(data));
 }

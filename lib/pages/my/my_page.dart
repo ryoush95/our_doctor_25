@@ -273,7 +273,12 @@ class MyPagePageState extends BaseState<MyPagePage> {
 
   category(MyPageCategory category, int idx) => GestureDetector(
     onTap:() {
-      Navigator.push(context, SlideRightTransRoute(builder: (context) => category.route));
+      if(idx == 1){
+        launch("https://wooadoctor.com/mypage/applications?token=${gUserInfo!.accessToken!}");
+        return;
+      }
+        Navigator.push(context,
+            SlideRightTransRoute(builder: (context) => category.route));
     },
     behavior: HitTestBehavior.translucent,
     child: Container(

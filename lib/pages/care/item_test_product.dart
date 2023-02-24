@@ -32,11 +32,6 @@ class ItemTestProduct extends StatefulWidget {
 class ItemTestProductState extends BaseState<ItemTestProduct> {
   //List<BannerList>? arrBannerList;
   ProductDetailDto mData = ProductDetailDto();
-  @override
-  void initState() {
-    print('ItemTestProductState');
-    super.initState();
-  }
 
   //상품 좋아요
   void productLike(String pid) {

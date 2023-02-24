@@ -1,40 +1,108 @@
 {
   "project_info": {
-    "project_number": "989949984258",
-    "project_id": "wooadoctor",
-    "storage_bucket": "wooadoctor.appspot.com"
+    "project_number": "769011525677",
+    "project_id": "ourdoctor-27fa9",
+    "storage_bucket": "ourdoctor-27fa9.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:989949984258:android:958c0aa7eeb86a1038711b",
+        "mobilesdk_app_id": "1:769011525677:android:d3db5f1edc5b6009ce70a4",
         "android_client_info": {
-          "package_name": "com.kyad.wooadoctor"
+          "package_name": "com.kyad.ourdoctor"
         }
       },
       "oauth_client": [
         {
-          "client_id": "989949984258-80s1cqlkkorm50nuckqck798mu75d7s3.apps.googleusercontent.com",
+          "client_id": "769011525677-2gb89vh4fn2p301jthvnk77dgu86gk4a.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kyad.ourdoctor",
+            "certificate_hash": "a72dc66afdd3d346d6b762a490616a328e53e5e7"
+          }
+        },
+        {
+          "client_id": "769011525677-qm6spbgokjm8t396u2p7v4vjl8tdn41r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kyad.ourdoctor",
+            "certificate_hash": "adcd78903314deadc013753d11b4fc8f7c6b4b61"
+          }
+        },
+        {
+          "client_id": "769011525677-dva56mc9tb6odqtfndim20799jg5ises.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyB6jwWQGe9_rCzmGTTlEIgO4tJ1XkZsEOQ"
+          "current_key": "AIzaSyAE08cGtf24TVr7-5EpPFfDl_C1pK6Iido"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "989949984258-80s1cqlkkorm50nuckqck798mu75d7s3.apps.googleusercontent.com",
+              "client_id": "769011525677-dva56mc9tb6odqtfndim20799jg5ises.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "989949984258-i0gsd8mhaatga1b7fl773qh2cjmr4gvc.apps.googleusercontent.com",
+              "client_id": "769011525677-deg43mal82if9nqiv7891dpelt4a6hcm.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.kyad.wooadoctor"
+                "bundle_id": "com.kyad.ourdoctor"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:769011525677:android:c87f401e40175b5fce70a4",
+        "android_client_info": {
+          "package_name": "com.kyad.wooadoctor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "769011525677-bcvm2bhtsgtsrsuu0k13jvsaaqm6n2ld.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kyad.wooadoctor",
+            "certificate_hash": "a72dc66afdd3d346d6b762a490616a328e53e5e7"
+          }
+        },
+        {
+          "client_id": "769011525677-on61jgts8f0d9v580e9ig39hfts1cvjk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kyad.wooadoctor",
+            "certificate_hash": "adcd78903314deadc013753d11b4fc8f7c6b4b61"
+          }
+        },
+        {
+          "client_id": "769011525677-dva56mc9tb6odqtfndim20799jg5ises.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAE08cGtf24TVr7-5EpPFfDl_C1pK6Iido"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "769011525677-dva56mc9tb6odqtfndim20799jg5ises.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "769011525677-deg43mal82if9nqiv7891dpelt4a6hcm.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.kyad.ourdoctor"
               }
             }
           ]

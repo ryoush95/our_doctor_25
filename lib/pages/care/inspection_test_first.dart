@@ -7,13 +7,16 @@ import 'package:ourdoctor/global/http_service.dart';
 import 'package:ourdoctor/helpers/common_util.dart';
 import 'package:ourdoctor/helpers/transition.dart';
 import 'package:ourdoctor/models/mbti_quiz_list_res_model.dart';
+import 'package:ourdoctor/models/product/test4_quiz_model.dart';
 import 'package:ourdoctor/models/product_detail_res_model.dart';
-import 'package:ourdoctor/models/test2_quiz_list_model.dart';
+import 'package:ourdoctor/models/product/test2_quiz_list_model.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
 import 'package:ourdoctor/pages/base/page_layout.dart';
 import 'package:ourdoctor/pages/care/inspection_test2_answer.dart';
 import 'package:ourdoctor/pages/components/main_text_button.dart';
 import 'package:ourdoctor/pages/components/simple_header.dart';
+
+import 'inspection_test4_answer.dart';
 
 class InspectionTest2FirstPage extends StatefulWidget {
   final ProductDetailDto data;
@@ -28,12 +31,18 @@ class InspectionTest2FirstPage extends StatefulWidget {
 class InspectionTest2FirstPageState
     extends BaseState<InspectionTest2FirstPage> {
   final HttpService httpService = HttpService();
-  List<Test2QuizDto> list = [];
+  List<Test2QuizDto> list2 = [];
+  List<Test4QuizDto> list4 = [];
 
   @override
   void initState() {
     // TODO: implement initState
-    getQuizList();
+    if(widget.data.category2 == "TEST2") {
+      getQuizList2();
+    }
+    if(widget.data.category2 == "TEST4") {
+      getQuizList4();
+    }
     super.initState();
   }
 
@@ -67,14 +76,29 @@ class InspectionTest2FirstPageState
     return false;
   }
 
-  void getQuizList() async {
+  void getQuizList2() async {
     Future<Test2QuizListModel> info = httpService.getTest2QuizList(widget.data.id!);
     info.then((value) async {
       setState(() {
         isLoading = false;
       });
       if (value.result == 0) {
-        list = value.data!;
+        list2 = value.data!;
+        setState(() {});
+      }
+    }).catchError((onError) {
+      print(onError.toString());
+    });
+  }
+
+  void getQuizList4() async {
+    Future<Test4QuizModel> info = httpService.getTest4QuizList(/*widget.data.id!*/"43");
+    info.then((value) async {
+      setState(() {
+        isLoading = false;
+      });
+      if (value.result == 0) {
+        list4 = value.data!;
         setState(() {});
       }
     }).catchError((onError) {
@@ -119,9 +143,18 @@ class InspectionTest2FirstPageState
                   style: AppTextStyle.PD(Colors.white, 18, weight: FW.bold),
                   height: 70,
                   onPressed: () {
-                    Navigator.pushReplacement(context,
-                        SlideRightTransRoute(builder: (context) => InspectionTest2AnswerPage(listData: list, testName: widget.data.name!,)),
-                    );
+                    if(widget.data.category2 == "TEST2") {
+                      Navigator.pushReplacement(context,
+                        SlideRightTransRoute(builder: (context) =>
+                            InspectionTest2AnswerPage(listData: list2, info: widget.data,)),
+                      );
+                    }
+                    if (widget.data.category2 == "TEST4"){
+                      Navigator.pushReplacement(context,
+                        SlideRightTransRoute(builder: (context) =>
+                            InspectionTest4AnswerPage(listData: list4, info: widget.data,)),
+                      );
+                    }
                   },
                 ),
               )

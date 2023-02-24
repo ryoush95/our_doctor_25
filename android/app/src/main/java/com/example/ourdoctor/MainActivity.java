@@ -1,4 +1,4 @@
-package com.example.ourdoctor;
+package com.kyad.wooadoctor;
 
 import android.os.Bundle;
 import android.util.Base64;

@@ -7,7 +7,7 @@ import 'package:ourdoctor/helpers/common_util.dart';
 import 'package:ourdoctor/helpers/transition.dart';
 import 'package:ourdoctor/models/mbti_quiz_list_res_model.dart';
 import 'package:ourdoctor/models/product_detail_res_model.dart';
-import 'package:ourdoctor/models/test2_quiz_list_model.dart';
+import 'package:ourdoctor/models/product/test2_quiz_list_model.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
 import 'package:ourdoctor/pages/base/page_layout.dart';
 import 'package:ourdoctor/pages/care/inspection_test2_answer.dart';
@@ -102,7 +102,7 @@ class PlusTest4FirstPageState
                   height: 70,
                   onPressed: () {
                     Navigator.pushReplacement(context,
-                        SlideRightTransRoute(builder: (context) => InspectionTest2AnswerPage(listData: list, testName: widget.data.name!,)),
+                        SlideRightTransRoute(builder: (context) => InspectionTest2AnswerPage(listData: list, info: widget.data,)),
                     );
                   },
                 ),

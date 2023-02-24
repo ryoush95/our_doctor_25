@@ -1,4 +1,6 @@
 // @dart=2.9
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -37,6 +39,7 @@ void main() async{
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
+  final FirebaseAnalytics analytics = FirebaseAnalytics();
   @override
   Widget build(BuildContext context) {
     LanguageService.setLanguage('ko');
@@ -58,6 +61,9 @@ class MyApp extends StatelessWidget {
         );
       },
       debugShowCheckedModeBanner: false,
+      navigatorObservers: [
+        FirebaseAnalyticsObserver(analytics: analytics),
+      ],
       title: 'OurDoctor',
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
