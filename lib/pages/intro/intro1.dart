@@ -8,6 +8,7 @@ import 'package:ourdoctor/helpers/transition.dart';
 import 'package:ourdoctor/language/language_service.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
 import 'package:ourdoctor/pages/base/page_layout.dart';
+import 'package:ourdoctor/pages/components/h14.dart';
 import 'package:ourdoctor/pages/components/h16.dart';
 import 'package:ourdoctor/pages/components/h18.dart';
 import 'package:ourdoctor/pages/components/h24_b.dart';
@@ -56,6 +57,7 @@ class IntroHomePageState extends BaseState<IntroHomePage> {
                 child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                const SizedBox(height: 60),
                 Center(
                   child: Image.asset('assets/ic_guide_logo.png', width: 82, height: 90),
                 ),
@@ -67,55 +69,15 @@ class IntroHomePageState extends BaseState<IntroHomePage> {
                 // const SizedBox(height: 10),
                 H18(text: "우리 아이 키울 땐!", weight: FW.regular, maxLine: 2, height: 1.7),
                 const SizedBox(height: 33),
-                H18(
-                  text: LanguageService.trans("intro2_description"),
+                H14(
+                  text: "+ 소아 · 청소년과 전문병원 의료진이 직접 만든 앱\n+ 서울대 의과대학 협력 및 감수\n+ 전국의 100여 개 아동 병원 - 아동병원협회의 공식 인증 앱",
                   weight: FW.medium,
                   color: AppColor_Intro_Description,
                   maxLine: 4,
                   height: 1.5,
                 ),
                 const SizedBox(height: 30),
-                H16(
-                  text: "발달영역 케어",
-                  weight: FW.bold,
-                  color: AppColor_BlackText.withOpacity(0.45),
-                  maxLine: 1,
-                ),
-                const SizedBox(height: 5),
-                H16(
-                  text: "대근육 / 소근육 / 인지 / 정서 / 발달 / 자조 / 신체",
-                  weight: FW.medium,
-                  color: AppColor_Intro_Description,
-                  maxLine: 1,
-                ),
-                const SizedBox(height: 15),
-                H16(
-                  text: "생활습관 케어",
-                  weight: FW.bold,
-                  color: AppColor_BlackText.withOpacity(0.45),
-                  maxLine: 1,
-                ),
-                const SizedBox(height: 5),
-                H16(
-                  text: "개인 위생부터 사회성까지\n아이의 올바른 생활 습관을 위한 맞춤 솔루션",
-                  weight: FW.medium,
-                  color: AppColor_Intro_Description,
-                  maxLine: 2,
-                ),
-                const SizedBox(height: 15),
-                H16(
-                  text: "우리 아이 성장 기록",
-                  weight: FW.bold,
-                  color: AppColor_BlackText.withOpacity(0.45),
-                  maxLine: 1,
-                ),
-                const SizedBox(height: 5),
-                H16(
-                  text: "영양 / 수면 / 체온 / 질병",
-                  weight: FW.medium,
-                  color: AppColor_Intro_Description,
-                  maxLine: 2,
-                ),
+                Expanded(child: Container()),
               ],
             )),
             Row(

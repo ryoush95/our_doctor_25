@@ -400,7 +400,7 @@ final Map<String, String> ko_lang = {
   "to_the_next": "다음으로",
   "home_treatment_home_care_mode": "우아닥터",
   "intro2_title": "우리 아이 키울 땐!",
-  "intro2_description": "우리아이들병원\n소아청소년 전문의 제공\n성장·발달 홈케어 솔루션\n\n- 신체 5대 항목 케어\n신장/체중/영양/수면/질병\n\n- 두뇌 4대 항목 케어\n언어/운동/사회성/맞춤검사",
+  "intro2_description": "우리아이들병원\n소아 · 청소년 전문의 제공\n성장·발달 홈케어 솔루션\n\n- 신체 5대 항목 케어\n신장/체중/영양/수면/질병\n\n- 두뇌 4대 항목 케어\n언어/운동/사회성/맞춤검사",
   "intro2_description1_1": "- 신체 5대 항목 케어",
   "intro2_description1_2": "신장/체중/영양/수면/질병",
   "intro2_description1_3": "- 두뇌 4대 항목 케어",

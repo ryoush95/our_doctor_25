@@ -210,7 +210,7 @@ class CareFragmentState extends BaseState<CareFragment>
     } else if (tabIndex == 1) {
       category = "DEVELOPMENT";
     } else {
-      category = "TEST2";
+      category = "TEST";
     }
 
     Future<HomeCareDataResModel> info = httpService.homecareDataInfo(category);

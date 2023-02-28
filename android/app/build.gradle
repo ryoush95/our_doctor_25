@@ -44,8 +44,8 @@ android {
         minSdkVersion 21
         targetSdkVersion 31
         multiDexEnabled true
-        versionCode 11
-        versionName "1.0.6"  //onestore 1.0.0/2
+        versionCode 12
+        versionName "1.0.7"  //onestore 1.0.0/2
     }
 
     signingConfigs {

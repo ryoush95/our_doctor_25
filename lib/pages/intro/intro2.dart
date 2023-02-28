@@ -8,6 +8,7 @@ import 'package:ourdoctor/helpers/transition.dart';
 import 'package:ourdoctor/language/language_service.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
 import 'package:ourdoctor/pages/base/page_layout.dart';
+import 'package:ourdoctor/pages/components/h14.dart';
 import 'package:ourdoctor/pages/components/h16.dart';
 import 'package:ourdoctor/pages/components/h18.dart';
 import 'package:ourdoctor/pages/components/h24_b.dart';
@@ -31,13 +32,14 @@ class IntroGrowthPageState extends BaseState<IntroGrowthPage> {
     if (keyboardIsVisible(context)) {
       FocusScope.of(context).requestFocus(FocusNode());
     }
-    int now = DateTime.now().millisecondsSinceEpoch;
-    if (now - backButtonTimestamp < 2000) {
-      exit(0);
-    } else {
-      showToast(LanguageService.trans('press_twice_to_exit'));
-    }
-    backButtonTimestamp = now;
+    // int now = DateTime.now().millisecondsSinceEpoch;
+    // if (now - backButtonTimestamp < 2000) {
+    //   exit(0);
+    // } else {
+    //   showToast(LanguageService.trans('press_twice_to_exit'));
+    // }
+    // backButtonTimestamp = now;
+    Navigator.pop(context);
     return false;
   }
 
@@ -62,7 +64,7 @@ class IntroGrowthPageState extends BaseState<IntroGrowthPage> {
                 ),
                 const SizedBox(height: 60),
                 H24B(
-                  text: LanguageService.trans("growth_and_development_home_care_mode"),
+                  text:"의료진과 함께하는\n우리 아이 홈케어",
                   maxLine: 2,
                   height: 1.2,
                 ),
@@ -73,15 +75,57 @@ class IntroGrowthPageState extends BaseState<IntroGrowthPage> {
                 ),
                 const SizedBox(height: 25),
                 H16(
-                  text: LanguageService.trans("intro3_description"),
+                  text: LanguageService.trans("intro2_description"),
                   weight: FW.medium,
-                  maxLine: 5,
-                  height: 1.5,
                   color: AppColor_Intro_Description,
+                  maxLine: 4,
+                  height: 1.5,
+                ),
+                const SizedBox(height: 15),
+                H16(
+                  text: "발달영역 케어",
+                  weight: FW.bold,
+                  color: AppColor_BlackText.withOpacity(0.45),
+                  maxLine: 1,
+                ),
+                const SizedBox(height: 5),
+                H14(
+                  text: "대근육 / 소근육 / 인지 / 정서 / 발달 / 자조 / 신체",
+                  weight: FW.medium,
+                  color: AppColor_Intro_Description,
+                  maxLine: 1,
+                ),
+                const SizedBox(height: 15),
+                H16(
+                  text: "생활습관 케어",
+                  weight: FW.bold,
+                  color: AppColor_BlackText.withOpacity(0.45),
+                  maxLine: 1,
+                ),
+                const SizedBox(height: 5),
+                H14(
+                  text: "개인 위생부터 사회성까지\n아이의 올바른 생활 습관을 위한 맞춤 솔루션",
+                  weight: FW.medium,
+                  color: AppColor_Intro_Description,
+                  maxLine: 2,
+                ),
+                const SizedBox(height: 15),
+                H16(
+                  text: "우리 아이 성장 기록",
+                  weight: FW.bold,
+                  color: AppColor_BlackText.withOpacity(0.45),
+                  maxLine: 1,
+                ),
+                const SizedBox(height: 5),
+                H14(
+                  text: "영양 / 수면 / 체온 / 질병",
+                  weight: FW.medium,
+                  color: AppColor_Intro_Description,
+                  maxLine: 2,
                 ),
                 Expanded(
                   child: Container(),
-                ),
+                )
               ],
             )),
             Row(

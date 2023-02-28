@@ -143,7 +143,7 @@ class MyPagePageState extends BaseState<MyPagePage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         ElevatedButton.icon(onPressed: (){
-                          launch("http://pf.kakao.com/_JAjBb");
+                          launch("http://pf.kakao.com/_xgkwexj");
                         }, icon: const Icon(Icons.chat_bubble_rounded), label: const Text("카카오 상담")),
                         const SizedBox(width: 15),
                         ElevatedButton.icon(onPressed: (){

@@ -27,7 +27,7 @@ import 'package:ourdoctor/pages/home/range_show.dart';
 import 'package:ourdoctor/pages/home/weight_report.dart';
 import 'package:ourdoctor/pages/intro/first.dart';
 import 'package:ourdoctor/pages/monitoring/monitoring_life_result.dart';
-import 'package:ourdoctor/pages/monitoring/solution_area.dart';
+import 'package:ourdoctor/pages/monitoring/monitoring_test_form.dart';
 import 'package:sprintf/sprintf.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -628,7 +628,7 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
                           height: 40,
                           radius: 20,
                           onPressed: () {
-                            launch("http://pf.kakao.com/_JAjBb");
+                            launch("http://pf.kakao.com/_xgkwexj");
                           },
                         ),
                       )
@@ -763,10 +763,29 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
           alignment: Alignment.topCenter,
           child: Column(
             children: [
-              SimpleHeader(
-                title: "우아 발달 모니터링 리포트",
-                onBackPressed: onBackPressed,
-              ),
+              Stack(children: [
+                SimpleHeader(
+                  title: "우아 발달 모니터링 리포트",
+                  onBackPressed: onBackPressed,
+                ),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Container(
+                    height: 62,
+                    width: 60,
+                    padding: EdgeInsets.only(right: 15.0, top: 24),
+                      child: InkWell(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                SlideRightTransRoute(builder: (context) => MonitoringTestForm()));
+                          },
+                          child: H14(
+                              text: "다시하기",
+                              align: TextAlign.right,
+                              weight: FW.medium))),
+                ),
+              ]),
               Container(
                 // width: MediaQuery.of(context).size.width - 64,
                 padding: const EdgeInsets.only(left: 20, right: 20, top: 10),

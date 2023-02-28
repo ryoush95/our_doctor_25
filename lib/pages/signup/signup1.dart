@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:ourdoctor/global/app_colors.dart';
 import 'package:ourdoctor/global/app_styles.dart';
 import 'package:ourdoctor/global/global.dart';
@@ -94,6 +95,8 @@ class SignUpParentPageState extends BaseState<SignUpParentPage> {
   String mValidId = ""; //중복 확인한 아이디
   int nDuplicatedNickname = 0;
   String mValidNickname = ""; //중복 확인한 닉네임
+  Color momColor = AppColor_Selector_Border;
+  Color dadColor = AppColor_Selector_Border;
 
   // FocusNode? detailAddrFocusNode;
   @override
@@ -166,9 +169,11 @@ class SignUpParentPageState extends BaseState<SignUpParentPage> {
         nickname.isEmpty ||
         // birth.isEmpty ||
         phone.isEmpty ||
-        dad_height.isEmpty ||
+        (dad_height.isEmpty &&
         // dad_weight.isEmpty ||
-        mom_height.isEmpty ||
+        mom_height.isEmpty )||
+        dadColor == AppColor_Red ||
+        momColor == AppColor_Red ||
         // mom_weight.isEmpty ||
         address1.isEmpty ||
         address2.isEmpty /*|| address3.isEmpty */ ||
@@ -195,9 +200,11 @@ class SignUpParentPageState extends BaseState<SignUpParentPage> {
         nickname.isEmpty ||
         // birth.isEmpty ||
         phone.isEmpty ||
-        dad_height.isEmpty ||
+        (dad_height.isEmpty &&
         // dad_weight.isEmpty ||
-        mom_height.isEmpty ||
+          mom_height.isEmpty )||
+        dadColor == AppColor_Red ||
+        momColor == AppColor_Red ||
         // mom_weight.isEmpty ||
         address1.isEmpty ||
         address2.isEmpty /*|| address3.isEmpty */ ||
@@ -300,9 +307,13 @@ class SignUpParentPageState extends BaseState<SignUpParentPage> {
   //////////////////////////////////
   //아이디 중복 체크
   void reqCheckLoginId() {
+    final reg = RegExp('[a-z0-9]*[a-z][a-z0-9]*');
     FocusScope.of(context).requestFocus(FocusNode());
     if (id.isEmpty) {
       showToast("아이디를 입력해 주세요.");
+      return;
+    } else if (!reg.hasMatch(id)) {
+      showToast("영어소문자를 반드시 포함해야 합니다.");
       return;
     }
     setState(() {
@@ -452,9 +463,15 @@ class SignUpParentPageState extends BaseState<SignUpParentPage> {
                                       onChanged: (text) {
                                         id = text;
                                         _idRegexValid = checkRegex(isId: true);
+                                        nDuplicatedId = 0;
                                         setState(() {});
                                         checkValid();
                                       },
+                                      format: [
+                                        FilteringTextInputFormatter.allow(
+                                          RegExp('[a-z0-9]'), // 영어 소문자는 필수, 숫자는 선택
+                                        )
+                                      ],
                                     ),
                                   ),
                                   const SizedBox(width: 10),
@@ -472,15 +489,15 @@ class SignUpParentPageState extends BaseState<SignUpParentPage> {
                                   ),
                                 ],
                               ),
-                              idInputController.text.length > 0 
+                              idInputController.text.isNotEmpty
                               ? Container(
                                 margin: const EdgeInsets.only(top: 9),
                                 child: H12(
                                   text: _idRegexValid
-                                    ? nDuplicatedId == 0 
+                                    ? nDuplicatedId == 0
                                       ? " "
                                       : (nDuplicatedId == 1 ? "중복 아이디는 사용할 수 없습니다." : "사용가능한 아이디입니다.")
-                                    : "아이디는 5-20자 사이의 영문 소문자, 숫자, 특수기호 ('_', '-') 만 사용 가능합니다.",
+                                    : "아이디는 5-20자 사이의 영문 소문자, 숫자만 사용 가능합니다.",
                                   weight: FW.medium,
                                   align: TextAlign.start,
                                   color: nDuplicatedId == 1 || !_idRegexValid ? AppColor_Red : AppColor_Primary,
@@ -506,7 +523,7 @@ class SignUpParentPageState extends BaseState<SignUpParentPage> {
                                   checkValid();
                                 },
                               ),
-                              pwdInputController.text.length > 0 
+                              pwdInputController.text.isNotEmpty
                               ? Container(
                                 margin: const EdgeInsets.only(top: 9),
                                 child: H12(
@@ -892,7 +909,18 @@ class SignUpParentPageState extends BaseState<SignUpParentPage> {
                                             textInputAction: TextInputAction.next,
                                             onEditingComplete: () => node.nextFocus(),
                                             placeholder: "",
-                                            onChanged: (text) => {dad_height = text, checkValid()},
+                                            onChanged: (text) {
+                                              dad_height = text;
+                                              if (double.parse(dad_height) > 1 &&
+                                                  double.parse(dad_height) < 200) {
+                                                dadColor = AppColor_Selector_Border;
+                                              } else {
+                                                dadColor = AppColor_Red;
+                                              }
+                                              checkValid();
+                                              setState(() {});
+                                            },
+                                            borderColor: dadColor,
                                           ),
                                         ),
                                         const SizedBox(width: 10),
@@ -929,7 +957,18 @@ class SignUpParentPageState extends BaseState<SignUpParentPage> {
                                             ),
                                             textInputAction: TextInputAction.done,
                                             placeholder: "",
-                                            onChanged: (text) => {mom_height = text, checkValid()},
+                                            onChanged: (text) {
+                                              mom_height = text;
+                                              if (double.parse(mom_height) > 1 &&
+                                                  double.parse(mom_height) < 200) {
+                                                momColor = AppColor_Selector_Border;
+                                              } else {
+                                                momColor = AppColor_Red;
+                                              }
+                                              checkValid();
+                                              setState(() {});
+                                            },
+                                            borderColor: momColor,
                                           ),
                                         ),
                                         const SizedBox(width: 10),
@@ -945,6 +984,14 @@ class SignUpParentPageState extends BaseState<SignUpParentPage> {
                               ),
                             ),
                           ],
+                        ),
+                        const SizedBox(height: 10,),
+                        H14(
+                          text: "* 보호자 모두의 키를 입력하지 않은 경우, 예측 키 결과가 정확하지 않을 수 있습니다.",
+                          weight: FW.medium,
+                          color: AppColor_BlackText.withOpacity(0.5),
+                          maxLine: 3,
+                          align: TextAlign.start,
                         ),
                         // const SizedBox(height: 30),
                         // Row(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:ourdoctor/global/app_colors.dart';
 import 'package:ourdoctor/global/app_styles.dart';
 
@@ -20,8 +21,9 @@ class UnderlineInput extends StatelessWidget {
   final textAlign;
   FocusNode? focus;
   bool? readOnly;
+  List<TextInputFormatter>? format;
 
-  UnderlineInput({Key? key, this.controller, this.keyboardType, this.placeholder, this.textInputAction, this.onEditingComplete, this.onChanged, this.borderColor, this.hintColor, this.maxLine, this.maxLength, this.height, this.weight, this.size, this.textAlign, this.isSecure, this.focus, this.readOnly})
+  UnderlineInput({Key? key, this.controller, this.keyboardType, this.placeholder, this.textInputAction, this.onEditingComplete, this.onChanged, this.borderColor, this.hintColor, this.maxLine, this.maxLength, this.height, this.weight, this.size, this.textAlign, this.isSecure, this.focus, this.readOnly, this.format})
       : super(key: key) {
     isSecure ??= false;
     maxLine ??= 1;
@@ -29,6 +31,7 @@ class UnderlineInput extends StatelessWidget {
     maxLength ??= -1;
     focus ??= FocusNode();
     readOnly ??= false;
+    format ??= [];
   }
 
   @override
@@ -62,6 +65,7 @@ class UnderlineInput extends StatelessWidget {
             border: InputBorder.none,
           ),
           onChanged: onChanged,
+          inputFormatters: format,
         ),
       ),
     );

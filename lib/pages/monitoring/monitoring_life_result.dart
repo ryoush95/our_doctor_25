@@ -445,32 +445,22 @@ class _MonitoringLifeResultState extends BaseState<MonitoringLifeResult> {
                 ),
               ) : const SizedBox(),
               const SizedBox(height: 30),
-              // RichText(
-              //   text: TextSpan(
-              //       children: [
-              //     TextSpan(
-              //       text: "성장, 발달에 ",
-              //       style:
-              //           AppTextStyle.PD(AppColor_BlackText, 16, weight: FW.bold),
-              //     ),
-              //     TextSpan(
-              //       text: "좋은 생활습관",
-              //       style:
-              //           AppTextStyle.PD(AppColor_Primary, 16, weight: FW.bold),
-              //     ),
-              //     TextSpan(
-              //       text: "이에요",
-              //       style:
-              //           AppTextStyle.PD(AppColor_BlackText, 16, weight: FW.bold),
-              //     ),
-              //   ]),
-              // ),
-              const SizedBox(height: 10),
               SizedBox(
                 // height: 90,
                 child: H14(
                   text: indiText,
                   maxLine: 4,
+                  height: 1.5,
+                  align: TextAlign.start,
+                ),
+              ),
+              const SizedBox(height: 10),
+              SizedBox(
+                // height: 90,
+                child: H14(
+                  text: "내가 체크한 답은 흐리게 표시 되며, 올바른 생활습관을 위한 답은 빨간색으로 표시돼요!",
+                  weight: FW.medium,
+                  maxLine: 8,
                   height: 1.5,
                   align: TextAlign.start,
                 ),

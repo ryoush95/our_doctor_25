@@ -204,15 +204,23 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
                     H14(
                       text: p.monitoringProgress != 3
                           ? "현재 개월 수에 맞는 모니터링을 해야할 시기가 지났어요"
-                          : "모니터링 결과를 통해 우리 아이 발달을 확인하세요"
-                          "\n결과는 의학적 소견과 관련이 없습니다",
+                          : "모니터링 결과를 통해 우리 아이 발달을 확인하세요",
                       weight: FW.regular,
                       maxLine: 3,
                       align: TextAlign.start,
                     ),
+                    const SizedBox(height: 10,),
+                    Visibility(
+                        visible: p.monitoringProgress == 3,
+                        child: H12(
+                          text: "본 모니터링 결과는 의학적인 진단을 의미하지는 않으며 경우에 따라 전문의의 진료가 필요합니다.",
+                          maxLine: 2,
+                          align: TextAlign.left,
+                          weight: FW.medium,
+                          color: AppColor_GrayText,
+                        )),
                   ],
                 ),
-
               ),
               const SizedBox(height: 15),
               Center(

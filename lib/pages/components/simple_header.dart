@@ -20,8 +20,8 @@ class SimpleHeader extends StatelessWidget {
               child: GestureDetector(
                 behavior: HitTestBehavior.translucent,
                 child: Container(
-                  height: 62,
-                  padding: const EdgeInsets.symmetric(horizontal: 20), 
+                  height: 22,
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Image.asset('assets/path_12225.png', width: 10,),
                 ),
                 onTap: onBackPressed,

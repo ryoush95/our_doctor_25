@@ -55,7 +55,7 @@ class InspectionTest2FirstPageState
       builder: (BuildContext context) => AlertDialog(
         title: const Text('검사 중단'),
         titleTextStyle: AppTextStyle.PD(Colors.black, 18, weight: FW.semi_bold),
-        content: Text('검사를 중단하시겠습니까?\n차감된 포인트는 환급되지 않습니다.'),
+        content: const Text('검사를 중단하시겠습니까?\n차감된 포인트는 환급되지 않습니다.'),
         contentTextStyle: AppTextStyle.PD(Colors.black, 18, weight: FW.regular),
         actions: <Widget>[
           TextButton(
@@ -110,56 +110,63 @@ class InspectionTest2FirstPageState
   Widget build(BuildContext context) {
     return PageLayout(
         isLoading: isLoading,
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              SimpleHeader(
-                title: widget.data.name,
-                onBackPressed: onBackPressed,
-              ),
-              FutureBuilder(
-                  future: precacheImage(CachedNetworkImageProvider(widget.data.detailImage!), context),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.done) {
-                      return CachedNetworkImage(imageUrl: widget.data.detailImage!,
-                        progressIndicatorBuilder: (context, url, downloadProgress) =>
-                            Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
-                      );
-                    } else {
-                      return const SizedBox(
-                        height: 85,
-                        child: Center(
-                            child: CircularProgressIndicator()),
-                      );
-                    }
-                  }
-              ),
-              // Image.network(widget.data.detailImage!),
-              Container(
-                padding: EdgeInsets.all(30),
-                child: MainTextButton(
-                  text: "시작하기",
-                  backgroundColor: AppColor_Primary,
-                  style: AppTextStyle.PD(Colors.white, 18, weight: FW.bold),
-                  height: 70,
-                  onPressed: () {
-                    if(widget.data.category2 == "TEST2") {
-                      Navigator.pushReplacement(context,
-                        SlideRightTransRoute(builder: (context) =>
-                            InspectionTest2AnswerPage(listData: list2, info: widget.data,)),
-                      );
-                    }
-                    if (widget.data.category2 == "TEST4"){
-                      Navigator.pushReplacement(context,
-                        SlideRightTransRoute(builder: (context) =>
-                            InspectionTest4AnswerPage(listData: list4, info: widget.data,)),
-                      );
-                    }
-                  },
+        child: Column(
+          children: [
+            SimpleHeader(
+              title: widget.data.name,
+              onBackPressed: onBackPressed,
+            ),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    FutureBuilder(
+                        future: precacheImage(CachedNetworkImageProvider(widget.data.detailImage!), context),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState == ConnectionState.done) {
+                            return CachedNetworkImage(imageUrl: widget.data.detailImage!,
+                              progressIndicatorBuilder: (context, url, downloadProgress) =>
+                                  Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
+                            );
+                          } else {
+                            return const SizedBox(
+                              height: 85,
+                              child: Center(
+                                  child: CircularProgressIndicator()),
+                            );
+                          }
+                        }
+                    ),
+                    Container(
+                      padding: EdgeInsets.all(30),
+                      child: MainTextButton(
+                        text: "시작하기",
+                        backgroundColor: AppColor_Primary,
+                        style: AppTextStyle.PD(Colors.white, 18, weight: FW.bold),
+                        height: 70,
+                        onPressed: () {
+                          if(widget.data.category2 == "TEST2") {
+                            Navigator.pushReplacement(context,
+                              SlideRightTransRoute(builder: (context) =>
+                                  InspectionTest2AnswerPage(listData: list2, info: widget.data,)),
+                            );
+                          }
+                          if (widget.data.category2 == "TEST4"){
+                            Navigator.pushReplacement(context,
+                              SlideRightTransRoute(builder: (context) =>
+                                  InspectionTest4AnswerPage(listData: list4, info: widget.data,)),
+                            );
+                          }
+                        },
+                      ),
+                    )
+                  ],
                 ),
-              )
-            ],
-          ),
+              ),
+            ),
+            // Image.network(widget.data.detailImage!),
+
+          ],
         ));
   }
 }

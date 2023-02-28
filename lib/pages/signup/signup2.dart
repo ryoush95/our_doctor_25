@@ -306,9 +306,6 @@ class SignupFamilyPageState extends BaseState<SignupFamilyPage> {
           return;
         }
       }
-      setState(() {
-        isValid = true;
-      });
     }
     /*
     for (int i = 0; i < selCommon.length; i++) {
@@ -340,12 +337,16 @@ class SignupFamilyPageState extends BaseState<SignupFamilyPage> {
       String content = childHeightInputController.elementAt(i).text;
       if (content == "") {
         return;
+      } else if (double.parse(content) < 1 || double.parse(content) > 200) {
+        return;
       }
     }
 
     for (int i = 0; i < childWeightInputController.length; i++) {
       String content = childWeightInputController.elementAt(i).text;
       if (content == "") {
+        return;
+      } else if (double.parse(content) < 1 || double.parse(content) > 200) {
         return;
       }
     }
@@ -384,8 +385,9 @@ class SignupFamilyPageState extends BaseState<SignupFamilyPage> {
       }
     }
     */
-    isValid = true;
-    setState(() {});
+    setState(() {
+      isValid = true;
+    });
   }
 
   Future<void> showBirthdayDlg(int index) async {
@@ -485,7 +487,6 @@ class SignupFamilyPageState extends BaseState<SignupFamilyPage> {
 
   void onDeleteChild(int index) {
     children_count = children_count - 1;
-    print(index);
     name.removeAt(index);
     nameInputController.removeAt(index);
     gender.removeAt(index);
@@ -1481,6 +1482,11 @@ class SignupFamilyPageState extends BaseState<SignupFamilyPage> {
                                 textInputAction: TextInputAction.next,
                                 placeholder: "",
                                 onChanged: (text) => {child_height[index] = text, checkValid()},
+                                borderColor:
+                                child_height[index].isEmpty ? AppColor_Selector_Border :
+                                    double.parse(child_height[index]) < 1 ||
+                                    double.parse(child_height[index]) > 200
+                                    ? AppColor_Red : AppColor_Selector_Border,
                               ),
                             ),
                             const SizedBox(width: 10),
@@ -1514,6 +1520,10 @@ class SignupFamilyPageState extends BaseState<SignupFamilyPage> {
                                 textInputAction: TextInputAction.next,
                                 placeholder: "",
                                 onChanged: (text) => {child_weight[index] = text, checkValid()},
+                                borderColor: child_weight[index].isEmpty ? AppColor_Selector_Border
+                                    : double.parse(child_weight[index]) < 1 ||
+                                        double.parse(child_weight[index]) > 200
+                                    ? AppColor_Red : AppColor_Selector_Border,
                               ),
                             ),
                             const SizedBox(width: 10),
