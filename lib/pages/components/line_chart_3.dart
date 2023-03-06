@@ -1,6 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:ourdoctor/global/app_colors.dart';
 import 'package:ourdoctor/global/app_styles.dart';
 import 'package:ourdoctor/language/language_service.dart';
 import 'package:ourdoctor/models/dto/report_dto.dart';
@@ -79,6 +80,7 @@ class _LineChart3WidgetState extends State<LineChart3Widget> {
               LineChart(
                 mainData(),
               ),
+              //국가평균
               LineChart(
                 mainData1(),
               ),
@@ -135,8 +137,7 @@ class _LineChart3WidgetState extends State<LineChart3Widget> {
             // interval: ((maxY - minY) / 3).floor().toDouble(),
             getTitlesWidget: (value, meta) {
               String title = value.toInt().toString();
-              final style = AppTextStyle.PD(const Color(0xffa0a0a0), 11,
-                  weight: FW.medium);
+              final style = AppTextStyle.PD(Colors.transparent, 11, weight: FW.medium);
               return SideTitleWidget(
                   child: Text(title, style: style), axisSide: meta.axisSide);
             },
@@ -246,8 +247,12 @@ class _LineChart3WidgetState extends State<LineChart3Widget> {
             // interval: ((maxY - minY) / 3).floor().toDouble(),
             getTitlesWidget: (value, meta) {
               String title = value.toInt().toString();
-              final style = AppTextStyle.PD(const Color(0xffa0a0a0), 11,
-                  weight: FW.medium);
+              var style = AppTextStyle.PD(AppColor_GrayText, 11, weight: FW.medium);
+              if (getMinY().floor() - 1.0 == value || getMaxY().ceil() + 1.0 == value) {
+                style = AppTextStyle.PD(Colors.transparent, 11, weight: FW.medium);
+                return SideTitleWidget(
+                    child: Text(title, style: style), axisSide: meta.axisSide);
+              }
               return SideTitleWidget(
                   child: Text(title, style: style), axisSide: meta.axisSide);
             },
@@ -315,7 +320,7 @@ class _LineChart3WidgetState extends State<LineChart3Widget> {
             // interval: ((maxY - minY) / 3).floor().toDouble(),
             getTitlesWidget: (value, meta) {
               String title = value.toInt().toString();
-              final style = AppTextStyle.PD(const Color(0xffa0a0a0), 11,
+              final style = AppTextStyle.PD(Colors.transparent, 11,
                   weight: FW.medium);
               return SideTitleWidget(
                   child: Text(title, style: style), axisSide: meta.axisSide);
@@ -384,7 +389,7 @@ class _LineChart3WidgetState extends State<LineChart3Widget> {
             // interval: ((maxY - minY) / 3).floor().toDouble(),
             getTitlesWidget: (value, meta) {
               String title = value.toInt().toString();
-              final style = AppTextStyle.PD(const Color(0xffa0a0a0), 11,
+              final style = AppTextStyle.PD(Colors.transparent, 11,
                   weight: FW.medium);
               return SideTitleWidget(
                   child: Text(title, style: style), axisSide: meta.axisSide);

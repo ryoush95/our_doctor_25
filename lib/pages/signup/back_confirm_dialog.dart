@@ -6,6 +6,7 @@ import 'package:ourdoctor/language/language_service.dart';
 import 'package:ourdoctor/pages/components/h16.dart';
 import 'package:ourdoctor/pages/components/h24_b.dart';
 import 'package:ourdoctor/pages/components/main_text_button.dart';
+import 'package:ourdoctor/pages/intro/first.dart';
 import 'package:ourdoctor/pages/intro/login1.dart';
 
 class BackConfirmDialog extends StatefulWidget {
@@ -94,7 +95,7 @@ class BackConfirmDialogState extends State<BackConfirmDialog> {
                                 Navigator.pop(context);
                                 Navigator.pop(context);
                                 Navigator.pop(context);
-                                Navigator.push(context, SlideRightTransRoute(builder: (context) => Login1Page()));
+                                Navigator.push(context, SlideRightTransRoute(builder: (context) => FirstPage()));
                               },
                             ),
                           )

@@ -188,7 +188,7 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
       setState(() {
         isLoading = false;
       });
-      showToast(onError);
+      print(onError.toString());
     });
   }
 
@@ -278,7 +278,7 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
             InkWell(
               onTap: () {
                 subTabIndex2 = 1;
-                solList = dicHomeGraphWeightInfo!.solutionList!.values.toList();
+                solList = dicHomeGraphWeightInfo == null ? [] :  dicHomeGraphWeightInfo!.solutionList!.values.toList();
                 setState(() {});
               },
               child: Container(
@@ -639,7 +639,13 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
     } else if (tabIndex == 1) {
       return MonitoringLifeResult(controller: sc);
     } else if (tabIndex == 2) {
-      solList = subTabIndex2 == 0 ? dicHomeGraphTallInfo!.solutionList!.values.toList() : dicHomeGraphWeightInfo!.solutionList!.values.toList();
+      if (dicHomeGraphTallInfo == null || dicHomeGraphWeightInfo == null) {
+        solList = [];
+      } else {
+        solList = subTabIndex2 == 0
+            ? dicHomeGraphTallInfo!.solutionList!.values.toList()
+            : dicHomeGraphWeightInfo!.solutionList!.values.toList();
+      }
       setState(() {});
       return Container(
         child: Column(

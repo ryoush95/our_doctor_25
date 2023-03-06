@@ -6,6 +6,9 @@ class ConvertScoreProvider extends ChangeNotifier{
   int _tab = 0;
   int get tab => _tab;
 
+  String _snsName = "";
+  String get snsName => _snsName;
+
   int _careTab = 0;
   int get careTab => _careTab;
 
@@ -21,5 +24,10 @@ class ConvertScoreProvider extends ChangeNotifier{
 
   void changeCareTab(int t) {
     _careTab = t;
+  }
+
+  void changeSNSName(String s) {
+    _snsName = s;
+    notifyListeners();
   }
 }

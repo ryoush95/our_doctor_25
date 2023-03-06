@@ -22,6 +22,8 @@ import 'package:ourdoctor/pages/components/h20.dart';
 import 'package:ourdoctor/pages/intro/login1.dart';
 import 'package:ourdoctor/pages/signup/agree.dart';
 import 'package:ourdoctor/pages/tab_main.dart';
+import 'package:ourdoctor/provider/convert_score_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class FirstPage extends StatefulWidget {
@@ -71,6 +73,11 @@ class FirstPageState extends BaseState<FirstPage> {
       if (credential.userIdentifier == "") {
         showToast("애플 로그인 실패되었습니다.");
         return;
+      }
+      // print("credntial => ${credential}");
+      if (credential.givenName != null){
+        String name = credential.familyName! + credential.givenName!;
+        Provider.of<ConvertScoreProvider>(context, listen: false).changeSNSName(name);
       }
       id = credential.userIdentifier!;
       password = credential.userIdentifier!;

@@ -29,6 +29,8 @@ import 'package:ourdoctor/pages/intro/first.dart';
 import 'package:ourdoctor/pages/signup/address.dart';
 import 'package:ourdoctor/pages/signup/signup2.dart';
 import 'package:ourdoctor/pages/signup/signup3.dart';
+import 'package:ourdoctor/provider/convert_score_provider.dart';
+import 'package:provider/provider.dart';
 
 import 'back_confirm_dialog.dart';
 
@@ -109,6 +111,7 @@ class SignUpParentPageState extends BaseState<SignUpParentPage> {
     }
 
     if (widget.snsid != "") {
+      nameInputController.text = Provider.of<ConvertScoreProvider>(context, listen: false).snsName;
       id = widget.snsid!;
       pwd = widget.snsid!;
       pwd1 = widget.snsid!;

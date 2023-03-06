@@ -13,6 +13,7 @@ import 'package:ourdoctor/models/home_grapth_res_model.dart';
 import 'package:ourdoctor/models/homecare_banner_res_model.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
 import 'package:ourdoctor/pages/care/product_detail.dart';
+import 'package:ourdoctor/pages/components/h12.dart';
 import 'package:ourdoctor/pages/components/h16.dart';
 import 'package:ourdoctor/pages/components/h18.dart';
 import 'package:ourdoctor/pages/components/h32_b.dart';
@@ -299,7 +300,14 @@ class HeightReportState extends BaseState<HeightReport> {
               subtext: widget.data.monitoring!.diagnose!.result!.contains("정상") ? "" : (widget.data.diff! >= 0 ? "+" : "") + convertScore(widget.data.diff!.toStringAsFixed(1)) + "cm",
             ),
             const SizedBox(height: 30),
-            H16(text: "예측 키는 후천적 노력과 환경에 따라 달라질 수 있습니다.", weight: FW.medium),
+            Container(
+              height: 30,
+              width: MediaQuery.of(context).size.width - 120,
+              child: Center(
+                child: H12(text: "예측 키는 후천적 노력과 환경에\n 따라 달라질 수 있습니다.", weight: FW.medium,
+                  maxLine: 2, align: TextAlign.center, color: AppColor_GrayText,),
+              ),
+            ),
             const SizedBox(height: 30),
             const Divider(color: AppColor_Light_Gray, thickness: 3),
             const SizedBox(height: 30),
