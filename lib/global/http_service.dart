@@ -2577,7 +2577,25 @@ class HttpService {
     Uri myUri = Uri.parse(_url);
     final response = await http.post(myUri, body: body);
     if (response.statusCode == 200) {
-    print(response.body);
+      return TestQuizResultModel.fromJson(json.decode(response.body));
+    } else {
+      // If that call was not successful, throw an error.
+      showToast(LanguageService.trans("server_fail"));
+      throw Exception(LanguageService.trans("server_fail"));
+    }
+  }
+
+  //부모양육태도 결과 가져오기
+  Future<TestQuizResultModel> getTestQuizResult43(String quizName, String quizResult) async {
+    String _url = API_BASE_URL + "api/monitoring/save_parenting_style_test";
+    Map<String, String> body = {
+      'access_token': gUserInfo!.accessToken!,
+      'answer' : quizResult,
+    };
+    Uri myUri = Uri.parse(_url);
+    final response = await http.post(myUri, body: body);
+    if (response.statusCode == 200) {
+      print(response.body);
       return TestQuizResultModel.fromJson(json.decode(response.body));
     } else {
       // If that call was not successful, throw an error.

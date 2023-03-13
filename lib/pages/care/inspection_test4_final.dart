@@ -57,7 +57,7 @@ class InspectionTest4FinalPageState
               const SizedBox(height: 20,),
               Center(
                 child: Image.network(
-                  widget.info.mainImage!,
+                  widget.result.resultImage!,
                   width: MediaQuery.of(context).size.width - 60,
                 ),
               ),

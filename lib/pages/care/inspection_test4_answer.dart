@@ -364,23 +364,50 @@ class InspectionTest4AnswerPageState
   Future<void> getResult() async {
     quizResult = list.map((e) => e.answer).toList();
     String r = jsonEncode(quizResult);
-    Future<TestQuizResultModel> info = httpService.getTestQuizResult(widget.info.id!, r);
-    info.then((value) async {
-      setState(() {
-        isLoading = false;
+    if (widget.info.id == "52"){
+      Future<TestQuizResultModel> info = httpService.getTestQuizResult43(
+          widget.info.id!, r);
+      info.then((value) async {
+        setState(() {
+          isLoading = false;
+        });
+        if (value.result == 0) {
+          Navigator.of(context).pushReplacement(
+            SlideRightTransRoute(
+                builder: (context) =>
+                    InspectionTest4FinalPage(
+                        info: widget.info, result: value.data!)),
+          );
+          print(r);
+          quizNum = 0;
+          quizResult.clear();
+          setState(() {});
+        }
+      }).catchError((onError) {
+        print(onError.toString());
       });
-      if (value.result == 0) {
-        Navigator.of(context).pushReplacement(
-          SlideRightTransRoute(
-              builder: (context) => InspectionTest4FinalPage(info: widget.info, result : value.data!)),
-        );
-        quizNum = 0;
-        quizResult.clear();
-        setState(() {});
-      }
-    }).catchError((onError) {
-      print(onError.toString());
-    });
+    } else {
+      Future<TestQuizResultModel> info = httpService.getTestQuizResult(
+          widget.info.id!, r);
+      info.then((value) async {
+        setState(() {
+          isLoading = false;
+        });
+        if (value.result == 0) {
+          Navigator.of(context).pushReplacement(
+            SlideRightTransRoute(
+                builder: (context) =>
+                    InspectionTest4FinalPage(
+                        info: widget.info, result: value.data!)),
+          );
+          quizNum = 0;
+          quizResult.clear();
+          setState(() {});
+        }
+      }).catchError((onError) {
+        print(onError.toString());
+      });
+    }
   }
 
   @override

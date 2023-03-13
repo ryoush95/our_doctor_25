@@ -303,7 +303,6 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
         const SizedBox(height: 22),
         Container(
           width: double.infinity,
-          height: 400,
           padding: const EdgeInsets.all(20.0),
           decoration: const BoxDecoration(
               color: AppColor_White,
@@ -464,9 +463,8 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
                   ],
                 ),
               ),
-              const Spacer(),
+              const SizedBox(height: 30),
               SizedBox(
-                height: 100,
                 child: H16(
                   text: "아이의 건강한 성장을 위해 성장 기록을 시작해 볼까요?",
                   weight: FW.regular,
@@ -475,7 +473,7 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
                 ),
 
               ),
-              const SizedBox(height: 15),
+              const SizedBox(height: 30),
               Center(
                 child: MainTextButton(
                   text: p.todayNote == false ? "성장 노트 기록하기" : "지난 기록 보기",

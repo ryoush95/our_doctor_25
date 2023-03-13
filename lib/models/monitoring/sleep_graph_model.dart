@@ -47,8 +47,8 @@ class SleepDataDto {
 
   int? avgSleepLaunch;
   int? avgSleepNight;
-  int? yesterdaySleepNight;
-  int? yesterdaySleepLaunch;
+  String? yesterdaySleepNight;
+  String? yesterdaySleepLaunch;
   List<GraphSleep>? graphSleep;
 
   factory SleepDataDto.fromRawJson(String str) => SleepDataDto.fromJson(json.decode(str));
@@ -58,8 +58,8 @@ class SleepDataDto {
   factory SleepDataDto.fromJson(Map<String, dynamic> json) => SleepDataDto(
     avgSleepLaunch: json["avg_sleep_launch"],
     avgSleepNight: json["avg_sleep_night"],
-    yesterdaySleepNight: json["yesterday_sleep_night"],
-    yesterdaySleepLaunch: json["yesterday_sleep_launch"],
+    yesterdaySleepNight: json["yesterday_sleep_night"] ?? "0",
+    yesterdaySleepLaunch: json["yesterday_sleep_launch"] ?? "0",
     graphSleep: json["graph_sleep"] == null ? [] : List<GraphSleep>.from(json["graph_sleep"]!.map((x) => GraphSleep.fromJson(x))),
   );
 
