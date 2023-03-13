@@ -188,7 +188,7 @@ class InspectionTest4AnswerPageState
       children: [
         Row(
           children: [
-            quizList[index].answer == "1" || quizList[index].answer == "2"
+            quizList[index].answer == "0" || quizList[index].answer == "1"
                 ? Container(
                     width: 90,
                     height: 30,
@@ -236,14 +236,14 @@ class InspectionTest4AnswerPageState
               InkWell(
                 onTap: () {
                   setState(() {
-                    list[index].answer = "1";
-                    quizList[index].answer = "1";
+                    list[index].answer = "0";
+                    quizList[index].answer = "0";
                   });
                 },
                 child: Row(
                   children: [
                     Image.asset(
-                      quizList[index].answer == "1"
+                      quizList[index].answer == "0"
                           ? "assets/ic_option_on.png"
                           : "assets/ic_option_off.png",
                       width: 35,
@@ -255,8 +255,27 @@ class InspectionTest4AnswerPageState
               InkWell(
                 onTap: () {
                   setState(() {
-                    quizList[index].answer = "2";
+                    quizList[index].answer = "1";
+                    list[index].answer = "1";
+                  });
+                },
+                child: Row(
+                  children: [
+                    Image.asset(
+                      quizList[index].answer == "1"
+                          ? "assets/ic_option_on.png"
+                          : "assets/ic_option_off.png",
+                      width: 25,
+                      height: 25,
+                    ),
+                  ],
+                ),
+              ),
+              InkWell(
+                onTap: () {
+                  setState(() {
                     list[index].answer = "2";
+                    quizList[index].answer = "2";
                   });
                 },
                 child: Row(
@@ -284,25 +303,6 @@ class InspectionTest4AnswerPageState
                       quizList[index].answer == "3"
                           ? "assets/ic_option_on.png"
                           : "assets/ic_option_off.png",
-                      width: 25,
-                      height: 25,
-                    ),
-                  ],
-                ),
-              ),
-              InkWell(
-                onTap: () {
-                  setState(() {
-                    list[index].answer = "4";
-                    quizList[index].answer = "4";
-                  });
-                },
-                child: Row(
-                  children: [
-                    Image.asset(
-                      quizList[index].answer == "4"
-                          ? "assets/ic_option_on.png"
-                          : "assets/ic_option_off.png",
                       width: 35,
                       height: 35,
                     ),
@@ -316,7 +316,7 @@ class InspectionTest4AnswerPageState
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            quizList[index].answer == "3" || quizList[index].answer == "4"
+            quizList[index].answer == "2" || quizList[index].answer == "3"
                 ? Container(
                     alignment: Alignment.bottomLeft,
                     width: 90,

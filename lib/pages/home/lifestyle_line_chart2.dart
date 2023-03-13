@@ -92,7 +92,7 @@ class LifestyleLineChart2State extends BaseState<LifestyleLineChart2> {
                     // padding: const EdgeInsets.symmetric(horizontal: 15),
                     color: Colors.white,
                     // 체온 그래프
-                    child: LineChartTemp(points: tempList, points2 : pricePoints2),
+                    child: TempLineChart(points: tempList, points2 : pricePoints2),
                   ),
                 ),
                 const SizedBox(height: 20),

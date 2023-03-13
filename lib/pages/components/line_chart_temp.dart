@@ -5,21 +5,21 @@ import 'package:ourdoctor/global/app_styles.dart';
 import 'package:ourdoctor/pages/components/price_point.dart';
 import 'package:sprintf/sprintf.dart';
 
-class LineChartTemp extends StatefulWidget {
-  const LineChartTemp({Key? key, required this.points, required this.points2}) : super(key: key);
+class TempLineChart extends StatefulWidget {
+  const TempLineChart({Key? key, required this.points, required this.points2}) : super(key: key);
 
   final List<PricePoint> points;
   final List<PricePoint> points2;
 
   @override
-  State<LineChartTemp> createState() => _LineChartTempState(points: this.points);
+  State<TempLineChart> createState() => _TempLineChartState(points: this.points);
 }
 
-class _LineChartTempState extends State<LineChartTemp> {
+class _TempLineChartState extends State<TempLineChart> {
   final List<PricePoint> points;
   late int showingTooltipSpot;
 
-  _LineChartTempState({required this.points});
+  _TempLineChartState({required this.points});
 
   List<String> d = [];
   List<Color> gradientColors = [];
@@ -33,7 +33,7 @@ class _LineChartTempState extends State<LineChartTemp> {
     showingTooltipSpot = -1;
     super.initState();
     WidgetsBinding.instance!.addPostFrameCallback((_) {
-      sc.jumpTo(now.day.toDouble() * 22);
+      sc.jumpTo(now.day.toDouble() * 14);
     });
     DateTime(now.year, now.month + 1, 0).day.toDouble();
 

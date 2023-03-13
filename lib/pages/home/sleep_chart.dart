@@ -12,16 +12,16 @@ import 'package:ourdoctor/pages/components/line_chart.dart';
 import 'package:ourdoctor/pages/components/line_chart2.dart';
 import 'package:sprintf/sprintf.dart';
 
-class SleepChart extends StatefulWidget {
-  SleepChart({Key? key, required this.data}) : super(key: key);
+class NightSleepChart extends StatefulWidget {
+  NightSleepChart({Key? key, required this.data}) : super(key: key);
 
   final SleepDataDto data;
 
   @override
-  SleepChartState createState() => SleepChartState();
+  NightSleepChartState createState() => NightSleepChartState();
 }
 
-class SleepChartState extends BaseState<SleepChart> {
+class NightSleepChartState extends BaseState<NightSleepChart> {
   DateTime now = DateTime.now();
   @override
   Widget build(BuildContext context) {
