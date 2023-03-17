@@ -799,6 +799,7 @@ class HttpService {
       'child_list': child_list,
       'nickname': nickname,
       'alarm_yn' : alarm,
+      'system_alarm_yn' : 'y',
     };
     Uri myUri = Uri.parse(_url);
     final response = await http.post(myUri, body: body);
@@ -806,7 +807,6 @@ class HttpService {
       return SignupParentResModel.fromJson(json.decode(response.body));
     } else {
       // If that call was not successful, throw an error.
-      print(response.body);
       showToast(LanguageService.trans("server_fail"));
       throw Exception(LanguageService.trans("server_fail"));
     }
@@ -916,6 +916,7 @@ class HttpService {
       'address_detail': address2,
       'add_child': isChild,
       'alarm_yn': alarm,
+      'system_alarm_yn' : 'y',
       'child_list': childList,
       'gender': gender.toString(),
       'hospital_id': hosiptalId,
@@ -1294,11 +1295,12 @@ class HttpService {
   }
 
   //설정
-  Future<DefaultResModel> setting(String alarm_yn) async {
+  Future<DefaultResModel> setting(String alarm_yn, String system_alarm_yn) async {
     String _url = API_BASE_URL + "api/user/change_setting";
     Map<String, String> body = {
       'access_token': gUserInfo!.accessToken!,
       'alarm_yn': alarm_yn,
+      'system_alarm_yn' : system_alarm_yn,
     };
     Uri myUri = Uri.parse(_url);
     final response = await http.post(myUri, body: body);
@@ -1432,7 +1434,7 @@ class HttpService {
   }
 
   //회원정보수정-부모정보수정
-  Future<DefaultResModel> changeParentProfile(String pwd, String name, String birth, String phone, String postcode, String address, String address_detail, String dad_height, String dad_weight, String mom_kidney, String mom_weight, String relation, String nickname, String alarm) async {
+  Future<DefaultResModel> changeParentProfile(String pwd, String name, String birth, String phone, String postcode, String address, String address_detail, String dad_height, String dad_weight, String mom_kidney, String mom_weight, String relation, String nickname, String alarm, String systemAlarm) async {
     String _url = API_BASE_URL + "api/user/change_profile3";
 
     Map<String, String> body = {
@@ -1451,6 +1453,7 @@ class HttpService {
       'relation': relation,
       'nickname': nickname,
       'alarm' : alarm,
+      'system_alarm' : systemAlarm,
     };
     Uri myUri = Uri.parse(_url);
     final response = await http.post(myUri, body: body);
@@ -2586,23 +2589,23 @@ class HttpService {
   }
 
   //부모양육태도 결과 가져오기
-  Future<TestQuizResultModel> getTestQuizResult43(String quizName, String quizResult) async {
-    String _url = API_BASE_URL + "api/monitoring/save_parenting_style_test";
-    Map<String, String> body = {
-      'access_token': gUserInfo!.accessToken!,
-      'answer' : quizResult,
-    };
-    Uri myUri = Uri.parse(_url);
-    final response = await http.post(myUri, body: body);
-    if (response.statusCode == 200) {
-      print(response.body);
-      return TestQuizResultModel.fromJson(json.decode(response.body));
-    } else {
-      // If that call was not successful, throw an error.
-      showToast(LanguageService.trans("server_fail"));
-      throw Exception(LanguageService.trans("server_fail"));
-    }
-  }
+  // Future<TestQuizResultModel> getTestQuizResult43(String quizName, String quizResult) async {
+  //   String _url = API_BASE_URL + "api/monitoring/save_parenting_style_test";
+  //   Map<String, String> body = {
+  //     'access_token': gUserInfo!.accessToken!,
+  //     'answer' : quizResult,
+  //   };
+  //   Uri myUri = Uri.parse(_url);
+  //   final response = await http.post(myUri, body: body);
+  //   if (response.statusCode == 200) {
+  //     print(response.body);
+  //     return TestQuizResultModel.fromJson(json.decode(response.body));
+  //   } else {
+  //     // If that call was not successful, throw an error.
+  //     showToast(LanguageService.trans("server_fail"));
+  //     throw Exception(LanguageService.trans("server_fail"));
+  //   }
+  // }
 
   //발달영역 모니터링 문제
   Future<MonitoringHealthListModel> getMonitoringHealthList() async {

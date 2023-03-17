@@ -509,8 +509,8 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
           child: Container(
-            margin: EdgeInsets.all(20.0),
-            child: data == null ? const SizedBox() : Column(
+            margin: const EdgeInsets.all(20.0),
+            child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 monitor1(p!),

@@ -24,6 +24,7 @@ import 'package:ourdoctor/pages/components/h24_b.dart';
 import 'package:ourdoctor/pages/components/main_text_button.dart';
 import 'package:ourdoctor/pages/home/add_children1.dart';
 import 'package:ourdoctor/pages/intro/first.dart';
+import 'package:ourdoctor/pages/my/notification_alert_widget.dart';
 import 'package:ourdoctor/pages/signup/signup3.dart';
 import 'package:ourdoctor/pages/tab_main.dart';
 
@@ -131,6 +132,8 @@ class SignupFinishPageState extends BaseState<SignupFinishPage> {
       isLoading = true;
     });
 
+    await updateSetting();
+
     Future<ChildInfoResModel> info = httpService.childInfo2(uid);
     info.then((ChildInfoResModel value) async {
       setState(() {
@@ -147,6 +150,36 @@ class SignupFinishPageState extends BaseState<SignupFinishPage> {
       setState(() {
         isLoading = false;
       });
+      showToast(onError);
+    });
+  }
+
+  Future<void> updateSetting() async {
+    String content =
+    """
+해당 기기로 댓글 알림 등
+서비스 이용에 필요한 안내 사항을 
+푸시 알림으로 전송하려고 합니다.
+
+앱 푸시에 수신 동의하시겠습니까?""";
+    bool? agree = await notificationShowDialogb2(context, "우아닥터에서 시스템 알림을 보내고자 합니다.", content);
+    gUserInfo!.systemAlarmYn = "n";
+    if (agree) {
+      gUserInfo!.systemAlarmYn = "y";
+    }
+
+    Future<DefaultResModel> info = httpService.setting(gUserInfo!.alarmYn!, gUserInfo!.systemAlarmYn!);
+    info.then((DefaultResModel value) async {
+      if (value.result == 0) {
+        gUserInfo!.alarmYn = gUserInfo!.alarmYn == "y" ? "n" : "y";
+        setState(() {});
+      } else {
+        if (value.result == 106) {
+          //token expired
+          Navigator.pushReplacement(context, SlideRightTransRoute(builder: (context) => FirstPage()));
+        }
+      }
+    }).catchError((onError) {
       showToast(onError);
     });
   }

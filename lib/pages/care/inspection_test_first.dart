@@ -92,7 +92,10 @@ class InspectionTest2FirstPageState
   }
 
   void getQuizList4() async {
-    Future<Test4QuizModel> info = httpService.getTest4QuizList(/*widget.data.id!*/"43");
+    if (widget.data.id == "52"){
+      widget.data.id = widget.data.category3;
+    }
+    Future<Test4QuizModel> info = httpService.getTest4QuizList(widget.data.id!);
     info.then((value) async {
       setState(() {
         isLoading = false;

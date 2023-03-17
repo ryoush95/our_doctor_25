@@ -4,6 +4,7 @@ import 'package:ourdoctor/global/app_colors.dart';
 import 'package:ourdoctor/global/app_styles.dart';
 import 'package:ourdoctor/global/global.dart';
 import 'package:ourdoctor/global/http_service.dart';
+import 'package:ourdoctor/helpers/common_util.dart';
 import 'package:ourdoctor/helpers/transition.dart';
 import 'package:ourdoctor/language/language_service.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
@@ -13,6 +14,7 @@ import 'package:ourdoctor/pages/components/h18.dart';
 import 'package:ourdoctor/pages/components/h22.dart';
 import 'package:ourdoctor/pages/components/h24_b.dart';
 import 'package:ourdoctor/pages/components/main_text_button.dart';
+import 'package:ourdoctor/pages/my/notification_alert_widget.dart';
 import 'package:ourdoctor/pages/signup/signup1.dart';
 
 class AgreePage extends StatefulWidget {
@@ -389,22 +391,31 @@ class AgreePageState extends BaseState<AgreePage> {
                                   height: 58,
                                   radius: 16,
                                   disableBackground: !isAll ? AppColor_Primary_Disable : Colors.transparent,
-                                  onPressed: () {
+                                  onPressed: () async {
                                     if (!isAll) {
                                       return;
                                     }
+                                    String content =
+                                    """
+전송자 : 우아닥터
+일시 : ${DateTime.now().year}년 ${DateTime.now().month}월 ${DateTime.now().day}일
+내용 : ${isItem5 ? "수신 동의 완료" : "수신거부 처리 완료"}
+
+광고성 정보 수신 동의는 마이페이지>내 정보>정보 수정하기에서 변경 가능합니다.""";
+                                    await notificationShowDialogb1(context, "광고성 정보 수신 동의 처리 결과", content);
                                     Navigator.push(
-                                        context,
-                                        SlideRightTransRoute(
-                                            builder: (context) => SignUpParentPage(
-                                                  snsid: widget.snsid,
-                                                  type: widget.type,
-                                                  dadHeight: widget.dadHeight,
-                                                  momHeight: widget.momHeight,
-                                                  childHeight: widget.childHeight,
-                                                  childWeight: widget.childWeight,
-                                                  alarm: isItem5 ? "y" : "n",
-                                                )),
+                                      context,
+                                      SlideRightTransRoute(
+                                          builder: (context) =>
+                                              SignUpParentPage(
+                                                snsid: widget.snsid,
+                                                type: widget.type,
+                                                dadHeight: widget.dadHeight,
+                                                momHeight: widget.momHeight,
+                                                childHeight: widget.childHeight,
+                                                childWeight: widget.childWeight,
+                                                alarm: isItem5 ? "y" : "n",
+                                              )),
                                     );
                                   },
                                 ),

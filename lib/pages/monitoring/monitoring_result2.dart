@@ -212,36 +212,36 @@ class _MonitoringResult2State extends BaseState<MonitoringResult2> {
     }
   }
 
-  Widget _body() {
-    if (tabIndex == 0) {
-      // CATE : 질병
-      return Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: tempGraphList == null || tempGraphList!.graphTemperature!.isEmpty ? Center(
-              child: H14(text: "체온 정보가 없습니다."),
-            ): LifestyleLineChart2(data:tempGraphList!),
-          ),
-          const SizedBox(height: 20),
-          Container(
-              padding: const EdgeInsets.symmetric(horizontal: 30),
-              child: DiseaseReport(
-                  data: reportList,
-                  data1: reportList1,
-                  data2: reportList2,
-                  result: 1),
-          ),
-          const SizedBox(height: 50),
-        ],
-      );
-    } else if (tabIndex == 1) {
-      // CATE : 수면
-      print(gUserInfo!.accessToken!);
-      return sleepGraphList != null
-          ? Column(
-        children: [
-          /*Row(
+  Widget symptom() {
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: tempGraphList == null || tempGraphList!.graphTemperature!.isEmpty ? Center(
+            child: H14(text: "체온 정보가 없습니다."),
+          ): LifestyleLineChart2(data:tempGraphList!),
+        ),
+        const SizedBox(height: 20),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 30),
+          child: DiseaseReport(
+              data: reportList,
+              data1: reportList1,
+              data2: reportList2,
+              result: 1),
+        ),
+        const SizedBox(height: 50),
+      ],
+    );
+  }
+
+  Widget sleep() {
+    return sleepGraphList != null
+        ? Column(
+      children: [
+        /*
+          // 선택 월 변경 탭
+          Row(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
@@ -279,11 +279,21 @@ class _MonitoringResult2State extends BaseState<MonitoringResult2> {
               // const SizedBox(width: 10),
             ],
           ),*/
-          Container(padding: const EdgeInsets.symmetric(horizontal: 30), child: SleepReport(data: sleepGraphList!, result: 1)),
-        ],
-      ) : const SizedBox(
-        child: Text("검사결과 없음"),
-      );
+        Container(padding: const EdgeInsets.symmetric(horizontal: 30), child: SleepReport(data: sleepGraphList!, result: 1)),
+      ],
+    ) : const SizedBox(
+      child: Text("검사결과 없음"),
+    );
+  }
+
+  Widget _body() {
+    if (tabIndex == 0) {
+      // CATE : 질병
+      return symptom();
+    } else if (tabIndex == 1) {
+      // CATE : 수면
+      // print(gUserInfo!.accessToken!);
+      return sleep();
     } else if (tabIndex == 2) {
       // CATE : 영양
       return Stack(
@@ -299,7 +309,7 @@ class _MonitoringResult2State extends BaseState<MonitoringResult2> {
         child: InspectionReport(data: reportList, data1: reportList1, data2: reportList2),
       );
     }
-    return CircularProgressIndicator();
+    return const CircularProgressIndicator();
   }
 
   Widget categoryTile(int index) {

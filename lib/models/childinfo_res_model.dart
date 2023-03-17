@@ -77,6 +77,7 @@ class ChildDto {
   String? addressDetail;
   String? addChild;
   String? alarmYn;
+  String? systemAlarmYn;
   String? selectedChildUid;
   String? weight;
   String? height;
@@ -136,6 +137,7 @@ class ChildDto {
       this.addressDetail,
       this.addChild,
       this.alarmYn,
+      this.systemAlarmYn,
       this.selectedChildUid,
       this.weight,
       this.height,
@@ -195,6 +197,7 @@ class ChildDto {
     addressDetail = json['address_detail'] ?? "";
     addChild = json['add_child'] ?? "";
     alarmYn = json['alarm_yn'] ?? "";
+    systemAlarmYn = json['system_alarm_yn'] ?? "";
     selectedChildUid = json['selected_child_uid'] ?? "";
     weight = json['weight'] ?? "";
     height = json['height'] ?? "";
@@ -271,6 +274,7 @@ class ChildDto {
     data['address_detail'] = this.addressDetail;
     data['add_child'] = this.addChild;
     data['alarm_yn'] = this.alarmYn;
+    data['system_yn'] = this.systemAlarmYn;
     data['selected_child_uid'] = this.selectedChildUid;
     data['weight'] = this.weight;
     data['height'] = this.height;

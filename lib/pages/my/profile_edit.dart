@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ourdoctor/global/app_colors.dart';
 import 'package:ourdoctor/global/app_styles.dart';
@@ -27,6 +28,7 @@ import 'package:ourdoctor/pages/components/underline_input.dart';
 import 'package:ourdoctor/pages/components/underline_input1.dart';
 import 'package:ourdoctor/pages/dialog/dlg_select_date.dart';
 import 'package:ourdoctor/pages/intro/first.dart';
+import 'package:ourdoctor/pages/my/notification_alert_widget.dart';
 import 'package:ourdoctor/pages/signup/address.dart';
 
 class ProfileEditPage extends StatefulWidget {
@@ -87,7 +89,9 @@ class ProfileEditPageState extends BaseState<ProfileEditPage> {
   String relationship_direct = "";
   var relationshipInputController = TextEditingController();
   bool onAlarm = true;
+  bool onAlarm2 = true;
   String alarmYn = "y";
+  String alarmYn2 = "y";
 
   int nDuplicatedNickname = 0;
   String mValidNickname = ""; //중복 확인한 닉네임
@@ -98,7 +102,7 @@ class ProfileEditPageState extends BaseState<ProfileEditPage> {
 
     userInfo = gUserInfo;
     id = userInfo!.loginId!;
-    pwd = userInfo!.password!;
+    // pwd = userInfo!.password!;
     name = userInfo!.name!;
     birth = userInfo!.birth!;
     phone = userInfo!.phone!;
@@ -109,9 +113,9 @@ class ProfileEditPageState extends BaseState<ProfileEditPage> {
     relationship = userInfo!.relationship!;
     number_child = userInfo!.childCount.toString();
     dad_height = userInfo!.dadHeight!; //+ " cm";
-    dad_weight = userInfo!.dadWeight!; //+ " kg";
+    // dad_weight = userInfo!.dadWeight!; //+ " kg";
     mom_height = userInfo!.momHeight!; //+ " cm";
-    mom_weight = userInfo!.momWeight!; //+ " kg";
+    // mom_weight = userInfo!.momWeight!; //+ " kg";
 
     idController.text = id;
     pwdController.text = pwd;
@@ -124,13 +128,15 @@ class ProfileEditPageState extends BaseState<ProfileEditPage> {
     address2Controller.text = address2;
 
     dadheightController.text = dad_height;
-    dadweightController.text = dad_weight;
+    dadweightController.text = "";
     momheightController.text = mom_height;
-    momweightController.text = mom_weight;
+    momweightController.text = "";
 
     setState(() {
       alarmYn = gUserInfo!.alarmYn!;
+      alarmYn2 = gUserInfo!.systemAlarmYn!;
       if (alarmYn != 'y') onAlarm = false;
+      if (alarmYn2 != 'y') onAlarm2 = false;
     });
 
     for (int i = 0; i < gRelationList!.length; i++) {
@@ -176,11 +182,25 @@ class ProfileEditPageState extends BaseState<ProfileEditPage> {
   void checkValid() {
   if(userInfo!.signupType == "normal") {
       if (relationship == "기타 입력") {
-      if (id.isEmpty || pwd.isEmpty || rePwd.isEmpty || name.isEmpty || birth.isEmpty || phone.isEmpty || nickname.isEmpty || dad_height.isEmpty || dad_weight.isEmpty || mom_height.isEmpty || mom_weight.isEmpty || address1.isEmpty || postcode.isEmpty || relationship_direct.isEmpty || number_child.isEmpty) {
-        //address1.isEmpty || address2.isEmpty || relationship.isEmpty || number_child.isEmpty
-        setState(() {
-          valid = false;
-        });
+        if (id.isEmpty ||
+            // pwd.isEmpty ||
+            // rePwd.isEmpty ||
+            name.isEmpty ||
+            birth.isEmpty ||
+            phone.isEmpty ||
+            nickname.isEmpty ||
+            dad_height.isEmpty ||
+            // dad_weight.isEmpty ||
+            mom_height.isEmpty ||
+            // mom_weight.isEmpty ||
+            address1.isEmpty ||
+            postcode.isEmpty ||
+            relationship_direct.isEmpty ||
+            number_child.isEmpty) {
+          //address1.isEmpty || address2.isEmpty || relationship.isEmpty || number_child.isEmpty
+          setState(() {
+            valid = false;
+          });
       } else {
         if(pwd == rePwd) {
           setState(() {
@@ -193,8 +213,22 @@ class ProfileEditPageState extends BaseState<ProfileEditPage> {
         }
       }
     } else {
-      if (id.isEmpty || pwd.isEmpty || rePwd.isEmpty || name.isEmpty || birth.isEmpty || phone.isEmpty || nickname.isEmpty || dad_height.isEmpty || dad_weight.isEmpty || mom_height.isEmpty || mom_weight.isEmpty || address1.isEmpty || postcode.isEmpty || relationship.isEmpty || number_child.isEmpty) {
-        //address1.isEmpty || address2.isEmpty || relationship.isEmpty || number_child.isEmpty
+        if (id.isEmpty ||
+            // pwd.isEmpty ||
+            // rePwd.isEmpty ||
+            name.isEmpty ||
+            birth.isEmpty ||
+            phone.isEmpty ||
+            nickname.isEmpty ||
+            dad_height.isEmpty ||
+            // dad_weight.isEmpty ||
+            mom_height.isEmpty ||
+            // mom_weight.isEmpty ||
+            address1.isEmpty ||
+            postcode.isEmpty ||
+            relationship.isEmpty ||
+            number_child.isEmpty) {
+          //address1.isEmpty || address2.isEmpty || relationship.isEmpty || number_child.isEmpty
         setState(() {
           valid = false;
         });
@@ -213,11 +247,25 @@ class ProfileEditPageState extends BaseState<ProfileEditPage> {
     }
   } else {
       if (relationship == "기타 입력") {
-      if (id.isEmpty || pwd.isEmpty || rePwd.isEmpty || name.isEmpty || birth.isEmpty || phone.isEmpty || nickname.isEmpty || dad_height.isEmpty || dad_weight.isEmpty || mom_height.isEmpty || mom_weight.isEmpty || address1.isEmpty || postcode.isEmpty || relationship_direct.isEmpty || number_child.isEmpty) {
-        //address1.isEmpty || address2.isEmpty || relationship.isEmpty || number_child.isEmpty
-        setState(() {
-          valid = false;
-        });
+        if (id.isEmpty ||
+            // pwd.isEmpty ||
+            // rePwd.isEmpty ||
+            name.isEmpty ||
+            birth.isEmpty ||
+            phone.isEmpty ||
+            nickname.isEmpty ||
+            dad_height.isEmpty ||
+            // dad_weight.isEmpty ||
+            mom_height.isEmpty ||
+            // mom_weight.isEmpty ||
+            address1.isEmpty ||
+            postcode.isEmpty ||
+            relationship_direct.isEmpty ||
+            number_child.isEmpty) {
+          //address1.isEmpty || address2.isEmpty || relationship.isEmpty || number_child.isEmpty
+          setState(() {
+            valid = false;
+          });
       } else {
         if(pwd == rePwd) {
           setState(() {
@@ -230,10 +278,22 @@ class ProfileEditPageState extends BaseState<ProfileEditPage> {
         }
       }
     } else {
-      if (id.isEmpty || name.isEmpty || birth.isEmpty || phone.isEmpty || nickname.isEmpty || dad_height.isEmpty || dad_weight.isEmpty || mom_height.isEmpty || mom_weight.isEmpty || address1.isEmpty || postcode.isEmpty || relationship.isEmpty || number_child.isEmpty) {
-        //address1.isEmpty || address2.isEmpty || relationship.isEmpty || number_child.isEmpty
-        setState(() {
-          valid = false;
+        if (id.isEmpty ||
+            name.isEmpty ||
+            birth.isEmpty ||
+            phone.isEmpty ||
+            nickname.isEmpty ||
+            dad_height.isEmpty ||
+            // dad_weight.isEmpty ||
+            mom_height.isEmpty ||
+            // mom_weight.isEmpty ||
+            address1.isEmpty ||
+            postcode.isEmpty ||
+            relationship.isEmpty ||
+            number_child.isEmpty) {
+          //address1.isEmpty || address2.isEmpty || relationship.isEmpty || number_child.isEmpty
+          setState(() {
+            valid = false;
         });
       } else {
           setState(() {
@@ -254,7 +314,22 @@ class ProfileEditPageState extends BaseState<ProfileEditPage> {
       isLoading = true;
     });
 
-    Future<DefaultResModel> offerInfo = httpService.changeParentProfile(pwd, name, birth, phone, postcode, address1, address2, dad_height, dad_weight, mom_height, mom_weight, relationship != "기타 입력" ? relationship : relationship_direct, nickname, alarmYn);
+    Future<DefaultResModel> offerInfo = httpService.changeParentProfile(
+        pwd,
+        name,
+        birth,
+        phone,
+        postcode,
+        address1,
+        address2,
+        dad_height,
+        dad_weight,
+        mom_height,
+        mom_weight,
+        relationship != "기타 입력" ? relationship : relationship_direct,
+        nickname,
+        alarmYn,
+        alarmYn2);
     offerInfo.then((DefaultResModel value) async {
       setState(() {
         isLoading = false;
@@ -756,43 +831,43 @@ class ProfileEditPageState extends BaseState<ProfileEditPage> {
                           ),
                         ),
                         const SizedBox(width: 10),
-                        SizedBox(
-                          width: (screenSize.width - 70) / 2,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              H16(text: LanguageService.trans("dad_weight"), weight: FW.medium, color: AppColor_BlackText),
-                              const SizedBox(height: 10),
-                              SizedBox(
-                                width: screenSize.width,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Expanded(
-                                      child: OutlineNumInput(
-                                        controller: dadweightController,
-                                        keyboardType: const TextInputType.numberWithOptions(
-                                          decimal: true,
-                                          signed: true,
-                                        ),
-                                        textInputAction: TextInputAction.next,
-                                        onEditingComplete: () => node.nextFocus(),
-                                        placeholder: "",
-                                        onChanged: (text) => {dad_weight = text, checkValid()},
-                                      ),
-                                    ),
-                                    const SizedBox(width: 10),
-                                    H17(
-                                      text: LanguageService.trans("kg"),
-                                      weight: FW.medium,
-                                      color: AppColor_BlackText,
-                                    ),
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
+                    //     SizedBox(
+                    //       width: (screenSize.width - 70) / 2,
+                    //       child: Column(
+                    //         crossAxisAlignment: CrossAxisAlignment.start,
+                    //         children: [
+                    //           H16(text: LanguageService.trans("dad_weight"), weight: FW.medium, color: AppColor_BlackText),
+                    //           const SizedBox(height: 10),
+                    //           SizedBox(
+                    //             width: screenSize.width,
+                    //             child: Row(
+                    //               mainAxisAlignment: MainAxisAlignment.center,
+                    //               children: [
+                    //                 Expanded(
+                    //                   child: OutlineNumInput(
+                    //                     controller: dadweightController,
+                    //                     keyboardType: const TextInputType.numberWithOptions(
+                    //                       decimal: true,
+                    //                       signed: true,
+                    //                     ),
+                    //                     textInputAction: TextInputAction.next,
+                    //                     onEditingComplete: () => node.nextFocus(),
+                    //                     placeholder: "",
+                    //                     onChanged: (text) => {dad_weight = text, checkValid()},
+                    //                   ),
+                    //                 ),
+                    //                 const SizedBox(width: 10),
+                    //                 H17(
+                    //                   text: LanguageService.trans("kg"),
+                    //                   weight: FW.medium,
+                    //                   color: AppColor_BlackText,
+                    //                 ),
+                    //               ],
+                    //             ),
+                    //           )
+                    //         ],
+                    //       ),
+                    //     ),
                       ],
                     ),
                     const SizedBox(height: 30),
@@ -837,77 +912,100 @@ class ProfileEditPageState extends BaseState<ProfileEditPage> {
                           ),
                         ),
                         const SizedBox(width: 10),
-                        SizedBox(
-                          width: (screenSize.width - 70) / 2,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              H16(text: LanguageService.trans("mom_weight"), weight: FW.medium, color: AppColor_BlackText),
-                              const SizedBox(height: 10),
-                              SizedBox(
-                                width: screenSize.width,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Expanded(
-                                      child: OutlineNumInput(
-                                        controller: momweightController,
-                                        keyboardType: const TextInputType.numberWithOptions(
-                                          decimal: true,
-                                          signed: true,
-                                        ),
-                                        textInputAction: TextInputAction.done,
-                                        placeholder: "",
-                                        onChanged: (text) => {mom_weight = text, checkValid()},
-                                      ),
-                                    ),
-                                    const SizedBox(width: 10),
-                                    H17(
-                                      text: LanguageService.trans("kg"),
-                                      weight: FW.medium,
-                                      color: AppColor_BlackText,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                        // SizedBox(
+                        //   width: (screenSize.width - 70) / 2,
+                        //   child: Column(
+                        //     crossAxisAlignment: CrossAxisAlignment.start,
+                        //     children: [
+                        //       H16(text: LanguageService.trans("mom_weight"), weight: FW.medium, color: AppColor_BlackText),
+                        //       const SizedBox(height: 10),
+                        //       SizedBox(
+                        //         width: screenSize.width,
+                        //         child: Row(
+                        //           mainAxisAlignment: MainAxisAlignment.center,
+                        //           children: [
+                        //             Expanded(
+                        //               child: OutlineNumInput(
+                        //                 controller: momweightController,
+                        //                 keyboardType: const TextInputType.numberWithOptions(
+                        //                   decimal: true,
+                        //                   signed: true,
+                        //                 ),
+                        //                 textInputAction: TextInputAction.done,
+                        //                 placeholder: "",
+                        //                 onChanged: (text) => {mom_weight = text, checkValid()},
+                        //               ),
+                        //             ),
+                        //             const SizedBox(width: 10),
+                        //             H17(
+                        //               text: LanguageService.trans("kg"),
+                        //               weight: FW.medium,
+                        //               color: AppColor_BlackText,
+                        //             ),
+                        //           ],
+                        //         ),
+                        //       ),
+                        //     ],
+                        //   ),
+                        // ),
                       ],
                     ),
                     const SizedBox(height: 30),
                     Container(
                       height: 60,
-                      // margin: const EdgeInsets.symmetric(horizontal: 30),
-                      // decoration: const BoxDecoration(
-                      //   border: Border(
-                      //     bottom: BorderSide(
-                      //       color: AppColor_Divider,
-                      //       width: 1,
-                      //     ),
-                      //   ),
-                      // ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          // Container(
-                          //     width: 25,
-                          //     child: Image.asset('assets/${category.icon}', width: 25)
-                          // ),
-                          // const SizedBox(width: 18),
+                          H16(
+                            text: '시스템 알림',
+                            weight: FW.medium,
+                            color: AppColor_BlackText,
+                          ),
+                          Transform.scale(
+                            scale: 0.8,
+                            child: CupertinoSwitch(
+                              activeColor: AppColor_Primary,
+                              value: onAlarm2,
+                              onChanged: (bool value) {
+                                setState(() {
+                                  onAlarm2 = value;
+                                  onAlarm2 ? alarmYn2 = 'y' : alarmYn2 = 'n';
+                                });
+                              },
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    Container(
+                      height: 60,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
                           H16(
                             text: '광고/마케팅 알림',
                             weight: FW.medium,
                             color: AppColor_BlackText,
                           ),
-                          Switch(
-                            value: onAlarm,
-                            onChanged: (bool value) {
-                              setState(() {
+                          Transform.scale(
+                            scale: 0.8,
+                            child: CupertinoSwitch(
+                              activeColor: AppColor_Primary,
+                              value: onAlarm,
+                              onChanged: (bool value) async {
                                 onAlarm = value;
                                 onAlarm ? alarmYn = 'y' : alarmYn = 'n';
-                              });
-                            },
+                                String content =
+                                """
+전송자 : 우아닥터
+일시 : ${DateTime.now().year}년 ${DateTime.now().month}월 ${DateTime.now().day}일
+내용 : ${value ? "수신 동의 완료" : "수신거부 처리 완료"}
+
+광고성 정보 수신 동의는 마이페이지>내 정보>정보 수정하기에서 변경 가능합니다.""";
+                                await notificationShowDialogb1(context,"광고성 정보 수신 동의 처리 결과",content);
+                                setState(() {});
+                              },
+                            ),
                           )
                         ],
                       ),

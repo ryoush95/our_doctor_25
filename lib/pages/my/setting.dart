@@ -48,7 +48,7 @@ class SettingPageState extends BaseState<SettingPage> {
       isLoading = true;
     });
 
-    Future<DefaultResModel> info = httpService.setting(gUserInfo!.alarmYn == "y" ? "n" : "y");
+    Future<DefaultResModel> info = httpService.setting(gUserInfo!.alarmYn!, gUserInfo!.systemAlarmYn!);
     info.then((DefaultResModel value) async {
       setState(() {
         isLoading = false;

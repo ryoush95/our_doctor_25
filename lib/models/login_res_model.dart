@@ -74,6 +74,7 @@ class UserInfoDto {
   String? addressDetail;
   String? addChild;
   String? alarmYn;
+  String? systemAlarmYn;
   String? selectedChildUid;
   String? status;
   String? weight;
@@ -145,6 +146,7 @@ class UserInfoDto {
       this.addressDetail,
       this.addChild,
       this.alarmYn,
+      this.systemAlarmYn,
       this.selectedChildUid,
       this.status,
       this.weight,
@@ -216,6 +218,7 @@ class UserInfoDto {
     addressDetail = json['address_detail'] ?? "";
     addChild = json['add_child'] ?? "";
     alarmYn = json['alarm_yn'] ?? "";
+    systemAlarmYn = json['system_alarm_yn'] ?? "";
     selectedChildUid = json['selected_child_uid'] ?? "";
     status = json['status'] ?? "";
     weight = json['weight'] ?? "";
@@ -299,6 +302,7 @@ class UserInfoDto {
     data['address_detail'] = this.addressDetail;
     data['add_child'] = this.addChild;
     data['alarm_yn'] = this.alarmYn;
+    data['system_alarm_yn'] = this.systemAlarmYn;
     data['selected_child_uid'] = this.selectedChildUid;
     data['status'] = this.status;
     data['weight'] = this.weight;
@@ -377,6 +381,7 @@ class ChildList {
   String? addressDetail;
   String? addChild;
   String? alarmYn;
+  String? systemAlarmYn;
   String? selectedChildUid;
   String? status;
   String? weight;
@@ -509,6 +514,7 @@ class ChildList {
     addressDetail = json['address_detail'] ?? "";
     addChild = json['add_child'] ?? "";
     alarmYn = json['alarm_yn'] ?? "";
+    systemAlarmYn = json['system_alarm_yn'] ?? "";
     selectedChildUid = json['selected_child_uid'] ?? "";
     status = json['status'] ?? "";
     weight = json['weight'] ?? "";
@@ -582,6 +588,7 @@ class ChildList {
     data['address_detail'] = this.addressDetail;
     data['add_child'] = this.addChild;
     data['alarm_yn'] = this.alarmYn;
+    data['system_alarm_yn'] = this.systemAlarmYn;
     data['selected_child_uid'] = this.selectedChildUid;
     data['status'] = this.status;
     data['weight'] = this.weight;

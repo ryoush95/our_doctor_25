@@ -33,7 +33,7 @@ class _TempLineChartState extends State<TempLineChart> {
     showingTooltipSpot = -1;
     super.initState();
     WidgetsBinding.instance!.addPostFrameCallback((_) {
-      sc.jumpTo(now.day.toDouble() * 14);
+      sc.jumpTo((now.day.toDouble() - 1) * 16);
     });
     DateTime(now.year, now.month + 1, 0).day.toDouble();
 

@@ -40,7 +40,10 @@ class InspectionTest4AnswerPageState
   late ScrollController _listController;
   List<Test4QuizDto> list = [];
   int quizNum = 0;
-  int pageNum = 1;
+  int pageNum = 0;
+  int nowNum = 0;
+  final itemCount = 5;
+  bool lastPage = false;
   List<Test4QuizDto> quizList = [];
   List<String> quizResult = [];
 
@@ -48,11 +51,7 @@ class InspectionTest4AnswerPageState
   void initState() {
     super.initState();
     _listController = ScrollController();
-    for (var i in widget.listData) {
-      if (i.result != 'result') {
-        list.add(i);
-      }
-    }
+    list = widget.listData;
     goNext();
     setState(() {});
   }
@@ -111,11 +110,20 @@ class InspectionTest4AnswerPageState
 
   void goNext() {
     quizList.clear();
-    for (var i in list) {
-      if (i.page == pageNum.toString()) {
-        quizList.add(i);
+    pageNum++;
+    for (int i = nowNum; i < nowNum + itemCount; i++) {
+      if(list.length == i) {
+        lastPage = true;
+        break;
       }
+      quizList.add(list[i]);
     }
+    nowNum = nowNum + itemCount;
+    // for (var i in list) {
+    //   if (i.page == pageNum.toString()) {
+    //     quizList.add(i);
+    //   }
+    // }
     setState(() {});
   }
 
@@ -157,6 +165,7 @@ class InspectionTest4AnswerPageState
   }
 
   Widget _itemBuilder(BuildContext context, int index) {
+    int numId = index + ((pageNum - 1) * itemCount);
     return Container(
       height: 300,
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -164,7 +173,7 @@ class InspectionTest4AnswerPageState
           text: TextSpan(
             children: [
               TextSpan(
-                text: "Q${index + ((pageNum - 1) * 5) + 1}\n\n",
+                text: "Q${numId + 1}\n\n",
                 style: AppTextStyle.PD(AppColor_Table_DateTime, 18,
                     weight: FW.bold),
               ),
@@ -177,13 +186,13 @@ class InspectionTest4AnswerPageState
           ),
         ),
         const SizedBox(height: 20),
-        checkbox(index),
+        checkbox(index, numId),
         const SizedBox(height: 30)
       ]),
     );
   }
 
-  Widget checkbox(int index) {
+  Widget checkbox(int index, int numId) {
     return Column(
       children: [
         Row(
@@ -236,7 +245,7 @@ class InspectionTest4AnswerPageState
               InkWell(
                 onTap: () {
                   setState(() {
-                    list[index].answer = "0";
+                    list[numId].answer = "0";
                     quizList[index].answer = "0";
                   });
                 },
@@ -256,7 +265,7 @@ class InspectionTest4AnswerPageState
                 onTap: () {
                   setState(() {
                     quizList[index].answer = "1";
-                    list[index].answer = "1";
+                    list[numId].answer = "1";
                   });
                 },
                 child: Row(
@@ -274,7 +283,7 @@ class InspectionTest4AnswerPageState
               InkWell(
                 onTap: () {
                   setState(() {
-                    list[index].answer = "2";
+                    list[numId].answer = "2";
                     quizList[index].answer = "2";
                   });
                 },
@@ -293,7 +302,7 @@ class InspectionTest4AnswerPageState
               InkWell(
                 onTap: () {
                   setState(() {
-                    list[index].answer = "3";
+                    list[numId].answer = "3";
                     quizList[index].answer = "3";
                   });
                 },
@@ -364,50 +373,24 @@ class InspectionTest4AnswerPageState
   Future<void> getResult() async {
     quizResult = list.map((e) => e.answer).toList();
     String r = jsonEncode(quizResult);
-    if (widget.info.id == "52"){
-      Future<TestQuizResultModel> info = httpService.getTestQuizResult43(
-          widget.info.id!, r);
-      info.then((value) async {
-        setState(() {
-          isLoading = false;
-        });
-        if (value.result == 0) {
-          Navigator.of(context).pushReplacement(
-            SlideRightTransRoute(
-                builder: (context) =>
-                    InspectionTest4FinalPage(
-                        info: widget.info, result: value.data!)),
-          );
-          print(r);
-          quizNum = 0;
-          quizResult.clear();
-          setState(() {});
-        }
-      }).catchError((onError) {
-        print(onError.toString());
+    Future<TestQuizResultModel> info = httpService.getTestQuizResult(widget.info.id!, r);
+    info.then((value) async {
+      setState(() {
+        isLoading = false;
       });
-    } else {
-      Future<TestQuizResultModel> info = httpService.getTestQuizResult(
-          widget.info.id!, r);
-      info.then((value) async {
-        setState(() {
-          isLoading = false;
-        });
-        if (value.result == 0) {
-          Navigator.of(context).pushReplacement(
-            SlideRightTransRoute(
-                builder: (context) =>
-                    InspectionTest4FinalPage(
-                        info: widget.info, result: value.data!)),
-          );
-          quizNum = 0;
-          quizResult.clear();
-          setState(() {});
-        }
-      }).catchError((onError) {
-        print(onError.toString());
-      });
-    }
+      if (value.result == 0) {
+        Navigator.of(context).pushReplacement(
+          SlideRightTransRoute(
+              builder: (context) => InspectionTest4FinalPage(
+                  info: widget.info, result: value.data!)),
+        );
+        quizNum = 0;
+        quizResult.clear();
+        setState(() {});
+      }
+    }).catchError((onError) {
+      print(onError.toString());
+    });
   }
 
   @override
@@ -447,7 +430,7 @@ class InspectionTest4AnswerPageState
                                     weight: FW.bold),
                               ),
                               TextSpan(
-                                text: "$pageNum / ${(list.length / 5).round()}",
+                                text: "$pageNum / ${(list.length / itemCount).round()}",
                                 style: AppTextStyle.PD(
                                     AppColor_Table_DateTime, 15,
                                     weight: FW.regular),
@@ -473,7 +456,7 @@ class InspectionTest4AnswerPageState
               ),
             ),
             MainTextButton(
-              text: pageNum == (list.length / 5).round() ? "결과보기" : "다음",
+              text: lastPage ? "결과보기" : "다음",
               backgroundColor: AppColor_Primary,
               style: AppTextStyle.PD(Colors.white, 18, weight: FW.bold),
               radius: 0,
@@ -486,11 +469,11 @@ class InspectionTest4AnswerPageState
                   showToast("모든 문항에 체크해주세요");
                   return;
                 }
-                if (pageNum == (list.length / 5).round()) {
+                print(list.map((e) => e.answer));
+                if (lastPage) {
                   getResult();
                   return;
                 }
-                pageNum++;
                 goNext();
                 _listController.jumpTo(0.0);
               },

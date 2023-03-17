@@ -237,10 +237,10 @@ class ProfileViewPageState extends BaseState<ProfileViewPage> {
                       builder: (_) => ProfileItem(title: LanguageService.trans("number_of_children"), content: gUserInfo!.childCount.toString(), type: 0),
                     ),
                     Observer(
-                      builder: (_) => ProfileItem(title: LanguageService.trans("dad_height_weight"), content: sprintf("%s cm / %s kg", [gUserInfo!.dadHeight!, gUserInfo!.dadWeight!]), type: 0),
+                      builder: (_) => ProfileItem(title: LanguageService.trans("dad_height"), content: sprintf("%s cm", [gUserInfo!.dadHeight!]), type: 0),
                     ),
                     Observer(
-                      builder: (_) => ProfileItem(title: LanguageService.trans("mom_height_weight"), content: sprintf("%s cm / %s kg", [gUserInfo!.momHeight!, gUserInfo!.momWeight!]), type: 0),
+                      builder: (_) => ProfileItem(title: LanguageService.trans("mom_kidney"), content: sprintf("%s cm", [gUserInfo!.momHeight!]), type: 0),
                     ),
                     const SizedBox(height: 15),
                     Container(

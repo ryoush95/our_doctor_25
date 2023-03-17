@@ -43,7 +43,7 @@ class _LineChartWidget2State extends State<LineChartWidget2> {
   void initState() {
     super.initState();
     WidgetsBinding.instance!.addPostFrameCallback((_) {
-      sc.jumpTo(now.day.toDouble() * 14);
+      sc.jumpTo((now.day.toDouble() - 1) * 20);
     });
     gradientColors = [
     widget.type == "night" ? AppColor_Primary.withOpacity(0.8) : AppColor_Breath.withOpacity(0.8),
