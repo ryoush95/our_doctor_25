@@ -85,12 +85,7 @@ class SplashPageState extends BaseState<SplashPage> {
                       child: const Text('취소')),
                   TextButton(
                       onPressed: () {
-                        if (Platform.isAndroid) {
-                          launch("https://play.google.com/store/apps/details?id=$packageName");
-                        }
-                        if (Platform.isIOS) {
-                          launch("https://apps.apple.com/kr/app/$appName/id1626735427");
-                        }
+                        launch("https://onelink.to/j4qk9e");
                       },
                       child: const Text('업데이트'))
                 ],

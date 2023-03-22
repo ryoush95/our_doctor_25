@@ -469,7 +469,6 @@ class InspectionTest4AnswerPageState
                   showToast("모든 문항에 체크해주세요");
                   return;
                 }
-                print(list.map((e) => e.answer));
                 if (lastPage) {
                   getResult();
                   return;

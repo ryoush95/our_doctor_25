@@ -674,6 +674,7 @@ class CommunityFragmenttState extends BaseState<CommunityFragment> {
                       ],
                     ),
                   ),
+                  const SizedBox(height: 15),
                   ageFilters(),
                   searchBar(),
                   Expanded(
@@ -685,6 +686,7 @@ class CommunityFragmenttState extends BaseState<CommunityFragment> {
                           shrinkWrap: true,
                           controller: controller,
                           physics: const ClampingScrollPhysics(),
+                          addAutomaticKeepAlives: true,
                           itemCount: arrCommunityList.length,
                           itemBuilder: (BuildContext context, int index) {
                             return _getTiles(index);
