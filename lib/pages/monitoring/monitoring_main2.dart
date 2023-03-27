@@ -36,7 +36,7 @@ import 'package:ourdoctor/provider/global_provider.dart';
 import 'package:ourdoctor/provider/old_food_list_provider.dart';
 import 'package:provider/provider.dart';
 
-import 'monitoring_result2.dart';
+import 'monitoring_report2.dart';
 
 class MonitoringMain2 extends StatefulWidget {
   const MonitoringMain2({Key? key}) : super(key: key);
@@ -533,7 +533,7 @@ class _MonitoringMain2State extends BaseState<MonitoringMain2> {
       if (value.result == 0) {
         showToast("저장되었습니다");
         await Provider.of<GlobalProvider>(context, listen: false).getNoteInfo(context);
-        Navigator.pushReplacement(context, SlideRightTransRoute(builder: (context) => MonitoringResult2(),));
+        Navigator.pushReplacement(context, SlideRightTransRoute(builder: (context) => MonitoringReport2(),));
       } else {
         showToast(value.msg ?? "");
         if (value.result == 106) {

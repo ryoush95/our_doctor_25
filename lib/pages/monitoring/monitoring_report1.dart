@@ -56,7 +56,7 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
   HomeGraphTallDto? dicHomeGraphTallInfo;
   HomeGraphWeightDto? dicHomeGraphWeightInfo;
 
-  List<String> CATEGORYS = ["발달영역", "생활습관", "신체"];
+  List<String> cateList = ["발달영역", "생활습관", "신체"];
   List<String> subCategory = ["대근육", "소근육", "인지", "언어", "사회성", "자조"];
   List<String> subCategoryImg = [
     "monitor_icon1.png",
@@ -193,29 +193,39 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
   }
 
   Widget _getTiles1(int index) {
-    return GestureDetector(
-      behavior: HitTestBehavior.translucent,
+    double mWidth = (MediaQuery.of(context).size.width) / cateList.length;
+    return InkWell(
       onTap: () {
-        sc.jumpTo(0.0);
         setState(() {
           tabIndex = index;
         });
       },
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 8),
-        margin: const EdgeInsets.only(right: 8),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(18),
-            color: tabIndex == index ? AppColor_Primary : AppColor_f4f5f7),
-        child: Center(
-          child: H14(
-            text: CATEGORYS[index],
-            weight: FW.bold,
-            align: TextAlign.center,
-            color: tabIndex == index
-                ? Colors.white
-                : AppColor_GridText,
-          ),
+      child: SizedBox(
+        width: mWidth,
+        height: 40,
+        child: Stack(
+          children: [
+            Center(
+              child: H14(
+                text: cateList[index],
+                weight: FW.medium,
+                align: TextAlign.center,
+                maxLine: 2,
+                color: tabIndex == index ? AppColor_BlackText : AppColor_BlackText.withOpacity(0.2),
+              ),
+            ),
+            Positioned(
+              child: SizedBox(
+                  width: mWidth,
+                  height: 2,
+                  child: Container(
+                    width: 80,
+                    height: MediaQuery.of(context).size.width,
+                    color: tabIndex == index ? AppColor_Primary : AppColor_BlackText.withOpacity(0.1),
+                  )),
+              bottom: 0,
+            )
+          ],
         ),
       ),
     );
@@ -647,14 +657,12 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
             : dicHomeGraphWeightInfo!.solutionList!.values.toList();
       }
       setState(() {});
-      return Container(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            bodyTabSelector(),
-            bodyTile(),
-          ],
-        ),
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          bodyTabSelector(),
+          bodyTile(),
+        ],
       );
     }
     return const CircularProgressIndicator();
@@ -792,35 +800,31 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
                               weight: FW.medium))),
                 ),
               ]),
-              Container(
-                // width: MediaQuery.of(context).size.width - 64,
-                padding: const EdgeInsets.only(left: 20, right: 20, top: 10),
-                height: 50,
-                child: GridView.builder(
-                  // scrollDirection: Axis.horizontal,
-                  // shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemBuilder: (BuildContext context, int index) {
-                    return _getTiles1(index);
-                  },
-                  itemCount: CATEGORYS.length,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    childAspectRatio: 3 / 1,
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10,
-                  ),
-                ),
-              ),
               Expanded(
                 child: Container(
-                  margin: const EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 0),
+                  // margin: const EdgeInsets.fromLTRB(20.0, 0, 20.0, 0),
                   child: SingleChildScrollView(
                       controller: sc,
                       physics: const BouncingScrollPhysics(), child: Column(
                         children: [
-                          _body(),
-                          const SizedBox(height: 40)
+                          Container(
+                            padding: const EdgeInsets.only(bottom: 10),
+                            height: 40,
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemBuilder: (BuildContext context, int index) {
+                                return _getTiles1(index);
+                              },
+                              itemCount: cateList.length,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 40.0),
+                            child: _body(),
+                          ),
+                          // const SizedBox(height: 40)
                         ],
                       )),
                 ),

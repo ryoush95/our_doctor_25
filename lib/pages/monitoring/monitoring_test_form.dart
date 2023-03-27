@@ -21,7 +21,7 @@ import 'package:ourdoctor/pages/components/h17.dart';
 import 'package:ourdoctor/pages/components/main_text_button.dart';
 import 'package:ourdoctor/pages/components/outline_num_input.dart';
 import 'package:ourdoctor/pages/components/simple_header.dart';
-import 'package:ourdoctor/pages/monitoring/monitor_report1.dart';
+import 'package:ourdoctor/pages/monitoring/monitoring_report1.dart';
 import 'package:ourdoctor/provider/global_provider.dart';
 import 'package:provider/provider.dart';
 

@@ -45,7 +45,7 @@ class CareFragmentState extends BaseState<CareFragment>
   int tabIndex = 0;
   int category = 0;
 
-  List<String> CATEGORY = ["성장스토어", "발달클래스", "우아테스트"];
+  List<String> cateList = ["성장스토어", "발달클래스", "우아테스트"];
   ScrollController controller = ScrollController();
   bool isLast = true;
   int nPage = 0;
@@ -252,43 +252,43 @@ class CareFragmentState extends BaseState<CareFragment>
     });
   }
 
-  Widget getBannerTitle(int index) {
-    return InkWell(
-      onTap: () {
-        changeTab(index);
-        setState(() {
-          nPage = 0;
-          position = 0;
-          getBannerList();
-          getHomeDataInfo();
-          pageController.jumpToPage(0);
-        });
-      },
-      child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 8),
-          margin: const EdgeInsets.only(right: 8),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(18),
-              color: tabIndex == index ? AppColor_Primary : AppColor_f4f5f7),
-          child: SizedBox(
-            child: Stack(
-              children: [
-                Center(
-                  child: H14(
-                    text: CATEGORY[index],
-                    weight: FW.bold,
-                    align: TextAlign.center,
-                    maxLine: 1,
-                    color: tabIndex == index
-                        ? AppColor_White
-                        : AppColor_GridText,
-                  ),
-                ),
-              ],
-            ),
-          )),
-    );
-  }
+  // Widget getBannerTitle(int index) {
+  //   return InkWell(
+  //     onTap: () {
+  //       changeTab(index);
+  //       setState(() {
+  //         nPage = 0;
+  //         position = 0;
+  //         getBannerList();
+  //         getHomeDataInfo();
+  //         pageController.jumpToPage(0);
+  //       });
+  //     },
+  //     child: Container(
+  //         padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 8),
+  //         margin: const EdgeInsets.only(right: 8),
+  //         decoration: BoxDecoration(
+  //             borderRadius: BorderRadius.circular(18),
+  //             color: tabIndex == index ? AppColor_Primary : AppColor_f4f5f7),
+  //         child: SizedBox(
+  //           child: Stack(
+  //             children: [
+  //               Center(
+  //                 child: H14(
+  //                   text: cateList[index],
+  //                   weight: FW.bold,
+  //                   align: TextAlign.center,
+  //                   maxLine: 1,
+  //                   color: tabIndex == index
+  //                       ? AppColor_White
+  //                       : AppColor_GridText,
+  //                 ),
+  //               ),
+  //             ],
+  //           ),
+  //         )),
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -302,7 +302,7 @@ class CareFragmentState extends BaseState<CareFragment>
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                  bannerList.isNotEmpty ? CareBanner() : const CircularProgressIndicator(),
+                  bannerList.isNotEmpty ? CareBanner() : const Center(child: CircularProgressIndicator()),
                   bannerList.isNotEmpty ? Center(child: _dotIndicator()) : Container(),
                   const SizedBox(height: 10),
                   CategoryShow(),
@@ -364,27 +364,65 @@ class CareFragmentState extends BaseState<CareFragment>
         ),
       );
 
+  Widget _getTiles1(int index) {
+    double mWidth = (MediaQuery.of(context).size.width) / cateList.length;
+    return InkWell(
+      onTap: () {
+        changeTab(index);
+        setState(() {
+          nPage = 0;
+          position = 0;
+          getBannerList();
+          getHomeDataInfo();
+          pageController.jumpToPage(0);
+        });
+      },
+      child: SizedBox(
+        width: mWidth,
+        height: MediaQuery.of(context).size.height,
+        child: Stack(
+          children: [
+            Center(
+              child: H14(
+                text: cateList[index],
+                weight: FW.medium,
+                align: TextAlign.center,
+                maxLine: 2,
+                color: tabIndex == index ? AppColor_BlackText : AppColor_BlackText.withOpacity(0.2),
+              ),
+            ),
+            Positioned(
+              child: SizedBox(
+                  width: mWidth,
+                  height: 2,
+                  child: Container(
+                    width: 80,
+                    height: MediaQuery.of(context).size.width,
+                    color: tabIndex == index ? AppColor_Primary : AppColor_BlackText.withOpacity(0.1),
+                  )),
+              bottom: 0,
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget CareBanner() {
     return SizedBox(
       width: double.infinity,
         height: 270,
         child: Stack(children: [
-          Container(
-            margin: EdgeInsets.all(25),
-            child: GridView.builder(
-              // scrollDirection: Axis.horizontal,
-              // shrinkWrap: true,
+          SizedBox(
+            height: 40,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               itemBuilder: (BuildContext context, int index) {
-                return getBannerTitle(index);
+                return _getTiles1(index);
               },
-              itemCount: CATEGORY.length,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  childAspectRatio: 3 / 1,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10
-              ),
+              itemCount: cateList.length,
             ),
           ),
           Positioned(

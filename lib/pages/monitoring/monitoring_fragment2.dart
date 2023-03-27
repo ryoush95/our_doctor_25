@@ -1,5 +1,6 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:ourdoctor/global/app_colors.dart';
 import 'package:ourdoctor/global/app_styles.dart';
 import 'package:ourdoctor/global/global.dart';
@@ -24,11 +25,13 @@ import 'package:ourdoctor/pages/components/round_container.dart';
 import 'package:ourdoctor/pages/home/circular_progress2.dart';
 import 'package:ourdoctor/pages/home/circular_progress3.dart';
 import 'package:ourdoctor/pages/intro/first.dart';
-import 'package:ourdoctor/pages/monitoring/monitor_report1.dart';
-import 'package:ourdoctor/pages/monitoring/monitoring_result2.dart';
+import 'package:ourdoctor/pages/monitoring/monitoring_report1.dart';
+import 'package:ourdoctor/pages/monitoring/monitoring_food_result.dart';
+import 'package:ourdoctor/pages/monitoring/monitoring_report2.dart';
 import 'package:ourdoctor/pages/monitoring/monitoring_main2.dart';
 import 'package:ourdoctor/provider/global_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 import '../app_event.dart';
 import 'monitoring_test_form.dart';
@@ -45,12 +48,16 @@ class MonitoringFragment2 extends StatefulWidget {
 
 class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
   final HttpService httpService = HttpService();
-  int curCategory1 = 0;
+  int tabIndex = 0;
   HomeMonitorDto? dicHomeDataInfo;
   MonitoringProfileDto? data;
 
+  List<String> category = ["성장노트", "영양", "발달"];
   String lifeIcon = "assets/icon_normal.png";
   String lifeText = "";
+
+  DateTime _selectedDay = DateTime.now();
+  DateTime _focusedDay = DateTime.now();
 
 
   @override
@@ -117,13 +124,56 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
     }
   }
 
+  Widget _getTiles1(int index) {
+    double mWidth = (MediaQuery.of(context).size.width) / category.length;
+    return InkWell(
+      onTap: () {
+        setState(() {
+          tabIndex = index;
+        });
+      },
+      child: SizedBox(
+        width: mWidth,
+        height: MediaQuery.of(context).size.height,
+        child: Stack(
+          children: [
+            Center(
+              child: H14(
+                text: category[index],
+                weight: FW.medium,
+                align: TextAlign.center,
+                maxLine: 2,
+                color: tabIndex == index ? AppColor_BlackText : AppColor_BlackText.withOpacity(0.2),
+              ),
+            ),
+            Positioned(
+              child: SizedBox(
+                  width: mWidth,
+                  height: 2,
+                  child: Container(
+                    width: 80,
+                    height: MediaQuery.of(context).size.width,
+                    color: tabIndex == index ? AppColor_Primary : AppColor_BlackText.withOpacity(0.1),
+                  )),
+              bottom: 0,
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
 
   Widget monitor1(MonitoringProfileDto p) {
     final life = Provider.of<GlobalProvider>(context, listen: false);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        H18(text: "우아 발달 모니터링 리포트"),
+        H18(
+            text: "짜잔!\n${gSelChildInfo!.name}의 발달 분석 결과가 나왔어요",
+          maxLine: 2,
+          align: TextAlign.start,
+        ),
         const SizedBox(height: 20),
         Container(
           width: double.infinity,
@@ -291,10 +341,14 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            H18(text: "우아 성장 노트"),
+            H18(
+              text: "${gSelChildInfo!.name}의\n성장을 기록해볼까요?",
+              maxLine: 2,
+              align: TextAlign.start,
+            ),
             InkWell(
               onTap: () {
-                Navigator.push(context, SlideRightTransRoute(builder: (context) => MonitoringResult2()));
+                Navigator.push(context, SlideRightTransRoute(builder: (context) => MonitoringReport2()));
               },
               child: H14(text: "지난기록", weight: FW.regular,),
             ),
@@ -487,7 +541,7 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
                     if(p.todayNote == false) {
                       Navigator.push(context, SlideRightTransRoute(builder: (context) => MonitoringMain2(),));
                     } else {
-                      Navigator.push(context, SlideRightTransRoute(builder: (context) => MonitoringResult2(),));
+                      Navigator.push(context, SlideRightTransRoute(builder: (context) => MonitoringReport2(),));
                     }
                   },
                 ),
@@ -499,27 +553,201 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
     );
   }
 
+  Widget monitor3() {
+
+    Map<DateTime, List> _events = {
+      DateTime.utc(2023, 03, 11): ['Event 1', 'Event 2'],
+      DateTime.utc(2023, 03, 12): ['Event 3', 'Event 4'],
+      DateTime.utc(2023, 03, 13): ['Event 5', 'Event 6'],
+    };
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        H18(
+          text: "${gSelChildInfo!.name}는\n${DateTime.now().month}월에 골고루 먹었을까요?",
+          maxLine: 2,
+          align: TextAlign.start,
+        ),
+        TableCalendar(
+          focusedDay: _focusedDay,
+          firstDay: DateTime(2020, 1, 1),
+          lastDay: DateTime(2050, 12, 31),
+          calendarFormat: CalendarFormat.month,
+          headerStyle: const HeaderStyle(
+              formatButtonVisible: false,
+              titleCentered: true,
+          ),
+          selectedDayPredicate: (day) {
+            return isSameDay(_selectedDay, day);
+          },
+          onDaySelected: (selectedDay, focusedDay) {
+            if (!isSameDay(_selectedDay, selectedDay)) {
+              setState(() {
+                _selectedDay = selectedDay;
+                _focusedDay = focusedDay;
+              });
+            }
+          },
+          onPageChanged: (focusedDay) {
+            _focusedDay = focusedDay;
+          },
+          eventLoader: (day) => _events[day] ?? [],
+
+          calendarBuilders: CalendarBuilders(
+            // 토요일 일요일 날짜 색변경
+            defaultBuilder: (context, day, focusedDay) {
+              if (day.weekday == DateTime.sunday) {
+                final text = day.day.toString();
+                return Center(
+                  child: Text(
+                    text,
+                    style: const TextStyle(color: Colors.red),
+                  ),
+                );
+              }
+              if (day.weekday == DateTime.saturday) {
+                final text = day.day.toString();
+                return Center(
+                  child: Text(
+                    text,
+                    style: const TextStyle(color: Colors.blue),
+                  ),
+                );
+              }
+            },
+            // 헤더 주말색 변경
+            dowBuilder: (context, day) {
+              if (day.weekday == DateTime.sunday) {
+                final text = DateFormat.E().format(day);
+                return Center(
+                  child: Text(
+                    text,
+                    style: const TextStyle(color: Colors.red),
+                  ),
+                );
+              }
+              if (day.weekday == DateTime.saturday) {
+                final text = DateFormat.E().format(day);
+                return Center(
+                  child: Text(
+                    text,
+                    style: const TextStyle(color: Colors.blue),
+                  ),
+                );
+              }
+            },
+            todayBuilder: (context, day, focusedDay) {
+              return Container(
+                margin: EdgeInsets.only(bottom: 5),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColor_Primary.withOpacity(0.6),
+                ),
+                child: Center(
+                  child: Text(
+                    day.day.toString(),
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                ),
+                width: 40,
+                height: 40,
+              );
+            },
+            selectedBuilder: (context, day, focusedDay) {
+              return Container(
+                margin: const EdgeInsets.only(bottom: 5),
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColor_Primary,
+                ),
+                child: Center(
+                  child: Text(
+                    day.day.toString(),
+                    style: const TextStyle(fontSize: 16,color: Colors.white),
+                  ),
+                ),
+                width: 40,
+                height: 40,
+              );
+            },
+            markerBuilder: (context, day, events) {
+              if(events.isNotEmpty) {
+                return Container(
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: AppColor_Primary,
+                  ),
+                  width: 10,
+                  height: 10,
+                );
+              }
+            },
+          ),
+        ),
+        Center(
+          child: MainTextButton(
+            text: "duddid",
+            style: AppTextStyle.PD(
+                Colors.white, 16,
+                weight: FW.medium),
+            width: 185,
+            height: 40,
+            radius: 6,
+            onPressed: () {
+              Navigator.push(context, SlideRightTransRoute(
+                  builder: (context) => MonitoringFoodResult()));
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _body() {
+    final p = Provider.of<GlobalProvider>(context, listen: false).profile;
+    if(tabIndex == 0) {
+      return monitor2(p!);
+    } else if (tabIndex ==1) {
+      return monitor3();
+    } else {
+      return monitor1(p!);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final p = Provider.of<GlobalProvider>(context, listen: false).profile;
     getNoteInfo();
     return PageLayout(
         isLoading: isLoading,
         onBack: onBackPressed,
-        child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          child: Container(
-            margin: const EdgeInsets.all(20.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                monitor1(p!),
-                const SizedBox(height: 55),
-                monitor2(p),
-                const SizedBox(height: 36),
-              ],
+        child: Column(
+          children: [
+            Container(
+              height: 40,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemBuilder: (BuildContext context, int index) {
+                  return _getTiles1(index);
+                },
+                itemCount: category.length,
+              ),
             ),
-          ),
+            Expanded(
+              child: Container(
+                margin: const EdgeInsets.all(20.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    _body(),
+                    Spacer(),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ));
   }
 }

@@ -23,6 +23,7 @@ import 'package:ourdoctor/pages/home/developmental_class_area.dart';
 import 'package:ourdoctor/pages/home/growth_store_area.dart';
 import 'package:ourdoctor/pages/home/news_area.dart';
 import 'package:ourdoctor/pages/home/quiz_area.dart';
+import 'package:ourdoctor/pages/home/radar_chart.dart';
 import 'package:ourdoctor/pages/home/report_area.dart';
 import 'package:ourdoctor/pages/home/review_dialog.dart';
 import 'package:ourdoctor/pages/home/school_area.dart';
@@ -194,7 +195,6 @@ class HomeFragmentState extends BaseState<HomeFragment> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     TopArea(name: gSelChildInfo!.name!, type: 0),
-
                     const SizedBox(height: 30),
                     // searchBar(),
                     // const SizedBox(height: 30,),

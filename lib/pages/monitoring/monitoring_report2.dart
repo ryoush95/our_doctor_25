@@ -23,20 +23,18 @@ import 'package:ourdoctor/pages/components/simple_header.dart';
 import 'package:ourdoctor/pages/home/disease_report.dart';
 import 'package:ourdoctor/pages/home/inspection_report.dart';
 import 'package:ourdoctor/pages/home/lifestyle_line_chart2.dart';
-import 'package:ourdoctor/pages/home/lifestyle_report.dart';
 import 'package:ourdoctor/pages/home/sleep_report.dart';
 import 'package:ourdoctor/pages/intro/first.dart';
-import 'package:ourdoctor/pages/monitoring/solution_area.dart';
 import 'package:sprintf/sprintf.dart';
 
-class MonitoringResult2 extends StatefulWidget {
-  const MonitoringResult2({Key? key}) : super(key: key);
+class MonitoringReport2 extends StatefulWidget {
+  const MonitoringReport2({Key? key}) : super(key: key);
 
   @override
-  State<MonitoringResult2> createState() => _MonitoringResult2State();
+  State<MonitoringReport2> createState() => _MonitoringReport2State();
 }
 
-class _MonitoringResult2State extends BaseState<MonitoringResult2> {
+class _MonitoringReport2State extends BaseState<MonitoringReport2> {
   final HttpService httpService = HttpService();
   int tabIndex = 0;
   List<String> category = ["질병", "수면", "영양", "맞춤검사"];
@@ -73,7 +71,13 @@ class _MonitoringResult2State extends BaseState<MonitoringResult2> {
     curMonth = now.month;
     getTempList();
     getHomeGraphLifeStyle();
-    getFoodList();
+    int birthYear = int.parse(gSelChildInfo!.birth!.substring(0,4));
+    int birthMonth = int.parse(gSelChildInfo!.birth!.substring(5,7));
+    DateTime birthDate = DateTime(birthYear, birthMonth); // 태어난 날짜
+    int months = ((now.year - birthDate.year) * 12) + (now.month - birthDate.month);
+    if (months >= 12 && months <= 107) {
+      getFoodList();
+    }
     getSleepList();
   }
 
@@ -160,7 +164,7 @@ class _MonitoringResult2State extends BaseState<MonitoringResult2> {
       setState(() {
         isLoading = false;
       });
-      showToast(onError);
+      print(onError);
     });
   }
 
@@ -305,42 +309,49 @@ class _MonitoringResult2State extends BaseState<MonitoringResult2> {
     } else if (tabIndex == 3) {
       // CATE : 맞춤검사
       return Padding(
-        padding: const EdgeInsets.only(left: 30.0,right: 30.0),
+        padding: const EdgeInsets.only(left: 30.0,right: 30.0, top: 30.0),
         child: InspectionReport(data: reportList, data1: reportList1, data2: reportList2),
       );
     }
     return const CircularProgressIndicator();
   }
 
-  Widget categoryTile(int index) {
+  Widget _getTiles1(int index) {
+    double mWidth = (MediaQuery.of(context).size.width) / category.length;
     return InkWell(
       onTap: () {
         setState(() {
           tabIndex = index;
-          print(tabIndex);
         });
       },
-      child: Container(
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(18),
-              color: tabIndex == index ? AppColor_Primary : AppColor_f4f5f7),
-          child: SizedBox(
-            child: Stack(
-              children: [
-                Center(
-                  child: H14(
-                    text: category[index],
-                    weight: FW.bold,
-                    align: TextAlign.center,
-                    maxLine: 1,
-                    color: tabIndex == index
-                        ? AppColor_White
-                        : AppColor_BlackText.withOpacity(0.2),
-                  ),
-                ),
-              ],
+      child: SizedBox(
+        width: mWidth,
+        height: MediaQuery.of(context).size.height,
+        child: Stack(
+          children: [
+            Center(
+              child: H14(
+                text: category[index],
+                weight: FW.medium,
+                align: TextAlign.center,
+                maxLine: 2,
+                color: tabIndex == index ? AppColor_BlackText : AppColor_BlackText.withOpacity(0.2),
+              ),
             ),
-          )),
+            Positioned(
+              child: SizedBox(
+                  width: mWidth,
+                  height: 2,
+                  child: Container(
+                    width: 80,
+                    height: MediaQuery.of(context).size.width,
+                    color: tabIndex == index ? AppColor_Primary : AppColor_BlackText.withOpacity(0.1),
+                  )),
+              bottom: 0,
+            )
+          ],
+        ),
+      ),
     );
   }
 
@@ -362,23 +373,18 @@ class _MonitoringResult2State extends BaseState<MonitoringResult2> {
                 child: Column(
                   children: [
                     Container(
-                      width: screenSize.width,
+                      // width: screenSize.width,
                       height: 40,
-                      margin: EdgeInsets.all(25),
-                      child: GridView.builder(
-                        // scrollDirection: Axis.horizontal,
-                        // shrinkWrap: true,
+                      padding: const EdgeInsets.only(bottom: 10),
+                      // margin: const EdgeInsets.all(25),
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         itemBuilder: (BuildContext context, int index) {
-                          return categoryTile(index);
+                          return _getTiles1(index);
                         },
                         itemCount: category.length,
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 4,
-                                childAspectRatio: 2.5 / 1,
-                                crossAxisSpacing: 10,
-                                mainAxisSpacing: 10),
                       ),
                     ),
                     _body(),

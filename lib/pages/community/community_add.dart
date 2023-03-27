@@ -544,7 +544,14 @@ class AddCommunityPageState extends BaseState<AddCommunityPage> {
                                     maxLines: null,
                                     onEditingComplete: () => node.unfocus(),
                                     decoration: InputDecoration(
-                                      hintText: LanguageService.trans("input_content"),
+                                      hintText:
+""" 다함께 소통하는 공간이 될 수 있도록, 아래 글 읽어보시고 작성해주세요 :)
+
+1. 도배성/광고성/비속어 금지
+2. 다른 회원에게 불편함을 초래하는 글 금지 
+
+- 1일 5개의 게시물까지 포인트가 지급됩니다.""",
+                                      hintMaxLines: 10,
                                       counterText: "",
                                       border: InputBorder.none,
                                       hintStyle: AppTextStyle.PD(AppColor_Hint, 16, weight: FW.regular),
