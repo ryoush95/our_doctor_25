@@ -101,8 +101,7 @@ class TopAreaState extends BaseState<TopArea> {
     Future.delayed(const Duration(milliseconds: 500), () {
       if (gSignupMonitoring) {
         gSignupMonitoring = false;
-        Navigator.push(context,
-            SlideRightTransRoute(builder: (context) => MonitoringStartPage()));
+        // Navigator.push(context, SlideRightTransRoute(builder: (context) => MonitoringStartPage()));
       }
     });
 

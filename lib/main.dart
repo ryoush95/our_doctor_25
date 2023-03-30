@@ -9,6 +9,7 @@ import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:ourdoctor/global/app_colors.dart';
 import 'package:ourdoctor/global/app_get_it.dart';
 import 'package:ourdoctor/helpers/fcm.dart';
+import 'package:ourdoctor/pages/monitoring/provider/food_result_provider.dart';
 import 'package:ourdoctor/pages/splash/splash.dart';
 import 'package:ourdoctor/provider/global_provider.dart';
 import 'package:ourdoctor/provider/old_food_list_provider.dart';
@@ -31,7 +32,7 @@ void main() async{
       ChangeNotifierProvider(create: (_) => ConvertScoreProvider()),
       ChangeNotifierProvider(create: (_) => OldFoodListProvider()),
       ChangeNotifierProvider(create: (_) => GlobalProvider()),
-      // ChangeNotifierProvider(create: (_) => ChildQuizProvider()),
+      ChangeNotifierProvider(create: (_) => FoodResultProvider()),
     ],
     child: MyApp(),
   ));

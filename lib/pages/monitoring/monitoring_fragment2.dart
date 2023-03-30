@@ -1,5 +1,6 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:ourdoctor/global/app_colors.dart';
 import 'package:ourdoctor/global/app_styles.dart';
@@ -24,6 +25,7 @@ import 'package:ourdoctor/pages/components/main_text_button.dart';
 import 'package:ourdoctor/pages/components/round_container.dart';
 import 'package:ourdoctor/pages/home/circular_progress2.dart';
 import 'package:ourdoctor/pages/home/circular_progress3.dart';
+import 'package:ourdoctor/pages/home/radar_chart.dart';
 import 'package:ourdoctor/pages/intro/first.dart';
 import 'package:ourdoctor/pages/monitoring/monitoring_report1.dart';
 import 'package:ourdoctor/pages/monitoring/monitoring_food_result.dart';
@@ -52,12 +54,9 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
   HomeMonitorDto? dicHomeDataInfo;
   MonitoringProfileDto? data;
 
-  List<String> category = ["성장노트", "영양", "발달"];
+  List<String> category = ["영양", "발달", "성장노트"];
   String lifeIcon = "assets/icon_normal.png";
   String lifeText = "";
-
-  DateTime _selectedDay = DateTime.now();
-  DateTime _focusedDay = DateTime.now();
 
 
   @override
@@ -164,7 +163,7 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
   }
 
 
-  Widget monitor1(MonitoringProfileDto p) {
+  Widget monitorDev(MonitoringProfileDto p) {
     final life = Provider.of<GlobalProvider>(context, listen: false);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -205,7 +204,7 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
                 children: [
                   CircularProgress3(score: p.monitoringProgress != 3 ? 0 : p.development!.score,status: p.development!.status,),
                   Container(margin: EdgeInsets.all(5),child: CircularProgress3(score: p.monitoringProgress != 3 ? 0 : p.health!.score ,status: p.health!.status,)),
-                  Container(
+                  SizedBox(
                     height: 85,
                     width: 85,
                     child: Column(
@@ -334,7 +333,7 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
     );
   }
 
-  Widget monitor2(MonitoringProfileDto p) {
+  Widget monitorNote(MonitoringProfileDto p) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -370,7 +369,7 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
               ]),
           child: Column(
             children: [
-              Container(
+              SizedBox(
                 height: 170,
                 child: Row(
                   children: [
@@ -463,7 +462,7 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
                       ],
                     ),
                     const SizedBox(width: 20),
-                    Container(
+                    SizedBox(
                       // height: 130,
                       height: 100,
                       width: MediaQuery.of(context).size.width - 200,
@@ -553,141 +552,23 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
     );
   }
 
-  Widget monitor3() {
-
-    Map<DateTime, List> _events = {
-      DateTime.utc(2023, 03, 11): ['Event 1', 'Event 2'],
-      DateTime.utc(2023, 03, 12): ['Event 3', 'Event 4'],
-      DateTime.utc(2023, 03, 13): ['Event 5', 'Event 6'],
-    };
-
+  Widget monitorFood() {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        H18(
-          text: "${gSelChildInfo!.name}는\n${DateTime.now().month}월에 골고루 먹었을까요?",
-          maxLine: 2,
-          align: TextAlign.start,
-        ),
-        TableCalendar(
-          focusedDay: _focusedDay,
-          firstDay: DateTime(2020, 1, 1),
-          lastDay: DateTime(2050, 12, 31),
-          calendarFormat: CalendarFormat.month,
-          headerStyle: const HeaderStyle(
-              formatButtonVisible: false,
-              titleCentered: true,
+        Container(
+          padding: EdgeInsets.only(bottom: 20),
+          width: double.infinity,
+          child: H18(
+            text: "최근 기록은 ${DateFormat("yyyy년 MM월 dd일").format(DateTime.now())} 이에요 :)\n오늘은 무엇을 먹었나요?",
+            align: TextAlign.start,
+            maxLine: 2,
           ),
-          selectedDayPredicate: (day) {
-            return isSameDay(_selectedDay, day);
-          },
-          onDaySelected: (selectedDay, focusedDay) {
-            if (!isSameDay(_selectedDay, selectedDay)) {
-              setState(() {
-                _selectedDay = selectedDay;
-                _focusedDay = focusedDay;
-              });
-            }
-          },
-          onPageChanged: (focusedDay) {
-            _focusedDay = focusedDay;
-          },
-          eventLoader: (day) => _events[day] ?? [],
+        ),
 
-          calendarBuilders: CalendarBuilders(
-            // 토요일 일요일 날짜 색변경
-            defaultBuilder: (context, day, focusedDay) {
-              if (day.weekday == DateTime.sunday) {
-                final text = day.day.toString();
-                return Center(
-                  child: Text(
-                    text,
-                    style: const TextStyle(color: Colors.red),
-                  ),
-                );
-              }
-              if (day.weekday == DateTime.saturday) {
-                final text = day.day.toString();
-                return Center(
-                  child: Text(
-                    text,
-                    style: const TextStyle(color: Colors.blue),
-                  ),
-                );
-              }
-            },
-            // 헤더 주말색 변경
-            dowBuilder: (context, day) {
-              if (day.weekday == DateTime.sunday) {
-                final text = DateFormat.E().format(day);
-                return Center(
-                  child: Text(
-                    text,
-                    style: const TextStyle(color: Colors.red),
-                  ),
-                );
-              }
-              if (day.weekday == DateTime.saturday) {
-                final text = DateFormat.E().format(day);
-                return Center(
-                  child: Text(
-                    text,
-                    style: const TextStyle(color: Colors.blue),
-                  ),
-                );
-              }
-            },
-            todayBuilder: (context, day, focusedDay) {
-              return Container(
-                margin: EdgeInsets.only(bottom: 5),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColor_Primary.withOpacity(0.6),
-                ),
-                child: Center(
-                  child: Text(
-                    day.day.toString(),
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                ),
-                width: 40,
-                height: 40,
-              );
-            },
-            selectedBuilder: (context, day, focusedDay) {
-              return Container(
-                margin: const EdgeInsets.only(bottom: 5),
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColor_Primary,
-                ),
-                child: Center(
-                  child: Text(
-                    day.day.toString(),
-                    style: const TextStyle(fontSize: 16,color: Colors.white),
-                  ),
-                ),
-                width: 40,
-                height: 40,
-              );
-            },
-            markerBuilder: (context, day, events) {
-              if(events.isNotEmpty) {
-                return Container(
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: AppColor_Primary,
-                  ),
-                  width: 10,
-                  height: 10,
-                );
-              }
-            },
-          ),
-        ),
+        RadarChartWidget(state: false,),
         Center(
           child: MainTextButton(
-            text: "duddid",
+            text: "영양 기록하기",
             style: AppTextStyle.PD(
                 Colors.white, 16,
                 weight: FW.medium),
@@ -707,11 +588,11 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
   Widget _body() {
     final p = Provider.of<GlobalProvider>(context, listen: false).profile;
     if(tabIndex == 0) {
-      return monitor2(p!);
+      return monitorFood();
     } else if (tabIndex ==1) {
-      return monitor3();
+      return monitorDev(p!);
     } else {
-      return monitor1(p!);
+      return monitorNote(p!);
     }
   }
 
@@ -723,7 +604,7 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
         onBack: onBackPressed,
         child: Column(
           children: [
-            Container(
+            SizedBox(
               height: 40,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
@@ -737,16 +618,16 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
             ),
             Expanded(
               child: Container(
-                margin: const EdgeInsets.all(20.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    _body(),
-                    Spacer(),
-                  ],
+                margin: const EdgeInsets.symmetric(horizontal: 20.0),
+                   child: SingleChildScrollView(child: Column(
+                     children: [
+                       const SizedBox(height: 20),
+                       _body(),
+                     ],
+                   )),
+                    // Spacer(),
                 ),
               ),
-            ),
           ],
         ));
   }

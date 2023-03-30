@@ -154,7 +154,7 @@ class AlarmPageState extends BaseState<AlarmPage> {
       Navigator.pop(context, "story");
     } else if (info.notificationType == "ask_answer") {
       //1 : 1 문의 page로 이행.
-      Navigator.push(context, SlideRightTransRoute(builder: (context) => AskHistoryPage()));
+      // Navigator.push(context, SlideRightTransRoute(builder: (context) => AskHistoryPage()));
     } else if (info.notificationType == "community_added") {
       if (info.data == "") {
         return;
@@ -224,7 +224,7 @@ class AlarmPageState extends BaseState<AlarmPage> {
     String makeTime = DateFormat('HH:mm:ss').format(now);
     dicWriteDto = MonitorWriteDto(uid: "", regDate: makeDate, regTime: makeTime, temperature: "", oxygen: "", heartCnt: "", symptom: "", pillUrl: "", speciality: "", stepTimes: "");
     if (dicInfo!.regtime! == "") {
-      Navigator.push(context, SlideRightTransRoute(builder: (context) => MonitoringStartPage()));
+      // Navigator.push(context, SlideRightTransRoute(builder: (context) => MonitoringStartPage()));
       return;
     }
 
@@ -233,7 +233,7 @@ class AlarmPageState extends BaseState<AlarmPage> {
     int oldHour = int.parse(regtime.substring(11, 13));
     String currentDate = getCurrentDate();
     if (oldDate != currentDate) {
-      Navigator.push(context, SlideRightTransRoute(builder: (context) => MonitoringStartPage()));
+      // Navigator.push(context, SlideRightTransRoute(builder: (context) => MonitoringStartPage()));
     } else {
       var dt = DateTime.now();
       int curHour = dt.hour;
@@ -242,13 +242,13 @@ class AlarmPageState extends BaseState<AlarmPage> {
         if (oldHour < 12) {
           dicWriteDto!.uid = dicInfo!.uid!;
         }
-        Navigator.push(context, SlideRightTransRoute(builder: (context) => MonitoringStartPage()));
+        // Navigator.push(context, SlideRightTransRoute(builder: (context) => MonitoringStartPage()));
       } else {
         //오후 시간
         if (oldHour > 12) {
           dicWriteDto!.uid = dicInfo!.uid!;
         }
-        Navigator.push(context, SlideRightTransRoute(builder: (context) => MonitoringStartPage()));
+        // Navigator.push(context, SlideRightTransRoute(builder: (context) => MonitoringStartPage()));
       }
     }
   }
@@ -263,7 +263,7 @@ class AlarmPageState extends BaseState<AlarmPage> {
     dicWriteDto =
         MonitorWriteDto(uid: dicInfo!.uid!, regDate: makeDate, regTime: makeTime, temperature: dicInfo!.temperature!, oxygen: dicInfo!.oxygen!, heartCnt: dicInfo!.heartCnt!, symptom: dicInfo!.symptom!, pillUrl: dicInfo!.pillUrl!, speciality: dicInfo!.speciality!, stepTimes: dicInfo!.stepTimes!);
 
-    Navigator.push(context, SlideRightTransRoute(builder: (context) => MonitoringResultPage()));
+    // Navigator.push(context, SlideRightTransRoute(builder: (context) => MonitoringResultPage()));
   }
 
   String getImgName(ActiveDto info) {

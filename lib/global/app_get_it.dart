@@ -4,6 +4,7 @@ import 'package:event_bus/event_bus.dart';
 import 'package:get_it/get_it.dart';
 import 'package:ourdoctor/global/app_api.dart';
 import 'package:ourdoctor/models/dto/user_dto.dart';
+import 'package:ourdoctor/pages/monitoring/provider/food_result_provider.dart';
 import 'package:ourdoctor/provider/global_provider.dart';
 import 'package:ourdoctor/stores/my_page_store.dart';
 import 'package:ourdoctor/stores/user_info_store.dart';
@@ -17,6 +18,7 @@ setupLocator() async {
   // Register EventBus
   getIt.registerSingleton(EventBus());
   getIt.registerSingleton<GlobalProvider>(GlobalProvider());
+  getIt.registerSingleton<FoodResultProvider>(FoodResultProvider());
 
   // API
   final Dio dio = Dio();
