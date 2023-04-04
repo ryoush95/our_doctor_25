@@ -581,6 +581,7 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
             },
           ),
         ),
+        const SizedBox(height: 30),
       ],
     );
   }

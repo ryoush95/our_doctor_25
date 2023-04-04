@@ -402,28 +402,6 @@ class TopAreaState extends BaseState<TopArea> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            // RichText(text: TextSpan(
-                            //   children: [
-                            //     TextSpan(
-                            //       text: "생활 ",
-                            //       style: AppTextStyle.PD(
-                            //           AppColor_Primary, 16,
-                            //           weight: FW.bold)),
-                            //     TextSpan(
-                            //         text: "모니터링 기록 ",
-                            //         style: AppTextStyle.PD(
-                            //           AppColor_BlackText,
-                            //           16,
-                            //           weight: FW.regular,
-                            //         )),
-                            //     TextSpan(
-                            //         text: "+12일 ",
-                            //         style: AppTextStyle.PD(
-                            //           AppColor_BlackText,
-                            //           16,
-                            //         )),
-                            //   ]
-                            // )),
                             Container(
                               width: 128,
                               child: Center(
@@ -484,7 +462,7 @@ class TopAreaState extends BaseState<TopArea> {
             ),
           )
         : const Center(
-            child: CircularProgressIndicator(),
+            child: SizedBox(),
           );
   }
 }

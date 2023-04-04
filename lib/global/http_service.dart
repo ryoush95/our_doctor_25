@@ -58,6 +58,7 @@ import 'package:ourdoctor/models/monitor_result_res_model.dart';
 import 'package:ourdoctor/models/monitor_life_list2_model.dart';
 import 'package:ourdoctor/models/monitor_week_res_model.dart';
 import 'package:ourdoctor/models/monitor_write_res_model.dart';
+import 'package:ourdoctor/models/monitoring/food_item_list_model.dart';
 import 'package:ourdoctor/models/monitoring/food_list_model.dart';
 import 'package:ourdoctor/models/monitoring/heath_result_model.dart';
 import 'package:ourdoctor/models/monitoring/life_result_model.dart';
@@ -1834,6 +1835,23 @@ class HttpService {
     } else {
       // If that call was not successful, throw an error.
       print(response.statusCode);
+      showToast(LanguageService.trans("server_fail"));
+      throw Exception(LanguageService.trans("server_fail"));
+    }
+  }
+
+  //모니터링 음식 리스트
+  Future<FoodItemListModel> foodWriteList() async {
+    String _url = API_BASE_URL + "api/monitoring/get_food_list";
+    Map<String, String> body = {
+      'access_token': gUserInfo!.accessToken!,
+    };
+    Uri myUri = Uri.parse(_url);
+    final response = await http.post(myUri, body: body);
+    if (response.statusCode == 200) {
+      return FoodItemListModel.fromJson(json.decode(response.body));
+    } else {
+      // If that call was not successful, throw an error.
       showToast(LanguageService.trans("server_fail"));
       throw Exception(LanguageService.trans("server_fail"));
     }

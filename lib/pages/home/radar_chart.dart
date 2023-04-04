@@ -6,6 +6,7 @@ import 'dart:ui' as ui;
 
 import 'package:ourdoctor/global/app_colors.dart';
 import 'package:ourdoctor/global/app_styles.dart';
+import 'package:ourdoctor/global/global.dart';
 import 'package:ourdoctor/helpers/transition.dart';
 import 'package:ourdoctor/pages/components/h14.dart';
 import 'package:ourdoctor/pages/components/h16.dart';
@@ -15,6 +16,14 @@ import 'package:ourdoctor/pages/monitoring/food_write_list.dart';
 import 'package:ourdoctor/pages/monitoring/provider/food_result_provider.dart';
 import 'package:provider/provider.dart';
 
+final List<String> foodList = [ "고기, 생선, 달걀, 콩류", "과일류", "채소류", "유제품", "곡류"];
+final List<Color> colorList = [
+  Colors.amber,
+  Colors.orange,
+  AppColor_Oxygen,
+  AppColor_Red,
+  AppColor_Primary,
+];
 
 /// 레이더 차트 위젯을 생성하는 클래스
 class RadarChartWidget extends StatefulWidget {
@@ -38,21 +47,21 @@ class _RadarChartWidgetState extends State<RadarChartWidget> {
 
 
   Widget explain() {
-    final List<String> foodList = ["곡류", "고기", "채소", "과일", "유제품"];
+    final selIndex = context.watch<FoodResultProvider>().foodGraphIndex;
     return Column(
       children: [
-        H18(
-          text: context.watch<FoodResultProvider>().foodGraphIndex.toString(),
-          color: Colors.black,
-        ),
+        // H18(
+        //   text: context.watch<FoodResultProvider>().foodGraphIndex.toString(),
+        //   color: Colors.black,
+        // ),
         Container(
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(18.0),
-              color: AppColor_Primary),
+              color: selIndex < 0 ? AppColor_Primary : colorList[selIndex]),
           padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
           // left: 10, right: 10, top: 20, bottom: 20),
           child: H18(
-            text: _graphIndex < 0 ? "영양 총평" : foodList[_graphIndex],
+            text: selIndex < 0 ? "영양 총평" : foodList[selIndex],
             color: Colors.white,
           ),
         ),
@@ -113,6 +122,34 @@ class _RadarChartWidgetState extends State<RadarChartWidget> {
 
     return Column(
       children: [
+        Row(
+          children: [
+            const SizedBox(width: 20),
+            Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(18.0),
+                  color: Colors.pink),
+              padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 5),
+              // left: 10, right: 10, top: 20, bottom: 20),
+              child: H18(
+                text:  "권장량",
+                color: Colors.white,
+              ),
+            ),
+            const SizedBox(width: 10),
+            Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(18.0),
+                  color: AppColor_Primary),
+              padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 5),
+              // left: 10, right: 10, top: 20, bottom: 20),
+              child: H18(
+                text:  gSelChildInfo!.name!,
+                color: Colors.white,
+              ),
+            ),
+          ],
+        ),
         Container(
             height: 400,
             width: 400,
@@ -124,7 +161,7 @@ class _RadarChartWidgetState extends State<RadarChartWidget> {
                       clickX = details.localPosition.dx;
                       clickY = details.localPosition.dy;
                       _graphIndex = caculator(Size(size,size), clickX, clickY);
-                      // Provider.of<FoodResultProvider>(context, listen: false).changeGraphIndex(_graphIndex);
+                      Provider.of<FoodResultProvider>(context, listen: false).changeGraphIndex(_graphIndex);
                   }
                 },
                 child: CustomPaint(
@@ -146,7 +183,7 @@ class _RadarChartWidgetState extends State<RadarChartWidget> {
                 explain(),
                 Center(
                   child: MainTextButton(
-                    text: "duddid",
+                    text: "식단 기록하기",
                     style: AppTextStyle.PD(Colors.white, 16, weight: FW.medium),
                     width: 185,
                     height: 40,
@@ -166,14 +203,6 @@ class _RadarChartWidgetState extends State<RadarChartWidget> {
 
 // 레이더 차트를 그리는 CustomPainter 클래스
 class RadarChartPainter extends CustomPainter {
-  List<String> foodList = ["곡류", "고기", "채소", "과일", "유제품"]; // 음식 종류 리스트
-  List<Color> colorList = [
-    Colors.red,
-    Colors.orange,
-    Colors.green,
-    Colors.blue,
-    Colors.black
-  ];
   final context;
   final List<double> data; // 데이터 리스트
   double clickX;
@@ -231,13 +260,11 @@ class RadarChartPainter extends CustomPainter {
           (clickY >= y - ss && clickY <= y + ss);
 
       sel = sel != -1 ? sel : click ? i : -1;
-      
 
       points.add(Offset(x, y)); // 꼭지점 좌표 리스트에 추가
       canvas.drawCircle(
           Offset(x, y),
-          // click ? 12 :
-          9, // 꼭지점에 그리는 점의 크기를 10으로 변경
+          click ? 12 : 9, // 꼭지점에 그리는 점의 크기를 10으로 변경
           Paint()
             ..color = colorList[i]
             ..strokeWidth = 2
@@ -248,16 +275,10 @@ class RadarChartPainter extends CustomPainter {
           text: foodList[i],
           style: TextStyle(
             color: Colors.white,
-            fontSize:
-            // click ? 16 :
-            14,
+            fontSize: click ? 16 : 14,
             background: Paint()
-              ..strokeWidth =
-              // click ? 24.0 :
-              20.0
-              ..color =
-              // click ? colorList[i] :
-              Colors.grey
+              ..strokeWidth = click ? 24.0 : 20.0
+              ..color = click ? colorList[i] : Colors.grey
               ..style = PaintingStyle.stroke
               ..strokeJoin = StrokeJoin.round,
           ),

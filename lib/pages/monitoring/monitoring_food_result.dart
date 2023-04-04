@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:ourdoctor/global/app_colors.dart';
@@ -12,6 +13,8 @@ import 'package:ourdoctor/pages/components/h18.dart';
 import 'package:ourdoctor/pages/components/main_text_button.dart';
 import 'package:ourdoctor/pages/components/simple_header.dart';
 import 'package:ourdoctor/pages/home/radar_chart.dart';
+import 'package:ourdoctor/pages/monitoring/monitoring_food_habit.dart';
+import 'package:ourdoctor/pages/monitoring/monitoring_food_test2.dart';
 import 'package:ourdoctor/pages/monitoring/provider/food_result_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -36,8 +39,12 @@ class _MonitoringFoodResultState extends State<MonitoringFoodResult> {
 
   int graphIndex = 0;
 
-  final List<bool> checkList = List.generate(5, (_) => false);
-
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    p.changeGraphIndex(-1);
+  }
 
   Future<bool> onBackPressed() async {
     Navigator.pop(context);
@@ -157,7 +164,7 @@ class _MonitoringFoodResultState extends State<MonitoringFoodResult> {
     );
   }
 
-  Widget monitorFood() {
+  Widget monitorTotal() {
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -242,18 +249,18 @@ class _MonitoringFoodResultState extends State<MonitoringFoodResult> {
                 return foodListTile(index);
               },),
           ),
-          Center(
-            child: MainTextButton(
-              text: "duddid",
-              style: AppTextStyle.PD(Colors.white, 16, weight: FW.medium),
-              width: 185,
-              height: 40,
-              radius: 6,
-              onPressed: () {
-
-              },
-            ),
-          ),
+          // Center(
+          //   child: MainTextButton(
+          //     text: "duddid",
+          //     style: AppTextStyle.PD(Colors.white, 16, weight: FW.medium),
+          //     width: 185,
+          //     height: 40,
+          //     radius: 6,
+          //     onPressed: () {
+          //
+          //     },
+          //   ),
+          // ),
           const SizedBox(height: 55),
         ],
       ),
@@ -397,69 +404,10 @@ class _MonitoringFoodResultState extends State<MonitoringFoodResult> {
     return Container();
   }
 
-  Widget foodHabitTestTile1(index) {
-    return InkWell(
-      onTap: () {
-        setState(() {
-          checkList[index] = !checkList[index];
-        });
-      },
-      child: Row(
-        children: [
-          Container(
-            height: 90,
-            width: 90,
-            decoration: BoxDecoration(
-                borderRadius: const BorderRadius.all(
-                    Radius.circular(8)),
-                color: checkList[index]
-                    ? AppColor_Primary
-                    : AppColor_Light_Gray),
-            child: Icon(
-              Icons.check_rounded,
-              color: checkList[index]
-                  ? AppColor_White
-                  : Colors.grey,
-              size: 50,
-            ),
-          ),
-          const SizedBox(
-            width: 5,
-          ),
-          Expanded(
-            child: Container(
-              height: 90,
-              decoration: BoxDecoration(
-                  borderRadius:
-                  BorderRadius.all(Radius.circular(8)),
-                  color: checkList[index]
-                      ? AppColor_Primary
-                      : AppColor_Light_Gray),
-              child: Center(
-                  child: Container(
-                    padding: EdgeInsets.all(8),
-                    width: double.infinity,
-                    child: H16(
-                      text: "asdasd",
-                      color: checkList[index]
-                          ? AppColor_White
-                          : Colors.black,
-                      maxLine: 2,
-                      align: TextAlign.start,
-                      weight: FW.medium,
-                    ),
-                  )),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget monitor1() {
     return  Container(
       padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: monitorFood());
+        child: monitorTotal());
   }
 
   Widget monitor2() {
@@ -484,57 +432,37 @@ class _MonitoringFoodResultState extends State<MonitoringFoodResult> {
   }
 
   Widget monitor3() {
+    print(gUserInfo!.accessToken!);
     return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-      child: SingleChildScrollView(
-        child: Stack(
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 25),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: H18(
-                    text: "문제 행동",
-                    color: AppColor_Primary,
-                    align: TextAlign.start,
-                  ),
-                ),
-                H18(
-                  text: "체크 리스트",
-                  align: TextAlign.start,
-                ),
-                const SizedBox(height: 55),
-                Container(
-                  height: 500,
-                  child: ListView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: 5,
-                    itemBuilder: (context, index) {
-                      return Container(
-                        padding: EdgeInsets.only(bottom: 10),
-                        height: 100,
-                        child: foodHabitTestTile1(index),
-                      );
-                    },
-                  ),
-                ),
-                const SizedBox(height: 55),
-                MainTextButton(
-                  text: "완료하기",
-                  style: AppTextStyle.PD(Colors.white, 24, weight: FW.medium),
-                  width: double.infinity,
-                  height: 80,
-                  radius: 10,
-                  onPressed: () {},
-                ),
-                const SizedBox(height: 55),
-              ],
-            ),
-          ],
-        ),
+      color: Colors.transparent,
+      child: Stack(
+        children: [
+          Column(
+            children: [
+              CachedNetworkImage(
+                imageUrl: "https://mingles-dev.s3.ap-northeast-2.amazonaws.com/uploads/product/main_image_object/41/%EB%B0%B0%EC%93%B0%EB%B0%A4_%EC%8D%B8%EB%84%A4%EC%9D%BC.jpg",
+                width: 200,
+                height: 200,
+                fit: BoxFit.fill,
+              ),
+              H18(
+                text: "미션을 수행하며\n건강한 식습관을 가져보세요!",maxLine: 2,
+              ),
+              Divider(),
+              MainTextButton(
+                text: "다시 점검하기",
+                style: AppTextStyle.PD(Colors.white, 16, weight: FW.medium),
+                width: 185,
+                height: 40,
+                radius: 6,
+                onPressed: () {
+                  Navigator.push(context, SlideRightTransRoute(builder: (context) => MonitoringFoodTest2(),));
+                },
+              ),
+            ],
+          ),
+          MonitoringFoodHabit(),
+        ],
       ),
     );
   }
@@ -551,7 +479,6 @@ class _MonitoringFoodResultState extends State<MonitoringFoodResult> {
 
   @override
   Widget build(BuildContext context) {
-    p.changeGraphIndex(-1);
     return PageLayout(
       onBack: onBackPressed,
       child: Column(
