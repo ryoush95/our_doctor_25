@@ -587,18 +587,24 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
             radius: 6,
             onPressed: () {
 
-              DateTime birth = DateTime.parse(gSelChildInfo!.birth!);
               DateTime now = DateTime.now();
-              int dif = now.difference(birth).inDays.toInt();
-              //1년 초과 자녀 , 이하 자녀 분기
-              if(dif>365){
-                //1년 초과 자녀
+              DateTime birth = DateTime.parse(gSelChildInfo!.birth!);
+
+              int birthYear = int.parse(gSelChildInfo!.birth!.substring(0,4));
+              int birthMonth = int.parse(gSelChildInfo!.birth!.substring(5,7));
+              DateTime birthDate = DateTime(birthYear, birthMonth); // 태어난 날짜
+              int dif = now.difference(birth).inDays.toInt(); // 태어난 날짜와 오늘 날짜의 차이
+              int months = ((now.year - birthDate.year) * 12) + (now.month - birthDate.month); //몇 개월차
+
+              //12개월 초과 자녀 , 이하 자녀 분기
+              if(months>12){
+                //12개월 초과 자녀
                 Navigator.push(context, SlideRightTransRoute(
                   builder: (context) => MonitoringFoodResult()));
               }else{
-                //1년 이하 자녀
+                //12개월 이하 자녀
                 Navigator.push(context, SlideRightTransRoute(
-                    builder: (context) => MonitoringFoodResultReplace(dif: dif)));
+                    builder: (context) => MonitoringFoodResultReplace(months: months ,dif:dif)));
               }
 
             },
