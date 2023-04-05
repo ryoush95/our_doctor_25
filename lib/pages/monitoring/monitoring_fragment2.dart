@@ -36,6 +36,7 @@ import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../app_event.dart';
+import 'monitoring_food_result_replace.dart';
 import 'monitoring_test_form.dart';
 
 class MonitoringFragment2 extends StatefulWidget {
@@ -585,8 +586,21 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
             height: 40,
             radius: 6,
             onPressed: () {
-              Navigator.push(context, SlideRightTransRoute(
+
+              DateTime birth = DateTime.parse(gSelChildInfo!.birth!);
+              DateTime now = DateTime.now();
+              int dif = now.difference(birth).inDays.toInt();
+              //1년 초과 자녀 , 이하 자녀 분기
+              if(dif>365){
+                //1년 초과 자녀
+                Navigator.push(context, SlideRightTransRoute(
                   builder: (context) => MonitoringFoodResult()));
+              }else{
+                //1년 이하 자녀
+                Navigator.push(context, SlideRightTransRoute(
+                    builder: (context) => MonitoringFoodResultReplace(dif: dif)));
+              }
+
             },
           ),
         ),
