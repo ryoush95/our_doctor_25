@@ -142,7 +142,7 @@ class _MonitoringFoodTest2State extends BaseState<MonitoringFoodTest2> {
   Widget _itemBuilder(BuildContext context, int index) {
     int numId = index + ((pageNum - 1) * itemCount);
     return Container(
-      height: 300,
+      height: 400,
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         RichText(
           text: TextSpan(
@@ -171,16 +171,17 @@ class _MonitoringFoodTest2State extends BaseState<MonitoringFoodTest2> {
     return Column(
       children: [
         Container(
-          height: 80,
+          height: 250,
           width: MediaQuery.of(context).size.width - 64,
           child: ListView.builder(
-            scrollDirection: Axis.horizontal,
+            // scrollDirection: Axis.horizontal,
+            physics: const NeverScrollableScrollPhysics(),
             itemCount: 5,
             itemBuilder: (context, check) =>  Container(
               height: 50,
               width: (MediaQuery.of(context).size.width - 64) / 5,
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   InkWell(
                     onTap: () {
@@ -189,45 +190,22 @@ class _MonitoringFoodTest2State extends BaseState<MonitoringFoodTest2> {
                         quizList[index].answer = "$check";
                       });
                     },
-                    child: Row(
-                      children: [
-                        Image.asset(
-                          quizList[index].answer == "$check"
-                              ? "assets/ic_option_on.png"
-                              : "assets/ic_option_off.png",
-                          width: 35,
-                          height: 35,
-                        ),
-                      ],
+                    child: Image.asset(
+                      quizList[index].answer == "$check"
+                          ? "assets/ic_option_on.png"
+                          : "assets/ic_option_off.png",
+                      width: 35,
+                      height: 35,
                     ),
                   ),
+                  const SizedBox(width: 10),
+                  H16(text: "$check"),
                 ],
               ),
             ),
           ),
         ),
         const SizedBox(height: 15),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Container(
-              height: 30,
-              child: H16(
-                text: LanguageService.trans("전혀 그렇지않다"),
-                weight: FW.medium,
-                color: AppColor_BlackText,
-              ),
-            ),
-            Container(
-              height: 30,
-              child: H16(
-                text: LanguageService.trans("매우 그렇다"),
-                weight: FW.medium,
-                color: AppColor_BlackText,
-              ),
-            ),
-          ],
-        ),
       ],
     );
   }
@@ -256,12 +234,12 @@ class _MonitoringFoodTest2State extends BaseState<MonitoringFoodTest2> {
                           children: [
                             TextSpan(
                               text: "식습관\n",
-                              style: AppTextStyle.PD(AppColor_Primary, 18,
+                              style: AppTextStyle.PD(AppColor_Primary, 24,
                                   weight: FW.bold),
                             ),
                             TextSpan(
                               text: "체크리스트\n\n",
-                              style: AppTextStyle.PD(AppColor_BlackText, 19,
+                              style: AppTextStyle.PD(AppColor_BlackText, 24,
                                   weight: FW.bold),
                             ),
                             TextSpan(
@@ -278,7 +256,7 @@ class _MonitoringFoodTest2State extends BaseState<MonitoringFoodTest2> {
                     const Divider(),
                     const SizedBox(height: 30),
                     Container(
-                      height: quizList.length * 300,
+                      height: quizList.length * 400,
                       child: ListView.builder(
                         physics: const NeverScrollableScrollPhysics(),
                         itemCount: quizList.length,

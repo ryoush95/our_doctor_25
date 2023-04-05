@@ -556,12 +556,21 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
     return Column(
       children: [
         Container(
+          padding: EdgeInsets.only(bottom: 8),
+          width: double.infinity,
+          child: H18(
+            text: "최근 기록은 ${DateFormat("yyyy년 MM월 dd일").format(DateTime.now())} 이에요 :)",
+            align: TextAlign.start,
+            maxLine: 3,
+          ),
+        ),
+        Container(
           padding: EdgeInsets.only(bottom: 20),
           width: double.infinity,
           child: H18(
-            text: "최근 기록은 ${DateFormat("yyyy년 MM월 dd일").format(DateTime.now())} 이에요 :)\n오늘은 무엇을 먹었나요?",
+            text: "오늘은 무엇을 먹었나요?",
             align: TextAlign.start,
-            maxLine: 2,
+            maxLine: 3,
           ),
         ),
 

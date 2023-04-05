@@ -43,9 +43,14 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Padding(
+                  Container(
+                    width: MediaQuery.of(context).size.width - 130,
                     padding: const EdgeInsets.symmetric(vertical: 10.0),
-                    child: H16(text: "건강하고 다양한 음식을 골고루 잘 먹고있네요.",maxLine: 2,),
+                    child: H16(
+                      text: "건강하고 다양한 음식을 골고루 잘 먹고있네요.aaaaaaaaaaaaaaaa",
+                      maxLine: 2,
+                      align: TextAlign.start,
+                    ),
                   ),
                   Container(
                     width: MediaQuery.of(context).size.width - 130,
@@ -77,6 +82,7 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
                   H18(
                     text: "Mission 1",
                     color: AppColor_Primary,
+                    weight: FW.medium,
                   ),
                   const SizedBox(height: 10,),
                   H18(text: "채소 1가지 이상 먹어보기")
@@ -181,8 +187,16 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 30),
-              child: H24B(
-                text: "미션을 수행하며\n건강한 식습관을 가져보세요!",maxLine: 2,
+              child: Column(
+                children: [
+                  H24B(
+                    text: "미션을 수행하며",maxLine: 2,
+                  ),
+                  const SizedBox(height: 8),
+                  H24B(
+                    text: "건강한 식습관을 가져보세요!",maxLine: 2,
+                  ),
+                ],
               ),
             ),
             const Divider(),

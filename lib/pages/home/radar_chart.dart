@@ -8,6 +8,7 @@ import 'package:ourdoctor/global/app_colors.dart';
 import 'package:ourdoctor/global/app_styles.dart';
 import 'package:ourdoctor/global/global.dart';
 import 'package:ourdoctor/helpers/transition.dart';
+import 'package:ourdoctor/pages/components/h12.dart';
 import 'package:ourdoctor/pages/components/h14.dart';
 import 'package:ourdoctor/pages/components/h16.dart';
 import 'package:ourdoctor/pages/components/h18.dart';
@@ -128,24 +129,26 @@ class _RadarChartWidgetState extends State<RadarChartWidget> {
             Container(
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(18.0),
-                  color: Colors.pink),
+                  color: Colors.pink.withOpacity(0.3)),
               padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 5),
               // left: 10, right: 10, top: 20, bottom: 20),
-              child: H18(
+              child: H12(
                 text:  "권장량",
                 color: Colors.white,
+                weight: FW.medium,
               ),
             ),
             const SizedBox(width: 10),
             Container(
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(18.0),
-                  color: AppColor_Primary),
+                  color: AppColor_Primary.withOpacity(0.3)),
               padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 5),
               // left: 10, right: 10, top: 20, bottom: 20),
-              child: H18(
+              child: H12(
                 text:  gSelChildInfo!.name!,
                 color: Colors.white,
+                weight: FW.medium,
               ),
             ),
           ],
@@ -217,7 +220,7 @@ class RadarChartPainter extends CustomPainter {
     final centerY = size.height / 2; // 중심 y좌표
 
     final paint = Paint()
-      ..color = Colors.grey // 회색
+      ..color = Color(0xFFCECECE) // 회색
       ..style = PaintingStyle.stroke // 선 스타일
       ..strokeWidth = 1; // 선 두께
 
@@ -264,7 +267,7 @@ class RadarChartPainter extends CustomPainter {
       points.add(Offset(x, y)); // 꼭지점 좌표 리스트에 추가
       canvas.drawCircle(
           Offset(x, y),
-          click ? 12 : 9, // 꼭지점에 그리는 점의 크기를 10으로 변경
+          9, // 꼭지점에 그리는 점의 크기를 9으로 변경
           Paint()
             ..color = colorList[i]
             ..strokeWidth = 2
@@ -275,7 +278,7 @@ class RadarChartPainter extends CustomPainter {
           text: foodList[i],
           style: TextStyle(
             color: Colors.white,
-            fontSize: click ? 16 : 14,
+            fontSize: click ? 14 : 12,
             background: Paint()
               ..strokeWidth = click ? 24.0 : 20.0
               ..color = click ? colorList[i] : Colors.grey
@@ -289,7 +292,7 @@ class RadarChartPainter extends CustomPainter {
       textPainter.layout();
       final textX = centerX + radius * cos(angle) * 1.5 - textPainter.width / 2;
       final textY =
-          centerY + radius * sin(angle) * 1.4 - textPainter.height / 2;
+          centerY + radius * sin(angle) * 1.5 - textPainter.height / 2;
       textPainter.paint(canvas, Offset(textX, textY));
     }
 

@@ -1,10 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:ourdoctor/global/app_colors.dart';
 import 'package:ourdoctor/global/app_get_it.dart';
 import 'package:ourdoctor/global/app_styles.dart';
 import 'package:ourdoctor/global/global.dart';
+import 'package:ourdoctor/helpers/common_util.dart';
 import 'package:ourdoctor/helpers/transition.dart';
 import 'package:ourdoctor/pages/base/page_layout.dart';
 import 'package:ourdoctor/pages/components/h14.dart';
@@ -96,25 +98,27 @@ class _MonitoringFoodResultState extends State<MonitoringFoodResult> {
   Widget foodListTile(index) {
     return InkWell(
       onTap: () {
+        Fluttertoast.cancel();
+        showToast("미션을 완료했어요! +1point");
         setState(() {
           _showMessage = true;
         });
-        Future.delayed(Duration(seconds: 1), () {
-          setState(() {
-            _showMessage = false;
-          });
-        });
+        // Future.delayed(Duration(seconds: 1), () {
+        //   setState(() {
+        //     _showMessage = false;
+        //   });
+        // });
       },
       child: Stack(
         children: [
           Container(
-            width: 100,
+            width: (MediaQuery.of(context).size.width - 40) / 2.5,
             height: 100,
             margin: EdgeInsets.all(3),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
               border: Border.all(
-                color: AppColor_Primary,
+                color: index == 0 ? AppColor_Oxygen : AppColor_Primary,
                 width: 2,
               ),
             ),
@@ -125,22 +129,22 @@ class _MonitoringFoodResultState extends State<MonitoringFoodResult> {
               ),
             ),
           ),
-          AnimatedPositioned(
-            duration: const Duration(milliseconds: 500),
-            top: _showMessage ? 0 : -60,
-            left: 0,
-            right: 0,
-            height: 40,
-            child: Container(
-              padding: EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: Colors.grey.withOpacity(0.8),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Text('+1 point',
-                  style: TextStyle(fontSize: 16, color: Colors.white)),
-            ),
-          ),
+          // AnimatedPositioned(
+          //   duration: const Duration(milliseconds: 500),
+          //   top: _showMessage ? 0 : -60,
+          //   left: 0,
+          //   right: 0,
+          //   height: 40,
+          //   child: Container(
+          //     padding: EdgeInsets.all(8),
+          //     decoration: BoxDecoration(
+          //       color: Colors.grey.withOpacity(0.8),
+          //       borderRadius: BorderRadius.circular(8),
+          //     ),
+          //     child: Text('+1 point',
+          //         style: TextStyle(fontSize: 16, color: Colors.white)),
+          //   ),
+          // ),
           // Opacity(
           //   opacity: _showMessage ? 1 : 0,
           //   child: Container(
@@ -164,6 +168,16 @@ class _MonitoringFoodResultState extends State<MonitoringFoodResult> {
     );
   }
 
+  Color colorSwitch(num) {
+    if (num == 0){
+      return AppColor_Red;
+    } else if (num == 1){
+      return Colors.amber;
+    } else {
+      return AppColor_Oxygen;
+    }
+  }
+
   Widget monitorTotal() {
     return SingleChildScrollView(
       child: Column(
@@ -171,7 +185,13 @@ class _MonitoringFoodResultState extends State<MonitoringFoodResult> {
         children: [
           const SizedBox(height: 20),
           H18(
-            text: "${gSelChildInfo!.name}는\n${DateTime.now().month}월에 골고루 먹었을까요?",
+            text: "${gSelChildInfo!.name}는",
+            maxLine: 2,
+            align: TextAlign.start,
+          ),
+          const SizedBox(height: 8),
+          H18(
+            text: "${DateTime.now().month}월에 골고루 먹었을까요?",
             maxLine: 2,
             align: TextAlign.start,
           ),
@@ -197,16 +217,29 @@ class _MonitoringFoodResultState extends State<MonitoringFoodResult> {
                       H14(text: foodList[index]),
                       Container(
                         margin: const EdgeInsets.all(3),
-                        height: 50,
+                        height: 60,
                         decoration: BoxDecoration(
-                          color: AppColor_Oxygen,
+                          color: colorSwitch(1),
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        child: Center(
-                            child: H14(
-                              text: "과다",
-                              color: Colors.white,
-                            )),
+                        child: Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: Column(
+                            children: [
+                              Image.asset(
+                                  "assets/food_icon_noback_$index.png",
+                                width: 30,
+                                height: 30,
+                              ),
+                              const SizedBox(height: 4),
+                              Center(
+                                  child: H14(
+                                    text: "과다",
+                                    color: Colors.white,
+                                  )),
+                            ],
+                          ),
+                        ),
                       )
                     ],
                   ),
@@ -214,15 +247,40 @@ class _MonitoringFoodResultState extends State<MonitoringFoodResult> {
               },
             ),
           ),
-          H18(
-            text: "식단 종합",
-            maxLine: 2,
-            align: TextAlign.start,
-          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              H16(text: "최신 기록은 3월 25일 이에요"),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  H18(
+                    text: "식단 종합",
+                    maxLine: 2,
+                    align: TextAlign.start,
+                  ),
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: "최신 기록은 ",
+                          style: AppTextStyle.PD(AppColor_BlackText, 16,
+                              weight: FW.regular),
+                        ),
+                        TextSpan(
+                          text: "3월 25일",
+                          style: AppTextStyle.PD(AppColor_Primary, 16,
+                              weight: FW.bold, height: 1.4),
+                        ),
+                        TextSpan(
+                          text: " 이에요",
+                          style: AppTextStyle.PD(AppColor_BlackText, 16,
+                              weight: FW.regular, height: 1.4),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 8),
                 margin: const EdgeInsets.only(right: 8),
@@ -240,6 +298,7 @@ class _MonitoringFoodResultState extends State<MonitoringFoodResult> {
               ),
             ],
           ),
+          const SizedBox(height: 8),
           Container(
             height: 160,
             child: ListView.builder(

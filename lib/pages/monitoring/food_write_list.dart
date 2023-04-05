@@ -112,7 +112,7 @@ class _FoodWriteListState extends BaseState<FoodWriteList> {
             const SizedBox(height: 15),
             H16(
               text: cateList[index],
-              color: Colors.grey,
+              color: cateIndex == index ? colorList[index] : Colors.grey,
               maxLine: 2,
               weight: FW.semi_bold,
             ),
@@ -130,7 +130,10 @@ class _FoodWriteListState extends BaseState<FoodWriteList> {
         children: [
           FutureBuilder(
             builder: (context, snapshot) =>
-                CachedNetworkImage(imageUrl: foodList[index].image),
+                CachedNetworkImage(
+                    imageUrl: foodList[index].image,
+                  width: 120,
+                ),
           ),
           Expanded(
             child: Column(
@@ -149,7 +152,7 @@ class _FoodWriteListState extends BaseState<FoodWriteList> {
                   ),
                 ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
                       width: 30,
@@ -170,7 +173,9 @@ class _FoodWriteListState extends BaseState<FoodWriteList> {
                         child: Icon(Icons.remove_rounded, color: AppColor_GrayText,),
                       ),
                     ),
-                    H20(text: foodList[index].unit + " " + foodList[index].unitName,),
+                    SizedBox(
+                      width: 100,
+                        child: H20(text: foodList[index].unit + " " + foodList[index].unitName,)),
                     Container(
                       width: 30,
                       height: 100,
