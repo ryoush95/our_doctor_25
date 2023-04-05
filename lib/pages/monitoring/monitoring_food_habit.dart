@@ -55,6 +55,7 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
                   Container(
                     width: MediaQuery.of(context).size.width - 130,
                     child: H14(
+                      color: Color(0xff707071), height: 1.3,
                       text: aa[index],
                       maxLine: 99,
                       align: TextAlign.start,

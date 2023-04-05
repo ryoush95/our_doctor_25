@@ -34,6 +34,7 @@ class _MonitoringFoodResultState extends State<MonitoringFoodResult> {
   int foodHabitIndex = 0;
   List<String> cateList = ["종합", "식단", "식습관"];
   List<String> foodList = ["곡류", "고기", "채소", "과일", "유제품"];
+  List<bool> missionCheck = [];
 
   DateTime _selectedDay = DateTime.now();
   DateTime _focusedDay = DateTime.now();
@@ -114,7 +115,7 @@ class _MonitoringFoodResultState extends State<MonitoringFoodResult> {
           Container(
             width: (MediaQuery.of(context).size.width - 40) / 2.5,
             height: 100,
-            margin: EdgeInsets.all(3),
+            margin: index == 3 ? EdgeInsets.symmetric(horizontal: 10) : EdgeInsets.only(left: 10),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
               border: Border.all(
@@ -181,128 +182,136 @@ class _MonitoringFoodResultState extends State<MonitoringFoodResult> {
   Widget monitorTotal() {
     return SingleChildScrollView(
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(height: 20),
-          H18(
-            text: "${gSelChildInfo!.name}는",
-            maxLine: 2,
-            align: TextAlign.start,
-          ),
-          const SizedBox(height: 8),
-          H18(
-            text: "${DateTime.now().month}월에 골고루 먹었을까요?",
-            maxLine: 2,
-            align: TextAlign.start,
-          ),
-          foodCalendar(),
-          const SizedBox(height: 30),
-          H18(
-            text: "식단 종합",
-            maxLine: 2,
-            align: TextAlign.start,
-          ),
-          const SizedBox(height: 20),
-          SizedBox(
-            height: 150,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: 5,
-              itemBuilder: (context, index) {
-                return Container(
-                  width: (MediaQuery.of(context).size.width - 40) / 5,
-                  child: Column(
-                    children: [
-                      H14(text: foodList[index]),
-                      Container(
-                        margin: const EdgeInsets.all(3),
-                        height: 60,
-                        decoration: BoxDecoration(
-                          color: colorSwitch(1),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(5.0),
-                          child: Column(
-                            children: [
-                              Image.asset(
-                                  "assets/food_icon_noback_$index.png",
-                                width: 30,
-                                height: 30,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                H18(
+                  text: "${gSelChildInfo!.name}는",
+                  maxLine: 2,
+                  align: TextAlign.start,
+                ),
+                const SizedBox(height: 8),
+                H18(
+                  text: "${DateTime.now().month}월에 골고루 먹었을까요?",
+                  maxLine: 2,
+                  align: TextAlign.start,
+                ),
+                foodCalendar(),
+                const SizedBox(height: 30),
+                H18(
+                  text: "식단 종합",
+                  maxLine: 2,
+                  align: TextAlign.start,
+                ),
+                const SizedBox(height: 20),
+                SizedBox(
+                  height: 150,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: 5,
+                    itemBuilder: (context, index) {
+                      return Container(
+                        width: (MediaQuery.of(context).size.width - 40) / 5,
+                        child: Column(
+                          children: [
+                            H14(text: foodList[index]),
+                            Container(
+                              margin: const EdgeInsets.all(3),
+                              height: 60,
+                              decoration: BoxDecoration(
+                                color: colorSwitch(1),
+                                borderRadius: BorderRadius.circular(8),
                               ),
-                              const SizedBox(height: 4),
-                              Center(
-                                  child: H14(
-                                    text: "과다",
-                                    color: Colors.white,
-                                  )),
+                              child: Padding(
+                                padding: const EdgeInsets.all(5.0),
+                                child: Column(
+                                  children: [
+                                    Image.asset(
+                                      "assets/food_icon_noback_$index.png",
+                                      width: 30,
+                                      height: 30,
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Center(
+                                        child: H14(
+                                          text: "과다",
+                                          color: Colors.white,
+                                        )),
+                                  ],
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        H18(
+                          text: "식단 종합",
+                          maxLine: 2,
+                          align: TextAlign.start,
+                        ),
+                        RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text: "최신 기록은 ",
+                                style: AppTextStyle.PD(AppColor_BlackText, 16,
+                                    weight: FW.regular),
+                              ),
+                              TextSpan(
+                                text: "3월 25일",
+                                style: AppTextStyle.PD(AppColor_Primary, 16,
+                                    weight: FW.bold, height: 1.4),
+                              ),
+                              TextSpan(
+                                text: " 이에요",
+                                style: AppTextStyle.PD(AppColor_BlackText, 16,
+                                    weight: FW.regular, height: 1.4),
+                              ),
                             ],
                           ),
                         ),
-                      )
-                    ],
-                  ),
-                );
-              },
-            ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  H18(
-                    text: "식단 종합",
-                    maxLine: 2,
-                    align: TextAlign.start,
-                  ),
-                  RichText(
-                    text: TextSpan(
-                      children: [
-                        TextSpan(
-                          text: "최신 기록은 ",
-                          style: AppTextStyle.PD(AppColor_BlackText, 16,
-                              weight: FW.regular),
-                        ),
-                        TextSpan(
-                          text: "3월 25일",
-                          style: AppTextStyle.PD(AppColor_Primary, 16,
-                              weight: FW.bold, height: 1.4),
-                        ),
-                        TextSpan(
-                          text: " 이에요",
-                          style: AppTextStyle.PD(AppColor_BlackText, 16,
-                              weight: FW.regular, height: 1.4),
-                        ),
                       ],
                     ),
-                  ),
-                ],
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 8),
-                margin: const EdgeInsets.only(right: 8),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(18),
-                    color: AppColor_Primary),
-                child: Center(
-                  child: H14(
-                    text: "업데이트 하기",
-                    weight: FW.bold,
-                    align: TextAlign.center,
-                    color: Colors.white,
-                  ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 8),
+                      margin: const EdgeInsets.only(right: 8),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(18),
+                          color: AppColor_Primary),
+                      child: Center(
+                        child: H14(
+                          text: "업데이트 하기",
+                          weight: FW.bold,
+                          align: TextAlign.center,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
           const SizedBox(height: 8),
           Container(
             height: 160,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
+              physics: const BouncingScrollPhysics(),
               itemCount: 4,
               itemBuilder: (context, index) {
                 return foodListTile(index);
@@ -328,9 +337,9 @@ class _MonitoringFoodResultState extends State<MonitoringFoodResult> {
 
   Widget foodCalendar() {
     Map<DateTime, List> _events = {
-      DateTime.utc(2023, 03, 11): ['Event 1', 'Event 2'],
-      DateTime.utc(2023, 03, 12): ['Event 3', 'Event 4'],
-      DateTime.utc(2023, 03, 13): ['Event 5', 'Event 6'],
+      DateTime.utc(2023, 04, 11): ['Event 1', 'Event 2'],
+      DateTime.utc(2023, 04, 12): ['Event 3', 'Event 4'],
+      DateTime.utc(2023, 04, 13): ['Event 5', 'Event 6'],
     };
 
     return TableCalendar(
@@ -367,21 +376,27 @@ class _MonitoringFoodResultState extends State<MonitoringFoodResult> {
         ),
         // 토요일 일요일 날짜 색변경
         defaultBuilder: (context, day, focusedDay) {
+          final text = day.day.toString();
           if (day.weekday == DateTime.sunday) {
-            final text = day.day.toString();
             return Center(
               child: Text(
                 text,
-                style: const TextStyle(color: Colors.red),
+                style: const TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
               ),
             );
-          }
-          if (day.weekday == DateTime.saturday) {
+          } else if (day.weekday == DateTime.saturday) {
             final text = day.day.toString();
             return Center(
               child: Text(
                 text,
-                style: const TextStyle(color: Colors.blue),
+                style: const TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+              ),
+            );
+          } else {
+            return Center(
+              child: Text(
+                text,
+                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
             );
           }
@@ -417,7 +432,7 @@ class _MonitoringFoodResultState extends State<MonitoringFoodResult> {
             child: Center(
               child: Text(
                 day.day.toString(),
-                style: const TextStyle(color: Colors.white),
+                style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
               ),
             ),
             width: 40,
@@ -434,7 +449,7 @@ class _MonitoringFoodResultState extends State<MonitoringFoodResult> {
             child: Center(
               child: Text(
                 day.day.toString(),
-                style: const TextStyle(fontSize: 16,color: Colors.white),
+                style: const TextStyle(fontSize: 16,color: Colors.white, fontWeight: FontWeight.bold),
               ),
             ),
             width: 40,
@@ -465,14 +480,15 @@ class _MonitoringFoodResultState extends State<MonitoringFoodResult> {
 
   Widget monitor1() {
     return  Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      // padding: const EdgeInsets.symmetric(horizontal: 20),
+      //   color: Colors.transparent,
         child: monitorTotal());
   }
 
   Widget monitor2() {
     return SingleChildScrollView(
       child: SizedBox(
-          height: 900,
+          height: MediaQuery.of(context).size.width + 550,
           child: Column(
             children: [
               Container(
@@ -563,3 +579,4 @@ class _MonitoringFoodResultState extends State<MonitoringFoodResult> {
     );
   }
 }
+

@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'dart:ui' as ui;
@@ -41,11 +42,72 @@ class _RadarChartWidgetState extends State<RadarChartWidget> {
 
   Offset position = const Offset(0, 0);
   final List<bool> isPointSelected = List.generate(5, (_) => false);
-  double size = 200;
   double clickX = -1;
   double clickY = -1;
   int _graphIndex = -1;
 
+  PageController bannerController = PageController();
+  double bannerNum = 0;
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    bannerController.dispose();
+  }
+
+  Widget banner() {
+    return PageView.builder(
+      controller: bannerController,
+      itemCount: foodList.length,
+      itemBuilder: (context, index) =>  Container(
+        width: MediaQuery.of(context).size.width - 64,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(6.0),
+            color: AppColor_Light_Gray),
+        margin: EdgeInsets.symmetric(horizontal: 10),
+        padding: const EdgeInsets.only(
+            left: 30, right: 30, top: 20, bottom: 20),
+        // margin: const EdgeInsets.symmetric(horizontal: 30),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            H16(text: foodList[index]),
+            const SizedBox(
+              height: 10,
+            ),
+            H14(
+              text: "contentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontent",
+              maxLine: 10,
+              height: 1.5,
+              align: TextAlign.start,
+            ),
+          ],
+        ),
+      ),
+      onPageChanged: (i) {
+        setState(() {
+          bannerNum = i.toDouble();
+          Provider.of<FoodResultProvider>(context, listen: false).changeGraphIndex(i);
+        });
+      },
+    );
+  }
+
+  _dotIndicator() {
+    // List _items = [mData.mainImage!, mData.mainImage!];
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: DotsIndicator(
+        dotsCount: 5,
+        position: bannerNum,
+        decorator: DotsDecorator(
+          color: const Color(0xFF000000).withOpacity(0.12), // Inactive color
+          activeColor: AppColor_Primary,
+        ),
+      ),
+    );
+  }
 
   Widget explain() {
     final selIndex = context.watch<FoodResultProvider>().foodGraphIndex;
@@ -67,31 +129,16 @@ class _RadarChartWidgetState extends State<RadarChartWidget> {
           ),
         ),
         const SizedBox(height: 30),
+        // bannerList.isNotEmpty ? CareBanner() : const Center(child: CircularProgressIndicator()),
+        Container(height: 200, child: banner()),
         Container(
-          width: MediaQuery.of(context).size.width - 64,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(6.0),
-              color: AppColor_Light_Gray),
-          padding: const EdgeInsets.only(
-              left: 30, right: 30, top: 20, bottom: 20),
-          // margin: const EdgeInsets.symmetric(horizontal: 30),
+          height: 50,
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              H16(text: "title"),
-              const SizedBox(
-                height: 10,
-              ),
-              H14(
-                text: "contentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontent",
-                maxLine: 10,
-                height: 1.5,
-                align: TextAlign.start,
-              ),
+              foodList.isNotEmpty ? Center(child: _dotIndicator()) : Container(),
             ],
           ),
         ),
-        const SizedBox(height: 50),
       ],
     );
   }
@@ -120,6 +167,7 @@ class _RadarChartWidgetState extends State<RadarChartWidget> {
   @override
   Widget build(BuildContext context) {
     final List<double> data2 = [0.5, 0.8, 0.6, 0.9, 0.4];
+    double size = MediaQuery.of(context).size.width - 200;
 
     return Column(
       children: [
@@ -154,33 +202,41 @@ class _RadarChartWidgetState extends State<RadarChartWidget> {
           ],
         ),
         Container(
-            height: 400,
-            width: 400,
-            padding: const EdgeInsets.all(20),
-            child: Center(
-              child: GestureDetector(
-                onTapDown: (details) {
-                  if (widget.state!) {
-                      clickX = details.localPosition.dx;
-                      clickY = details.localPosition.dy;
-                      _graphIndex = caculator(Size(size,size), clickX, clickY);
-                      Provider.of<FoodResultProvider>(context, listen: false).changeGraphIndex(_graphIndex);
-                  }
-                },
-                child: CustomPaint(
-                  painter: RadarChartPainter(
-                    context,
-                    data2,
-                    clickX,
-                    clickY,
-                  ),
-                  size: Size(size, size),
+          height: size + 200,
+          width: size + 200,
+          padding: const EdgeInsets.all(20),
+          child: Center(
+            child: GestureDetector(
+              onTapDown: (details) {
+                if (widget.state!) {
+                  clickX = details.localPosition.dx;
+                  clickY = details.localPosition.dy;
+                  _graphIndex = caculator(Size(size,size), clickX, clickY);
+                  bannerController.jumpToPage(_graphIndex);
+                  Provider.of<FoodResultProvider>(context, listen: false).changeGraphIndex(_graphIndex);
+                }
+              },
+              child: CustomPaint(
+                painter: widget.state! ? RadarChartPainter(
+                  context,
+                  data2,
+                  clickX,
+                  clickY,
+                ) : RadarChartPainter(
+                  context,
+                  data2,
+                  -1,
+                  -1,
                 ),
+                size: Size(size, size),
               ),
             ),
+          ),
         ),
         Visibility(
           visible: widget.state!,
+          child: Container(
+            height: 450,
             child: Column(
               children: [
                 explain(),
@@ -198,6 +254,7 @@ class _RadarChartWidgetState extends State<RadarChartWidget> {
                 ),
               ],
             ),
+          ),
         ),
       ],
     );
@@ -225,7 +282,7 @@ class RadarChartPainter extends CustomPainter {
       ..strokeWidth = 1; // 선 두께
 
     final fillPaint = Paint()
-      ..color = Colors.grey.withOpacity(0.1) // 파란색, 투명도 30%
+      ..color = const Color(0xFFF8F8F8)
       ..style = PaintingStyle.fill; // 채우기 스타일
 
     final points = <Offset>[]; // 꼭지점 좌표 리스트
@@ -241,7 +298,7 @@ class RadarChartPainter extends CustomPainter {
     canvas.drawPath(path, fillPaint); // 다각형 내부를 채우는 패스 그리기
     // canvas.drawPath(path, paint); // 다각형 테두리 그리기
 
-    paint.color = Colors.grey.withOpacity(0.8); // 회색 반투명
+    paint.color = const Color(0xFFE3E3E3);// 회색 반투명
 
     for (var i = 0; i < 5; i++) {
       // 중심부터 꼭지점까지 선 그리기
@@ -251,18 +308,15 @@ class RadarChartPainter extends CustomPainter {
       canvas.drawLine(Offset(centerX, centerY), Offset(x, y), paint);
     }
 
-    int sel = -1;
-
+    int graphNum = Provider.of<FoodResultProvider>(context, listen: false).foodGraphIndex;
+    if(clickX == -1 && clickY == -1) {
+      graphNum = -1;
+    }
     for (var i = 0; i < 5; i++) {
       // 5개의 꼭지점 좌표 계산
       final angle = 2 * pi / 5 * i - pi / 2; // 꼭지점의 각도
       final x = centerX + radius * cos(angle); // 꼭지점의 x좌표
       final y = centerY + radius * sin(angle); // 꼭지점의 y좌표
-      double ss = 10;
-      bool click = (clickX >= x - ss && clickX <= x + ss) &&
-          (clickY >= y - ss && clickY <= y + ss);
-
-      sel = sel != -1 ? sel : click ? i : -1;
 
       points.add(Offset(x, y)); // 꼭지점 좌표 리스트에 추가
       canvas.drawCircle(
@@ -272,18 +326,14 @@ class RadarChartPainter extends CustomPainter {
             ..color = colorList[i]
             ..strokeWidth = 2
             ..style = PaintingStyle.fill); // 꼭지점에 클릭 가능한 점 그리기
+
       // 꼭지점 주변에 12시부터 시계방향으로 foodList의 텍스트를 넣어줌
       final textPainter = TextPainter(
         text: TextSpan(
           text: foodList[i],
           style: TextStyle(
-            color: Colors.white,
-            fontSize: click ? 14 : 12,
-            background: Paint()
-              ..strokeWidth = click ? 24.0 : 20.0
-              ..color = click ? colorList[i] : Colors.grey
-              ..style = PaintingStyle.stroke
-              ..strokeJoin = StrokeJoin.round,
+            color: graphNum == i ? Colors.white : Colors.grey,
+            fontSize: graphNum == i ? 14 : 12,
           ),
         ),
         textAlign: TextAlign.center,
@@ -292,7 +342,19 @@ class RadarChartPainter extends CustomPainter {
       textPainter.layout();
       final textX = centerX + radius * cos(angle) * 1.5 - textPainter.width / 2;
       final textY =
-          centerY + radius * sin(angle) * 1.5 - textPainter.height / 2;
+          centerY + radius * sin(angle) * 1.4 - textPainter.height / 2;
+      final backgroundPaint = Paint()
+        ..color = graphNum == i ? colorList[i] : const Color(0xFFF8F8F8)// Set a custom background color
+        ..style = PaintingStyle.fill; // Set the painting style to fill
+      final backgroundRect = RRect.fromLTRBR(
+        textX - 20 / 2,
+        textY - 20 / 2,
+        textX + textPainter.width + 20 / 2,
+        textY + textPainter.height + 20 / 2,
+        Radius.circular(radius),
+      );
+      canvas.drawRRect( backgroundRect, backgroundPaint,
+      );
       textPainter.paint(canvas, Offset(textX, textY));
     }
 
@@ -333,3 +395,4 @@ class RadarChartPainter extends CustomPainter {
   @override
   bool shouldRepaint(RadarChartPainter oldDelegate) => true; // 다시 그릴 필요 없음
 }
+
