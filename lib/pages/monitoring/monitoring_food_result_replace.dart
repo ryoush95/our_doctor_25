@@ -39,6 +39,11 @@ class _MonitoringFoodResultReplaceState
   }
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   void dispose() {
     weightController.dispose();
     calculateController.dispose();
@@ -84,11 +89,11 @@ class _MonitoringFoodResultReplaceState
                         decoration: const InputDecoration(
                             enabledBorder: OutlineInputBorder(
                               borderSide:
-                              BorderSide(width: 1, color: Colors.blue),
+                              BorderSide(width: 1, color: AppColor_Primary),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderSide:
-                              BorderSide(width: 1, color: Colors.blue),
+                              BorderSide(width: 1, color: AppColor_Primary),
                             ),
                             isDense: true,
                             counterText: ""),
@@ -127,7 +132,7 @@ class _MonitoringFoodResultReplaceState
               )),
           const Icon(
             Icons.arrow_drop_down_rounded,
-            color: Color(0xFF4B9EFF),
+            color: AppColor_Primary,
             size: 80.0,
           ),
           SizedBox(
@@ -159,11 +164,11 @@ class _MonitoringFoodResultReplaceState
                         decoration: const InputDecoration(
                             enabledBorder: OutlineInputBorder(
                               borderSide:
-                              BorderSide(width: 1, color: Colors.blue),
+                              BorderSide(width: 1, color: AppColor_Primary),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderSide:
-                              BorderSide(width: 1, color: Colors.blue),
+                              BorderSide(width: 1, color: AppColor_Primary),
                             ),
                             isDense: true,
                             counterText: ""),
@@ -198,14 +203,14 @@ class _MonitoringFoodResultReplaceState
                   defaultOpen: true,
                   leadingImagePath: 'https://mingles-dev.s3.ap-northeast-2.amazonaws.com/file/monitoringReplace/%E1%84%8B%E1%85%A1%E1%84%8B%E1%85%B5%E1%84%8F%E1%85%A9%E1%86%AB_%E1%84%89%E1%85%AE%E1%84%8B%E1%85%B2+tip_2.png',
                   title: H18(
-                    text: '모유 수유 중이라면?',
-                    align: TextAlign.left,
-                    color: Colors.blueAccent,),
+                      text: '모유 수유 중이라면?',
+                      align: TextAlign.left,
+                      color: AppColor_Primary),
                   content: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       H17(
-                        text: "모유는 분유와 칼로리는 비슷하지만 직수를 하는 경우,\n수유량 계산이 어려울 수 있어요.\n이때, 체중 증가 정도로 수유량이 적절한지 알 수 있답니다.",
+                        text: "모유는 분유와 칼로리는 비슷하지만 직수를 하는 경우, 수유량 계산이 어려울 수 있어요. 이때, 체중 증가 정도로 수유량이 적절한지 알 수 있답니다.",
                         weight: FW.medium,
                         color: AppColor_BlackText.withOpacity(0.6),
                         maxLine: 15,
@@ -215,7 +220,7 @@ class _MonitoringFoodResultReplaceState
                       const SizedBox(height: 30,),
                       H17(
                         text: "생후 ~ 6개월",
-                        color: Colors.blueAccent,
+                        color: AppColor_Primary,
                         height: 1.5,
                         align: TextAlign.left,
                       ),
@@ -228,7 +233,7 @@ class _MonitoringFoodResultReplaceState
                       ),
                       H17(
                         text: "6개월 ~ 12개월",
-                        color: Colors.blueAccent,
+                        color: AppColor_Primary,
                         height: 1.5,
                         align: TextAlign.left,
                       ),
@@ -246,14 +251,14 @@ class _MonitoringFoodResultReplaceState
                   defaultOpen: false,
                   leadingImagePath: 'https://mingles-dev.s3.ap-northeast-2.amazonaws.com/file/monitoringReplace/%E1%84%8B%E1%85%A1%E1%84%8B%E1%85%B5%E1%84%8F%E1%85%A9%E1%86%AB_%E1%84%89%E1%85%AE%E1%84%8B%E1%85%B2+tip_1.png',
                   title: H18(
-                    text: '분유 수유 중이라면?',
-                    align: TextAlign.left,
-                    color: Colors.blueAccent,),
+                      text: '분유 수유 중이라면?',
+                      align: TextAlign.left,
+                      color: AppColor_Primary),
                   content: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       H17(
-                        text: "분유를 수유 할 때 중요한 것은 분유의 농도예요.\n분유에 따라 조금씩 다르므로 분유마다 제공되는 권장 제조량으로 농도를 맞추어 주세요.\n분유의 농도가 권장량보다 진할 경우,분유에 함유된 인단백질같은 물질이 굳어서 단단해지는 분유석(bezoar)이 형성될 수 있어요.\n간혹 아이의 변이나 체중을 위해 임의로 농도를 조절하는 경우가 있는데 소아과 전문의의 처방이 있는 게 아니라면, 분유 농도는 임의로 조절하지 않도록 해주세요.",
+                        text: "분유를 수유 할 때 중요한 것은 분유의 농도예요. 분유에 따라 조금씩 다르므로 분유마다 제공되는 권장 제조량으로 농도를 맞추어 주세요. 분유의 농도가 권장량보다 진할 경우,분유에 함유된 인단백질같은 물질이 굳어서 단단해지는 분유석(bezoar)이 형성될 수 있어요. 간혹 아이의 변이나 체중을 위해 임의로 농도를 조절하는 경우가 있는데 소아과 전문의의 처방이 있는 게 아니라면, 분유 농도는 임의로 조절하지 않도록 해주세요.",
                         weight: FW.medium,
                         color: AppColor_BlackText.withOpacity(0.6),
                         maxLine: 15,
@@ -267,14 +272,14 @@ class _MonitoringFoodResultReplaceState
                   defaultOpen: false,
                   leadingImagePath: 'https://mingles-dev.s3.ap-northeast-2.amazonaws.com/file/monitoringReplace/%E1%84%8B%E1%85%A1%E1%84%8B%E1%85%B5%E1%84%8F%E1%85%A9%E1%86%AB_%E1%84%89%E1%85%AE%E1%84%8B%E1%85%B2+tip_3.png',
                   title: H18(
-                    text: '분유 + 모유 수유 중이라면?',
-                    align: TextAlign.left,
-                    color: Colors.blueAccent,),
+                      text: '분유 + 모유 수유 중이라면?',
+                      align: TextAlign.left,
+                      color: AppColor_Primary),
                   content: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       H17(
-                        text: "모유 수유량이 적은 경우, 분유로 보충을 하거나 수면 교육을 위해 혼유를 하는 경우도 많아요.\n마지막 수유로 분유를 먹이실 경우, 모유와 칼로리는 같으나 소화에 더 오랜 시간이 걸리기때문에 공복감을 지연시킬 수 있어요. 영양이나 면역학적으로는 모유가 우수하겠으나 엄마 수면의 양과 질을 위해서라도 수면교육을 하는 동안의 아기에게 적용해보셔도 좋아요.\n수유하는 엄마의 건강과 상황에 따라 알맞게 조절하되, 체중이 백분위보다 크게 증가하지 않도록 모유와 분유량을 잘 조절해야 해요.",
+                        text: "모유 수유량이 적은 경우, 분유로 보충을 하거나 수면 교육을 위해 혼유를 하는 경우도 많아요. 마지막 수유로 분유를 먹이실 경우, 모유와 칼로리는 같으나 소화에 더 오랜 시간이 걸리기때문에 공복감을 지연시킬 수 있어요. 영양이나 면역학적으로는 모유가 우수하겠으나 엄마 수면의 양과 질을 위해서라도 수면교육을 하는 동안의 아기에게 적용해보셔도 좋아요. 수유하는 엄마의 건강과 상황에 따라 알맞게 조절하되, 체중이 백분위보다 크게 증가하지 않도록 모유와 분유량을 잘 조절해야 해요.",
                         weight: FW.medium,
                         color: AppColor_BlackText.withOpacity(0.6),
                         maxLine: 15,
@@ -299,6 +304,7 @@ class _MonitoringFoodResultReplaceState
     return SingleChildScrollView(
       child: Column(
         children: [
+
           Container(
             width: MediaQuery.of(context).size.width,
             padding: const EdgeInsets.all(30),
@@ -319,20 +325,45 @@ class _MonitoringFoodResultReplaceState
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 30.0),
-            child: CachedNetworkImage(
-              imageUrl:
-              "https://mingles-dev.s3.ap-northeast-2.amazonaws.com/file/monitoringReplace/%E1%84%8B%E1%85%B5%E1%84%8B%E1%85%B2%E1%84%89%E1%85%B5%E1%86%A8+%E1%84%8E%E1%85%A6%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%84%89%E1%85%B3%E1%84%90%E1%85%B3_1.png",
-              width: MediaQuery.of(context).size.width,
-              fit: BoxFit.contain,
+
+            child: Container(
+              decoration: const BoxDecoration(
+                  color: AppColor_White,
+                  borderRadius: BorderRadius.all(Radius.circular(6)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColor_Light_Gray,
+                      blurRadius: 5.0, // soften the shadow
+                      spreadRadius: 5.0, //extend the shadow
+                    )
+                  ]),
+              child: CachedNetworkImage(
+                imageUrl:
+                "https://mingles-dev.s3.ap-northeast-2.amazonaws.com/file/monitoringReplace/%E1%84%8B%E1%85%B5%E1%84%8B%E1%85%B2%E1%84%89%E1%85%B5%E1%86%A8+%E1%84%8E%E1%85%A6%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%84%89%E1%85%B3%E1%84%90%E1%85%B3_1.png",
+                width: MediaQuery.of(context).size.width,
+                fit: BoxFit.contain,
+              ),
             ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 30.0),
-            child: CachedNetworkImage(
-              imageUrl:
-              "https://mingles-dev.s3.ap-northeast-2.amazonaws.com/file/monitoringReplace/%E1%84%8B%E1%85%B5%E1%84%8B%E1%85%B2%E1%84%89%E1%85%B5%E1%86%A8+%E1%84%8E%E1%85%A6%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%84%89%E1%85%B3%E1%84%90%E1%85%B3_%E1%84%89%E1%85%A5%E1%86%AF%E1%84%86%E1%85%A7%E1%86%BC.png",
-              width: MediaQuery.of(context).size.width,
-              fit: BoxFit.contain,
+            child: Container(
+              decoration: const BoxDecoration(
+                  color: AppColor_White,
+                  borderRadius: BorderRadius.all(Radius.circular(6)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColor_Light_Gray,
+                      blurRadius: 5.0, // soften the shadow
+                      spreadRadius: 5.0, //extend the shadow
+                    )
+                  ]),
+              child: CachedNetworkImage(
+                imageUrl:
+                "https://mingles-dev.s3.ap-northeast-2.amazonaws.com/file/monitoringReplace/%E1%84%8B%E1%85%B5%E1%84%8B%E1%85%B2%E1%84%89%E1%85%B5%E1%86%A8+%E1%84%8E%E1%85%A6%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%84%89%E1%85%B3%E1%84%90%E1%85%B3_%E1%84%89%E1%85%A5%E1%86%AF%E1%84%86%E1%85%A7%E1%86%BC.png",
+                width: MediaQuery.of(context).size.width,
+                fit: BoxFit.contain,
+              ),
             ),
           ),
           Padding(
@@ -343,14 +374,14 @@ class _MonitoringFoodResultReplaceState
                   defaultOpen: true,
                   leadingImagePath: 'https://mingles-dev.s3.ap-northeast-2.amazonaws.com/file/monitoringReplace/%E1%84%8B%E1%85%A1%E1%84%8B%E1%85%B5%E1%84%8F%E1%85%A9%E1%86%AB_%E1%84%8B%E1%85%B5%E1%84%8B%E1%85%B2%E1%84%89%E1%85%B5%E1%86%A8+tip_1.png',
                   title: H18(
-                    text: '밤중 수유는 NO!',
-                    align: TextAlign.left,
-                    color: Colors.blueAccent,),
+                      text: '밤중 수유는 NO!',
+                      align: TextAlign.left,
+                      color: AppColor_Primary),
                   content: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       H17(
-                        text: "밤중 수유를 하게되면 밤에 깊은 잠을 자기 어렵기도 하고,수유,이유식 리듬이 지켜지기 어려울 수 있어요.\n자기 전, 마지막 수유 때 충분히 먹이고푹 잘 수 있는 환경을 만들어주어야 다음날 이유식도 잘 먹을 수 있어요!",
+                        text: "밤중 수유를 하게되면 밤에 깊은 잠을 자기 어렵기도 하고,수유,이유식 리듬이 지켜지기 어려울 수 있어요. 자기 전, 마지막 수유 때 충분히 먹이고푹 잘 수 있는 환경을 만들어주어야 다음날 이유식도 잘 먹을 수 있어요!",
                         weight: FW.medium,
                         color: AppColor_BlackText.withOpacity(0.6),
                         maxLine: 15,
@@ -364,14 +395,14 @@ class _MonitoringFoodResultReplaceState
                   defaultOpen: false,
                   leadingImagePath: 'https://mingles-dev.s3.ap-northeast-2.amazonaws.com/file/monitoringReplace/%E1%84%8B%E1%85%A1%E1%84%8B%E1%85%B5%E1%84%8F%E1%85%A9%E1%86%AB_%E1%84%8B%E1%85%B5%E1%84%8B%E1%85%B2%E1%84%89%E1%85%B5%E1%86%A8+tip_2.png',
                   title: H18(
-                    text: '하루 일과는 일정하게!',
-                    align: TextAlign.left,
-                    color: Colors.blueAccent,),
+                      text: '하루 일과는 일정하게!',
+                      align: TextAlign.left,
+                      color: AppColor_Primary),
                   content: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       H17(
-                        text: "하루 일과가 일정해야 아이에게도 하루의 루틴이 생겨나요.\n매일 비슷한 시간에 식사를 하고, 식사 전후의 리듬에 아이가 익숙해진다면 규치적인 식습관 형성은 물론, 아이의 생활리듬도 유지된답니다.",
+                        text: "하루 일과가 일정해야 아이에게도 하루의 루틴이 생겨나요. 매일 비슷한 시간에 식사를 하고, 식사 전후의 리듬에 아이가 익숙해진다면 규치적인 식습관 형성은 물론, 아이의 생활리듬도 유지된답니다.",
                         weight: FW.medium,
                         color: AppColor_BlackText.withOpacity(0.6),
                         maxLine: 15,
@@ -385,14 +416,14 @@ class _MonitoringFoodResultReplaceState
                   defaultOpen: false,
                   leadingImagePath: 'https://mingles-dev.s3.ap-northeast-2.amazonaws.com/file/monitoringReplace/%E1%84%8B%E1%85%A1%E1%84%8B%E1%85%B5%E1%84%8F%E1%85%A9%E1%86%AB_%E1%84%89%E1%85%AE%E1%84%8B%E1%85%B2+tip_3.png',
                   title: H18(
-                    text: '체중이 많이 나가지 않도록 주의!',
-                    align: TextAlign.left,
-                    color: Colors.blueAccent,),
+                      text: '체중이 많이 나가지 않도록 주의!',
+                      align: TextAlign.left,
+                      color: AppColor_Primary),
                   content: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       H17(
-                        text: "이유식 시작 전에 체중이 많이 나가는 경우,이유식을 제대로 먹이기 힘들거나, 이유식 이후 체중 증가 폭이 더 커질 수 있어요.\n이 시기에는 세포 수 자체가 증가하는 시기이므로, 비만이 될 확률이 높아질 수 있어요.",
+                        text: "이유식 시작 전에 체중이 많이 나가는 경우,이유식을 제대로 먹이기 힘들거나, 이유식 이후 체중 증가 폭이 더 커질 수 있어요. 이 시기에는 세포 수 자체가 증가하는 시기이므로, 비만이 될 확률이 높아질 수 있어요.",
                         weight: FW.medium,
                         color: AppColor_BlackText.withOpacity(0.6),
                         maxLine: 15,
@@ -422,10 +453,22 @@ class _MonitoringFoodResultReplaceState
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: CachedNetworkImage(
-              imageUrl:
-              "https://mingles-dev.s3.ap-northeast-2.amazonaws.com/file/monitoringReplace/%E1%84%8B%E1%85%B5%E1%84%8B%E1%85%B2%E1%84%80%E1%85%B5+%E1%84%8B%E1%85%A7%E1%86%BC%E1%84%8B%E1%85%A1(7~12%E1%84%80%E1%85%A2%E1%84%8B%E1%85%AF%E1%86%AF)+%E1%84%8B%E1%85%B3%E1%86%B7%E1%84%89%E1%85%B5%E1%86%A8_1.png",
-              fit: BoxFit.contain,
+            child: Container(
+              decoration: const BoxDecoration(
+                  color: AppColor_White,
+                  borderRadius: BorderRadius.all(Radius.circular(6)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColor_Light_Gray,
+                      blurRadius: 5.0, // soften the shadow
+                      spreadRadius: 5.0, //extend the shadow
+                    )
+                  ]),
+              child: CachedNetworkImage(
+                imageUrl:
+                "https://mingles-dev.s3.ap-northeast-2.amazonaws.com/file/monitoringReplace/%E1%84%8B%E1%85%B5%E1%84%8B%E1%85%B2%E1%84%80%E1%85%B5+%E1%84%8B%E1%85%A7%E1%86%BC%E1%84%8B%E1%85%A1(7~12%E1%84%80%E1%85%A2%E1%84%8B%E1%85%AF%E1%86%AF)+%E1%84%8B%E1%85%B3%E1%86%B7%E1%84%89%E1%85%B5%E1%86%A8_1.png",
+                fit: BoxFit.contain,
+              ),
             ),
           ),
           const SizedBox(
@@ -434,10 +477,22 @@ class _MonitoringFoodResultReplaceState
 
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: CachedNetworkImage(
-              imageUrl:
-              "https://mingles-dev.s3.ap-northeast-2.amazonaws.com/file/monitoringReplace/%E1%84%8B%E1%85%B5%E1%84%8B%E1%85%B2%E1%84%80%E1%85%B5+%E1%84%8B%E1%85%A7%E1%86%BC%E1%84%8B%E1%85%A1(7~12%E1%84%80%E1%85%A2%E1%84%8B%E1%85%AF%E1%86%AF)+%E1%84%8B%E1%85%B3%E1%86%B7%E1%84%89%E1%85%B5%E1%86%A8_2.png",
-              fit: BoxFit.contain,
+            child: Container(
+              decoration: const BoxDecoration(
+                  color: AppColor_White,
+                  borderRadius: BorderRadius.all(Radius.circular(6)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColor_Light_Gray,
+                      blurRadius: 5.0, // soften the shadow
+                      spreadRadius: 5.0, //extend the shadow
+                    )
+                  ]),
+              child: CachedNetworkImage(
+                imageUrl:
+                "https://mingles-dev.s3.ap-northeast-2.amazonaws.com/file/monitoringReplace/%E1%84%8B%E1%85%B5%E1%84%8B%E1%85%B2%E1%84%80%E1%85%B5+%E1%84%8B%E1%85%A7%E1%86%BC%E1%84%8B%E1%85%A1(7~12%E1%84%80%E1%85%A2%E1%84%8B%E1%85%AF%E1%86%AF)+%E1%84%8B%E1%85%B3%E1%86%B7%E1%84%89%E1%85%B5%E1%86%A8_2.png",
+                fit: BoxFit.contain,
+              ),
             ),
           ),
           const SizedBox(
@@ -445,10 +500,22 @@ class _MonitoringFoodResultReplaceState
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: CachedNetworkImage(
-              imageUrl:
-              "https://mingles-dev.s3.ap-northeast-2.amazonaws.com/file/monitoringReplace/%E1%84%8B%E1%85%B5%E1%84%8B%E1%85%B2%E1%84%80%E1%85%B5+%E1%84%8B%E1%85%A7%E1%86%BC%E1%84%8B%E1%85%A1(7~12%E1%84%80%E1%85%A2%E1%84%8B%E1%85%AF%E1%86%AF)+%E1%84%8B%E1%85%B3%E1%86%B7%E1%84%89%E1%85%B5%E1%86%A8%E1%84%91%E1%85%AD_1.png",
-              fit: BoxFit.contain,
+            child: Container(
+              decoration: const BoxDecoration(
+                  color: AppColor_White,
+                  borderRadius: BorderRadius.all(Radius.circular(6)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColor_Light_Gray,
+                      blurRadius: 5.0, // soften the shadow
+                      spreadRadius: 5.0, //extend the shadow
+                    )
+                  ]),
+              child: CachedNetworkImage(
+                imageUrl:
+                "https://mingles-dev.s3.ap-northeast-2.amazonaws.com/file/monitoringReplace/%E1%84%8B%E1%85%B5%E1%84%8B%E1%85%B2%E1%84%80%E1%85%B5+%E1%84%8B%E1%85%A7%E1%86%BC%E1%84%8B%E1%85%A1(7~12%E1%84%80%E1%85%A2%E1%84%8B%E1%85%AF%E1%86%AF)+%E1%84%8B%E1%85%B3%E1%86%B7%E1%84%89%E1%85%B5%E1%86%A8%E1%84%91%E1%85%AD_1.png",
+                fit: BoxFit.contain,
+              ),
             ),
           ),
           const SizedBox(
