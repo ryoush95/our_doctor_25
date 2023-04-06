@@ -55,6 +55,7 @@ import 'package:ourdoctor/models/login_res_model.dart';
 import 'package:ourdoctor/models/mbti_quiz_list_res_model.dart';
 import 'package:ourdoctor/models/monitor_list_res_model.dart';
 import 'package:ourdoctor/models/monitor_result_res_model.dart';
+import 'package:ourdoctor/models/monitor_life_list2_model.dart';
 import 'package:ourdoctor/models/monitor_week_res_model.dart';
 import 'package:ourdoctor/models/monitor_write_res_model.dart';
 import 'package:ourdoctor/models/monitoring/food_check_list1_model.dart';
@@ -2596,6 +2597,58 @@ class HttpService {
       'access_token': gUserInfo!.accessToken!,
       'quiz_id' : quizName,
       'quiz_result' : quizResult,
+    };
+    Uri myUri = Uri.parse(_url);
+    final response = await http.post(myUri, body: body);
+    if (response.statusCode == 200) {
+      return TestQuizResultModel.fromJson(json.decode(response.body));
+    } else {
+      // If that call was not successful, throw an error.
+      showToast(LanguageService.trans("server_fail"));
+      throw Exception(LanguageService.trans("server_fail"));
+    }
+  }
+
+
+  // 식습관체크리스트
+  Future<FoodCheckList1> getCheckList1() async {
+    String _url = API_BASE_URL + "api/Monitoring/get_food_checklist1";
+    Map<String, String> body = {
+      'access_token': gUserInfo!.accessToken!,
+    };
+    Uri myUri = Uri.parse(_url);
+    final response = await http.post(myUri, body: body);
+    if (response.statusCode == 200) {
+      return FoodCheckList1.fromJson(json.decode(response.body));
+    } else {
+      // If that call was not successful, throw an error.
+      showToast(LanguageService.trans("server_fail"));
+      throw Exception(LanguageService.trans("server_fail"));
+    }
+  }
+
+  Future<FoodCheckList2> getCheckList2() async {
+    String _url = API_BASE_URL + "api/Monitoring/get_food_checklist2";
+    Map<String, String> body = {
+      'access_token': gUserInfo!.accessToken!,
+    };
+    Uri myUri = Uri.parse(_url);
+    final response = await http.post(myUri, body: body);
+    if (response.statusCode == 200) {
+      return FoodCheckList2.fromJson(json.decode(response.body));
+    } else {
+      // If that call was not successful, throw an error.
+      showToast(LanguageService.trans("server_fail"));
+      throw Exception(LanguageService.trans("server_fail"));
+    }
+  }
+
+  Future<TestQuizResultModel> saveCheckList(String checkList1, String checkList2) async {
+    String _url = API_BASE_URL + "api/Monitoring/save_food_checklist";
+    Map<String, String> body = {
+      'access_token': gUserInfo!.accessToken!,
+      'check_list1' : checkList1,
+      'check_list2' : checkList2,
     };
     Uri myUri = Uri.parse(_url);
     final response = await http.post(myUri, body: body);
