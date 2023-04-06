@@ -59,6 +59,7 @@ import 'package:ourdoctor/models/monitor_week_res_model.dart';
 import 'package:ourdoctor/models/monitor_write_res_model.dart';
 import 'package:ourdoctor/models/monitoring/food_check_list1_model.dart';
 import 'package:ourdoctor/models/monitoring/food_check_list2_model.dart';
+import 'package:ourdoctor/models/monitoring/food_habits_result_model.dart';
 import 'package:ourdoctor/models/monitoring/food_item_list_model.dart';
 import 'package:ourdoctor/models/monitoring/food_list_model.dart';
 import 'package:ourdoctor/models/monitoring/heath_result_model.dart';
@@ -2607,57 +2608,6 @@ class HttpService {
     }
   }
 
-  // 식습관체크리스트
-  Future<FoodCheckList1> getCheckList1() async {
-    String _url = API_BASE_URL + "api/Monitoring/get_food_checklist1";
-    Map<String, String> body = {
-      'access_token': gUserInfo!.accessToken!,
-    };
-    Uri myUri = Uri.parse(_url);
-    final response = await http.post(myUri, body: body);
-    if (response.statusCode == 200) {
-      return FoodCheckList1.fromJson(json.decode(response.body));
-    } else {
-      // If that call was not successful, throw an error.
-      showToast(LanguageService.trans("server_fail"));
-      throw Exception(LanguageService.trans("server_fail"));
-    }
-  }
-
-  Future<FoodCheckList2> getCheckList2() async {
-    String _url = API_BASE_URL + "api/Monitoring/get_food_checklist2";
-    Map<String, String> body = {
-      'access_token': gUserInfo!.accessToken!,
-    };
-    Uri myUri = Uri.parse(_url);
-    final response = await http.post(myUri, body: body);
-    if (response.statusCode == 200) {
-      return FoodCheckList2.fromJson(json.decode(response.body));
-    } else {
-      // If that call was not successful, throw an error.
-      showToast(LanguageService.trans("server_fail"));
-      throw Exception(LanguageService.trans("server_fail"));
-    }
-  }
-
-  Future<TestQuizResultModel> saveCheckList(String checkList1, String checkList2) async {
-    String _url = API_BASE_URL + "api/Monitoring/save_food_checklist";
-    Map<String, String> body = {
-      'access_token': gUserInfo!.accessToken!,
-      'check_list1' : checkList1,
-      'check_list2' : checkList2,
-    };
-    Uri myUri = Uri.parse(_url);
-    final response = await http.post(myUri, body: body);
-    if (response.statusCode == 200) {
-      return TestQuizResultModel.fromJson(json.decode(response.body));
-    } else {
-      // If that call was not successful, throw an error.
-      showToast(LanguageService.trans("server_fail"));
-      throw Exception(LanguageService.trans("server_fail"));
-    }
-  }
-
   //부모양육태도 결과 가져오기
   // Future<TestQuizResultModel> getTestQuizResult43(String quizName, String quizResult) async {
   //   String _url = API_BASE_URL + "api/monitoring/save_parenting_style_test";
@@ -3078,6 +3028,23 @@ class HttpService {
     if(response.statusCode == 200) {
       return CommunityListResModel.fromJson(json.decode(response.body));
     } else {
+      showToast(LanguageService.trans("server_fail"));
+      throw Exception(LanguageService.trans("server_fail"));
+    }
+  }
+
+  //식습관 결과 가져오기
+  Future<FoodHabitModel> getFoodHabitResults() async {
+    String _url = API_BASE_URL + "api/EXAMPLE/api"; //TODO API_URL수정하기
+    Map<String, String> body = {
+      'access_token': gUserInfo!.accessToken!,
+    };
+    Uri myUri = Uri.parse(_url);
+    final response = await http.post(myUri, body: body);
+    if (response.statusCode == 200) {
+      return FoodHabitModel.fromJson(json.decode(response.body));
+    } else {
+      // If that call was not successful, throw an error.
       showToast(LanguageService.trans("server_fail"));
       throw Exception(LanguageService.trans("server_fail"));
     }
