@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:ourdoctor/global/app_colors.dart';
 import 'package:ourdoctor/global/app_styles.dart';
+import 'package:ourdoctor/global/http_service.dart';
 import 'package:ourdoctor/helpers/transition.dart';
 import 'package:ourdoctor/pages/components/h14.dart';
 import 'package:ourdoctor/pages/components/h16.dart';
@@ -31,7 +32,6 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
         ".요해요필 이선개 식음취섭\n선해위 기하방예 을등염장위아소 ,병인성\n!요아않 지좋 에강건 은식음 인적극자",
         "1aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n2\n3\n4"
       ],
-
       [
         '333건강하고 다양한 음식을 골고루 잘 먹고있네요.aaaaaaaaaaaaaaaa',
         ".요해요필 이선개 식음취섭\n선해위 기하방예 을등염장위아소 ,병인성\n!요아않 지좋 에강건 은식음 인적극자",
@@ -81,7 +81,9 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
                   Container(
                     width: MediaQuery.of(context).size.width - 130,
                     child: H14(
-                      color: Color(0xff707071), height: 1.3,
+                      weight: FW.medium,
+                      color: Color(0xff707071),
+                      height: 1.3,
                       text: item[1],
                       maxLine: 99,
                       align: TextAlign.start,
@@ -106,7 +108,7 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  H18(
+                  H16(
                     text: "Mission ${index + 1}",
                     color: AppColor_Primary,
                     weight: FW.medium,
@@ -116,7 +118,10 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
                   ),
                   Row(
                     children: [
-                      H18(text: "${mission_result[index]}"),
+                      H14(
+                        text: "${mission_result[index]}",
+                        height: 1.3,
+                      ),
                     ],
                   )
                 ],
@@ -155,7 +160,7 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 30),
-              child: H24B(
+              child: H18(
                 text: "식습관 분석을 완료했어요!",
                 maxLine: 2,
                 color: AppColor_Primary,
@@ -183,7 +188,7 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: food_results_map.length,
                     itemBuilder: (context, index) {
-                      final item=food_results_map[index];
+                      final item = food_results_map[index];
                       return pageItem(index, item);
                     },
                     separatorBuilder: (BuildContext context, int index) {
@@ -244,12 +249,12 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
               padding: const EdgeInsets.symmetric(vertical: 30),
               child: Column(
                 children: [
-                  H24B(
+                  H18(
                     text: "미션을 수행하며",
                     maxLine: 2,
                   ),
                   const SizedBox(height: 8),
-                  H24B(
+                  H18(
                     text: "건강한 식습관을 가져보세요!",
                     maxLine: 2,
                   ),
