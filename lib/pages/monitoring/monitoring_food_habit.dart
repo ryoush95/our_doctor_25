@@ -19,15 +19,41 @@ class MonitoringFoodHabit extends StatefulWidget {
 }
 
 class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
+  List<List<String>> food_results_map = [
+       [
+        '건강하고 다양한 음식을 골고루 잘 먹고있네요.aaaaaaaaaaaaaaaa',
+        ".요해요필 이선개 식음취섭\n선해위 기하방예 을등염장위아소 ,병인성\n!요아않 지좋 에강건 은식음 인적극자",
+        "1aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n2\n3\n4"
+      ],
+
+       [
+        '2222222건강하고 다양한 음식을 골고루 잘 먹고있네요.aaaaaaaaaaaaaaaa',
+        ".요해요필 이선개 식음취섭\n선해위 기하방예 을등염장위아소 ,병인성\n!요아않 지좋 에강건 은식음 인적극자",
+        "1aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n2\n3\n4"
+      ],
+
+      [
+        '333건강하고 다양한 음식을 골고루 잘 먹고있네요.aaaaaaaaaaaaaaaa',
+        ".요해요필 이선개 식음취섭\n선해위 기하방예 을등염장위아소 ,병인성\n!요아않 지좋 에강건 은식음 인적극자",
+        "1aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n2\n3\n4"
+      ],
+  ];
+
+  List<String> mission_result = [
+    '채소 1가지 이상 먹어보기',
+    '채소 2가지 이상 먹어보기',
+    '채소 3가지 이상 먹어보기'
+  ];
 
   @override
   void initState() {
+    //여기서 데이터 가져오기
+
     // TODO: implement initState
     super.initState();
   }
 
-  Widget pageItem(index) {
-    List<String> aa = ["요어겠좋 면리늘 를취섭 류소채 ,만다", ".요해요필 이선개 식음취섭\n선해위 기하방예 을등염장위아소 ,병인성\n!요아않 지좋 에강건 은식음 인적극자","1aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n2\n3\n4"];
+  Widget pageItem(index,item) {
     return Column(
       children: [
         Row(
@@ -47,7 +73,7 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
                     width: MediaQuery.of(context).size.width - 130,
                     padding: const EdgeInsets.symmetric(vertical: 10.0),
                     child: H16(
-                      text: "건강하고 다양한 음식을 골고루 잘 먹고있네요.aaaaaaaaaaaaaaaa",
+                      text: item[0],
                       maxLine: 2,
                       align: TextAlign.start,
                     ),
@@ -56,7 +82,7 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
                     width: MediaQuery.of(context).size.width - 130,
                     child: H14(
                       color: Color(0xff707071), height: 1.3,
-                      text: aa[index],
+                      text: item[1],
                       maxLine: 99,
                       align: TextAlign.start,
                     ),
@@ -81,12 +107,18 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   H18(
-                    text: "Mission 1",
+                    text: "Mission ${index + 1}",
                     color: AppColor_Primary,
                     weight: FW.medium,
                   ),
-                  const SizedBox(height: 10,),
-                  H18(text: "채소 1가지 이상 먹어보기")
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    children: [
+                      H18(text: "${mission_result[index]}"),
+                    ],
+                  )
                 ],
               ),
               const Spacer(),
@@ -109,10 +141,13 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            const SizedBox(height: 40,),
+            const SizedBox(
+              height: 40,
+            ),
             FutureBuilder(
               builder: (context, snapshot) => CachedNetworkImage(
-                imageUrl: "https://mingles-dev.s3.ap-northeast-2.amazonaws.com/uploads/product/main_image_object/41/%EB%B0%B0%EC%93%B0%EB%B0%A4_%EC%8D%B8%EB%84%A4%EC%9D%BC.jpg",
+                imageUrl:
+                    "https://mingles-dev.s3.ap-northeast-2.amazonaws.com/uploads/product/main_image_object/41/%EB%B0%B0%EC%93%B0%EB%B0%A4_%EC%8D%B8%EB%84%A4%EC%9D%BC.jpg",
                 width: 200,
                 height: 200,
                 fit: BoxFit.fill,
@@ -121,39 +156,49 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 30),
               child: H24B(
-                text: "식습관 분석을 완료했어요!",maxLine: 2,
+                text: "식습관 분석을 완료했어요!",
+                maxLine: 2,
                 color: AppColor_Primary,
               ),
             ),
-        Container(
-          width: double.infinity,
-          margin: const EdgeInsets.all(5.0),
-          padding: const EdgeInsets.all(20.0),
-          decoration: const BoxDecoration(
-              color: AppColor_White,
-              borderRadius: BorderRadius.all(Radius.circular(6)),
-              boxShadow: [
-                BoxShadow(
-                  color: AppColor_Light_Gray,
-                  blurRadius: 5.0, // soften the shadow
-                  spreadRadius: 5.0, //extend the shadow
-                )
-              ]),
-          child: Column(
-            children: [
-              pageItem(0),
-              const SizedBox(height: 50),
-              pageItem(1),
-              const SizedBox(height: 50),
-              pageItem(2),
-            ],
-          ),
-          // child: ListView.builder(itemBuilder: (context, index) {
-          //   return pageItem(index);
-          // },)
-        ),
-          const SizedBox(height: 20,),
-
+            Container(
+              width: double.infinity,
+              margin: const EdgeInsets.all(5.0),
+              padding: const EdgeInsets.all(20.0),
+              decoration: const BoxDecoration(
+                  color: AppColor_White,
+                  borderRadius: BorderRadius.all(Radius.circular(6)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColor_Light_Gray,
+                      blurRadius: 5.0, // soften the shadow
+                      spreadRadius: 5.0, //extend the shadow
+                    )
+                  ]),
+              child: Column(
+                children: [
+                  ListView.separated(
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: food_results_map.length,
+                    itemBuilder: (context, index) {
+                      final item=food_results_map[index];
+                      return pageItem(index, item);
+                    },
+                    separatorBuilder: (BuildContext context, int index) {
+                      return const SizedBox(height: 30);
+                    },
+                  ),
+                ],
+              ),
+              // child: ListView.builder(itemBuilder: (context, index) {
+              //   return pageItem(index);
+              // },)
+            ),
+            const SizedBox(
+              height: 20,
+            ),
             MainTextButton(
               text: "다시 점검하기",
               style: AppTextStyle.PD(Colors.white, 16, weight: FW.medium),
@@ -161,10 +206,16 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
               height: 40,
               radius: 6,
               onPressed: () {
-                Navigator.push(context, SlideRightTransRoute(builder: (context) => MonitoringFoodTest2(),));
+                Navigator.push(
+                    context,
+                    SlideRightTransRoute(
+                      builder: (context) => MonitoringFoodTest2(),
+                    ));
               },
             ),
-            const SizedBox(height: 40,),
+            const SizedBox(
+              height: 40,
+            ),
           ],
         ),
       ),
@@ -177,10 +228,13 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            const SizedBox(height: 40,),
+            const SizedBox(
+              height: 40,
+            ),
             FutureBuilder(
               builder: (context, snapshot) => CachedNetworkImage(
-                imageUrl: "https://mingles-dev.s3.ap-northeast-2.amazonaws.com/uploads/product/main_image_object/41/%EB%B0%B0%EC%93%B0%EB%B0%A4_%EC%8D%B8%EB%84%A4%EC%9D%BC.jpg",
+                imageUrl:
+                    "https://mingles-dev.s3.ap-northeast-2.amazonaws.com/uploads/product/main_image_object/41/%EB%B0%B0%EC%93%B0%EB%B0%A4_%EC%8D%B8%EB%84%A4%EC%9D%BC.jpg",
                 width: 200,
                 height: 200,
                 fit: BoxFit.fill,
@@ -191,11 +245,13 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
               child: Column(
                 children: [
                   H24B(
-                    text: "미션을 수행하며",maxLine: 2,
+                    text: "미션을 수행하며",
+                    maxLine: 2,
                   ),
                   const SizedBox(height: 8),
                   H24B(
-                    text: "건강한 식습관을 가져보세요!",maxLine: 2,
+                    text: "건강한 식습관을 가져보세요!",
+                    maxLine: 2,
                   ),
                 ],
               ),
@@ -205,13 +261,15 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
               height: 4 * 90,
               child: ListView.builder(
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount: 4,
+                itemCount: mission_result.length,
                 itemBuilder: (context, index) {
-                return page1Item(index);
-              },),
+                  return page1Item(index);
+                },
+              ),
             ),
-            const SizedBox(height: 20,),
-
+            const SizedBox(
+              height: 20,
+            ),
             MainTextButton(
               text: "다시 점검하기",
               style: AppTextStyle.PD(Colors.white, 16, weight: FW.medium),
@@ -219,10 +277,16 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
               height: 40,
               radius: 6,
               onPressed: () {
-                Navigator.push(context, SlideRightTransRoute(builder: (context) => MonitoringFoodTest2(),));
+                Navigator.push(
+                    context,
+                    SlideRightTransRoute(
+                      builder: (context) => MonitoringFoodTest2(),
+                    ));
               },
             ),
-            const SizedBox(height: 40,),
+            const SizedBox(
+              height: 40,
+            ),
           ],
         ),
       ),
