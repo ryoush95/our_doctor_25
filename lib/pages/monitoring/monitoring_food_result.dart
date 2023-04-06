@@ -17,7 +17,7 @@ import 'package:ourdoctor/pages/components/main_text_button.dart';
 import 'package:ourdoctor/pages/components/simple_header.dart';
 import 'package:ourdoctor/pages/home/radar_chart.dart';
 import 'package:ourdoctor/pages/monitoring/monitoring_food_habit.dart';
-import 'package:ourdoctor/pages/monitoring/monitoring_food_test2.dart';
+import 'package:ourdoctor/pages/monitoring/monitoring_food_test1.dart';
 import 'package:ourdoctor/pages/monitoring/provider/food_result_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -559,7 +559,7 @@ class _MonitoringFoodResultState extends State<MonitoringFoodResult> {
                 height: 40,
                 radius: 6,
                 onPressed: () {
-                  Navigator.push(context, SlideRightTransRoute(builder: (context) => MonitoringFoodTest2(),));
+                  Navigator.push(context, SlideRightTransRoute(builder: (context) => MonitoringFoodTest1(),));
                 },
               ),
             ],

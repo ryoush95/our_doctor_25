@@ -8,11 +8,9 @@ import 'package:ourdoctor/models/monitoring/food_habits_result_model.dart';
 import 'package:ourdoctor/pages/components/h14.dart';
 import 'package:ourdoctor/pages/components/h16.dart';
 import 'package:ourdoctor/pages/components/h18.dart';
-import 'package:ourdoctor/pages/components/h24_b.dart';
-import 'package:ourdoctor/pages/components/line_chart_temp.dart';
 import 'package:ourdoctor/pages/components/main_text_button.dart';
-import 'package:ourdoctor/pages/components/price_point.dart';
 
+import 'monitoring_food_test1.dart';
 import 'monitoring_food_test2.dart';
 
 class MonitoringFoodHabit extends StatefulWidget {
@@ -228,7 +226,7 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
                 Navigator.push(
                     context,
                     SlideRightTransRoute(
-                      builder: (context) => MonitoringFoodTest2(),
+                      builder: (context) => MonitoringFoodTest1(),
                     ));
               },
             ),
