@@ -42,8 +42,8 @@ class _RadarChartWidgetState extends State<RadarChartWidget> {
 
   Offset position = const Offset(0, 0);
   final List<bool> isPointSelected = List.generate(5, (_) => false);
-  double clickX = -1;
-  double clickY = -1;
+  double clickX = 50;
+  double clickY = 50;
   int _graphIndex = -1;
 
   PageController bannerController = PageController();
@@ -60,37 +60,44 @@ class _RadarChartWidgetState extends State<RadarChartWidget> {
     return PageView.builder(
       controller: bannerController,
       itemCount: foodList.length,
-      itemBuilder: (context, index) =>  Container(
-        width: MediaQuery.of(context).size.width - 64,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(6.0),
-            color: AppColor_Light_Gray),
-        margin: EdgeInsets.symmetric(horizontal: 10),
-        padding: const EdgeInsets.only(
-            left: 30, right: 30, top: 20, bottom: 20),
-        // margin: const EdgeInsets.symmetric(horizontal: 30),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            H16(text: foodList[index]),
-            const SizedBox(
-              height: 10,
-            ),
-            H14(
-              text: "contentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontent",
-              maxLine: 10,
-              height: 1.5,
-              align: TextAlign.start,
-            ),
-          ],
-        ),
-      ),
+      itemBuilder: (context, index) => buildBannerItem(context, index),
       onPageChanged: (i) {
         setState(() {
           bannerNum = i.toDouble();
-          Provider.of<FoodResultProvider>(context, listen: false).changeGraphIndex(i);
+          Provider.of<FoodResultProvider>(context, listen: false)
+              .changeGraphIndex(i);
         });
       },
+    );
+  }
+
+  Widget buildBannerItem(BuildContext context, int index) {
+    return Container(
+      width: MediaQuery.of(context).size.width - 64,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(6.0),
+          color: AppColor_Light_Gray),
+      margin: EdgeInsets.symmetric(horizontal: 10),
+      padding:
+      const EdgeInsets.only(left: 30, right: 30, top: 20, bottom: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          H16(text: foodList[index]),
+          const SizedBox(
+            height: 10,
+          ),
+          H14(
+            text:
+            "contentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontent",
+            maxLine: 10,
+            height: 1.3,
+            align: TextAlign.start,
+            color: const Color(0xff707071),
+            weight: FW.medium,
+          ),
+        ],
+      ),
     );
   }
 
@@ -130,7 +137,7 @@ class _RadarChartWidgetState extends State<RadarChartWidget> {
         ),
         const SizedBox(height: 30),
         // bannerList.isNotEmpty ? CareBanner() : const Center(child: CircularProgressIndicator()),
-        Container(height: 200, child: banner()),
+        Container(height: 150, margin: EdgeInsets.all(10), child: banner()),
         Container(
           height: 50,
           child: Column(
@@ -372,7 +379,7 @@ class RadarChartPainter extends CustomPainter {
 
     final dataPath = Path()..addPolygon(dataPoints, true); // 데이터 다각형 경로 생성
     canvas.drawPath(dataPath, fillPaint); // 데이터 다각형 그리기
-    canvas.drawPath(dataPath, paint); // 데이터 다각형 그리기
+    // canvas.drawPath(dataPath, paint); // 데이터 다각형 그리기
 
     paint.color = Colors.blueAccent.withOpacity(0.5); // 파란색 반투명
     fillPaint.color = Colors.blueAccent.withOpacity(0.5);
@@ -389,7 +396,7 @@ class RadarChartPainter extends CustomPainter {
 
     final dataPath1 = Path()..addPolygon(dataPoints1, true); // 데이터 다각형 경로 생성
     canvas.drawPath(dataPath1, fillPaint); // 데이터 다각형 그리기
-    canvas.drawPath(dataPath1, paint); // 데이터 다각형 그리기
+    // canvas.drawPath(dataPath1, paint); // 데이터 다각형 그리기
   }
 
   @override

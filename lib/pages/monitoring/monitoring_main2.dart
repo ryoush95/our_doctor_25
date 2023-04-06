@@ -22,6 +22,7 @@ import 'package:ourdoctor/pages/components/h14.dart';
 import 'package:ourdoctor/pages/components/h16.dart';
 import 'package:ourdoctor/pages/components/h17.dart';
 import 'package:ourdoctor/pages/components/h18.dart';
+import 'package:ourdoctor/pages/components/h20.dart';
 import 'package:ourdoctor/pages/components/h24_b.dart';
 import 'package:ourdoctor/pages/components/main_text_button.dart';
 import 'package:ourdoctor/pages/components/outline_input.dart';
@@ -576,7 +577,7 @@ class _MonitoringMain2State extends BaseState<MonitoringMain2> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          H24B(
+                          H18(
                             text: "우아 성장 노트",
                             color: AppColor_BlackText,
                             align: TextAlign.left,

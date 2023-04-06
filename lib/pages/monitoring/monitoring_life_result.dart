@@ -459,10 +459,11 @@ class _MonitoringLifeResultState extends BaseState<MonitoringLifeResult> {
                 // height: 90,
                 child: H14(
                   text: "내가 체크한 답은 흐리게 표시 되며, 올바른 생활습관을 위한 답은 빨간색으로 표시돼요!",
-                  weight: FW.medium,
+                  weight: FW.regular,
                   maxLine: 8,
                   height: 1.5,
                   align: TextAlign.start,
+                  color: const Color(0xff707071),
                 ),
               ),
             ],

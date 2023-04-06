@@ -18,6 +18,7 @@ import 'package:ourdoctor/pages/components/h14.dart';
 import 'package:ourdoctor/pages/components/h16.dart';
 import 'package:ourdoctor/pages/components/h18.dart';
 import 'package:ourdoctor/pages/components/h20.dart';
+import 'package:ourdoctor/pages/components/header_text.dart';
 import 'package:ourdoctor/pages/components/main_text_button.dart';
 import 'package:ourdoctor/pages/components/result_area.dart';
 import 'package:ourdoctor/pages/dialog/dlg_common.dart';
@@ -579,9 +580,8 @@ class DiseaseReportState extends BaseState<DiseaseReport> {
                     children: [
                       Container(
                         width: MediaQuery.of(context).size.width,
-                        child: H18(
+                        child: HeaderText(
                           text: LanguageService.trans('are_you_healthy'),
-                          weight: FW.regular,
                           align: TextAlign.start,
                         ),
                       ),

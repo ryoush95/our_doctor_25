@@ -234,13 +234,13 @@ class _MonitoringFoodTest2State extends BaseState<MonitoringFoodTest2> {
                           children: [
                             TextSpan(
                               text: "식습관\n",
-                              style: AppTextStyle.PD(AppColor_Primary, 24,
-                                  weight: FW.bold),
+                              style: AppTextStyle.PD(AppColor_Primary, 18,
+                                  weight: FW.bold,),
                             ),
                             TextSpan(
                               text: "체크리스트\n\n",
-                              style: AppTextStyle.PD(AppColor_BlackText, 24,
-                                  weight: FW.bold),
+                              style: AppTextStyle.PD(AppColor_BlackText, 18,
+                                  weight: FW.bold,height: 1.5),
                             ),
                             TextSpan(
                               text: "$pageNum / ${(list.length / itemCount).round()}",

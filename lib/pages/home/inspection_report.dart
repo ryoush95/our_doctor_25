@@ -12,6 +12,7 @@ import 'package:ourdoctor/pages/app_event.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
 import 'package:ourdoctor/pages/components/h16.dart';
 import 'package:ourdoctor/pages/components/h18.dart';
+import 'package:ourdoctor/pages/components/header_text.dart';
 import 'package:ourdoctor/pages/intro/first.dart';
 import 'package:ourdoctor/pages/my/custom_inspection.dart';
 import 'package:ourdoctor/pages/my/custom_inspection2.dart';
@@ -109,8 +110,8 @@ class InspectionReportState extends BaseState<InspectionReport> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  H18(text: "$testNum개 ", weight: FW.bold),
-                  H18(text: "항목에 대한", weight: FW.regular),
+                  HeaderText(text: "$testNum개 "),
+                  HeaderText(text: "항목에 대한"),
                 ],
               ),
             ),
@@ -118,7 +119,7 @@ class InspectionReportState extends BaseState<InspectionReport> {
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                H16(text: testNum == 0 ? "맞춤검사를 완료했습니다." : "맞춤검사가 가능합니다.", weight: FW.regular),
+                HeaderText(text: testNum == 0 ? "맞춤검사를 완료했습니다." : "맞춤검사가 가능합니다."),
                 const SizedBox(width: 5),
                 Image.asset(
                   (dicInfo != null && dicInfo!.diagnose != null) ? 'assets/ic_status1.png' : 'assets/ic_smile5.png',

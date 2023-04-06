@@ -12,6 +12,7 @@ import 'package:ourdoctor/pages/base/page_layout.dart';
 import 'package:ourdoctor/pages/components/h14.dart';
 import 'package:ourdoctor/pages/components/h16.dart';
 import 'package:ourdoctor/pages/components/h18.dart';
+import 'package:ourdoctor/pages/components/header_text.dart';
 import 'package:ourdoctor/pages/components/main_text_button.dart';
 import 'package:ourdoctor/pages/components/simple_header.dart';
 import 'package:ourdoctor/pages/home/radar_chart.dart';
@@ -34,7 +35,7 @@ class _MonitoringFoodResultState extends State<MonitoringFoodResult> {
   int foodHabitIndex = 0;
   List<String> cateList = ["종합", "식단", "식습관"];
   List<String> foodList = ["곡류", "고기", "채소", "과일", "유제품"];
-  List<bool> missionCheck = [];
+  List<bool> missionList = [];
 
   DateTime _selectedDay = DateTime.now();
   DateTime _focusedDay = DateTime.now();
@@ -47,6 +48,7 @@ class _MonitoringFoodResultState extends State<MonitoringFoodResult> {
     // TODO: implement initState
     super.initState();
     p.changeGraphIndex(-1);
+    missionList = List.generate(5, (_) => false);
   }
 
   Future<bool> onBackPressed() async {
@@ -99,11 +101,17 @@ class _MonitoringFoodResultState extends State<MonitoringFoodResult> {
   Widget foodListTile(index) {
     return InkWell(
       onTap: () {
-        Fluttertoast.cancel();
-        showToast("미션을 완료했어요! +1point");
-        setState(() {
-          _showMessage = true;
-        });
+        if (index == 0){
+          return;
+        }
+        if (!missionList[index]) {
+          Fluttertoast.cancel();
+          showToast("미션을 완료했어요! +1point");
+          setState(() {
+            // _showMessage = true;
+            missionList[index] = !missionList[index];
+          });
+        }
         // Future.delayed(Duration(seconds: 1), () {
         //   setState(() {
         //     _showMessage = false;
@@ -115,19 +123,49 @@ class _MonitoringFoodResultState extends State<MonitoringFoodResult> {
           Container(
             width: (MediaQuery.of(context).size.width - 40) / 2.5,
             height: 100,
+            padding: EdgeInsets.all(10),
             margin: index == 3 ? EdgeInsets.symmetric(horizontal: 10) : EdgeInsets.only(left: 10),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
+              color: missionList[index] ? AppColor_Primary.withOpacity(0.5) : Colors.transparent,
               border: Border.all(
-                color: index == 0 ? AppColor_Oxygen : AppColor_Primary,
+                color: index == 0 ? AppColor_Oxygen : !missionList[index] ? AppColor_Primary : Colors.transparent,
                 width: 2,
               ),
             ),
-            child: Center(
-              child: Text(
-                foodList[index],
-                style: TextStyle(fontSize: 16),
-              ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                H14(
+                  text : foodList[index],
+                  color: missionList[index] ? Colors.white : Colors.black,
+                ),
+                Center(
+                  child: H16(
+                    text : "ㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁ",
+                    weight: FW.regular,
+                    maxLine: 3,
+                    align: TextAlign.start,
+                    color: missionList[index] ? Colors.white : Colors.black,
+                  ),
+                ),
+                SizedBox(height: 14,),
+              ],
+            ),
+          ),
+          Visibility(
+            visible: missionList[index],
+            child: Container(
+              width: (MediaQuery.of(context).size.width - 40) / 2.5,
+              height: 100,
+              padding: EdgeInsets.all(6),
+              margin: index == 3 ? EdgeInsets.symmetric(horizontal: 10) : EdgeInsets.only(left: 10),
+              // decoration: BoxDecoration(
+              //   borderRadius: BorderRadius.circular(8),
+              //   color: AppColor_Primary.withOpacity(0.5),
+              // ),
+              child: Image.asset("assets/도장_$index.png",),
             ),
           ),
           // AnimatedPositioned(
@@ -169,6 +207,60 @@ class _MonitoringFoodResultState extends State<MonitoringFoodResult> {
     );
   }
 
+  Widget missionAreaText() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            H18(
+              text: "식습관 종합",
+              maxLine: 2,
+              align: TextAlign.start,
+            ),
+            RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text: "최신 기록은 ",
+                    style: AppTextStyle.PD(AppColor_BlackText, 16,
+                        weight: FW.regular),
+                  ),
+                  TextSpan(
+                    text: "3월 25일",
+                    style: AppTextStyle.PD(AppColor_Primary, 16,
+                        weight: FW.bold, height: 1.4),
+                  ),
+                  TextSpan(
+                    text: " 이에요",
+                    style: AppTextStyle.PD(AppColor_BlackText, 16,
+                        weight: FW.regular, height: 1.4),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 8),
+          margin: const EdgeInsets.only(right: 8),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(18),
+              color: AppColor_Primary),
+          child: Center(
+            child: H14(
+              text: "업데이트 하기",
+              weight: FW.bold,
+              align: TextAlign.center,
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
   Color colorSwitch(num) {
     if (num == 0){
       return AppColor_Red;
@@ -179,7 +271,7 @@ class _MonitoringFoodResultState extends State<MonitoringFoodResult> {
     }
   }
 
-  Widget monitorTotal() {
+  Widget monitor1() {
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -189,19 +281,10 @@ class _MonitoringFoodResultState extends State<MonitoringFoodResult> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                H18(
-                  text: "${gSelChildInfo!.name}는",
-                  maxLine: 2,
-                  align: TextAlign.start,
-                ),
-                const SizedBox(height: 8),
-                H18(
-                  text: "${DateTime.now().month}월에 골고루 먹었을까요?",
-                  maxLine: 2,
-                  align: TextAlign.start,
-                ),
+                HeaderText(text: "${gSelChildInfo!.name}의 ${DateTime.now().month}월 리포트\n이번달은 골고루 먹었을까요?"),
                 foodCalendar(),
                 const SizedBox(height: 30),
+                // 상태 area
                 H18(
                   text: "식단 종합",
                   maxLine: 2,
@@ -252,61 +335,13 @@ class _MonitoringFoodResultState extends State<MonitoringFoodResult> {
                     },
                   ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        H18(
-                          text: "식단 종합",
-                          maxLine: 2,
-                          align: TextAlign.start,
-                        ),
-                        RichText(
-                          text: TextSpan(
-                            children: [
-                              TextSpan(
-                                text: "최신 기록은 ",
-                                style: AppTextStyle.PD(AppColor_BlackText, 16,
-                                    weight: FW.regular),
-                              ),
-                              TextSpan(
-                                text: "3월 25일",
-                                style: AppTextStyle.PD(AppColor_Primary, 16,
-                                    weight: FW.bold, height: 1.4),
-                              ),
-                              TextSpan(
-                                text: " 이에요",
-                                style: AppTextStyle.PD(AppColor_BlackText, 16,
-                                    weight: FW.regular, height: 1.4),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 8),
-                      margin: const EdgeInsets.only(right: 8),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(18),
-                          color: AppColor_Primary),
-                      child: Center(
-                        child: H14(
-                          text: "업데이트 하기",
-                          weight: FW.bold,
-                          align: TextAlign.center,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                // 미션 area
+                missionAreaText(),
               ],
             ),
           ),
           const SizedBox(height: 8),
+          // 미션 area list
           Container(
             height: 160,
             child: ListView.builder(
@@ -478,13 +513,6 @@ class _MonitoringFoodResultState extends State<MonitoringFoodResult> {
     return Container();
   }
 
-  Widget monitor1() {
-    return  Container(
-      // padding: const EdgeInsets.symmetric(horizontal: 20),
-      //   color: Colors.transparent,
-        child: monitorTotal());
-  }
-
   Widget monitor2() {
     return SingleChildScrollView(
       child: SizedBox(
@@ -493,9 +521,9 @@ class _MonitoringFoodResultState extends State<MonitoringFoodResult> {
             children: [
               Container(
                 width: MediaQuery.of(context).size.width,
-                padding: const EdgeInsets.all(30),
-                child: H18(
-                  text: DateFormat("yyyy년 MM월 dd일").format(DateTime.now()),
+                padding: const EdgeInsets.all(20),
+                child: H16(
+                  text: DateFormat("yyyy년 M월 d일").format(DateTime.now()),
                   align: TextAlign.start,
                 ),
               ),

@@ -348,21 +348,17 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
       } else {
         return Column(
           children: [
-            const SizedBox(height: 10),
+            const SizedBox(height: 20),
             dicHomeGraphTallInfo!.total_cnt! == 1
-                ? Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      const SizedBox(width: 28),
-                      H18(
-                        text: '신장 기록을 처음 완료했어요.😊',
-                        weight: FW.regular,
-                        maxLine: 2,
-                        align: TextAlign.start,
-                        height: 1.2,
-                      ),
-                    ],
+                ? Container(
+                    width: double.infinity,
+                    child: H18(
+                      text: '신장 기록을 처음 완료했어요. 😊',
+                      weight: FW.bold,
+                      maxLine: 2,
+                      align: TextAlign.start,
+                      height: 1.2,
+                    ),
                   )
                 : Visibility(
                     visible: dicHomeGraphTallInfo!.heightPrevDiff! > 0.0,
@@ -431,21 +427,18 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
       } else {
         return Column(
           children: [
+            const SizedBox(height: 20),
             dicHomeGraphWeightInfo!.total_cnt! == 1
-                ? Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      const SizedBox(width: 28),
-                      H18(
-                        text: '체중 기록을 처음 완료했어요.',
-                        weight: FW.regular,
-                        maxLine: 2,
-                        align: TextAlign.start,
-                        height: 1.2,
-                      ),
-                    ],
-                  )
+                ? Container(
+                  width: double.infinity,
+                  child: H18(
+                      text: '체중 기록을 처음 완료했어요. 😊',
+                      weight: FW.bold,
+                      maxLine: 2,
+                      align: TextAlign.start,
+                      height: 1.2,
+                    ),
+                )
                 : Visibility(
                     visible: dicHomeGraphTallInfo!.heightPrevDiff! > 0.0,
                     child: Row(
@@ -612,7 +605,7 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      H16(text: comment1),
+                      H16(text: comment1,),
                       const SizedBox(
                         height: 10,
                       ),
@@ -621,6 +614,8 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
                         maxLine: 10,
                         height: 1.5,
                         align: TextAlign.start,
+                        color: Color(0xff707071),
+                        weight: FW.regular,
                       ),
                     ],
                   ),

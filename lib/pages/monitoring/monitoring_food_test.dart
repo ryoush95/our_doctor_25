@@ -104,7 +104,7 @@ class _MonitoringFoodTestState extends BaseState<MonitoringFoodTest> {
                         ),
                       ),
                       H18(
-                        text: "체크 리스트",
+                        text: "체크리스트",
                         align: TextAlign.start,
                       ),
                       const SizedBox(height: 35),
@@ -125,7 +125,7 @@ class _MonitoringFoodTestState extends BaseState<MonitoringFoodTest> {
                       const SizedBox(height: 55),
                       MainTextButton(
                         text: "완료하기",
-                        style: AppTextStyle.PD(Colors.white, 24, weight: FW.medium),
+                        style: AppTextStyle.PD(Colors.white, 18, weight: FW.medium),
                         width: double.infinity,
                         height: 60,
                         radius: 10,

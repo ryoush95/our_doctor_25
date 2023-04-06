@@ -18,6 +18,7 @@ import 'package:ourdoctor/pages/components/h14.dart';
 import 'package:ourdoctor/pages/components/h16.dart';
 import 'package:ourdoctor/pages/components/h18.dart';
 import 'package:ourdoctor/pages/components/h20.dart';
+import 'package:ourdoctor/pages/components/header_text.dart';
 import 'package:ourdoctor/pages/components/main_text_button.dart';
 import 'package:ourdoctor/pages/components/simple_header.dart';
 import 'package:ourdoctor/pages/home/disease_report.dart';
@@ -477,17 +478,7 @@ class _MonitoringReport2State extends BaseState<MonitoringReport2> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         foodList.isNotEmpty ?
-        RichText(
-            text: TextSpan(children: [
-              TextSpan(
-                text: gSelChildInfo!.name!,
-                style: AppTextStyle.PD(AppColor_Primary, 20, weight: FW.bold),
-              ),
-              TextSpan(
-                text: "의 영양식단을 추천해요!",
-                style: AppTextStyle.PD(Colors.black, 20, weight: FW.bold),
-              )
-            ]))
+        HeaderText(text: "${gSelChildInfo!.name!}의 영양식단을 추천해요!")
          : Align(
           alignment: Alignment.centerLeft,
            child: RichText(
