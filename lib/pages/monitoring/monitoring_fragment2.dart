@@ -170,10 +170,9 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         H18(
-            text: "짜잔!\n${gSelChildInfo!.name}의 발달 분석 결과가 나왔어요",
+          text: "짜잔!\n${gSelChildInfo!.name}의 발달 분석 결과가 나왔어요",
           maxLine: 2,
           align: TextAlign.start,
-          height: 1.5,
         ),
         const SizedBox(height: 20),
         Container(
@@ -239,18 +238,18 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
                                 16,
                                 weight: FW.semi_bold,
                               )),
-                      TextSpan(
-                          text: p.monitoringProgress != 3? "시작": "완료",
-                          style:
+                          TextSpan(
+                              text: p.monitoringProgress != 3? "시작": "완료",
+                              style:
                               AppTextStyle.PD(AppColor_Primary, 16, weight: FW.bold)),
-                      TextSpan(
-                          text: p.monitoringProgress != 3? "해볼까요?": "했어요!",
-                          style: AppTextStyle.PD(
-                            AppColor_BlackText,
-                            16,
-                            weight: FW.semi_bold,
-                          )),
-                    ])),
+                          TextSpan(
+                              text: p.monitoringProgress != 3? "해볼까요?": "했어요!",
+                              style: AppTextStyle.PD(
+                                AppColor_BlackText,
+                                16,
+                                weight: FW.semi_bold,
+                              )),
+                        ])),
                     const SizedBox(height: 15),
                     H14(
                       text: p.monitoringProgress != 3
@@ -269,7 +268,6 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
                           align: TextAlign.left,
                           weight: FW.medium,
                           color: AppColor_GrayText,
-                          height: 1.3,
                         )),
                   ],
                 ),
@@ -287,12 +285,12 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
                   onPressed: () {
                     if (p.monitoringProgress! == 3) {
                       Navigator.push(context, SlideRightTransRoute(
-                          builder: (context) => MonitorReport1(),
+                        builder: (context) => MonitorReport1(),
                       ));
                     } else if (p.monitoringProgress! == 0) {
                       Navigator.push(context, SlideRightTransRoute(
                         builder: (context) => MonitoringTestForm(type: p.monitoringProgress!),
-                          ));
+                      ));
                     } else {
                       showNewDialog(context,p);
                     }
@@ -347,7 +345,6 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
               text: "${gSelChildInfo!.name}의\n성장을 기록해볼까요?",
               maxLine: 2,
               align: TextAlign.start,
-              height: 1.5,
             ),
             InkWell(
               onTap: () {
@@ -485,7 +482,7 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
                             children: [
                               H16(text: "수면", weight: FW.regular,),
                               H16(text: p.sleep!.status! =="Y" ? "부족": p.sleep!.status! =="N" ? "-"
-                              : "충분", color: changeColor(p.sleep!.status!),),
+                                  : "충분", color: changeColor(p.sleep!.status!),),
                             ],
                           ),
                           Row(
@@ -527,7 +524,6 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
                   weight: FW.regular,
                   maxLine: 3,
                   align: TextAlign.start,
-                  height: 1.3,
                 ),
 
               ),
@@ -564,7 +560,7 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
           padding: EdgeInsets.only(bottom: 8),
           width: double.infinity,
           child: H18(
-            text: "최근 기록은 ${DateFormat("yyyy년 M월 d일").format(DateTime.now())} 이에요 :)",
+            text: "최근 기록은 ${DateFormat("yyyy년 MM월 dd일").format(DateTime.now())} 이에요 :)",
             align: TextAlign.start,
             maxLine: 3,
           ),
@@ -604,7 +600,7 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
               if(months>12){
                 //12개월 초과 자녀
                 Navigator.push(context, SlideRightTransRoute(
-                  builder: (context) => MonitoringFoodResult()));
+                    builder: (context) => MonitoringFoodResult()));
               }else{
                 //12개월 이하 자녀
                 Navigator.push(context, SlideRightTransRoute(
@@ -653,16 +649,17 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
             Expanded(
               child: Container(
                 margin: const EdgeInsets.symmetric(horizontal: 20.0),
-                   child: SingleChildScrollView(child: Column(
-                     children: [
-                       const SizedBox(height: 20),
-                       _body(),
-                     ],
-                   )),
-                    // Spacer(),
-                ),
+                child: SingleChildScrollView(child: Column(
+                  children: [
+                    const SizedBox(height: 20),
+                    _body(),
+                  ],
+                )),
+                // Spacer(),
               ),
+            ),
           ],
         ));
   }
 }
+

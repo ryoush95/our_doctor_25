@@ -78,7 +78,7 @@ class _MonitoringFoodResultReplaceState
                         inputFormatters: [
                           FilteringTextInputFormatter.allow(
                             //숫자만 입력 , 소수점 1자리 까지 입력 가능
-                        RegExp(r'^(\d+)?\.?\d{0,1}'))
+                              RegExp(r'^(\d+)?\.?\d{0,1}'))
                         ],
                         //숫자만 입력
                         keyboardType: TextInputType.number,
@@ -86,17 +86,17 @@ class _MonitoringFoodResultReplaceState
                         decoration: const InputDecoration(
                             enabledBorder: OutlineInputBorder(
                               borderSide:
-                                  BorderSide(width: 1, color: Colors.blue),
+                              BorderSide(width: 1, color: Colors.blue),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderSide:
-                                  BorderSide(width: 1, color: Colors.blue),
+                              BorderSide(width: 1, color: Colors.blue),
                             ),
                             isDense: true,
                             counterText: ""),
                         onChanged: (val) {
                           //체중 입력되면 150곱하여 calculatecontroller 입력
-                         setState(() {
+                          setState(() {
                             weight = val;
                             var doubleVal = double.parse(val);
                             var calVal = formatAmount((doubleVal*150).round()).toString();
@@ -161,11 +161,11 @@ class _MonitoringFoodResultReplaceState
                         decoration: const InputDecoration(
                             enabledBorder: OutlineInputBorder(
                               borderSide:
-                                  BorderSide(width: 1, color: Colors.blue),
+                              BorderSide(width: 1, color: Colors.blue),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderSide:
-                                  BorderSide(width: 1, color: Colors.blue),
+                              BorderSide(width: 1, color: Colors.blue),
                             ),
                             isDense: true,
                             counterText: ""),
@@ -187,7 +187,7 @@ class _MonitoringFoodResultReplaceState
             padding: const EdgeInsets.only(top: 30.0),
             child: CachedNetworkImage(
               imageUrl:
-                  "https://mingles-dev.s3.ap-northeast-2.amazonaws.com/file/monitoringReplace/%E1%84%89%E1%85%AE%E1%84%8B%E1%85%B2+%E1%84%8B%E1%85%B5%E1%86%AF%E1%84%85%E1%85%A5%E1%84%89%E1%85%B3%E1%84%90%E1%85%B3_1.jpg",
+              "https://mingles-dev.s3.ap-northeast-2.amazonaws.com/file/monitoringReplace/%E1%84%89%E1%85%AE%E1%84%8B%E1%85%B2+%E1%84%8B%E1%85%B5%E1%86%AF%E1%84%85%E1%85%A5%E1%84%89%E1%85%B3%E1%84%90%E1%85%B3_1.jpg",
               width: MediaQuery.of(context).size.width,
               fit: BoxFit.contain,
             ),
@@ -198,51 +198,51 @@ class _MonitoringFoodResultReplaceState
               children: [
                 Accordion(
                   defaultOpen: true,
-                    leadingImagePath: 'https://mingles-dev.s3.ap-northeast-2.amazonaws.com/file/monitoringReplace/%E1%84%8B%E1%85%A1%E1%84%8B%E1%85%B5%E1%84%8F%E1%85%A9%E1%86%AB_%E1%84%89%E1%85%AE%E1%84%8B%E1%85%B2+tip_2.png',
-                    title: H18(
-                      text: '모유 수유 중이라면?',
-                      align: TextAlign.left,
-                      color: Colors.blueAccent,),
-                    content: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        H17(
-                          text: "모유는 분유와 칼로리는 비슷하지만 직수를 하는 경우,\n수유량 계산이 어려울 수 있어요.\n이때, 체중 증가 정도로 수유량이 적절한지 알 수 있답니다.",
-                          weight: FW.medium,
-                          color: AppColor_BlackText.withOpacity(0.6),
-                          maxLine: 15,
-                          height: 1.3,
-                          align: TextAlign.left,
-                        ),
-                        const SizedBox(height: 30,),
-                        H17(
-                          text: "생후 ~ 6개월",
-                          color: Colors.blueAccent,
-                          height: 1.5,
-                          align: TextAlign.left,
-                        ),
-                        H17(
-                          text: "하루 20~30g 체중이 증가하면 적당해요.",
-                          weight: FW.medium,
-                          color: AppColor_BlackText.withOpacity(0.6),
-                          height: 1.5,
-                          align: TextAlign.left,
-                        ),
-                        H17(
-                          text: "6개월 ~ 12개월",
-                          color: Colors.blueAccent,
-                          height: 1.5,
-                          align: TextAlign.left,
-                        ),
-                        H17(
-                          text: "하루 12~15g 체중이 증가하면 적당해요.",
-                          weight: FW.medium,
-                          color: AppColor_BlackText.withOpacity(0.6),
-                          height: 1.5,
-                          align: TextAlign.left,
-                        ),
-                      ],
-                    ),
+                  leadingImagePath: 'https://mingles-dev.s3.ap-northeast-2.amazonaws.com/file/monitoringReplace/%E1%84%8B%E1%85%A1%E1%84%8B%E1%85%B5%E1%84%8F%E1%85%A9%E1%86%AB_%E1%84%89%E1%85%AE%E1%84%8B%E1%85%B2+tip_2.png',
+                  title: H18(
+                    text: '모유 수유 중이라면?',
+                    align: TextAlign.left,
+                    color: Colors.blueAccent,),
+                  content: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      H17(
+                        text: "모유는 분유와 칼로리는 비슷하지만 직수를 하는 경우,\n수유량 계산이 어려울 수 있어요.\n이때, 체중 증가 정도로 수유량이 적절한지 알 수 있답니다.",
+                        weight: FW.medium,
+                        color: AppColor_BlackText.withOpacity(0.6),
+                        maxLine: 15,
+                        height: 1.3,
+                        align: TextAlign.left,
+                      ),
+                      const SizedBox(height: 30,),
+                      H17(
+                        text: "생후 ~ 6개월",
+                        color: Colors.blueAccent,
+                        height: 1.5,
+                        align: TextAlign.left,
+                      ),
+                      H17(
+                        text: "하루 20~30g 체중이 증가하면 적당해요.",
+                        weight: FW.medium,
+                        color: AppColor_BlackText.withOpacity(0.6),
+                        height: 1.5,
+                        align: TextAlign.left,
+                      ),
+                      H17(
+                        text: "6개월 ~ 12개월",
+                        color: Colors.blueAccent,
+                        height: 1.5,
+                        align: TextAlign.left,
+                      ),
+                      H17(
+                        text: "하루 12~15g 체중이 증가하면 적당해요.",
+                        weight: FW.medium,
+                        color: AppColor_BlackText.withOpacity(0.6),
+                        height: 1.5,
+                        align: TextAlign.left,
+                      ),
+                    ],
+                  ),
                 ),
                 Accordion(
                   defaultOpen: false,
@@ -426,7 +426,7 @@ class _MonitoringFoodResultReplaceState
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: CachedNetworkImage(
               imageUrl:
-                  "https://mingles-dev.s3.ap-northeast-2.amazonaws.com/file/monitoringReplace/%E1%84%8B%E1%85%B5%E1%84%8B%E1%85%B2%E1%84%80%E1%85%B5+%E1%84%8B%E1%85%A7%E1%86%BC%E1%84%8B%E1%85%A1(7~12%E1%84%80%E1%85%A2%E1%84%8B%E1%85%AF%E1%86%AF)+%E1%84%8B%E1%85%B3%E1%86%B7%E1%84%89%E1%85%B5%E1%86%A8_1.png",
+              "https://mingles-dev.s3.ap-northeast-2.amazonaws.com/file/monitoringReplace/%E1%84%8B%E1%85%B5%E1%84%8B%E1%85%B2%E1%84%80%E1%85%B5+%E1%84%8B%E1%85%A7%E1%86%BC%E1%84%8B%E1%85%A1(7~12%E1%84%80%E1%85%A2%E1%84%8B%E1%85%AF%E1%86%AF)+%E1%84%8B%E1%85%B3%E1%86%B7%E1%84%89%E1%85%B5%E1%86%A8_1.png",
               fit: BoxFit.contain,
             ),
           ),
@@ -491,3 +491,4 @@ class _MonitoringFoodResultReplaceState
     );
   }
 }
+

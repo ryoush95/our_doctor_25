@@ -55,7 +55,7 @@ class _AccordionState extends State<Accordion> with SingleTickerProviderStateMix
       });
 
     } else {
-      _controller.animateBack(0, duration: Duration(milliseconds: 300));
+      _controller.animateBack(0, duration: const Duration(milliseconds: 300));
       setState(() {
         _showContent=false;
       });
@@ -71,41 +71,41 @@ class _AccordionState extends State<Accordion> with SingleTickerProviderStateMix
 
         child: Column(children: [
           ListTile(
-            leading: CircleAvatar(
-        backgroundImage: NetworkImage(widget.leadingImagePath),
-      ),
-            title: widget.title,
-            trailing:
-            GestureDetector(
-              onTap: () => _toggleContainer(),
-                child: _showContent ? Transform(
-                    alignment: Alignment.center,
-                    transform: Matrix4.rotationX(math.pi),
-                    child: Image.asset('assets/polygon_7.png', width: 16)
-                ):Image.asset('assets/polygon_7.png', width: 16)
-            )
+              leading: CircleAvatar(
+                backgroundImage: NetworkImage(widget.leadingImagePath),
+              ),
+              title: widget.title,
+              trailing:
+              GestureDetector(
+                  onTap: () => _toggleContainer(),
+                  child: _showContent ? Transform(
+                      alignment: Alignment.center,
+                      transform: Matrix4.rotationX(math.pi),
+                      child: Image.asset('assets/polygon_7.png', width: 16)
+                  ):Image.asset('assets/polygon_7.png', width: 16)
+              )
           ),
           SizeTransition(
-            sizeFactor: _animation,
-            axis: Axis.vertical,
-            child: Container(
+              sizeFactor: _animation,
+              axis: Axis.vertical,
+              child: Container(
 
-              padding:
-              const EdgeInsets.symmetric(horizontal: 15),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Divider(
-                    height: 1,
-                  ),
+                padding:
+                const EdgeInsets.symmetric(horizontal: 15),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Divider(
+                      height: 1,
+                    ),
 
-                  Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 15),
-                      child: widget.content
-                  ),
-                ],
-              ),
-            )
+                    Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 15),
+                        child: widget.content
+                    ),
+                  ],
+                ),
+              )
           ),
 
 
