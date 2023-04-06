@@ -1,30 +1,16 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:intl/intl.dart';
 import 'package:ourdoctor/global/app_colors.dart';
-import 'package:ourdoctor/global/app_get_it.dart';
 import 'package:ourdoctor/global/app_styles.dart';
-import 'package:ourdoctor/global/global.dart';
 import 'package:ourdoctor/helpers/common_util.dart';
-import 'package:ourdoctor/helpers/transition.dart';
 import 'package:ourdoctor/pages/base/page_layout.dart';
 import 'package:ourdoctor/pages/components/accordion.dart';
-import 'package:ourdoctor/pages/components/h14.dart';
 import 'package:ourdoctor/pages/components/h16.dart';
 import 'package:ourdoctor/pages/components/h17.dart';
 import 'package:ourdoctor/pages/components/h18.dart';
 import 'package:ourdoctor/pages/components/h20.dart';
-import 'package:ourdoctor/pages/components/main_text_button.dart';
 import 'package:ourdoctor/pages/components/simple_header.dart';
-import 'package:ourdoctor/pages/home/radar_chart.dart';
-import 'package:ourdoctor/pages/monitoring/monitoring_food_habit.dart';
-import 'package:ourdoctor/pages/monitoring/monitoring_food_test2.dart';
-import 'package:ourdoctor/pages/monitoring/provider/food_result_provider.dart';
-import 'package:provider/provider.dart';
-import 'package:table_calendar/table_calendar.dart';
 
 class MonitoringFoodResultReplace extends StatefulWidget {
   final int months;
@@ -88,14 +74,14 @@ class _MonitoringFoodResultReplaceState
                       TextField(
                         maxLength: 4,
                         textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 25),
+                        style: const TextStyle(fontSize: 25),
                         inputFormatters: [
                           FilteringTextInputFormatter.allow(
-                              RegExp(r'(^\d*\.?\d*)')),
+                        RegExp(r'^(\d+)?\.?\d{0,1}'))
                         ],
                         keyboardType: TextInputType.number,
                         controller: weightController,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                             enabledBorder: OutlineInputBorder(
                               borderSide:
                                   BorderSide(width: 1, color: Colors.blue),
@@ -109,8 +95,8 @@ class _MonitoringFoodResultReplaceState
                         onChanged: (val) {
                           setState(() {
                             weight = val;
-                            var intVal = int.parse(val);
-                            String calVal = (intVal * 2).toString();
+                            var doubleVal = double.parse(val);
+                            var calVal = formatAmount((doubleVal*150).round()).toString();
                             calculateController.text = calVal;
                           });
                         },
@@ -138,9 +124,9 @@ class _MonitoringFoodResultReplaceState
                   ),
                 ],
               )),
-          Icon(
+          const Icon(
             Icons.arrow_drop_down_rounded,
-            color: Colors.red,
+            color: Color(0xFF4B9EFF),
             size: 80.0,
           ),
           SizedBox(
@@ -168,8 +154,8 @@ class _MonitoringFoodResultReplaceState
                         controller: calculateController,
                         readOnly: true,
                         textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 25),
-                        decoration: InputDecoration(
+                        style: const TextStyle(fontSize: 25),
+                        decoration: const InputDecoration(
                             enabledBorder: OutlineInputBorder(
                               borderSide:
                                   BorderSide(width: 1, color: Colors.blue),
@@ -225,7 +211,7 @@ class _MonitoringFoodResultReplaceState
                           height: 1.3,
                           align: TextAlign.left,
                         ),
-                        SizedBox(height: 30,),
+                        const SizedBox(height: 30,),
                         H17(
                           text: "생후 ~ 6개월",
                           color: Colors.blueAccent,
@@ -430,7 +416,7 @@ class _MonitoringFoodResultReplaceState
     return SingleChildScrollView(
       child: Column(
         children: [
-          SizedBox(
+          const SizedBox(
             height: 30,
           ),
           Padding(
@@ -441,7 +427,7 @@ class _MonitoringFoodResultReplaceState
               fit: BoxFit.contain,
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 30,
           ),
 
@@ -453,7 +439,7 @@ class _MonitoringFoodResultReplaceState
               fit: BoxFit.contain,
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 30,
           ),
           Padding(
@@ -464,52 +450,10 @@ class _MonitoringFoodResultReplaceState
               fit: BoxFit.contain,
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 30,
           ),
           // explain(),
-        ],
-      ),
-    );
-  }
-
-  Widget monitor31() {
-    print(gUserInfo!.accessToken!);
-    return Container(
-      color: Colors.transparent,
-      child: Stack(
-        children: [
-          Column(
-            children: [
-              CachedNetworkImage(
-                imageUrl:
-                    "https://mingles-dev.s3.ap-northeast-2.amazonaws.com/uploads/product/main_image_object/41/%EB%B0%B0%EC%93%B0%EB%B0%A4_%EC%8D%B8%EB%84%A4%EC%9D%BC.jpg",
-                width: 200,
-                height: 200,
-                fit: BoxFit.fill,
-              ),
-              H18(
-                text: "미션을 수행하며\n건강한 식습관을 가져보세요!",
-                maxLine: 2,
-              ),
-              Divider(),
-              MainTextButton(
-                text: "다시 점검하기",
-                style: AppTextStyle.PD(Colors.white, 16, weight: FW.medium),
-                width: 185,
-                height: 40,
-                radius: 6,
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      SlideRightTransRoute(
-                        builder: (context) => MonitoringFoodTest2(),
-                      ));
-                },
-              ),
-            ],
-          ),
-          MonitoringFoodHabit(),
         ],
       ),
     );

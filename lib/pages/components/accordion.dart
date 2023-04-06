@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'dart:math' as math;
 
 class Accordion extends StatefulWidget {
   final Widget title;
@@ -74,14 +75,15 @@ class _AccordionState extends State<Accordion> with SingleTickerProviderStateMix
         backgroundImage: NetworkImage(widget.leadingImagePath),
       ),
             title: widget.title,
-            trailing: IconButton(
-              icon: Icon(
-                  _showContent ? Icons.arrow_drop_up_rounded : Icons.arrow_drop_down_rounded),
-              iconSize: 40,
-              color: Colors.black,
-              onPressed: () => _toggleContainer(),
-
-            ),
+            trailing:
+            GestureDetector(
+              onTap: () => _toggleContainer(),
+                child: _showContent ? Transform(
+                    alignment: Alignment.center,
+                    transform: Matrix4.rotationX(math.pi),
+                    child: Image.asset('assets/polygon_7.png', width: 16)
+                ):Image.asset('assets/polygon_7.png', width: 16)
+            )
           ),
           SizeTransition(
             sizeFactor: _animation,
