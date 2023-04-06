@@ -13,7 +13,9 @@ import 'package:ourdoctor/pages/components/h20.dart';
 import 'package:ourdoctor/pages/components/simple_header.dart';
 
 class MonitoringFoodResultReplace extends StatefulWidget {
+  //몇 개월차
   final int months;
+  //몇 일차
   final int dif;
 
   const MonitoringFoodResultReplace(
@@ -27,15 +29,11 @@ class MonitoringFoodResultReplace extends StatefulWidget {
 
 class _MonitoringFoodResultReplaceState
     extends State<MonitoringFoodResultReplace> {
+  //체중 적는 textFiled 컨트롤러
   TextEditingController weightController = TextEditingController();
+  //체중을 토대로 계산되는 수유량 컨트롤러
   TextEditingController calculateController = TextEditingController();
-  String weight = "70";
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
+  String weight = "0";
 
   Future<bool> onBackPressed() async {
     Navigator.pop(context);
@@ -45,9 +43,11 @@ class _MonitoringFoodResultReplaceState
   @override
   void dispose() {
     weightController.dispose();
+    calculateController.dispose();
     super.dispose();
   }
 
+  //0 to 5개월 차 스크린
   Widget monitor1() {
     return SingleChildScrollView(
       child: Column(
@@ -77,8 +77,10 @@ class _MonitoringFoodResultReplaceState
                         style: const TextStyle(fontSize: 25),
                         inputFormatters: [
                           FilteringTextInputFormatter.allow(
+                            //숫자만 입력 , 소수점 1자리 까지 입력 가능
                         RegExp(r'^(\d+)?\.?\d{0,1}'))
                         ],
+                        //숫자만 입력
                         keyboardType: TextInputType.number,
                         controller: weightController,
                         decoration: const InputDecoration(
@@ -93,7 +95,8 @@ class _MonitoringFoodResultReplaceState
                             isDense: true,
                             counterText: ""),
                         onChanged: (val) {
-                          setState(() {
+                          //체중 입력되면 150곱하여 calculatecontroller 입력
+                         setState(() {
                             weight = val;
                             var doubleVal = double.parse(val);
                             var calVal = formatAmount((doubleVal*150).round()).toString();
@@ -195,7 +198,7 @@ class _MonitoringFoodResultReplaceState
               children: [
                 Accordion(
                   defaultOpen: true,
-                    leadingImagePath: 'https://www.woolha.com/media/2020/03/eevee.png',
+                    leadingImagePath: 'https://mingles-dev.s3.ap-northeast-2.amazonaws.com/file/monitoringReplace/%E1%84%8B%E1%85%A1%E1%84%8B%E1%85%B5%E1%84%8F%E1%85%A9%E1%86%AB_%E1%84%89%E1%85%AE%E1%84%8B%E1%85%B2+tip_2.png',
                     title: H18(
                       text: '모유 수유 중이라면?',
                       align: TextAlign.left,
@@ -243,7 +246,7 @@ class _MonitoringFoodResultReplaceState
                 ),
                 Accordion(
                   defaultOpen: false,
-                  leadingImagePath: 'https://www.woolha.com/media/2020/03/eevee.png',
+                  leadingImagePath: 'https://mingles-dev.s3.ap-northeast-2.amazonaws.com/file/monitoringReplace/%E1%84%8B%E1%85%A1%E1%84%8B%E1%85%B5%E1%84%8F%E1%85%A9%E1%86%AB_%E1%84%89%E1%85%AE%E1%84%8B%E1%85%B2+tip_1.png',
                   title: H18(
                     text: '분유 수유 중이라면?',
                     align: TextAlign.left,
@@ -264,7 +267,7 @@ class _MonitoringFoodResultReplaceState
                 ),
                 Accordion(
                   defaultOpen: false,
-                  leadingImagePath: 'https://www.woolha.com/media/2020/03/eevee.png',
+                  leadingImagePath: 'https://mingles-dev.s3.ap-northeast-2.amazonaws.com/file/monitoringReplace/%E1%84%8B%E1%85%A1%E1%84%8B%E1%85%B5%E1%84%8F%E1%85%A9%E1%86%AB_%E1%84%89%E1%85%AE%E1%84%8B%E1%85%B2+tip_3.png',
                   title: H18(
                     text: '분유 + 모유 수유 중이라면?',
                     align: TextAlign.left,
@@ -293,7 +296,7 @@ class _MonitoringFoodResultReplaceState
       ),
     );
   }
-
+  //6개월 차 스크린
   Widget monitor2() {
     return SingleChildScrollView(
       child: Column(
@@ -340,7 +343,7 @@ class _MonitoringFoodResultReplaceState
               children: [
                 Accordion(
                   defaultOpen: true,
-                  leadingImagePath: 'https://www.woolha.com/media/2020/03/eevee.png',
+                  leadingImagePath: 'https://mingles-dev.s3.ap-northeast-2.amazonaws.com/file/monitoringReplace/%E1%84%8B%E1%85%A1%E1%84%8B%E1%85%B5%E1%84%8F%E1%85%A9%E1%86%AB_%E1%84%8B%E1%85%B5%E1%84%8B%E1%85%B2%E1%84%89%E1%85%B5%E1%86%A8+tip_1.png',
                   title: H18(
                     text: '밤중 수유는 NO!',
                     align: TextAlign.left,
@@ -361,7 +364,7 @@ class _MonitoringFoodResultReplaceState
                 ),
                 Accordion(
                   defaultOpen: false,
-                  leadingImagePath: 'https://www.woolha.com/media/2020/03/eevee.png',
+                  leadingImagePath: 'https://mingles-dev.s3.ap-northeast-2.amazonaws.com/file/monitoringReplace/%E1%84%8B%E1%85%A1%E1%84%8B%E1%85%B5%E1%84%8F%E1%85%A9%E1%86%AB_%E1%84%8B%E1%85%B5%E1%84%8B%E1%85%B2%E1%84%89%E1%85%B5%E1%86%A8+tip_2.png',
                   title: H18(
                     text: '하루 일과는 일정하게!',
                     align: TextAlign.left,
@@ -382,7 +385,7 @@ class _MonitoringFoodResultReplaceState
                 ),
                 Accordion(
                   defaultOpen: false,
-                  leadingImagePath: 'https://www.woolha.com/media/2020/03/eevee.png',
+                  leadingImagePath: 'https://mingles-dev.s3.ap-northeast-2.amazonaws.com/file/monitoringReplace/%E1%84%8B%E1%85%A1%E1%84%8B%E1%85%B5%E1%84%8F%E1%85%A9%E1%86%AB_%E1%84%89%E1%85%AE%E1%84%8B%E1%85%B2+tip_3.png',
                   title: H18(
                     text: '체중이 많이 나가지 않도록 주의!',
                     align: TextAlign.left,
@@ -411,7 +414,7 @@ class _MonitoringFoodResultReplaceState
       ),
     );
   }
-
+  //7 to 12개월 차 스크린
   Widget monitor3() {
     return SingleChildScrollView(
       child: Column(
@@ -459,6 +462,7 @@ class _MonitoringFoodResultReplaceState
     );
   }
 
+  //자녀 개월 수에 의해 화면 분기
   Widget _body() {
     if (widget.months <= 5) {
       return monitor1();
