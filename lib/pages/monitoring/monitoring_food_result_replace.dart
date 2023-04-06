@@ -15,11 +15,9 @@ import 'package:ourdoctor/pages/components/simple_header.dart';
 class MonitoringFoodResultReplace extends StatefulWidget {
   //몇 개월차
   final int months;
-  //몇 일차
-  final int dif;
 
   const MonitoringFoodResultReplace(
-      {Key? key, required this.months, required this.dif})
+      {Key? key, required this.months})
       : super(key: key);
 
   @override

@@ -3102,4 +3102,23 @@ class HttpService {
       throw Exception(LanguageService.trans("server_fail"));
     }
   }
+
+  //개월수 가져오기
+  Future<dynamic> getChildMonths() async {
+    String _url = API_BASE_URL + "api/user/get_age"; //TODO API_URL수정하기
+    Map<String, String> body = {
+      'access_token': gUserInfo!.accessToken!,
+    };
+    Uri myUri = Uri.parse(_url);
+    final response = await http.post(myUri, body: body);
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      // If that call was not successful, throw an error.
+      showToast(LanguageService.trans("server_fail"));
+      throw Exception(LanguageService.trans("server_fail"));
+    }
+  }
+
+
 }

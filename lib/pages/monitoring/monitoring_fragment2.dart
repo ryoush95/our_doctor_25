@@ -585,16 +585,10 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
             width: 185,
             height: 40,
             radius: 6,
-            onPressed: () {
+            onPressed: () async{
 
-              DateTime now = DateTime.now();
-              DateTime birth = DateTime.parse(gSelChildInfo!.birth!);
-
-              int birthYear = int.parse(gSelChildInfo!.birth!.substring(0,4));
-              int birthMonth = int.parse(gSelChildInfo!.birth!.substring(5,7));
-              DateTime birthDate = DateTime(birthYear, birthMonth); // 태어난 날짜
-              int dif = now.difference(birth).inDays.toInt(); // 태어난 날짜와 오늘 날짜의 차이
-              int months = ((now.year - birthDate.year) * 12) + (now.month - birthDate.month); //몇 개월차
+              final info= await httpService.getChildMonths();
+              var months=info["data"]["month"];
 
               //12개월 초과 자녀 , 이하 자녀 분기
               if(months>12){
@@ -604,7 +598,7 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
               }else{
                 //12개월 이하 자녀
                 Navigator.push(context, SlideRightTransRoute(
-                    builder: (context) => MonitoringFoodResultReplace(months: months ,dif:dif)));
+                    builder: (context) => MonitoringFoodResultReplace(months: months)));
               }
 
             },
