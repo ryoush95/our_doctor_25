@@ -81,7 +81,7 @@ class _MonitoringFoodResultReplaceState
                         inputFormatters: [
                           FilteringTextInputFormatter.allow(
                             //숫자만 입력 , 소수점 1자리 까지 입력 가능
-                              RegExp(r'^(\d+)?\.?\d{0,1}'))
+                              RegExp(r'^\d+\.?\d{0,1}'))
                         ],
                         //숫자만 입력
                         keyboardType: TextInputType.number,
@@ -100,10 +100,14 @@ class _MonitoringFoodResultReplaceState
                         onChanged: (val) {
                           //체중 입력되면 150곱하여 calculatecontroller 입력
                           setState(() {
-                            weight = val;
-                            var doubleVal = double.parse(val);
-                            var calVal = formatAmount((doubleVal*150).round()).toString();
-                            calculateController.text = calVal;
+                            if(val.isNotEmpty){
+                              var doubleVal = double.parse(val);
+                              weight = formatAmount((doubleVal*150).round()).toString();
+                              calculateController.text = weight;
+                            }else{
+                              calculateController.text = "";
+                            }
+
                           });
                         },
                       ),
