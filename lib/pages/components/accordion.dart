@@ -2,6 +2,8 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
+import 'package:ourdoctor/global/app_colors.dart';
+
 class Accordion extends StatefulWidget {
   final Widget title;
   final Widget content;
@@ -66,9 +68,17 @@ class _AccordionState extends State<Accordion> with SingleTickerProviderStateMix
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
-      child: Card(
-
-
+      child: Container(
+        decoration: const BoxDecoration(
+            color: AppColor_White,
+            borderRadius: BorderRadius.all(Radius.circular(6)),
+            boxShadow: [
+              BoxShadow(
+                color: AppColor_Light_Gray,
+                blurRadius: 5.0, // soften the shadow
+                spreadRadius: 5.0, //extend the shadow
+              )
+            ]),
         child: Column(children: [
           ListTile(
               leading: CircleAvatar(
