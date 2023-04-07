@@ -25,7 +25,7 @@ class MonitoringFoodHabit extends StatefulWidget {
 class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
   HttpService httpService = HttpService();
   bool isLoading = false;
-  List<CommentDto> commentsList=[];//코멘트
+  List<dynamic> commentsList = []; //코멘트
   List<String> missionResults = []; //미션
 
   @override
@@ -38,34 +38,15 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
     Future<FoodHabitModel> info = httpService.getFoodHabitResults();
 
     info.then((FoodHabitModel value) {
-       if (value.data != null) {
-
-         print(value.data!.toJson());
-         print(value.data!.toJson().length);
-         // print(value.data!.toJson()['comments']);
-
-
-
-         // print(value.data!.comments!['title']);
-         // commentsList=CommentDto(title: value.data!.comments['']);
-
-
-
-         // for(int i=0;i<value.data!.comments!.length;i++){
-         //   commentsList.add(FoodHabitModelDto(title: value.data!.title!, content: value.data!.content!));
-         // }
-
-          // print('commentsList ${commentsList.length}');
-
-         // value.data!.missions!.length>3
-
-         // for (int i = 1; i < value.data!.missions!.length+1; i++) {
-         //   missionResults.add(value.data!.missions!['$i']['text']);
-         // }
-
+      if (value.data != null) {
+        for (int i = 0; i < value.data!.comments!.length; i++) {
+          commentsList.add(value.data!.comments![i]);
         }
-
-        setState(() {});
+        for (int i = 1; i < value.data!.missions!.length + 1; i++) {
+          missionResults.add(value.data!.missions!['$i']['text']);
+        }
+      }
+      setState(() {});
     }).catchError((onError) {
       print(onError.toString());
     });
@@ -107,7 +88,7 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
                     width: MediaQuery.of(context).size.width - 130,
                     padding: const EdgeInsets.symmetric(vertical: 10.0),
                     child: H16(
-                      text: comment.title,
+                      text: comment['title'],
                       height: 1.3,
                       maxLine: 2,
                       align: TextAlign.start,
@@ -119,7 +100,7 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
                       weight: FW.regular,
                       color: AppColor_707071,
                       height: 1.3,
-                      text: comment.content,
+                      text: comment['content'],
                       maxLine: 99,
                       align: TextAlign.start,
                     ),
@@ -134,7 +115,6 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
   }
 
   Widget page1Item(index) {
-    print('page1Item $index');
     return SizedBox(
       height: 90,
       child: Column(
@@ -145,7 +125,7 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   H16(
-                    text: "Mission ${index + 1}",
+                    text: "Mission ${index+1}",
                     color: AppColor_Primary,
                     weight: FW.medium,
                   ),
@@ -164,11 +144,18 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
                 ],
               ),
               const Spacer(),
-              Image.asset(
-                "assets/food_mission_icon_${index + 1}.png",
-                height: 70,
-                width: 70,
-              ),
+              if(index>=4)
+                Image.asset(
+                  "assets/food_mission_icon_1.png",
+                  height: 70,
+                  width: 70,
+                ),
+              if(index<4)
+                  Image.asset(
+                      "assets/food_mission_icon_${index+1}.png",
+                      height: 70,
+                      width: 70,
+                    ),
             ],
           ),
           const Divider(),
@@ -295,7 +282,7 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
             ),
             const Divider(),
             Container(
-              height: 4 * 90,
+              height: missionResults.length * 90,
               child: ListView.builder(
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: missionResults.length,
@@ -337,8 +324,8 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
       backgroundColor: Colors.white,
       body: PageView(
         children: [
-          // page(),
-          // page1(),
+          page(),
+          page1(),
         ],
       ),
     );

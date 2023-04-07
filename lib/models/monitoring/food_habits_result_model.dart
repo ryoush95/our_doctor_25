@@ -38,7 +38,7 @@ class FoodHabitModelDto {
     this.missions,
   });
 
-  List<CommentDto>? comments;
+  List<dynamic>? comments;
   Map<String, dynamic>? missions;
 
   factory FoodHabitModelDto.fromRawJson(String str) => FoodHabitModelDto.fromJson(json.decode(str));
