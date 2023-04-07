@@ -111,6 +111,20 @@ class IntroGrowthPageState extends BaseState<IntroGrowthPage> {
                 ),
                 const SizedBox(height: 15),
                 H16(
+                  text: "영양&식습관 케어",
+                  weight: FW.bold,
+                  color: AppColor_BlackText.withOpacity(0.45),
+                  maxLine: 1,
+                ),
+                const SizedBox(height: 5),
+                H14(
+                  text: "필수식품군 밸런스부터\n식습관 관리, 분석 및 맞춤 솔루션",
+                  weight: FW.medium,
+                  color: AppColor_Intro_Description,
+                  maxLine: 2,
+                ),
+                const SizedBox(height: 15),
+                H16(
                   text: "우리 아이 성장 기록",
                   weight: FW.bold,
                   color: AppColor_BlackText.withOpacity(0.45),
@@ -118,7 +132,7 @@ class IntroGrowthPageState extends BaseState<IntroGrowthPage> {
                 ),
                 const SizedBox(height: 5),
                 H14(
-                  text: "영양 / 수면 / 체온 / 질병",
+                  text: "수면 / 체온 / 질병",
                   weight: FW.medium,
                   color: AppColor_Intro_Description,
                   maxLine: 2,
