@@ -3088,7 +3088,7 @@ class HttpService {
 
   //식습관 결과 가져오기
   Future<FoodHabitModel> getFoodHabitResults() async {
-    String _url = API_BASE_URL + "api/monitoring/get_food_home";
+    String _url = API_BASE_URL + "api/monitoring/get_food_checklist_home";
     Map<String, String> body = {
       'access_token': gUserInfo!.accessToken!,
     };

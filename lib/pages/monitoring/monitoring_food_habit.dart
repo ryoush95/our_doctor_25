@@ -25,11 +25,7 @@ class MonitoringFoodHabit extends StatefulWidget {
 class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
   HttpService httpService = HttpService();
   bool isLoading = false;
-  List<FoodHabitModelDto> foodHabit = [
-    FoodHabitModelDto(title: '건강하고 잘 먹고 있네요', content: '채소류를 더 먹어주세요'),
-    FoodHabitModelDto(title: '건강하고 잘 먹고 있네요', content: '채소류를 더 먹어주세요'),
-    FoodHabitModelDto(title: '건강하고 잘 먹고 있네요', content: '채소류를 더 먹어주세요'),
-  ]; //식습관 결과
+  List<CommentDto> commentsList=[];//코멘트
   List<String> missionResults = []; //미션
 
   @override
@@ -42,12 +38,34 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
     Future<FoodHabitModel> info = httpService.getFoodHabitResults();
 
     info.then((FoodHabitModel value) {
-      if (value.data != null) {
-        for (int i = 1; i < value.data!.missions!.length; i++) {
-          missionResults.add(value.data!.missions!['$i']['text']);
+       if (value.data != null) {
+
+         print(value.data!.toJson());
+         print(value.data!.toJson().length);
+         // print(value.data!.toJson()['comments']);
+
+
+
+         // print(value.data!.comments!['title']);
+         // commentsList=CommentDto(title: value.data!.comments['']);
+
+
+
+         // for(int i=0;i<value.data!.comments!.length;i++){
+         //   commentsList.add(FoodHabitModelDto(title: value.data!.title!, content: value.data!.content!));
+         // }
+
+          // print('commentsList ${commentsList.length}');
+
+         // value.data!.missions!.length>3
+
+         // for (int i = 1; i < value.data!.missions!.length+1; i++) {
+         //   missionResults.add(value.data!.missions!['$i']['text']);
+         // }
+
         }
+
         setState(() {});
-      }
     }).catchError((onError) {
       print(onError.toString());
     });
@@ -69,7 +87,7 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
     );
   }
 
-  Widget pageItem(index, habit) {
+  Widget pageItem(index, comment) {
     return Column(
       children: [
         Row(
@@ -89,7 +107,7 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
                     width: MediaQuery.of(context).size.width - 130,
                     padding: const EdgeInsets.symmetric(vertical: 10.0),
                     child: H16(
-                      text: habit.title,
+                      text: comment.title,
                       height: 1.3,
                       maxLine: 2,
                       align: TextAlign.start,
@@ -101,7 +119,7 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
                       weight: FW.regular,
                       color: AppColor_707071,
                       height: 1.3,
-                      text: habit.content,
+                      text: comment.content,
                       maxLine: 99,
                       align: TextAlign.start,
                     ),
@@ -116,6 +134,7 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
   }
 
   Widget page1Item(index) {
+    print('page1Item $index');
     return SizedBox(
       height: 90,
       child: Column(
@@ -204,11 +223,11 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    itemCount: foodHabit.length,
-                    itemBuilder: (context, index) {
-                      return pageItem(index, foodHabit[index]);
+                    itemCount: commentsList.length,
+                    itemBuilder: (context, i) {
+                      return pageItem(i, commentsList[i]);
                     },
-                    separatorBuilder: (BuildContext context, int index) {
+                    separatorBuilder: (BuildContext context, int i) {
                       return const SizedBox(height: 30);
                     },
                   ),
@@ -318,8 +337,8 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
       backgroundColor: Colors.white,
       body: PageView(
         children: [
-          page(),
-          page1(),
+          // page(),
+          // page1(),
         ],
       ),
     );

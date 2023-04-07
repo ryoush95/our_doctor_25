@@ -34,13 +34,11 @@ class FoodHabitModel {
 
 class FoodHabitModelDto {
   FoodHabitModelDto({
-    this.title,
-    this.content,
+    this.comments,
     this.missions,
   });
 
-  String? title;
-  String? content;
+  List<CommentDto>? comments;
   Map<String, dynamic>? missions;
 
   factory FoodHabitModelDto.fromRawJson(String str) => FoodHabitModelDto.fromJson(json.decode(str));
@@ -48,14 +46,36 @@ class FoodHabitModelDto {
   String toRawJson() => json.encode(toJson());
 
   factory FoodHabitModelDto.fromJson(Map<String, dynamic> json) => FoodHabitModelDto(
-    title: json["habits"]["last_monitoring"],
-    content: json["habits"]["score"]["text"],
-    missions: json["habits"]["missions"],
+    comments: json["comments"],
+    missions: json["missions"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "comments": comments,
+    "missions": missions,
+  };
+}
+
+class CommentDto {
+  CommentDto({
+    this.title,
+    this.content,
+  });
+
+  String? title;
+  String? content;
+
+  factory CommentDto.fromRawJson(String str) => CommentDto.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
+  factory CommentDto.fromJson(Map<String, dynamic> json) => CommentDto(
+    title: json["title"],
+    content: json["content"],
   );
 
   Map<String, dynamic> toJson() => {
     "title": title,
     "content": content,
-    "missions": missions,
   };
 }
