@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:ourdoctor/global/app_colors.dart';
 import 'package:ourdoctor/global/app_styles.dart';
@@ -23,13 +24,13 @@ class MonitoringFoodHabit extends StatefulWidget {
 
 class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
   HttpService httpService = HttpService();
-  bool isLoading=false;
-  List<FoodHabitModelDto> foodHabit=[
+  bool isLoading = false;
+  List<FoodHabitModelDto> foodHabit = [
     FoodHabitModelDto(title: '건강하고 잘 먹고 있네요', content: '채소류를 더 먹어주세요'),
     FoodHabitModelDto(title: '건강하고 잘 먹고 있네요', content: '채소류를 더 먹어주세요'),
     FoodHabitModelDto(title: '건강하고 잘 먹고 있네요', content: '채소류를 더 먹어주세요'),
-  ];//식습관 결과
-  List<String> missionResults=[]; //미션
+  ]; //식습관 결과
+  List<String> missionResults = []; //미션
 
   @override
   void initState() {
@@ -37,14 +38,12 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
     super.initState();
   }
 
-
-
   Future<void> getFoodHabitResult() async {
     Future<FoodHabitModel> info = httpService.getFoodHabitResults();
 
     info.then((FoodHabitModel value) {
       if (value.data != null) {
-        for(int i=1; i<value.data!.missions!.length;i++){
+        for (int i = 1; i < value.data!.missions!.length; i++) {
           missionResults.add(value.data!.missions!['$i']['text']);
         }
         setState(() {});
@@ -52,6 +51,22 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
     }).catchError((onError) {
       print(onError.toString());
     });
+  }
+
+  _dotIndicator(index) {
+    // List _items = [mData.mainImage!, mData.mainImage!];
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: DotsIndicator(
+        // dotsCount: bannerList.length,
+        dotsCount: 2,
+        position: index,
+        decorator: DotsDecorator(
+          color: const Color(0xFF000000).withOpacity(0.12), // Inactive color
+          activeColor: AppColor_Primary,
+        ),
+      ),
+    );
   }
 
   Widget pageItem(index, habit) {
@@ -200,9 +215,8 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
                 ],
               ),
             ),
-            const SizedBox(
-              height: 20,
-            ),
+            _dotIndicator(0.0),
+            const SizedBox(height: 20),
             MainTextButton(
               text: "다시 점검하기",
               style: AppTextStyle.PD(Colors.white, 16, weight: FW.medium),
@@ -271,6 +285,7 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
                 },
               ),
             ),
+            _dotIndicator(1.0),
             const SizedBox(
               height: 20,
             ),
