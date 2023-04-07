@@ -32,40 +32,30 @@ class FoodHabitModel {
   };
 }
 
-//TODO 실 데이터에 따라 수정하기
-//image Name, comment, category
 class FoodHabitModelDto {
   FoodHabitModelDto({
     this.title,
     this.content,
-    this.img,
     this.missions,
-    this.solutions,
   });
 
   String? title;
   String? content;
-  String? img;
-  List<String>? missions;
-  List<String>? solutions;
+  Map<String, dynamic>? missions;
 
   factory FoodHabitModelDto.fromRawJson(String str) => FoodHabitModelDto.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
   factory FoodHabitModelDto.fromJson(Map<String, dynamic> json) => FoodHabitModelDto(
-    title: json["title"],
-    content: json["content"],
-    img: json["img"],
-    missions: json["missions"],
-    solutions: json["solutions"],
+    title: json["habits"]["last_monitoring"],
+    content: json["habits"]["score"]["text"],
+    missions: json["habits"]["missions"],
   );
 
   Map<String, dynamic> toJson() => {
     "title": title,
     "content": content,
-    "img": img,
     "missions": missions,
-    "solutions": solutions,
   };
 }
