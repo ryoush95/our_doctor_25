@@ -520,7 +520,7 @@ final Map<String, String> ko_lang = {
   "view_monitoring_results": "모니터링 결과보기",
   "getting_started_another_way": "다른 방법으로 시작하기",
   "start_title": "1분만에 우리 아이\n간편 체크하기",
-  "start_description": "회원가입 전, 간단하게\n아이의 성장을 체크해\n보세요",
+  "start_description": "회원가입 전,\n간단하게\n아이의 성장을 체크해\n보세요",
   "start_diagnostics": "1분 간편 체크하기",
   "sleep_at_night": "밤잠",
   "sleep_at_launch": "sleep at launch",
