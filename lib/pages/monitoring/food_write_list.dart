@@ -36,6 +36,7 @@ class _FoodWriteListState extends BaseState<FoodWriteList> {
   ];
   List<Map<String, FoodItem>> foodAllList = [];
   List<FoodItem> foodList= [];
+  List<String> standardImages = [];
   ScrollController sc = ScrollController();
   int cateIndex = 0;
 
@@ -71,9 +72,9 @@ class _FoodWriteListState extends BaseState<FoodWriteList> {
     Future<FoodItemListModel> getInfo = httpService.foodWriteList();
     getInfo.then((FoodItemListModel value) {
       if (value.result == 0) {
-        foodAllList = value.data;
+        foodAllList = value.data!.result!;
         foodList = foodAllList[cateIndex].values.toList();
-
+        standardImages = value.data!.standardImageList!;
         setState(() {
           isLoading = false;
         });
@@ -131,7 +132,7 @@ class _FoodWriteListState extends BaseState<FoodWriteList> {
           FutureBuilder(
             builder: (context, snapshot) =>
                 CachedNetworkImage(
-                    imageUrl: foodList[index].image,
+                    imageUrl: foodList[index].image!,
                   width: 120,
                 ),
           ),
@@ -147,7 +148,7 @@ class _FoodWriteListState extends BaseState<FoodWriteList> {
                   padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
                   // left: 10, right: 10, top: 20, bottom: 20),
                   child: H18(
-                    text: foodList[index].name,
+                    text: foodList[index].name!,
                     color: Colors.white,
                   ),
                 ),
@@ -175,7 +176,7 @@ class _FoodWriteListState extends BaseState<FoodWriteList> {
                     ),
                     SizedBox(
                       width: 100,
-                        child: H20(text: foodList[index].unit + " " + foodList[index].unitName,)),
+                        child: H20(text: foodList[index].unit! + " " + foodList[index].unitName!,)),
                     Container(
                       width: 30,
                       height: 100,
@@ -205,7 +206,7 @@ class _FoodWriteListState extends BaseState<FoodWriteList> {
     );
   }
 
-  void _showTooltip(img) {
+  void _showTooltip(second, img) {
     if (_overlayEntry != null) return;
 
     RenderBox? renderBox = _tooltipKey.currentContext?.findRenderObject() as RenderBox?;
@@ -245,8 +246,12 @@ class _FoodWriteListState extends BaseState<FoodWriteList> {
                       borderRadius: BorderRadius.circular(4),
                     ),
                     child: SingleChildScrollView(
-                      child: Image.asset(
-                          img),
+                      child: second
+                          ? FutureBuilder(
+                        builder: (context, snapshot) {
+                            return CachedNetworkImage(imageUrl: img);
+                      },)
+                          : Image.asset(img),
                     ),
                   ),
                 ),
@@ -285,7 +290,7 @@ class _FoodWriteListState extends BaseState<FoodWriteList> {
                     child: ListView.builder(
                       physics: const NeverScrollableScrollPhysics(),
                       scrollDirection: Axis.horizontal,
-                      itemCount: 5,
+                      itemCount: cateList.length,
                       itemBuilder: (context, index) {
                         return cateListTile(index);
                         // margin: const EdgeInsets.symmetric(horizontal: 30),
@@ -297,7 +302,7 @@ class _FoodWriteListState extends BaseState<FoodWriteList> {
                     children: [
                       InkWell(
                         onTap: () {
-                          _showTooltip("assets/food_tooltip${cateName[cateIndex]}.jpg");
+                          _showTooltip(true, standardImages[cateIndex]);
                         },
                         child: Container(
                           key: _tooltipKey,
@@ -318,7 +323,7 @@ class _FoodWriteListState extends BaseState<FoodWriteList> {
                         visible: cateIndex == 0,
                         child: InkWell(
                           onTap: () {
-                            _showTooltip("assets/food_tooltip_second.jpg");
+                            _showTooltip(false, "assets/food_tooltip_second.jpg");
                           },
                           child: Container(
                             // key: _tooltipKey,

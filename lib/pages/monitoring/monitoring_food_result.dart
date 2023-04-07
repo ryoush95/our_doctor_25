@@ -6,8 +6,11 @@ import 'package:ourdoctor/global/app_colors.dart';
 import 'package:ourdoctor/global/app_get_it.dart';
 import 'package:ourdoctor/global/app_styles.dart';
 import 'package:ourdoctor/global/global.dart';
+import 'package:ourdoctor/global/http_service.dart';
 import 'package:ourdoctor/helpers/common_util.dart';
 import 'package:ourdoctor/helpers/transition.dart';
+import 'package:ourdoctor/models/monitoring/food_home_model.dart';
+import 'package:ourdoctor/pages/base/base_state.dart';
 import 'package:ourdoctor/pages/base/page_layout.dart';
 import 'package:ourdoctor/pages/components/h14.dart';
 import 'package:ourdoctor/pages/components/h16.dart';
@@ -29,13 +32,17 @@ class MonitoringFoodResult extends StatefulWidget {
   State<MonitoringFoodResult> createState() => _MonitoringFoodResultState();
 }
 
-class _MonitoringFoodResultState extends State<MonitoringFoodResult> {
+class _MonitoringFoodResultState extends BaseState<MonitoringFoodResult> {
   final p = getIt.get<FoodResultProvider>();
+  final HttpService httpService = HttpService();
   int cateIndex = 0;
   int foodHabitIndex = 0;
   List<String> cateList = ["종합", "식단", "식습관"];
   List<String> foodList = ["곡류", "고기", "채소", "과일", "유제품"];
   List<bool> missionList = [];
+  FoodHomeData? foodHome;
+  Map<DateTime, List> _events = {};
+  DateTime? lastDate;
 
   DateTime _selectedDay = DateTime.now();
   DateTime _focusedDay = DateTime.now();
@@ -48,12 +55,36 @@ class _MonitoringFoodResultState extends State<MonitoringFoodResult> {
     // TODO: implement initState
     super.initState();
     p.changeGraphIndex(-1);
+    getFoodHomeData();
     missionList = List.generate(5, (_) => false);
   }
 
   Future<bool> onBackPressed() async {
     Navigator.pop(context);
     return true;
+  }
+
+  getFoodHomeData() async {
+    setState(() {
+      isLoading = true;
+    });
+    Future<FoodHomeModel> getFoodAll = httpService.getFoodHome();
+    await getFoodAll.then((value) {
+      if (value.result == 0) {
+        foodHome = value.data!;
+        foodHome!.habits!.missions!.putIfAbsent("0", () =>  Mission(complete: false, text: foodHome!.habits!.score!.text),);
+        lastDate = foodHome!.habits!.lastMonitoring!;
+        _events = addEvent();
+        setState(() {
+          isLoading = false;
+        });
+      }
+    }).catchError((onError) {
+      setState(() {
+        isLoading = false;
+      });
+      showToast(onError);
+    });
   }
 
   Widget _getTiles1(int index) {
@@ -99,19 +130,21 @@ class _MonitoringFoodResultState extends State<MonitoringFoodResult> {
   }
 
   Widget foodListTile(index) {
+    final mdata = foodHome!.habits!.missions!["$index"]!;
     return InkWell(
       onTap: () {
         if (index == 0){
           return;
         }
-        if (!missionList[index]) {
+        if (!mdata.complete!) {
           Fluttertoast.cancel();
           showToast("미션을 완료했어요! +1point");
           setState(() {
             // _showMessage = true;
-            missionList[index] = !missionList[index];
+            mdata.complete = !mdata.complete!;
           });
         }
+
         // Future.delayed(Duration(seconds: 1), () {
         //   setState(() {
         //     _showMessage = false;
@@ -124,12 +157,12 @@ class _MonitoringFoodResultState extends State<MonitoringFoodResult> {
             width: (MediaQuery.of(context).size.width - 40) / 2.5,
             height: 100,
             padding: EdgeInsets.all(10),
-            margin: index == 3 ? EdgeInsets.symmetric(horizontal: 10) : EdgeInsets.only(left: 10),
+            margin: index == foodHome!.habits!.missions!.length - 1 ? EdgeInsets.symmetric(horizontal: 10) : EdgeInsets.only(left: 10),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
-              color: missionList[index] ? AppColor_Primary.withOpacity(0.5) : Colors.transparent,
+              color: mdata.complete! ? AppColor_Primary.withOpacity(0.5) : Colors.transparent,
               border: Border.all(
-                color: index == 0 ? AppColor_Oxygen : !missionList[index] ? AppColor_Primary : Colors.transparent,
+                color: index == 0 ? colorSwitch(foodHome!.habits!.score!.status) : !mdata.complete! ? AppColor_Primary : Colors.transparent,
                 width: 2,
               ),
             ),
@@ -138,16 +171,16 @@ class _MonitoringFoodResultState extends State<MonitoringFoodResult> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 H14(
-                  text : foodList[index],
-                  color: missionList[index] ? Colors.white : Colors.black,
+                  text : index == 0 ? "식습관 지수" : mdata.text!,
+                  color: mdata.complete! ? Colors.white : Colors.black,
                 ),
                 Center(
                   child: H16(
-                    text : "ㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁ",
+                    text : mdata.text!,
                     weight: FW.regular,
                     maxLine: 3,
                     align: TextAlign.start,
-                    color: missionList[index] ? Colors.white : Colors.black,
+                    color: mdata.complete! ? Colors.white : Colors.black,
                   ),
                 ),
                 SizedBox(height: 14,),
@@ -155,7 +188,7 @@ class _MonitoringFoodResultState extends State<MonitoringFoodResult> {
             ),
           ),
           Visibility(
-            visible: missionList[index],
+            visible: mdata.complete!,
             child: Container(
               width: (MediaQuery.of(context).size.width - 40) / 2.5,
               height: 100,
@@ -228,7 +261,7 @@ class _MonitoringFoodResultState extends State<MonitoringFoodResult> {
                         weight: FW.regular),
                   ),
                   TextSpan(
-                    text: "3월 25일",
+                    text: "${lastDate!.month}월 ${lastDate!.day}일",
                     style: AppTextStyle.PD(AppColor_Primary, 16,
                         weight: FW.bold, height: 1.4),
                   ),
@@ -242,32 +275,32 @@ class _MonitoringFoodResultState extends State<MonitoringFoodResult> {
             ),
           ],
         ),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 8),
-          margin: const EdgeInsets.only(right: 8),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(18),
-              color: AppColor_Primary),
-          child: Center(
-            child: H14(
-              text: "업데이트 하기",
-              weight: FW.bold,
-              align: TextAlign.center,
-              color: Colors.white,
-            ),
-          ),
-        ),
+        // Container(
+        //   padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 8),
+        //   margin: const EdgeInsets.only(right: 8),
+        //   decoration: BoxDecoration(
+        //       borderRadius: BorderRadius.circular(18),
+        //       color: AppColor_Primary),
+        //   child: Center(
+        //     child: H14(
+        //       text: "업데이트 하기",
+        //       weight: FW.bold,
+        //       align: TextAlign.center,
+        //       color: Colors.white,
+        //     ),
+        //   ),
+        // ),
       ],
     );
   }
 
-  Color colorSwitch(num) {
-    if (num == 0){
+  Color colorSwitch(status) {
+    if (status == "R"){
       return AppColor_Red;
-    } else if (num == 1){
-      return Colors.amber;
-    } else {
+    } else if (status == "G"){
       return AppColor_Oxygen;
+    } else {
+      return Colors.amber;
     }
   }
 
@@ -284,7 +317,7 @@ class _MonitoringFoodResultState extends State<MonitoringFoodResult> {
                 HeaderText(text: "${gSelChildInfo!.name}의 ${DateTime.now().month}월 리포트\n이번달은 골고루 먹었을까요?"),
                 foodCalendar(),
                 const SizedBox(height: 30),
-                // 상태 area
+                // 식단 상태 area
                 H18(
                   text: "식단 종합",
                   maxLine: 2,
@@ -307,7 +340,7 @@ class _MonitoringFoodResultState extends State<MonitoringFoodResult> {
                               margin: const EdgeInsets.all(3),
                               height: 60,
                               decoration: BoxDecoration(
-                                color: colorSwitch(1),
+                                color: colorSwitch(foodHome!.food![foodList[index]]!.status),
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: Padding(
@@ -322,7 +355,7 @@ class _MonitoringFoodResultState extends State<MonitoringFoodResult> {
                                     const SizedBox(height: 4),
                                     Center(
                                         child: H14(
-                                          text: "과다",
+                                          text: foodHome!.food![foodList[index]]!.text!,
                                           color: Colors.white,
                                         )),
                                   ],
@@ -340,14 +373,14 @@ class _MonitoringFoodResultState extends State<MonitoringFoodResult> {
               ],
             ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 12),
           // 미션 area list
           Container(
             height: 160,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               physics: const BouncingScrollPhysics(),
-              itemCount: 4,
+              itemCount: foodHome!.habits!.missions!.length,
               itemBuilder: (context, index) {
                 return foodListTile(index);
               },),
@@ -370,13 +403,15 @@ class _MonitoringFoodResultState extends State<MonitoringFoodResult> {
     );
   }
 
-  Widget foodCalendar() {
-    Map<DateTime, List> _events = {
-      DateTime.utc(2023, 04, 11): ['Event 1', 'Event 2'],
-      DateTime.utc(2023, 04, 12): ['Event 3', 'Event 4'],
-      DateTime.utc(2023, 04, 13): ['Event 5', 'Event 6'],
-    };
+  Map<DateTime, List> addEvent() {
+    Map<DateTime, List> _event = {};
+    for (var i in foodHome!.calendar!) {
+      _event.putIfAbsent(i, () => ["Event"]);
+    }
+    return _event;
+  }
 
+  Widget foodCalendar() {
     return TableCalendar(
       focusedDay: _focusedDay,
       firstDay: DateTime(2020, 1, 1),
@@ -402,10 +437,9 @@ class _MonitoringFoodResultState extends State<MonitoringFoodResult> {
         _focusedDay = focusedDay;
       },
       eventLoader: (day) => _events[day] ?? [],
-
       calendarBuilders: CalendarBuilders(
         headerTitleBuilder: (context, date) => Text(
-          DateFormat("yyyy년 MM월").format(date), // 원하는 날짜 형식으로 변경
+          DateFormat("yyyy년 M월").format(date), // 원하는 날짜 형식으로 변경
           style: const TextStyle(fontSize: 18),
           textAlign: TextAlign.center,
         ),
@@ -572,7 +606,7 @@ class _MonitoringFoodResultState extends State<MonitoringFoodResult> {
 
   Widget _body() {
     if (cateIndex == 0) {
-      return monitor1();
+      return foodHome == null ? const Center(child: CircularProgressIndicator(),) : monitor1();
     } else if (cateIndex == 1) {
       return monitor2();
     } else {
@@ -583,6 +617,7 @@ class _MonitoringFoodResultState extends State<MonitoringFoodResult> {
   @override
   Widget build(BuildContext context) {
     return PageLayout(
+      isLoading: isLoading,
       onBack: onBackPressed,
       child: Column(
         children: [

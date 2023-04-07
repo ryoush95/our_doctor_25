@@ -2,53 +2,78 @@
 //
 //     final foodItemListModel = foodItemListModelFromJson(jsonString);
 
-import 'package:meta/meta.dart';
 import 'dart:convert';
 
 class FoodItemListModel {
   FoodItemListModel({
-    required this.data,
-    required this.result,
-    required this.msg,
-    required this.reason,
+    this.data,
+    this.result,
+    this.msg,
+    this.reason,
   });
 
-  List<Map<String, FoodItem>> data;
-  int result;
-  String msg;
-  String reason;
+  Data? data;
+  int? result;
+  String? msg;
+  String? reason;
 
   factory FoodItemListModel.fromRawJson(String str) => FoodItemListModel.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
   factory FoodItemListModel.fromJson(Map<String, dynamic> json) => FoodItemListModel(
-    data: List<Map<String, FoodItem>>.from(json["data"].map((x) => Map.from(x).map((k, v) => MapEntry<String, FoodItem>(k, FoodItem.fromJson(v))))),
+    data: json["data"] == null ? null : Data.fromJson(json["data"]),
     result: json["result"],
     msg: json["msg"],
     reason: json["reason"],
   );
 
   Map<String, dynamic> toJson() => {
-    "data": List<dynamic>.from(data.map((x) => Map.from(x).map((k, v) => MapEntry<String, dynamic>(k, v.toJson())))),
+    "data": data?.toJson(),
     "result": result,
     "msg": msg,
     "reason": reason,
   };
 }
 
-class FoodItem {
-  FoodItem({
-    required this.name,
-    required this.unitName,
-    required this.unit,
-    required this.image,
+class Data {
+  Data({
+    this.result,
+    this.standardImageList,
   });
 
-  String name;
-  String unitName;
-  String unit;
-  String image;
+  List<Map<String, FoodItem>>? result;
+  List<String>? standardImageList;
+
+  factory Data.fromRawJson(String str) => Data.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
+  factory Data.fromJson(Map<String, dynamic> json) => Data(
+    result: json["result"] == null ? [] : List<Map<String, FoodItem>>.from(json["result"]!.map((x) => Map.from(x).map((k, v) => MapEntry<String, FoodItem>(k, FoodItem.fromJson(v))))),
+    standardImageList: json["standard_image_list"] == null ? [] : List<String>.from(json["standard_image_list"]!.map((x) => x)),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "result": result == null ? [] : List<dynamic>.from(result!.map((x) => Map.from(x).map((k, v) => MapEntry<String, dynamic>(k, v.toJson())))),
+    "standard_image_list": standardImageList == null ? [] : List<dynamic>.from(standardImageList!.map((x) => x)),
+  };
+}
+
+class FoodItem {
+  FoodItem({
+    this.name,
+    this.unitName,
+    this.unit,
+    this.image,
+    this.count,
+  });
+
+  String? name;
+  String? unitName;
+  String? unit;
+  String? image;
+  int? count;
 
   factory FoodItem.fromRawJson(String str) => FoodItem.fromJson(json.decode(str));
 
@@ -59,6 +84,7 @@ class FoodItem {
     unitName: json["unit_name"],
     unit: json["unit"],
     image: json["image"],
+    count: json["count"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -66,5 +92,6 @@ class FoodItem {
     "unit_name": unitName,
     "unit": unit,
     "image": image,
+    "count": count,
   };
 }
