@@ -70,7 +70,7 @@ class IntroHomePageState extends BaseState<IntroHomePage> {
                 H18(text: "우리 아이 키울 땐!", weight: FW.regular, maxLine: 2, height: 1.7),
                 const SizedBox(height: 33),
                 H14(
-                  text: "+ 소아 · 청소년과 전문병원 의료진이 직접 만든 앱\n+ 서울대 의과대학 협력 및 감수\n+ 전국의 100여 개 아동 병원 - 아동병원협회의 공식 인증 앱",
+                  text: "+ 소아 · 청소년과 전문병원 의료진이 직접 만든 앱\n+ 서울대 의과대학 협력 및 감수",
                   weight: FW.medium,
                   color: AppColor_Intro_Description,
                   maxLine: 4,

@@ -3105,7 +3105,7 @@ class HttpService {
 
   //식습관 결과 가져오기
   Future<FoodHabitModel> getFoodHabitResults() async {
-    String _url = API_BASE_URL + "api/EXAMPLE/api"; //TODO API_URL수정하기
+    String _url = API_BASE_URL + "api/monitoring/get_food_home";
     Map<String, String> body = {
       'access_token': gUserInfo!.accessToken!,
     };
@@ -3114,7 +3114,7 @@ class HttpService {
     if (response.statusCode == 200) {
       return FoodHabitModel.fromJson(json.decode(response.body));
     } else {
-      // If that call was not successful, throw an error.
+      // If that call was not successful, tqhrow an error.
       showToast(LanguageService.trans("server_fail"));
       throw Exception(LanguageService.trans("server_fail"));
     }

@@ -1,7 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:ourdoctor/global/app_colors.dart';
 import 'package:ourdoctor/global/app_styles.dart';
+import 'package:ourdoctor/global/global.dart';
 import 'package:ourdoctor/global/http_service.dart';
 import 'package:ourdoctor/helpers/transition.dart';
 import 'package:ourdoctor/models/monitoring/food_habits_result_model.dart';
@@ -22,49 +24,52 @@ class MonitoringFoodHabit extends StatefulWidget {
 
 class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
   HttpService httpService = HttpService();
-
-  //var food_habits_results; //식습관 결과
-  //var mission_results; //미션
-
-  List<FoodHabitModelDto> food_habits_results = [
-    FoodHabitModelDto(
-      title: '건강하고 다양한 음식을 골고루 잘 먹고있네요.aaaaaaaaaaaaaaaa',
-      content:
-          '".요해요필 이선개 식음취섭\n선해위 기하방예 을등염장위아소 ,병인성\n!요아않 지좋 에강건 은식음 인적극자1aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n2\n3\n4"',
-    ),
-    FoodHabitModelDto(
-      title: '건123213강하고 다양한 음식을 골고루 잘 먹고있네요.aaaaaaaaaaaaaaaa',
-      content:
-          '".요해요필 이선개 식음취섭\n선해위 기하방예 을등염장위아소 ,병인성\n!요아않 지좋 에강건 은식음 인적극자1aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n2\n3\n4"',
-    ),
-    FoodHabitModelDto(
-      title: '건강하고 다양한 음식을 골고루 잘 먹고있네요.aaaaaaaaaaaaaaaa',
-      content:
-          '".요해요필 이선개 식음취섭\n선해위 기하방예 을등염장위아소 ,병인성\n!요아않 지좋 에강건 은식음 인적극자1aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n2\n3\n4"',
-    ),
-  ];
-
-  var mission_results = ['채소 1가지 이상 먹어보기', '채소 2가지 이상 먹어보기', '채소 3가지 이상 먹어보기'];
+  bool isLoading = false;
+  List<FoodHabitModelDto> foodHabit = [
+    FoodHabitModelDto(title: '건강하고 잘 먹고 있네요', content: '채소류를 더 먹어주세요'),
+    FoodHabitModelDto(title: '건강하고 잘 먹고 있네요', content: '채소류를 더 먹어주세요'),
+    FoodHabitModelDto(title: '건강하고 잘 먹고 있네요', content: '채소류를 더 먹어주세요'),
+  ]; //식습관 결과
+  List<String> missionResults = []; //미션
 
   @override
   void initState() {
-    // getFoodHabitResult();
+    getFoodHabitResult();
     super.initState();
   }
 
-  //TODO 수정하기
-  // Future<void> getFoodHabitResult() async{
-  //   final info=httpService.getFoodHabitResults();
-  //   info.then((FoodHabitModel value) {
-  //     if(value.data!=null){
-  //       food_habits_results!.add(value);
-  //     }else{
-  //       ;
-  //     }
-  //   } );
-  // }
+  Future<void> getFoodHabitResult() async {
+    Future<FoodHabitModel> info = httpService.getFoodHabitResults();
 
-  Widget pageItem(index, title, content) {
+    info.then((FoodHabitModel value) {
+      if (value.data != null) {
+        for (int i = 1; i < value.data!.missions!.length; i++) {
+          missionResults.add(value.data!.missions!['$i']['text']);
+        }
+        setState(() {});
+      }
+    }).catchError((onError) {
+      print(onError.toString());
+    });
+  }
+
+  _dotIndicator(index) {
+    // List _items = [mData.mainImage!, mData.mainImage!];
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: DotsIndicator(
+        // dotsCount: bannerList.length,
+        dotsCount: 2,
+        position: index,
+        decorator: DotsDecorator(
+          color: const Color(0xFF000000).withOpacity(0.12), // Inactive color
+          activeColor: AppColor_Primary,
+        ),
+      ),
+    );
+  }
+
+  Widget pageItem(index, habit) {
     return Column(
       children: [
         Row(
@@ -84,7 +89,7 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
                     width: MediaQuery.of(context).size.width - 130,
                     padding: const EdgeInsets.symmetric(vertical: 10.0),
                     child: H16(
-                      text: title,
+                      text: habit.title,
                       height: 1.3,
                       maxLine: 2,
                       align: TextAlign.start,
@@ -96,7 +101,7 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
                       weight: FW.regular,
                       color: AppColor_707071,
                       height: 1.3,
-                      text: content,
+                      text: habit.content,
                       maxLine: 99,
                       align: TextAlign.start,
                     ),
@@ -131,7 +136,7 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
                   Row(
                     children: [
                       H14(
-                        text: "${mission_results[index]}",
+                        text: "${missionResults[index]}",
                         height: 1.3,
                         weight: FW.bold,
                       ),
@@ -199,12 +204,9 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    itemCount: food_habits_results.length,
+                    itemCount: foodHabit.length,
                     itemBuilder: (context, index) {
-                      final title = food_habits_results[index].title;
-                      final content = food_habits_results[index].content;
-
-                      return pageItem(index, title, content);
+                      return pageItem(index, foodHabit[index]);
                     },
                     separatorBuilder: (BuildContext context, int index) {
                       return const SizedBox(height: 30);
@@ -213,9 +215,8 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
                 ],
               ),
             ),
-            const SizedBox(
-              height: 20,
-            ),
+            _dotIndicator(0.0),
+            const SizedBox(height: 20),
             MainTextButton(
               text: "다시 점검하기",
               style: AppTextStyle.PD(Colors.white, 16, weight: FW.medium),
@@ -278,12 +279,13 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
               height: 4 * 90,
               child: ListView.builder(
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount: mission_results.length,
+                itemCount: missionResults.length,
                 itemBuilder: (context, index) {
                   return page1Item(index);
                 },
               ),
             ),
+            _dotIndicator(1.0),
             const SizedBox(
               height: 20,
             ),
