@@ -45,6 +45,7 @@ class MonitoringProfileDto {
     this.development,
     this.lifestyle,
     this.sleep,
+    this.food,
     this.temperature,
     this.symptomList,
   });
@@ -56,6 +57,7 @@ class MonitoringProfileDto {
   Development? development;
   Lifestyle? lifestyle;
   Lifestyle? sleep;
+  Lifestyle? food;
   Temperature? temperature;
   List<dynamic>? symptomList;
 
@@ -71,6 +73,7 @@ class MonitoringProfileDto {
     development: json["development"] == null ? null : Development.fromJson(json["development"]),
     lifestyle: json["lifestyle"] == null ? null : Lifestyle.fromJson(json["lifestyle"]),
     sleep: json["sleep"] == null ? null : Lifestyle.fromJson(json["sleep"]),
+    food: json["food"] == null ? null : Lifestyle.fromJson(json["food"]),
     temperature: json["temperature"] == null ? null : Temperature.fromJson(json["temperature"]),
     symptomList: json["symptom_list"] == null ? [] : List<dynamic>.from(json["symptom_list"]!.map((x) => x)),
   );
@@ -83,6 +86,7 @@ class MonitoringProfileDto {
     "development": development?.toJson(),
     "lifestyle": lifestyle?.toJson(),
     "sleep": sleep?.toJson(),
+    "food": food?.toJson(),
     "temperature": temperature?.toJson(),
     "symptom_list": symptomList == null ? [] : List<dynamic>.from(symptomList!.map((x) => x)),
   };
