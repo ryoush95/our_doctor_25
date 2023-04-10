@@ -1,8 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:ourdoctor/global/app_colors.dart';
 import 'package:ourdoctor/global/app_styles.dart';
 import 'package:ourdoctor/global/http_service.dart';
+import 'package:ourdoctor/models/default_res_model.dart';
 import 'package:ourdoctor/models/monitoring/food_check_list2_model.dart';
+import 'package:ourdoctor/models/monitoring/food_habits_result_model.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
 import 'package:ourdoctor/pages/base/page_layout.dart';
 import 'package:ourdoctor/pages/components/h16.dart';
@@ -11,7 +15,9 @@ import 'package:ourdoctor/pages/components/main_text_button.dart';
 import 'package:ourdoctor/pages/components/simple_header.dart';
 
 class MonitoringFoodTest2 extends StatefulWidget {
-  const MonitoringFoodTest2({Key? key}) : super(key: key);
+  MonitoringFoodTest2({Key? key, required this.test1Data}) : super(key: key);
+
+  List<String> test1Data;
 
   @override
   State<MonitoringFoodTest2> createState() => _MonitoringFoodTest2State();
@@ -44,20 +50,21 @@ class _MonitoringFoodTest2State extends BaseState<MonitoringFoodTest2> {
       print(onError.toString());
     });
   }
-  
-  Future<void> saveCheckList2() async{
-    onBackPressed();
-    // Future<FoodCheckList2> insert = httpService.getCheckList2();
-    // insert.then((value) async {
-    //   setState(() {
-    //     isLoading = false;
-    //   });
-    //   if (value.result == 0) {
-    //     Navigator.pop(context);
-    //   }
-    // }).catchError((onError) {
-    //   print(onError.toString());
-    // });
+
+  Future<void> saveCheckList() async{
+    widget.test1Data.addAll(answerList.map((e) => e.answer));
+    String result = jsonEncode(widget.test1Data);
+    Future<FoodHabitModel> insert = httpService.saveCheckList(result);
+    insert.then((value) async {
+      setState(() {
+        isLoading = false;
+      });
+      if (value.result == 0) {
+        Navigator.pop(context);
+      }
+    }).catchError((onError) {
+      print(onError.toString());
+    });
   }
 
   Future<bool> onBackPressed() async {
@@ -70,6 +77,7 @@ class _MonitoringFoodTest2State extends BaseState<MonitoringFoodTest2> {
       onTap: () {
         setState(() {
           checkList[index] = !checkList[index];
+          answerList[index].answer = checkList[index] ? "1" : "0";
         });
       },
       child: Row(
@@ -172,7 +180,7 @@ class _MonitoringFoodTest2State extends BaseState<MonitoringFoodTest2> {
                         height: 60,
                         radius: 10,
                         onPressed: () {
-                          saveCheckList2();
+                          saveCheckList();
                         },
                       ),
                       const SizedBox(height: 55),

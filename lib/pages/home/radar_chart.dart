@@ -69,10 +69,12 @@ class _RadarChartWidgetState extends State<RadarChartWidget> {
   }
 
   Future<void> getChartData() async {
-    Future<FoodRadarchartModel> info2 = httpService.getFoodRadarChart();
-    await info2.then((FoodRadarchartModel value) async {
+    Future<FoodRadarchartModel> info = httpService.getFoodRadarChart();
+    await info.then((FoodRadarchartModel value) async {
       if (value.result == 0) {
-        foodData = value.data!;
+        final p = Provider.of<FoodResultProvider>(context, listen: false);
+        p.setDataProvider(value.data!);
+        foodData = p.foodData;
         for (int i =0; i < foodData!.graph!.length; i++) {
           main[i] = value.data!.graph![foodList[i]]!.data;
           average[i] = value.data!.graph![foodList[i]]!.average;
@@ -254,9 +256,13 @@ class _RadarChartWidgetState extends State<RadarChartWidget> {
                 if (widget.state!) {
                   clickX = details.localPosition.dx;
                   clickY = details.localPosition.dy;
-                  _graphIndex = caculator(Size(size,size), clickX, clickY);
-                  bannerController.jumpToPage(_graphIndex);
-                  Provider.of<FoodResultProvider>(context, listen: false).changeGraphIndex(_graphIndex);
+                  int cacul = caculator(Size(size,size), clickX, clickY);
+                  if (_graphIndex != cacul) {
+                    _graphIndex = cacul;
+                    bannerController.jumpToPage(_graphIndex);
+                    Provider.of<FoodResultProvider>(context, listen: false)
+                        .changeGraphIndex(_graphIndex);
+                  }
                 }
               },
               child: CustomPaint(

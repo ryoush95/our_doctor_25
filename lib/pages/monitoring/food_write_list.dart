@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:ourdoctor/global/app_colors.dart';
@@ -5,7 +7,9 @@ import 'package:ourdoctor/global/app_styles.dart';
 import 'package:ourdoctor/global/http_service.dart';
 import 'package:ourdoctor/helpers/common_util.dart';
 import 'package:ourdoctor/helpers/transition.dart';
+import 'package:ourdoctor/models/default_res_model.dart';
 import 'package:ourdoctor/models/monitoring/food_item_list_model.dart';
+import 'package:ourdoctor/models/monitoring/food_radarchart_model.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
 import 'package:ourdoctor/pages/base/page_layout.dart';
 import 'package:ourdoctor/pages/components/h14.dart';
@@ -15,6 +19,8 @@ import 'package:ourdoctor/pages/components/h20.dart';
 import 'package:ourdoctor/pages/components/main_text_button.dart';
 import 'package:ourdoctor/pages/components/simple_header.dart';
 import 'package:ourdoctor/pages/intro/first.dart';
+import 'package:ourdoctor/pages/monitoring/provider/food_result_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:show_more_text_popup/show_more_text_popup.dart';
 
 class FoodWriteList extends StatefulWidget {
@@ -123,10 +129,19 @@ class _FoodWriteListState extends BaseState<FoodWriteList> {
     );
   }
 
+  String changeUnit(FoodItem unit) {
+    String v = (unit.unit! * unit.count!).toString();
+    if (v.contains(".0")) {
+      v = v.substring(0, v.length - 2);
+    }
+    v = v + " " + unit.unitName!;
+    return v;
+  }
+
   Widget foodListTile(index) {
     return Container(
       height: 200,
-      margin: EdgeInsets.only(bottom: 10),
+      margin: const EdgeInsets.only(bottom: 10),
       child: Row(
         children: [
           FutureBuilder(
@@ -155,45 +170,61 @@ class _FoodWriteListState extends BaseState<FoodWriteList> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Container(
-                      width: 30,
-                      height: 100,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.25),
-                            spreadRadius: 0,
-                            blurRadius: 8,
-                            offset: Offset(0, 3),
-                          ),
-                        ],
-                      ),
-                      child: const Center(
-                        child: Icon(Icons.remove_rounded, color: AppColor_GrayText,),
+                    InkWell(
+                      onTap: () {
+                        if (foodList[index].count! > 0) {
+                          setState(() {
+                            foodList[index].count = foodList[index].count! - 1;
+                          });
+                        }
+                      },
+                      child: Container(
+                        width: 30,
+                        height: 100,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.25),
+                              spreadRadius: 0,
+                              blurRadius: 8,
+                              offset: Offset(0, 3),
+                            ),
+                          ],
+                        ),
+                        child: const Center(
+                          child: Icon(Icons.remove_rounded, color: AppColor_GrayText,),
+                        ),
                       ),
                     ),
                     SizedBox(
-                      width: 100,
-                        child: H20(text: foodList[index].unit! + " " + foodList[index].unitName!,)),
-                    Container(
-                      width: 30,
-                      height: 100,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.25),
-                            spreadRadius: 0,
-                            blurRadius: 8,
-                            offset: Offset(0, 3),
-                          ),
-                        ],
-                      ),
-                      child: const Center(
-                        child: Icon(Icons.add_rounded, color: AppColor_GrayText,),
+                        width: 100,
+                        child: H20(text: changeUnit(foodList[index]))),
+                    InkWell(
+                      onTap: () {
+                        setState(() {
+                          foodList[index].count = foodList[index].count! + 1;
+                        });
+                      },
+                      child: Container(
+                        width: 30,
+                        height: 100,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.25),
+                              spreadRadius: 0,
+                              blurRadius: 8,
+                              offset: Offset(0, 3),
+                            ),
+                          ],
+                        ),
+                        child: const Center(
+                          child: Icon(Icons.add_rounded, color: AppColor_GrayText,),
+                        ),
                       ),
                     ),
                   ],
@@ -263,6 +294,36 @@ class _FoodWriteListState extends BaseState<FoodWriteList> {
     );
 
     Overlay.of(context)?.insert(_overlayEntry!);
+  }
+
+  Future<void> saveFoodList() async {
+    Map<String, int> countList = {};
+    setState(() {
+      isLoading = true;
+    });
+    for (Map<String, FoodItem> foodItemMap in foodAllList) {
+      for (String id in foodItemMap.keys) {
+        FoodItem foodItem = foodItemMap[id]!;
+        if (foodItem.count != 0) {
+          countList[id] = foodItem.count!;
+        }
+      }
+    }
+
+    String result = jsonEncode(countList);
+    print(result);
+    Future<FoodRadarchartModel> insert = httpService.saveFoodWriteList(result);
+    await insert.then((value) async {
+      setState(() {
+        isLoading = false;
+      });
+      if (value.result == 0) {
+        Provider.of<FoodResultProvider>(context).setDataProvider(value.data!);
+        Navigator.pop(context);
+      }
+    }).catchError((onError) {
+      print(onError.toString());
+    });
   }
 
   void _hideTooltip() {
@@ -360,11 +421,12 @@ class _FoodWriteListState extends BaseState<FoodWriteList> {
                     child: MainTextButton(
                       text: "식단 기록하기",
                       style: AppTextStyle.PD(Colors.white, 16, weight: FW.medium),
+                      backgroundColor: colorList[cateIndex],
                       width: 185,
                       height: 40,
                       radius: 6,
                       onPressed: () {
-                        // Navigator.push(context, SlideRightTransRoute(builder: (context) => FoodWriteList()));
+                        saveFoodList();
                       },
                     ),
                   ),

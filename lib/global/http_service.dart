@@ -2678,17 +2678,35 @@ class HttpService {
     }
   }
 
-  Future<TestQuizResultModel> saveCheckList(String checkList1, String checkList2) async {
+  // 음식 체크리스트 입력
+  Future<FoodHabitModel> saveCheckList(String result) async {
     String _url = API_BASE_URL + "api/Monitoring/save_food_checklist";
     Map<String, String> body = {
       'access_token': gUserInfo!.accessToken!,
-      'check_list1' : checkList1,
-      'check_list2' : checkList2,
+      'answer' : result,
     };
     Uri myUri = Uri.parse(_url);
     final response = await http.post(myUri, body: body);
     if (response.statusCode == 200) {
-      return TestQuizResultModel.fromJson(json.decode(response.body));
+      return FoodHabitModel.fromJson(json.decode(response.body));
+    } else {
+      // If that call was not successful, throw an error.
+      showToast(LanguageService.trans("server_fail"));
+      throw Exception(LanguageService.trans("server_fail"));
+    }
+  }
+
+  // 식단 기록하기
+  Future<FoodRadarchartModel> saveFoodWriteList(String result) async {
+    String _url = API_BASE_URL + "api/Monitoring/save_food_list";
+    Map<String, String> body = {
+      'access_token': gUserInfo!.accessToken!,
+      'answer' : result,
+    };
+    Uri myUri = Uri.parse(_url);
+    final response = await http.post(myUri, body: body);
+    if (response.statusCode == 200) {
+      return FoodRadarchartModel.fromJson(json.decode(response.body));
     } else {
       // If that call was not successful, throw an error.
       showToast(LanguageService.trans("server_fail"));
