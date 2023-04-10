@@ -209,7 +209,7 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
               padding: const EdgeInsets.symmetric(vertical: 30),
               child: H18(
                 height: isChecked ? 1.0 : 1.3,
-                weight: isChecked ? FW.bold : FW.regular,
+                weight: FW.bold,
                 text: isChecked
                     ? "식습관 분석을 완료했어요!"
                     : "우리 아이의 냠냠 습관은 어떤가요?\n식습관과 문제행동을 체크해 보고,\n 더 건강한 냠냠습관을 가져 보세요.",
