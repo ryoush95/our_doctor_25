@@ -102,8 +102,7 @@ class _RadarChartWidgetState extends State<RadarChartWidget> {
       onPageChanged: (i) {
         setState(() {
           bannerNum = i.toDouble();
-          Provider.of<FoodResultProvider>(context, listen: false)
-              .changeGraphIndex(i);
+          Provider.of<FoodResultProvider>(context, listen: false).changeGraphIndex(i);
         });
       },
     );
@@ -116,7 +115,7 @@ class _RadarChartWidgetState extends State<RadarChartWidget> {
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(6.0),
           color: AppColor_Light_Gray),
-      margin: EdgeInsets.symmetric(horizontal: 10),
+      margin: const EdgeInsets.symmetric(horizontal: 10),
       padding:
       const EdgeInsets.only(left: 30, right: 30, top: 20, bottom: 20),
       child: Column(
@@ -211,7 +210,6 @@ class _RadarChartWidgetState extends State<RadarChartWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final List<double> data2 = [0.5, 0.8, 0.6, 0.9, 0.4];
     double size = MediaQuery.of(context).size.width - 200;
 
     return Column(
@@ -256,13 +254,11 @@ class _RadarChartWidgetState extends State<RadarChartWidget> {
                 if (widget.state!) {
                   clickX = details.localPosition.dx;
                   clickY = details.localPosition.dy;
-                  int cacul = caculator(Size(size,size), clickX, clickY);
-                  if (_graphIndex != cacul) {
-                    _graphIndex = cacul;
-                    bannerController.jumpToPage(_graphIndex);
-                    Provider.of<FoodResultProvider>(context, listen: false)
-                        .changeGraphIndex(_graphIndex);
-                  }
+                  int cacul = caculator(Size(size, size), clickX, clickY);
+                  _graphIndex = cacul;
+                  bannerController.jumpToPage(_graphIndex);
+                  Provider.of<FoodResultProvider>(context, listen: false)
+                      .changeGraphIndex(_graphIndex);
                 }
               },
               child: CustomPaint(

@@ -38,7 +38,7 @@ class MonitoringReport2 extends StatefulWidget {
 class _MonitoringReport2State extends BaseState<MonitoringReport2> {
   final HttpService httpService = HttpService();
   int tabIndex = 0;
-  List<String> category = ["질병", "수면", "영양", "맞춤검사"];
+  List<String> category = ["질병", "수면", "맞춤검사"];
   List<String> subTitle = ["아침식사", "점심식사", "간식", "저녁식사"];
   List<String> subCategory = [""];
   List<int> _data = [0,0,0,0,0,0,0];
@@ -72,13 +72,13 @@ class _MonitoringReport2State extends BaseState<MonitoringReport2> {
     curMonth = now.month;
     getTempList();
     getHomeGraphLifeStyle();
-    int birthYear = int.parse(gSelChildInfo!.birth!.substring(0,4));
-    int birthMonth = int.parse(gSelChildInfo!.birth!.substring(5,7));
-    DateTime birthDate = DateTime(birthYear, birthMonth); // 태어난 날짜
-    int months = ((now.year - birthDate.year) * 12) + (now.month - birthDate.month);
-    if (months >= 12 && months <= 107) {
-      getFoodList();
-    }
+    // int birthYear = int.parse(gSelChildInfo!.birth!.substring(0,4));
+    // int birthMonth = int.parse(gSelChildInfo!.birth!.substring(5,7));
+    // DateTime birthDate = DateTime(birthYear, birthMonth); // 태어난 날짜
+    // int months = ((now.year - birthDate.year) * 12) + (now.month - birthDate.month);
+    // if (months >= 12 && months <= 107) {
+    //   getFoodList();
+    // }
     getSleepList();
   }
 
@@ -299,15 +299,15 @@ class _MonitoringReport2State extends BaseState<MonitoringReport2> {
       // CATE : 수면
       // print(gUserInfo!.accessToken!);
       return sleep();
+    // } else if (tabIndex == 3) {
+    //   // CATE : 영양
+    //   return Stack(
+    //     children: [
+    //       // firstPage(),
+    //       secondPage(),
+    //     ],
+    //   );
     } else if (tabIndex == 2) {
-      // CATE : 영양
-      return Stack(
-        children: [
-          // firstPage(),
-          secondPage(),
-        ],
-      );
-    } else if (tabIndex == 3) {
       // CATE : 맞춤검사
       return Padding(
         padding: const EdgeInsets.only(left: 30.0,right: 30.0, top: 30.0),
