@@ -12,7 +12,7 @@ class SolutionAreaModel {
     this.reason,
   });
 
-  List<SolutionAreaDto>? data;
+  SolutionAreaDto? data;
   int? result;
   String? msg;
   String? reason;
@@ -22,14 +22,14 @@ class SolutionAreaModel {
   String toRawJson() => json.encode(toJson());
 
   factory SolutionAreaModel.fromJson(Map<String, dynamic> json) => SolutionAreaModel(
-    data: json["data"] == null ? null : List<SolutionAreaDto>.from(json["data"].map((x) => SolutionAreaDto.fromJson(x))),
+    data: json["data"] == null ? null : SolutionAreaDto.fromJson(json["data"]),
     result: json["result"],
     msg: json["msg"],
     reason: json["reason"],
   );
 
   Map<String, dynamic> toJson() => {
-    "data": data == null ? null : List<dynamic>.from(data!.map((x) => x.toJson())),
+    "data": data?.toJson(),
     "result": result,
     "msg": msg,
     "reason": reason,

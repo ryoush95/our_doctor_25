@@ -6,11 +6,15 @@ import 'package:ourdoctor/global/app_styles.dart';
 import 'package:ourdoctor/global/http_service.dart';
 import 'package:ourdoctor/helpers/common_util.dart';
 import 'package:ourdoctor/helpers/transition.dart';
+import 'package:ourdoctor/models/home_banner_model.dart';
 import 'package:ourdoctor/models/monitoring/solution_area_model.dart';
+import 'package:ourdoctor/pages/care/product_detail.dart';
+import 'package:ourdoctor/pages/community/community_detail.dart';
 import 'package:ourdoctor/pages/components/h14.dart';
 import 'package:ourdoctor/pages/components/h16.dart';
 import 'package:ourdoctor/pages/intro/first.dart';
 import 'package:provider/src/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class BannerArea extends StatefulWidget {
   const BannerArea({Key? key}) : super(key: key);
@@ -23,17 +27,13 @@ class _BannerAreaState extends State<BannerArea> {
   final HttpService httpService = HttpService();
   PageController pageController = PageController();
   int position = 0;
-  // List<SolutionAreaDto> bannerList = [];
-  List<String> bannerList = [
-    "https://mingles-dev.s3.ap-northeast-2.amazonaws.com/uploads/banner/image_object/1/detail_%EC%9A%B0%EC%95%84%EB%8B%A5%ED%84%B0_%EB%B0%B0%EB%84%88_%EA%B5%AC%EA%B8%80%ED%94%8C%EB%A0%88%EC%9D%B4.jpg",
-    "https://mingles-dev.s3.ap-northeast-2.amazonaws.com/uploads/banner/image_object/1/detail_%EC%9A%B0%EC%95%84%EB%8B%A5%ED%84%B0_%EB%B0%B0%EB%84%88_%EA%B5%AC%EA%B8%80%ED%94%8C%EB%A0%88%EC%9D%B4.jpg"
-  ];
+  List<BannerDto> bannerList = [];
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    // getBannerList();
+    getBannerList();
   }
 
   @override
@@ -44,12 +44,13 @@ class _BannerAreaState extends State<BannerArea> {
   }
 
   Future<void> getBannerList() async {
-    Future<SolutionAreaModel> info = httpService.getSolutionArea();
-    await info.then((SolutionAreaModel value) async {
+    Future<HomeBannerModel> info = httpService.getBanner();
+    await info.then((HomeBannerModel value) async {
       if (value.result == 0) {
-        for (var i in value.data!) {
-          bannerList.add(i.imgUrl!);
-        }
+        setState(() {
+          bannerList = value.data!;
+          print(bannerList);
+        });
       } else {
         if (value.result != 106) {
           showToast(value.msg ?? "");
@@ -60,6 +61,46 @@ class _BannerAreaState extends State<BannerArea> {
     }).catchError((onError) {
       print(onError.toString());
     });
+  }
+
+  Widget bannerItem() {
+    var screen = MediaQuery.of(context).size;
+    return PageView.builder(
+      controller: pageController,
+      itemCount: bannerList.length,
+      itemBuilder: (BuildContext context, int index) {
+        return InkWell(
+          onTap: () async {
+            final ban = bannerList[index];
+            if(ban.type == "url") {
+              launch(ban.url!);
+            } else if (ban.type == "community") {
+              Navigator.push(context, SlideRightTransRoute(builder: (context) => CommunityDetailPage(uid: ban.uid!),));
+            } else if (ban.type == "product") {
+              Navigator.push(context, SlideRightTransRoute(builder: (context) => ProductDetail(pid: ban.uid!),));
+            }
+          },
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(6),
+            child: CachedNetworkImage(
+              imageUrl: bannerList[index].imgUrl!,
+              width: screen.width,
+              height: screen.width / 2,
+              fit: BoxFit.fill,
+              progressIndicatorBuilder:
+                  (context, url, downloadProgress) => Center(
+                  child: CircularProgressIndicator(
+                      value: downloadProgress.progress)),
+            ),
+          ),
+        );
+      },
+      onPageChanged: (i) {
+        setState(() {
+          position = i;
+        });
+      },
+    );
   }
 
   _dotIndicator() {
@@ -95,31 +136,8 @@ class _BannerAreaState extends State<BannerArea> {
             ]),
             child: bannerList.isEmpty
                 ? const Center(child: CircularProgressIndicator())
-                : PageView.builder(
-                  controller: pageController,
-                  itemCount: bannerList.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return ClipRRect(
-                      borderRadius: BorderRadius.circular(6),
-                      child: CachedNetworkImage(
-                        imageUrl: bannerList[index],
-                        width: screen.width,
-                        height: screen.width / 2,
-                        fit: BoxFit.fill,
-                        progressIndicatorBuilder:
-                            (context, url, downloadProgress) => Center(
-                                child: CircularProgressIndicator(
-                                    value: downloadProgress.progress)),
-                      ),
-                    );
-                  },
-                  onPageChanged: (i) {
-                    setState(() {
-                      position = i;
-                    });
-                  },
-                )),
-        Center(child : _dotIndicator()),
+                : bannerItem()),
+        bannerList.isEmpty ? const SizedBox() : Center(child : _dotIndicator()),
       ],
     );
   }
