@@ -105,12 +105,11 @@ class _MonitoringFoodTest1State extends BaseState<MonitoringFoodTest1> {
 
   Future<void> getResult() async {
     quizResult = list.map((e) => e.answer).toList();
-    String r = jsonEncode(quizResult);
     Navigator
         .of(context)
         .pushReplacement(
         SlideRightTransRoute(
-            builder: (context) => MonitoringFoodTest2()));
+            builder: (context) => MonitoringFoodTest2(test1Data: quizResult,)));
     // Future<TestQuizResultModel> info = httpService.getTestQuizResult(widget.info.id!, r);
     // info.then((value) async {
     //   setState(() {
@@ -288,7 +287,7 @@ class _MonitoringFoodTest1State extends BaseState<MonitoringFoodTest1> {
                     ),
                   ),
                   MainTextButton(
-                      text: lastPage ? "결과보기" : "다음",
+                      text: "다음",
                       backgroundColor: AppColor_Primary,
                       style: AppTextStyle.PD(Colors.white, 18, weight: FW.medium),
                       width: double.infinity,

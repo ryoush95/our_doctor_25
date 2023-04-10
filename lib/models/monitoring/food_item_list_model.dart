@@ -71,7 +71,7 @@ class FoodItem {
 
   String? name;
   String? unitName;
-  String? unit;
+  double? unit;
   String? image;
   int? count;
 
@@ -82,9 +82,9 @@ class FoodItem {
   factory FoodItem.fromJson(Map<String, dynamic> json) => FoodItem(
     name: json["name"],
     unitName: json["unit_name"],
-    unit: json["unit"],
+    unit: double.tryParse(json["unit"]),
     image: json["image"],
-    count: json["count"],
+    count: json["count"] ?? 0,
   );
 
   Map<String, dynamic> toJson() => {

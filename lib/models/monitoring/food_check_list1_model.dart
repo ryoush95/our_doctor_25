@@ -44,7 +44,7 @@ class FoodCheck1 {
 
   String? question;
   String? choices;
-  String answer = "-1";
+  String answer = "1";
 
   factory FoodCheck1.fromRawJson(String str) => FoodCheck1.fromJson(json.decode(str));
 
