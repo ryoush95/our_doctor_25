@@ -590,12 +590,30 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
               final info= await httpService.getChildMonths();
               var months=info["data"]["month"];
 
-              //12개월 초과 자녀 , 이하 자녀 분기
-              if(months>12){
+              //132개월 초과 자녀(만 11세) , 자녀 분기
+              if(months>132){
+                showDialog<String>(
+                  context: context,
+                  builder: (BuildContext context) => AlertDialog(
+                    title: const Text(''),
+                    titleTextStyle: AppTextStyle.PD(Colors.black, 18, weight: FW.semi_bold),
+                    content: Text('청소년용 모니터링\n서비스는 추후에\n제공될 예정입니다.',textAlign: TextAlign.center,style: TextStyle(height: 1.3),),
+                    contentTextStyle: AppTextStyle.PD(Colors.black, 18, weight: FW.regular),
+                    actions: <Widget>[
+                      TextButton(
+                        onPressed: () => Navigator.pop(context, 'Cancel'),
+                        child: const Text('닫기'),
+                      ),
+
+                    ],
+                  ),
+                );
+              }else if(months>12){
                 //12개월 초과 자녀
                 Navigator.push(context, SlideRightTransRoute(
                     builder: (context) => MonitoringFoodResult()));
-              }else{
+              }
+              else{
                 //12개월 이하 자녀
                 Navigator.push(context, SlideRightTransRoute(
                     builder: (context) => MonitoringFoodResultReplace(months: months)));
