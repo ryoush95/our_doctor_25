@@ -311,7 +311,7 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
             const Divider(),
             if (isChecked)
               Container(
-                height: missionResults.length * 90,
+                height: missionResults.length * 100,
                 child: ListView.builder(
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: missionResults.length,
