@@ -426,12 +426,12 @@ class CareFragmentState extends BaseState<CareFragment>
             ),
           ),
           Positioned(
-              child:thumbnail(),
+              child:thumbnail(bannerList),
               top: 70),
         ]));
   }
 
-  thumbnail() {
+  thumbnail(list) {
     var screen = MediaQuery.of(context).size;
     return Container(
         width: screen.width - 10,
@@ -445,16 +445,16 @@ class CareFragmentState extends BaseState<CareFragment>
                 spreadRadius: 5.0, //extend the shadow
               ),
             ]),
-        child: bannerList.isEmpty
+        child: list.isEmpty
             ? const Center(child: CircularProgressIndicator())
             : PageView.builder(
               controller: pageController,
-              itemCount: bannerList.length,
+              itemCount: list.length,
               itemBuilder: (BuildContext context, int index) {
                 return ClipRRect(
                   borderRadius: BorderRadius.circular(6),
                   child: CachedNetworkImage(
-                    imageUrl: bannerList[index],
+                    imageUrl: list[index],
                     width: screen.width,
                     height: screen.width / 2,
                     fit: BoxFit.fill,

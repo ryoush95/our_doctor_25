@@ -18,6 +18,7 @@ import 'package:ourdoctor/pages/community/community_search.dart';
 import 'package:ourdoctor/pages/components/h14.dart';
 import 'package:ourdoctor/pages/components/h20.dart';
 import 'package:ourdoctor/pages/components/noline_input.dart';
+import 'package:ourdoctor/pages/home/banner_area.dart';
 import 'package:ourdoctor/pages/home/community_area.dart';
 import 'package:ourdoctor/pages/home/developmental_class_area.dart';
 import 'package:ourdoctor/pages/home/growth_store_area.dart';
@@ -31,6 +32,7 @@ import 'package:ourdoctor/pages/home/talk_area.dart';
 import 'package:ourdoctor/pages/home/top_area.dart';
 import 'package:ourdoctor/pages/home/weather_area.dart';
 import 'package:ourdoctor/pages/intro/first.dart';
+import 'package:ourdoctor/pages/monitoring/solution_area.dart';
 import 'package:ourdoctor/provider/convert_score_provider.dart';
 import 'package:ourdoctor/provider/monitoring_note_profile_provider.dart';
 import 'package:provider/provider.dart';
@@ -196,11 +198,14 @@ class HomeFragmentState extends BaseState<HomeFragment> {
                   children: [
                     TopArea(name: gSelChildInfo!.name!, type: 0),
                     const SizedBox(height: 30),
+                    const BannerArea(),
                     // searchBar(),
-                    // const SizedBox(height: 30,),
+                    const SizedBox(height: 30,),
                     WeatherArea(),
                     const SizedBox(height: 50),
-                    TalkArea(),//게시판
+                    TalkArea(board: 0,),// 질문 게시판
+                    const SizedBox(height: 50),
+                    TalkArea(board: 1,),// 자유 게시판
                     const SizedBox(height: 10),
                     // QuizArea(),//질문
                     // const SizedBox(height: 50),

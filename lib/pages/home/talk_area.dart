@@ -31,7 +31,8 @@ import 'item_news.dart';
 import 'item_quiz.dart';
 
 class TalkArea extends StatefulWidget {
-  TalkArea({Key? key, this.curCategory = 0}) : super(key: key);
+  TalkArea({Key? key, required this.board, this.curCategory = 0}) : super(key: key);
+  int? board;
   int? curCategory;
 
   @override
@@ -57,9 +58,13 @@ class TalkAreaState extends BaseState<TalkArea> {
     setState(() {
       isLoading = true;
     });
+    String board = "talk";
+    if (widget.board == 0) {
+      board = "faq";
+    }
 
     Future<CommunityListResModel> info =
-        httpService.communityList("", 0, "talk", "recent", "");
+        httpService.communityList("", 0, board, "recent", "");
     info.then((CommunityListResModel value) async {
       setState(() {
         isLoading = false;
@@ -69,7 +74,7 @@ class TalkAreaState extends BaseState<TalkArea> {
         var l = value.data!.contents!;
         for (var i in l) {
           if (arrNewsList.length >= 10) break;
-          if (i.topic == "talk") {
+          if (i.topic == board) {
             if (arrNewsList.isEmpty && i.admin == "1") {
               arrNewsList.add(i);
             }
@@ -122,7 +127,7 @@ class TalkAreaState extends BaseState<TalkArea> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    H18(text: '자유게시판'),
+                    H18(text: widget.board == 0 ? '질문게시판': '자유게시판'),
                     InkWell(
                       onTap: () {
                         eventBus.fire(MoreCommunityEvent(type: 5));
