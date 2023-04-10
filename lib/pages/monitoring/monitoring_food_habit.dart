@@ -7,10 +7,13 @@ import 'package:ourdoctor/global/global.dart';
 import 'package:ourdoctor/global/http_service.dart';
 import 'package:ourdoctor/helpers/transition.dart';
 import 'package:ourdoctor/models/monitoring/food_habits_result_model.dart';
+import 'package:ourdoctor/models/monitoring/note_profile_model.dart';
 import 'package:ourdoctor/pages/components/h14.dart';
 import 'package:ourdoctor/pages/components/h16.dart';
 import 'package:ourdoctor/pages/components/h18.dart';
 import 'package:ourdoctor/pages/components/main_text_button.dart';
+import 'package:ourdoctor/provider/global_provider.dart';
+import 'package:provider/provider.dart';
 
 import 'monitoring_food_test1.dart';
 import 'monitoring_food_test2.dart';
@@ -27,11 +30,30 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
   bool isLoading = false;
   List<dynamic> commentsList = []; //코멘트
   List<String> missionResults = []; //미션
+  MonitoringProfileDto? data;
+  bool isChecked = false;
 
   @override
   void initState() {
+    checkUserFoodTested();
     getFoodHabitResult();
     super.initState();
+  }
+
+  Future<void> checkUserFoodTested() async {
+    final p = Provider.of<GlobalProvider>(context, listen: false);
+    await p.getNoteInfo(context);
+    data = p.profile;
+    if (data!.food != null) {
+      //TODO 현재 데이터 없어서 분기처리 반대로 했음 추후 수정필요함
+      setState(() {
+        isChecked = false;
+      });
+    } else {
+      setState(() {
+        isChecked = true;
+      });
+    }
   }
 
   Future<void> getFoodHabitResult() async {
@@ -39,6 +61,7 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
 
     info.then((FoodHabitModel value) {
       if (value.data != null) {
+        isChecked = true;
         for (int i = 0; i < value.data!.comments!.length; i++) {
           commentsList.add(value.data!.comments![i]);
         }
@@ -125,7 +148,7 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   H16(
-                    text: "Mission ${index+1}",
+                    text: "Mission ${index + 1}",
                     color: AppColor_Primary,
                     weight: FW.medium,
                   ),
@@ -144,18 +167,18 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
                 ],
               ),
               const Spacer(),
-              if(index>=4)
+              if (index >= 4)
                 Image.asset(
                   "assets/food_mission_icon_1.png",
                   height: 70,
                   width: 70,
                 ),
-              if(index<4)
-                  Image.asset(
-                      "assets/food_mission_icon_${index+1}.png",
-                      height: 70,
-                      width: 70,
-                    ),
+              if (index < 4)
+                Image.asset(
+                  "assets/food_mission_icon_${index + 1}.png",
+                  height: 70,
+                  width: 70,
+                ),
             ],
           ),
           const Divider(),
@@ -185,46 +208,51 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 30),
               child: H18(
-                text: "식습관 분석을 완료했어요!",
-                maxLine: 2,
-                color: AppColor_Primary,
+                height: isChecked ? 1.0 : 1.3,
+                weight: isChecked ? FW.bold : FW.regular,
+                text: isChecked
+                    ? "식습관 분석을 완료했어요!"
+                    : "우리 아이의 냠냠 습관은 어떤가요?\n식습관과 문제행동을 체크해 보고,\n 더 건강한 냠냠습관을 가져 보세요.",
+                maxLine: isChecked ? 2 : 3,
+                color: isChecked ? AppColor_Primary : AppColor_BlackText,
               ),
             ),
-            Container(
-              width: double.infinity,
-              margin: const EdgeInsets.all(5.0),
-              padding: const EdgeInsets.all(20.0),
-              decoration: const BoxDecoration(
-                  color: AppColor_White,
-                  borderRadius: BorderRadius.all(Radius.circular(6)),
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppColor_Light_Gray,
-                      blurRadius: 5.0, // soften the shadow
-                      spreadRadius: 5.0, //extend the shadow
-                    )
-                  ]),
-              child: Column(
-                children: [
-                  ListView.separated(
-                    scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: commentsList.length,
-                    itemBuilder: (context, i) {
-                      return pageItem(i, commentsList[i]);
-                    },
-                    separatorBuilder: (BuildContext context, int i) {
-                      return const SizedBox(height: 30);
-                    },
-                  ),
-                ],
+            if (isChecked)
+              Container(
+                width: double.infinity,
+                margin: const EdgeInsets.all(5.0),
+                padding: const EdgeInsets.all(20.0),
+                decoration: const BoxDecoration(
+                    color: AppColor_White,
+                    borderRadius: BorderRadius.all(Radius.circular(6)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColor_Light_Gray,
+                        blurRadius: 5.0, // soften the shadow
+                        spreadRadius: 5.0, //extend the shadow
+                      )
+                    ]),
+                child: Column(
+                  children: [
+                    ListView.separated(
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: commentsList.length,
+                      itemBuilder: (context, i) {
+                        return pageItem(i, commentsList[i]);
+                      },
+                      separatorBuilder: (BuildContext context, int i) {
+                        return const SizedBox(height: 30);
+                      },
+                    ),
+                  ],
+                ),
               ),
-            ),
             _dotIndicator(0.0),
             const SizedBox(height: 20),
             MainTextButton(
-              text: "다시 점검하기",
+              text: isChecked ? "다시 점검하기" : "점검하기",
               style: AppTextStyle.PD(Colors.white, 16, weight: FW.medium),
               width: 185,
               height: 40,
@@ -281,22 +309,23 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
               ),
             ),
             const Divider(),
-            Container(
-              height: missionResults.length * 90,
-              child: ListView.builder(
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: missionResults.length,
-                itemBuilder: (context, index) {
-                  return page1Item(index);
-                },
+            if (isChecked)
+              Container(
+                height: missionResults.length * 90,
+                child: ListView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: missionResults.length,
+                  itemBuilder: (context, index) {
+                    return page1Item(index);
+                  },
+                ),
               ),
-            ),
             _dotIndicator(1.0),
             const SizedBox(
               height: 20,
             ),
             MainTextButton(
-              text: "다시 점검하기",
+              text: isChecked ? "다시 점검하기" : "점검하기",
               style: AppTextStyle.PD(Colors.white, 16, weight: FW.medium),
               width: 185,
               height: 40,
