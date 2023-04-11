@@ -9,6 +9,7 @@ import 'package:ourdoctor/global/global.dart';
 import 'package:ourdoctor/global/http_service.dart';
 import 'package:ourdoctor/helpers/common_util.dart';
 import 'package:ourdoctor/helpers/transition.dart';
+import 'package:ourdoctor/models/default_res_model.dart';
 import 'package:ourdoctor/models/monitoring/food_home_model.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
 import 'package:ourdoctor/pages/base/page_layout.dart';
@@ -129,6 +130,26 @@ class _MonitoringFoodResultState extends BaseState<MonitoringFoodResult> {
     );
   }
 
+  Future<void> sendMission(Mission mdata, int index) async {
+    Future<DefaultResModel> info = httpService.missionComplete(index.toString());
+    await info.then((value) {
+      if (value.result == 0) {
+        Fluttertoast.cancel();
+        showToast("미션을 완료했어요! +1point");
+        setState(() {
+          // _showMessage = true;
+          mdata.complete = !mdata.complete!;
+        });
+      }
+    }).catchError((onError) {
+      setState(() {
+        isLoading = false;
+      });
+      showToast(onError);
+    });
+  }
+
+
   Widget foodListTile(index) {
     final mdata = foodHome!.habits!.missions!["$index"]!;
     return InkWell(
@@ -137,12 +158,7 @@ class _MonitoringFoodResultState extends BaseState<MonitoringFoodResult> {
           return;
         }
         if (!mdata.complete!) {
-          Fluttertoast.cancel();
-          showToast("미션을 완료했어요! +1point");
-          setState(() {
-            // _showMessage = true;
-            mdata.complete = !mdata.complete!;
-          });
+          sendMission(mdata, index);
         }
 
         // Future.delayed(Duration(seconds: 1), () {

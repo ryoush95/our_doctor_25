@@ -12,7 +12,7 @@ class HomeBannerModel {
     this.reason,
   });
 
-  List<BannerDto>? data;
+  Map<String, BannerDto>? data;
   int? result;
   String? msg;
   String? reason;
@@ -22,14 +22,14 @@ class HomeBannerModel {
   String toRawJson() => json.encode(toJson());
 
   factory HomeBannerModel.fromJson(Map<String, dynamic> json) => HomeBannerModel(
-    data: json["data"] == null ? null : List<BannerDto>.from(json["data"].map((x) => BannerDto.fromJson(x))),
+    data: Map.from(json["data"]!).map((k, v) => MapEntry<String, BannerDto>(k, BannerDto.fromJson(v))),
     result: json["result"],
     msg: json["msg"],
     reason: json["reason"],
   );
 
   Map<String, dynamic> toJson() => {
-    "data": data == null ? null : List<dynamic>.from(data!.map((x) => x.toJson())),
+    "data": Map.from(data!).map((k, v) => MapEntry<String, dynamic>(k, v.toJson())),
     "result": result,
     "msg": msg,
     "reason": reason,
