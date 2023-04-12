@@ -34,40 +34,29 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
 
   @override
   void initState() {
-    checkUserFoodTested();
     getFoodHabitResult();
     super.initState();
-  }
-
-  Future<void> checkUserFoodTested() async {
-    final p = Provider.of<GlobalProvider>(context, listen: false);
-    await p.getNoteInfo(context);
-    data = p.profile;
-    if (data!.food != null) {
-      setState(() {
-        isChecked = true;
-      });
-    } else {
-      setState(() {
-        isChecked = false;
-      });
-    }
   }
 
   Future<void> getFoodHabitResult() async {
     Future<FoodHabitModel> info = httpService.getFoodHabitResults();
 
     info.then((FoodHabitModel value) {
-      if (value.data != null) {
-        isChecked = true;
-        for (int i = 0; i < value.data!.comments!.length; i++) {
-          commentsList.add(value.data!.comments![i]);
-        }
-        for (int i = 1; i < value.data!.missions!.length + 1; i++) {
-          missionResults.add(value.data!.missions!['$i']['text']);
-        }
+      if (value.data == null) {
+        setState(() {
+          isChecked = false;
+        });
+        return;
       }
-      setState(() {});
+      setState(() {
+        isChecked = true;
+      });
+      for (int i = 0; i < value.data!.comments!.length; i++) {
+        commentsList.add(value.data!.comments![i]);
+      }
+      for (int i = 1; i < value.data!.missions!.length + 1; i++) {
+        missionResults.add(value.data!.missions!['$i']['text']);
+      }
     }).catchError((onError) {
       print(onError.toString());
     });
