@@ -22,7 +22,7 @@ import 'package:ourdoctor/pages/monitoring/food_write_list.dart';
 import 'package:ourdoctor/pages/monitoring/provider/food_result_provider.dart';
 import 'package:provider/provider.dart';
 
-final List<String> foodList = [ "고기, 생선, 달걀, 콩류", "과일류", "채소류", "유제품", "곡류"];
+final List<String> foodList = ["고기, 생선, 달걀, 콩류", "과일류", "채소류", "유제품", "곡류"];
 final List<Color> colorList = [
   Colors.amber,
   Colors.orange,
@@ -33,8 +33,10 @@ final List<Color> colorList = [
 
 /// 레이더 차트 위젯을 생성하는 클래스
 class RadarChartWidget extends StatefulWidget {
-  RadarChartWidget({Key? key, this.state = false}) : super(key: key);
+  RadarChartWidget({Key? key, this.state = false, required this.date})
+      : super(key: key);
   bool? state;
+  String? date;
   @override
   State<RadarChartWidget> createState() => _RadarChartWidgetState();
 }
@@ -42,14 +44,12 @@ class RadarChartWidget extends StatefulWidget {
 class _RadarChartWidgetState extends State<RadarChartWidget> {
   final HttpService httpService = HttpService();
   ChartData? foodData;
-  List<double> main = [0,0,0,0,0];
-  List<double> average = [0,0,0,0,0];
+  List<double> main = [0, 0, 0, 0, 0];
+  List<double> average = [0, 0, 0, 0, 0];
   List<Comment?> commentList = [null, null, null, null, null];
-
 
   double clickX = 50;
   double clickY = 50;
-  int _graphIndex = -1;
 
   PageController bannerController = PageController();
   double bannerNum = 0;
@@ -59,6 +59,8 @@ class _RadarChartWidgetState extends State<RadarChartWidget> {
     // TODO: implement initState
     super.initState();
     getChartData();
+    Provider.of<FoodResultProvider>(context, listen: false)
+        .changeGraphIndex2(-1);
   }
 
   @override
@@ -69,23 +71,26 @@ class _RadarChartWidgetState extends State<RadarChartWidget> {
   }
 
   Future<void> getChartData() async {
-    Future<FoodRadarchartModel> info = httpService.getFoodRadarChart();
+    final p = Provider.of<FoodResultProvider>(context, listen: false);
+    Future<FoodRadarchartModel> info =
+        httpService.getFoodRadarChart(widget.date);
     await info.then((FoodRadarchartModel value) async {
       if (value.result == 0) {
-        final p = Provider.of<FoodResultProvider>(context, listen: false);
         p.setDataProvider(value.data!);
         foodData = p.foodData;
-        for (int i =0; i < foodData!.graph!.length; i++) {
+        for (int i = 0; i < foodData!.graph!.length; i++) {
           main[i] = value.data!.graph![foodList[i]]!.data;
           average[i] = value.data!.graph![foodList[i]]!.average;
           commentList[i] = foodData!.graph![foodList[i]]!.comment!;
         }
+        // p.changeSelDate(DateFormat('yyyy-MM-dd').format(DateTime.now()));
         setState(() {});
       } else {
         showToast(value.msg ?? "");
         if (value.result == 106) {
           //token expired
-          Navigator.pushReplacement(context, SlideRightTransRoute(builder: (context) => FirstPage()));
+          Navigator.pushReplacement(
+              context, SlideRightTransRoute(builder: (context) => FirstPage()));
         }
       }
     }).catchError((onError) {
@@ -98,11 +103,13 @@ class _RadarChartWidgetState extends State<RadarChartWidget> {
     return PageView.builder(
       controller: bannerController,
       itemCount: foodList.length,
-      itemBuilder: (context, index) => buildBannerItem(context, index, selIndex),
+      itemBuilder: (context, index) =>
+          buildBannerItem(context, index, selIndex),
       onPageChanged: (i) {
         setState(() {
           bannerNum = i.toDouble();
-          Provider.of<FoodResultProvider>(context, listen: false).changeGraphIndex(i);
+          Provider.of<FoodResultProvider>(context, listen: false)
+              .changeGraphIndex(i);
         });
       },
     );
@@ -113,11 +120,9 @@ class _RadarChartWidgetState extends State<RadarChartWidget> {
     return Container(
       width: MediaQuery.of(context).size.width - 64,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(6.0),
-          color: AppColor_Light_Gray),
+          borderRadius: BorderRadius.circular(6.0), color: AppColor_Light_Gray),
       margin: const EdgeInsets.symmetric(horizontal: 10),
-      padding:
-      const EdgeInsets.only(left: 30, right: 30, top: 20, bottom: 20),
+      padding: const EdgeInsets.only(left: 30, right: 30, top: 20, bottom: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -157,15 +162,11 @@ class _RadarChartWidgetState extends State<RadarChartWidget> {
     final selIndex = context.watch<FoodResultProvider>().foodGraphIndex;
     return Column(
       children: [
-        // H18(
-        //   text: context.watch<FoodResultProvider>().foodGraphIndex.toString(),
-        //   color: Colors.black,
-        // ),
         Container(
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(18.0),
               color: selIndex < 0 ? AppColor_Primary : colorList[selIndex]),
-          padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           // left: 10, right: 10, top: 20, bottom: 20),
           child: H18(
             text: selIndex < 0 ? "영양 총평" : foodList[selIndex],
@@ -174,12 +175,14 @@ class _RadarChartWidgetState extends State<RadarChartWidget> {
         ),
         const SizedBox(height: 30),
         // bannerList.isNotEmpty ? CareBanner() : const Center(child: CircularProgressIndicator()),
-        Container(height: 150, margin: EdgeInsets.all(10), child: banner()),
-        Container(
+        SizedBox(height: 150, child: banner()),
+        SizedBox(
           height: 50,
           child: Column(
             children: [
-              foodList.isNotEmpty ? Center(child: _dotIndicator()) : Container(),
+              foodList.isNotEmpty
+                  ? Center(child: _dotIndicator())
+                  : Container(),
             ],
           ),
         ),
@@ -202,108 +205,138 @@ class _RadarChartWidgetState extends State<RadarChartWidget> {
       bool click = (clickX >= x - ss && clickX <= x + ss) &&
           (clickY >= y - ss && clickY <= y + ss);
 
-      sel = sel != -1 ? sel : click ? i : -1;
+      sel = sel != -1
+          ? sel
+          : click
+              ? i
+              : -1;
     }
     return sel;
   }
-
 
   @override
   Widget build(BuildContext context) {
     double size = MediaQuery.of(context).size.width - 200;
 
-    return Column(
-      children: [
-        Row(
-          children: [
-            const SizedBox(width: 20),
-            Container(
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(18.0),
-                  color: Colors.pink.withOpacity(0.3)),
-              padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 5),
-              // left: 10, right: 10, top: 20, bottom: 20),
-              child: H12(
-                text:  "권장량",
-                color: Colors.white,
-                weight: FW.medium,
-              ),
-            ),
-            const SizedBox(width: 10),
-            Container(
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(18.0),
-                  color: AppColor_Primary.withOpacity(0.3)),
-              padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 5),
-              // left: 10, right: 10, top: 20, bottom: 20),
-              child: H12(
-                text:  gSelChildInfo!.name!,
-                color: Colors.white,
-                weight: FW.medium,
-              ),
-            ),
-          ],
-        ),
-        Container(
-          height: size + 200,
-          width: size + 200,
-          padding: const EdgeInsets.all(20),
-          child: Center(
-            child: GestureDetector(
-              onTapDown: (details) {
-                if (widget.state!) {
-                  clickX = details.localPosition.dx;
-                  clickY = details.localPosition.dy;
-                  int cacul = caculator(Size(size, size), clickX, clickY);
-                  _graphIndex = cacul;
-                  bannerController.jumpToPage(_graphIndex);
-                  Provider.of<FoodResultProvider>(context, listen: false)
-                      .changeGraphIndex(_graphIndex);
-                }
-              },
-              child: CustomPaint(
-                painter: widget.state! ? RadarChartPainter(
-                  context,
-                  main,
-                  average,
-                  clickX,
-                  clickY,
-                ) : RadarChartPainter(
-                  context,
-                  main,
-                  average,
-                  -1,
-                  -1,
+    return Container(
+      padding:
+          widget.state! ? const EdgeInsets.all(20) : const EdgeInsets.all(0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          foodData == null
+              ? const SizedBox()
+              : H18(
+                  text: !widget.state! ? foodData!.title! : widget.date!,
+                  align: TextAlign.start,
+                  maxLine: 3,
                 ),
-                size: Size(size, size),
+          const SizedBox(height: 20),
+          Row(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(18.0),
+                    color: Colors.pink.withOpacity(0.3)),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                // left: 10, right: 10, top: 20, bottom: 20),
+                child: H12(
+                  text: "권장량",
+                  color: Colors.white,
+                  weight: FW.medium,
+                ),
+              ),
+              const SizedBox(width: 10),
+              Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(18.0),
+                    color: AppColor_Primary.withOpacity(0.3)),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                // left: 10, right: 10, top: 20, bottom: 20),
+                child: H12(
+                  text: gSelChildInfo!.name!,
+                  color: Colors.white,
+                  weight: FW.medium,
+                ),
+              ),
+            ],
+          ),
+          Container(
+            height: size + 200,
+            width: size + 200,
+            padding: const EdgeInsets.all(20),
+            child: Center(
+              child: GestureDetector(
+                onTapDown: (details) {
+                  if (widget.state!) {
+                    clickX = details.localPosition.dx;
+                    clickY = details.localPosition.dy;
+                    int cacul = caculator(Size(size, size), clickX, clickY);
+                    bannerController.jumpToPage(cacul);
+                    Provider.of<FoodResultProvider>(context, listen: false)
+                        .changeGraphIndex(cacul);
+                  }
+                },
+                child: CustomPaint(
+                  painter: widget.state!
+                      ? RadarChartPainter(
+                          context,
+                          main,
+                          average,
+                          clickX,
+                          clickY,
+                        )
+                      : RadarChartPainter(
+                          context,
+                          main,
+                          average,
+                          -1,
+                          -1,
+                        ),
+                  size: Size(size, size),
+                ),
               ),
             ),
           ),
-        ),
-        Visibility(
-          visible: widget.state!,
-          child: Container(
-            height: 450,
-            child: Column(
-              children: [
-                foodData != null ? explain() : const SizedBox(),
-                Center(
-                  child: MainTextButton(
-                    text: "식단 기록하기",
-                    style: AppTextStyle.PD(Colors.white, 16, weight: FW.medium),
-                    width: 185,
-                    height: 40,
-                    radius: 6,
-                    onPressed: () {
-                      Navigator.push(context, SlideRightTransRoute(builder: (context) => FoodWriteList()));
-                    },
+          Visibility(
+            visible: widget.state!,
+            child: SizedBox(
+              height: 450,
+              child: Column(
+                children: [
+                  foodData == null || foodData!.comment!.content.isEmpty
+                      ? SizedBox(
+                          height: 50,
+                          child: H16(
+                            text: "아직 기록된 식단이 없습니다.",
+                            color: AppColor_BlackText,
+                          ),
+                        )
+                      : explain(),
+                  Center(
+                    child: MainTextButton(
+                      text: "식단 기록하기",
+                      style:
+                          AppTextStyle.PD(Colors.white, 16, weight: FW.medium),
+                      width: 185,
+                      height: 40,
+                      radius: 6,
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            SlideRightTransRoute(
+                                builder: (context) => FoodWriteList()));
+                      },
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
@@ -316,7 +349,8 @@ class RadarChartPainter extends CustomPainter {
   double clickX;
   double clickY;
 
-  RadarChartPainter(this.context, this.avg, this.main, this.clickX, this.clickY); // 생성자
+  RadarChartPainter(
+      this.context, this.avg, this.main, this.clickX, this.clickY); // 생성자
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -346,7 +380,7 @@ class RadarChartPainter extends CustomPainter {
     canvas.drawPath(path, fillPaint); // 다각형 내부를 채우는 패스 그리기
     // canvas.drawPath(path, paint); // 다각형 테두리 그리기
 
-    paint.color = const Color(0xFFE3E3E3);// 회색 반투명
+    paint.color = const Color(0xFFE3E3E3); // 회색 반투명
 
     for (var i = 0; i < 5; i++) {
       // 중심부터 꼭지점까지 선 그리기
@@ -356,8 +390,9 @@ class RadarChartPainter extends CustomPainter {
       canvas.drawLine(Offset(centerX, centerY), Offset(x, y), paint);
     }
 
-    int graphNum = Provider.of<FoodResultProvider>(context, listen: false).foodGraphIndex;
-    if(clickX == -1 && clickY == -1) {
+    int graphNum =
+        Provider.of<FoodResultProvider>(context, listen: false).foodGraphIndex;
+    if (clickX == -1 && clickY == -1) {
       graphNum = -1;
     }
     for (var i = 0; i < 5; i++) {
@@ -392,7 +427,9 @@ class RadarChartPainter extends CustomPainter {
       final textY =
           centerY + radius * sin(angle) * 1.4 - textPainter.height / 2;
       final backgroundPaint = Paint()
-        ..color = graphNum == i ? colorList[i] : const Color(0xFFF8F8F8)// Set a custom background color
+        ..color = graphNum == i
+            ? colorList[i]
+            : const Color(0xFFF8F8F8) // Set a custom background color
         ..style = PaintingStyle.fill; // Set the painting style to fill
       final backgroundRect = RRect.fromLTRBR(
         textX - 20 / 2,
@@ -401,7 +438,9 @@ class RadarChartPainter extends CustomPainter {
         textY + textPainter.height + 20 / 2,
         Radius.circular(radius),
       );
-      canvas.drawRRect( backgroundRect, backgroundPaint,
+      canvas.drawRRect(
+        backgroundRect,
+        backgroundPaint,
       );
       textPainter.paint(canvas, Offset(textX, textY));
     }
@@ -443,4 +482,3 @@ class RadarChartPainter extends CustomPainter {
   @override
   bool shouldRepaint(RadarChartPainter oldDelegate) => true; // 다시 그릴 필요 없음
 }
-

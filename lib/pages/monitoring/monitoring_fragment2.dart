@@ -59,10 +59,8 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
   String lifeIcon = "assets/icon_normal.png";
   String lifeText = "";
 
-
   @override
-  void initState(){
-
+  void initState() {
     getMonitor2HomeDataInfo();
 
     eventBus.on<SelectChildEvent>().listen((event) {
@@ -115,9 +113,9 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
   }
 
   Color changeColor(String s) {
-    if(s == "R"){
+    if (s == "R") {
       return AppColor_Red;
-    } else if(s=="G"){
+    } else if (s == "G") {
       return AppColor_Oxygen;
     } else {
       return AppColor_Primary;
@@ -143,7 +141,9 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
                 weight: FW.medium,
                 align: TextAlign.center,
                 maxLine: 2,
-                color: tabIndex == index ? AppColor_BlackText : AppColor_BlackText.withOpacity(0.2),
+                color: tabIndex == index
+                    ? AppColor_BlackText
+                    : AppColor_BlackText.withOpacity(0.2),
               ),
             ),
             Positioned(
@@ -153,7 +153,9 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
                   child: Container(
                     width: 80,
                     height: MediaQuery.of(context).size.width,
-                    color: tabIndex == index ? AppColor_Primary : AppColor_BlackText.withOpacity(0.1),
+                    color: tabIndex == index
+                        ? AppColor_Primary
+                        : AppColor_BlackText.withOpacity(0.1),
                   )),
               bottom: 0,
             )
@@ -162,7 +164,6 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
       ),
     );
   }
-
 
   Widget monitorDev(MonitoringProfileDto p) {
     final life = Provider.of<GlobalProvider>(context, listen: false);
@@ -195,27 +196,59 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  SizedBox(width: 85,child: H16(text: "발달영역", align: TextAlign.center, weight: FW.medium)),
-                  SizedBox(width: 85,child: H16(text: "신체성장", align: TextAlign.center, weight: FW.medium)),
-                  SizedBox(width: 85,child: H16(text: "생활습관", align: TextAlign.center, weight: FW.medium)),
+                  SizedBox(
+                      width: 85,
+                      child: H16(
+                          text: "발달영역",
+                          align: TextAlign.center,
+                          weight: FW.medium)),
+                  SizedBox(
+                      width: 85,
+                      child: H16(
+                          text: "신체성장",
+                          align: TextAlign.center,
+                          weight: FW.medium)),
+                  SizedBox(
+                      width: 85,
+                      child: H16(
+                          text: "생활습관",
+                          align: TextAlign.center,
+                          weight: FW.medium)),
                 ],
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  CircularProgress3(score: p.monitoringProgress != 3 ? 0 : p.development!.score,status: p.development!.status,),
-                  Container(margin: EdgeInsets.all(5),child: CircularProgress3(score: p.monitoringProgress != 3 ? 0 : p.health!.score ,status: p.health!.status,)),
+                  CircularProgress3(
+                    score: p.monitoringProgress != 3 ? 0 : p.development!.score,
+                    status: p.development!.status,
+                  ),
+                  Container(
+                      margin: EdgeInsets.all(5),
+                      child: CircularProgress3(
+                        score: p.monitoringProgress != 3 ? 0 : p.health!.score,
+                        status: p.health!.status,
+                      )),
                   SizedBox(
                     height: 85,
                     width: 85,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Image.asset(p.monitoringProgress != 3 ? "assets/icon_bad.png" : life.lifeIcon, height: 48,),
+                        Image.asset(
+                          p.monitoringProgress != 3
+                              ? "assets/icon_bad.png"
+                              : life.lifeIcon,
+                          height: 48,
+                        ),
                         const SizedBox(height: 7),
                         H12(
-                          text: p.monitoringProgress != 3 ? "결과가없어요" : life.lifeText,
-                          color: p.monitoringProgress != 3 ? AppColor_Red : changeColor(p.lifestyle!.status!),
+                          text: p.monitoringProgress != 3
+                              ? "결과가없어요"
+                              : life.lifeText,
+                          color: p.monitoringProgress != 3
+                              ? AppColor_Red
+                              : changeColor(p.lifestyle!.status!),
                           weight: FW.medium,
                         ),
                       ],
@@ -231,25 +264,25 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
                   children: [
                     RichText(
                         text: TextSpan(children: [
-                          TextSpan(
-                              text: " 모니터링을 ",
-                              style: AppTextStyle.PD(
-                                AppColor_BlackText,
-                                16,
-                                weight: FW.semi_bold,
-                              )),
-                          TextSpan(
-                              text: p.monitoringProgress != 3? "시작": "완료",
-                              style:
-                              AppTextStyle.PD(AppColor_Primary, 16, weight: FW.bold)),
-                          TextSpan(
-                              text: p.monitoringProgress != 3? "해볼까요?": "했어요!",
-                              style: AppTextStyle.PD(
-                                AppColor_BlackText,
-                                16,
-                                weight: FW.semi_bold,
-                              )),
-                        ])),
+                      TextSpan(
+                          text: " 모니터링을 ",
+                          style: AppTextStyle.PD(
+                            AppColor_BlackText,
+                            16,
+                            weight: FW.semi_bold,
+                          )),
+                      TextSpan(
+                          text: p.monitoringProgress != 3 ? "시작" : "완료",
+                          style: AppTextStyle.PD(AppColor_Primary, 16,
+                              weight: FW.bold)),
+                      TextSpan(
+                          text: p.monitoringProgress != 3 ? "해볼까요?" : "했어요!",
+                          style: AppTextStyle.PD(
+                            AppColor_BlackText,
+                            16,
+                            weight: FW.semi_bold,
+                          )),
+                    ])),
                     const SizedBox(height: 15),
                     H14(
                       text: p.monitoringProgress != 3
@@ -259,11 +292,14 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
                       maxLine: 3,
                       align: TextAlign.start,
                     ),
-                    const SizedBox(height: 10,),
+                    const SizedBox(
+                      height: 10,
+                    ),
                     Visibility(
                         visible: p.monitoringProgress == 3,
                         child: H12(
-                          text: "본 모니터링 결과는 의학적인 진단을 의미하지는 않으며 경우에 따라 전문의의 진료가 필요합니다.",
+                          text:
+                              "본 모니터링 결과는 의학적인 진단을 의미하지는 않으며 경우에 따라 전문의의 진료가 필요합니다.",
                           maxLine: 2,
                           align: TextAlign.left,
                           weight: FW.medium,
@@ -275,24 +311,27 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
               const SizedBox(height: 15),
               Center(
                 child: MainTextButton(
-                  text: p.monitoringProgress != 3 ?"모니터링 시작하기":"모니터링 결과보기",
-                  style: AppTextStyle.PD(
-                      Colors.white, 16,
-                      weight: FW.medium),
+                  text: p.monitoringProgress != 3 ? "모니터링 시작하기" : "모니터링 결과보기",
+                  style: AppTextStyle.PD(Colors.white, 16, weight: FW.medium),
                   width: 185,
                   height: 40,
                   radius: 6,
                   onPressed: () {
                     if (p.monitoringProgress! == 3) {
-                      Navigator.push(context, SlideRightTransRoute(
-                        builder: (context) => MonitorReport1(),
-                      ));
+                      Navigator.push(
+                          context,
+                          SlideRightTransRoute(
+                            builder: (context) => MonitorReport1(),
+                          ));
                     } else if (p.monitoringProgress! == 0) {
-                      Navigator.push(context, SlideRightTransRoute(
-                        builder: (context) => MonitoringTestForm(type: p.monitoringProgress!),
-                      ));
+                      Navigator.push(
+                          context,
+                          SlideRightTransRoute(
+                            builder: (context) =>
+                                MonitoringTestForm(type: p.monitoringProgress!),
+                          ));
                     } else {
-                      showNewDialog(context,p);
+                      showNewDialog(context, p);
                     }
                   },
                 ),
@@ -316,16 +355,23 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
               child: Text("아니오"),
               onPressed: () {
                 Navigator.pop(context);
-                Navigator.push(context, SlideRightTransRoute(builder: (context) =>
-                    MonitoringTestForm(type: 0),));
+                Navigator.push(
+                    context,
+                    SlideRightTransRoute(
+                      builder: (context) => MonitoringTestForm(type: 0),
+                    ));
               },
             ),
             TextButton(
               child: Text("예"),
               onPressed: () {
                 Navigator.pop(context);
-                Navigator.push(context, SlideRightTransRoute(builder: (context) =>
-                    MonitoringTestForm(type: p.monitoringProgress!),));
+                Navigator.push(
+                    context,
+                    SlideRightTransRoute(
+                      builder: (context) =>
+                          MonitoringTestForm(type: p.monitoringProgress!),
+                    ));
               },
             ),
           ],
@@ -348,9 +394,15 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
             ),
             InkWell(
               onTap: () {
-                Navigator.push(context, SlideRightTransRoute(builder: (context) => MonitoringReport2()));
+                Navigator.push(
+                    context,
+                    SlideRightTransRoute(
+                        builder: (context) => MonitoringReport2()));
               },
-              child: H14(text: "지난기록", weight: FW.regular,),
+              child: H14(
+                text: "지난기록",
+                weight: FW.regular,
+              ),
             ),
           ],
         ),
@@ -387,7 +439,8 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
                               children: [
                                 Visibility(
                                   visible: (dicHomeDataInfo == null ||
-                                      dicHomeDataInfo!.profileImgUrl!.isEmpty) ||
+                                          dicHomeDataInfo!
+                                              .profileImgUrl!.isEmpty) ||
                                       dicHomeDataInfo!.profileImgUrl!
                                           .contains("img_photo_default"),
                                   child: Center(
@@ -398,7 +451,8 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
                                       child: Center(
                                         child: Image.asset(
                                             (dicHomeDataInfo == null ||
-                                                dicHomeDataInfo!.gender == 1)
+                                                    dicHomeDataInfo!.gender ==
+                                                        1)
                                                 ? 'assets/ic_default_male.png'
                                                 : 'assets/ic_default_female.png',
                                             width: 45),
@@ -408,7 +462,8 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
                                 ),
                                 Visibility(
                                   visible: dicHomeDataInfo != null &&
-                                      dicHomeDataInfo!.profileImgUrl!.isNotEmpty &&
+                                      dicHomeDataInfo!
+                                          .profileImgUrl!.isNotEmpty &&
                                       !dicHomeDataInfo!.profileImgUrl!
                                           .contains("img_photo_default"),
                                   child: ExtendedImage.network(
@@ -441,7 +496,7 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
                           children: [
                             Image.asset(
                                 (dicHomeDataInfo == null ||
-                                    dicHomeDataInfo!.gender == 1)
+                                        dicHomeDataInfo!.gender == 1)
                                     ? 'assets/ic_male.png'
                                     : 'assets/ic_female.png',
                                 width: 15),
@@ -458,7 +513,7 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
                             text: dicHomeDataInfo == null
                                 ? "0"
                                 : dicHomeDataInfo!.age.toString() +
-                                LanguageService.trans('sae'),
+                                    LanguageService.trans('sae'),
                             weight: FW.regular),
                       ],
                     ),
@@ -480,20 +535,35 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              H16(text: "수면", weight: FW.regular,),
-                              H16(text: p.sleep!.status! =="Y" ? "부족": p.sleep!.status! =="N" ? "-"
-                                  : "충분", color: changeColor(p.sleep!.status!),),
+                              H16(
+                                text: "수면",
+                                weight: FW.regular,
+                              ),
+                              H16(
+                                text: p.sleep!.status! == "Y"
+                                    ? "부족"
+                                    : p.sleep!.status! == "N"
+                                        ? "-"
+                                        : "충분",
+                                color: changeColor(p.sleep!.status!),
+                              ),
                             ],
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              H16(text: "체온", weight: FW.regular,),
+                              H16(
+                                text: "체온",
+                                weight: FW.regular,
+                              ),
                               Row(
                                 children: [
                                   H16(
-                                    text: p.temperature!.temperature == null ? "-" : p.temperature!.temperature.toString(),
-                                    color: changeColor(p.temperature!.status!),),
+                                    text: p.temperature!.temperature == null
+                                        ? "-"
+                                        : p.temperature!.temperature.toString(),
+                                    color: changeColor(p.temperature!.status!),
+                                  ),
                                   H16(text: " °C"),
                                 ],
                               ),
@@ -502,11 +572,17 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              H16(text: "질병", weight: FW.regular,),
+                              H16(
+                                text: "질병",
+                                weight: FW.regular,
+                              ),
                               Row(
                                 children: [
                                   H16(text: "처방전 + "),
-                                  H16(text: p.symptomList!.length.toString(), color: AppColor_Primary,),
+                                  H16(
+                                    text: p.symptomList!.length.toString(),
+                                    color: AppColor_Primary,
+                                  ),
                                 ],
                               ),
                             ],
@@ -525,23 +601,28 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
                   maxLine: 3,
                   align: TextAlign.start,
                 ),
-
               ),
               const SizedBox(height: 30),
               Center(
                 child: MainTextButton(
                   text: p.todayNote == false ? "성장 노트 기록하기" : "지난 기록 보기",
-                  style: AppTextStyle.PD(
-                      Colors.white, 16,
-                      weight: FW.medium),
+                  style: AppTextStyle.PD(Colors.white, 16, weight: FW.medium),
                   width: 185,
                   height: 40,
                   radius: 6,
                   onPressed: () {
-                    if(p.todayNote == false) {
-                      Navigator.push(context, SlideRightTransRoute(builder: (context) => MonitoringMain2(),));
+                    if (p.todayNote == false) {
+                      Navigator.push(
+                          context,
+                          SlideRightTransRoute(
+                            builder: (context) => MonitoringMain2(),
+                          ));
                     } else {
-                      Navigator.push(context, SlideRightTransRoute(builder: (context) => MonitoringReport2(),));
+                      Navigator.push(
+                          context,
+                          SlideRightTransRoute(
+                            builder: (context) => MonitoringReport2(),
+                          ));
                     }
                   },
                 ),
@@ -556,69 +637,58 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
   Widget monitorFood() {
     return Column(
       children: [
-        Container(
-          padding: EdgeInsets.only(bottom: 8),
-          width: double.infinity,
-          child: H18(
-            text: "최근 기록은 ${DateFormat("yyyy년 MM월 dd일").format(DateTime.now())} 이에요 :)",
-            align: TextAlign.start,
-            maxLine: 3,
-          ),
+        RadarChartWidget(
+          state: false,
+          date: DateFormat('yyyy-MM-dd').format(DateTime.now()),
         ),
-        Container(
-          padding: EdgeInsets.only(bottom: 20),
-          width: double.infinity,
-          child: H18(
-            text: "오늘은 무엇을 먹었나요?",
-            align: TextAlign.start,
-            maxLine: 3,
-          ),
-        ),
-
-        RadarChartWidget(state: false,),
         Center(
           child: MainTextButton(
             text: "영양 기록하기",
-            style: AppTextStyle.PD(
-                Colors.white, 16,
-                weight: FW.medium),
+            style: AppTextStyle.PD(Colors.white, 16, weight: FW.medium),
             width: 185,
             height: 40,
             radius: 6,
-            onPressed: () async{
-
-              final info= await httpService.getChildMonths();
-              var months=info["data"]["month"];
+            onPressed: () async {
+              final info = await httpService.getChildMonths();
+              var months = info["data"]["month"];
 
               //132개월 초과 자녀(만 11세) , 자녀 분기
-              if(months>132){
+              if (months > 132) {
                 showDialog<String>(
                   context: context,
                   builder: (BuildContext context) => AlertDialog(
                     title: const Text(''),
-                    titleTextStyle: AppTextStyle.PD(Colors.black, 18, weight: FW.semi_bold),
-                    content: Text('청소년용 모니터링\n서비스는 추후에\n제공될 예정입니다.',textAlign: TextAlign.center,style: TextStyle(height: 1.3),),
-                    contentTextStyle: AppTextStyle.PD(Colors.black, 18, weight: FW.regular),
+                    titleTextStyle:
+                        AppTextStyle.PD(Colors.black, 18, weight: FW.semi_bold),
+                    content: Text(
+                      '청소년용 모니터링\n서비스는 추후에\n제공될 예정입니다.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(height: 1.3),
+                    ),
+                    contentTextStyle:
+                        AppTextStyle.PD(Colors.black, 18, weight: FW.regular),
                     actions: <Widget>[
                       TextButton(
                         onPressed: () => Navigator.pop(context, 'Cancel'),
                         child: const Text('닫기'),
                       ),
-
                     ],
                   ),
                 );
-              }else if(months>12){
+              } else if (months > 12) {
                 //12개월 초과 자녀
-                Navigator.push(context, SlideRightTransRoute(
-                    builder: (context) => MonitoringFoodResult()));
-              }
-              else{
+                Navigator.push(
+                    context,
+                    SlideRightTransRoute(
+                        builder: (context) => MonitoringFoodResult()));
+              } else {
                 //12개월 이하 자녀
-                Navigator.push(context, SlideRightTransRoute(
-                    builder: (context) => MonitoringFoodResultReplace(months: months)));
+                Navigator.push(
+                    context,
+                    SlideRightTransRoute(
+                        builder: (context) =>
+                            MonitoringFoodResultReplace(months: months)));
               }
-
             },
           ),
         ),
@@ -629,9 +699,9 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
 
   Widget _body() {
     final p = Provider.of<GlobalProvider>(context, listen: false).profile;
-    if(tabIndex == 0) {
+    if (tabIndex == 0) {
       return monitorFood();
-    } else if (tabIndex ==1) {
+    } else if (tabIndex == 1) {
       return monitorDev(p!);
     } else {
       return monitorNote(p!);
@@ -661,7 +731,8 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
             Expanded(
               child: Container(
                 margin: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: SingleChildScrollView(child: Column(
+                child: SingleChildScrollView(
+                    child: Column(
                   children: [
                     const SizedBox(height: 20),
                     _body(),
@@ -674,4 +745,3 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
         ));
   }
 }
-

@@ -41,7 +41,7 @@ class _FoodWriteListState extends BaseState<FoodWriteList> {
     "_milk",
   ];
   List<Map<String, FoodItem>> foodAllList = [];
-  List<FoodItem> foodList= [];
+  List<FoodItem> foodList = [];
   List<String> standardImages = [];
   ScrollController sc = ScrollController();
   int cateIndex = 0;
@@ -53,7 +53,6 @@ class _FoodWriteListState extends BaseState<FoodWriteList> {
     AppColor_Red,
     AppColor_Primary,
   ];
-
 
   final GlobalKey _tooltipKey = GlobalKey();
   OverlayEntry? _overlayEntry;
@@ -114,8 +113,8 @@ class _FoodWriteListState extends BaseState<FoodWriteList> {
         child: Column(
           children: [
             cateIndex == index
-              ? Image.asset("assets/food${cateName[index]}_on.jpg")
-              : Image.asset("assets/food${cateName[index]}_off.jpg"),
+                ? Image.asset("assets/food${cateName[index]}_on.jpg")
+                : Image.asset("assets/food${cateName[index]}_off.jpg"),
             const SizedBox(height: 15),
             H16(
               text: cateList[index],
@@ -145,11 +144,10 @@ class _FoodWriteListState extends BaseState<FoodWriteList> {
       child: Row(
         children: [
           FutureBuilder(
-            builder: (context, snapshot) =>
-                CachedNetworkImage(
-                    imageUrl: foodList[index].image!,
-                  width: 120,
-                ),
+            builder: (context, snapshot) => CachedNetworkImage(
+              imageUrl: foodList[index].image!,
+              width: 120,
+            ),
           ),
           Expanded(
             child: Column(
@@ -157,10 +155,11 @@ class _FoodWriteListState extends BaseState<FoodWriteList> {
               children: [
                 Container(
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(18.0),
-                      color: colorList[cateIndex],
+                    borderRadius: BorderRadius.circular(18.0),
+                    color: colorList[cateIndex],
                   ),
-                  padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   // left: 10, right: 10, top: 20, bottom: 20),
                   child: H18(
                     text: foodList[index].name!,
@@ -194,7 +193,10 @@ class _FoodWriteListState extends BaseState<FoodWriteList> {
                           ],
                         ),
                         child: const Center(
-                          child: Icon(Icons.remove_rounded, color: AppColor_GrayText,),
+                          child: Icon(
+                            Icons.remove_rounded,
+                            color: AppColor_GrayText,
+                          ),
                         ),
                       ),
                     ),
@@ -223,7 +225,10 @@ class _FoodWriteListState extends BaseState<FoodWriteList> {
                           ],
                         ),
                         child: const Center(
-                          child: Icon(Icons.add_rounded, color: AppColor_GrayText,),
+                          child: Icon(
+                            Icons.add_rounded,
+                            color: AppColor_GrayText,
+                          ),
                         ),
                       ),
                     ),
@@ -240,7 +245,8 @@ class _FoodWriteListState extends BaseState<FoodWriteList> {
   void _showTooltip(second, img) {
     if (_overlayEntry != null) return;
 
-    RenderBox? renderBox = _tooltipKey.currentContext?.findRenderObject() as RenderBox?;
+    RenderBox? renderBox =
+        _tooltipKey.currentContext?.findRenderObject() as RenderBox?;
     if (renderBox == null) return;
 
     final buttonSize = renderBox.size;
@@ -259,9 +265,9 @@ class _FoodWriteListState extends BaseState<FoodWriteList> {
           child: Material(
             type: MaterialType.transparency,
             child: Container(
-                color: Colors.grey.withOpacity(0.5),
-                width: screenWidth,
-                height: screenHeight,
+              color: Colors.grey.withOpacity(0.5),
+              width: screenWidth,
+              height: screenHeight,
               child: Center(
                 child: InkWell(
                   onTap: () {
@@ -279,9 +285,10 @@ class _FoodWriteListState extends BaseState<FoodWriteList> {
                     child: SingleChildScrollView(
                       child: second
                           ? FutureBuilder(
-                        builder: (context, snapshot) {
-                            return CachedNetworkImage(imageUrl: img);
-                      },)
+                              builder: (context, snapshot) {
+                                return CachedNetworkImage(imageUrl: img);
+                              },
+                            )
                           : Image.asset(img),
                     ),
                   ),
@@ -311,14 +318,14 @@ class _FoodWriteListState extends BaseState<FoodWriteList> {
     }
 
     String result = jsonEncode(countList);
-    print(result);
-    Future<FoodRadarchartModel> insert = httpService.saveFoodWriteList(result);
+    Future<DefaultResModel> insert = httpService.saveFoodWriteList(result);
     await insert.then((value) async {
       setState(() {
         isLoading = false;
       });
       if (value.result == 0) {
-        Provider.of<FoodResultProvider>(context).setDataProvider(value.data!);
+        // Provider.of<FoodResultProvider>(context).setDataProvider(value.data!);
+        showToast("저장되었습니다.");
         Navigator.pop(context);
       }
     }).catchError((onError) {
@@ -335,18 +342,18 @@ class _FoodWriteListState extends BaseState<FoodWriteList> {
   Widget build(BuildContext context) {
     return PageLayout(
         child: Column(
-          children: [
-            SimpleHeader(
-              onBackPressed: onBackPressed,
-              title: "영양모니터링",
-            ),
+      children: [
+        SimpleHeader(
+          onBackPressed: onBackPressed,
+          title: "영양모니터링",
+        ),
         Expanded(
           child: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(20.0),
               child: Column(
                 children: [
-                  Container(
+                  SizedBox(
                     height: 120,
                     child: ListView.builder(
                       physics: const NeverScrollableScrollPhysics(),
@@ -384,7 +391,8 @@ class _FoodWriteListState extends BaseState<FoodWriteList> {
                         visible: cateIndex == 0,
                         child: InkWell(
                           onTap: () {
-                            _showTooltip(false, "assets/food_tooltip_second.jpg");
+                            _showTooltip(
+                                false, "assets/food_tooltip_second.jpg");
                           },
                           child: Container(
                             // key: _tooltipKey,
@@ -406,7 +414,7 @@ class _FoodWriteListState extends BaseState<FoodWriteList> {
                       ),
                     ],
                   ),
-                  Container(
+                  SizedBox(
                     height: foodList.length * 210,
                     width: MediaQuery.of(context).size.width - 64,
                     child: ListView.builder(
@@ -420,7 +428,8 @@ class _FoodWriteListState extends BaseState<FoodWriteList> {
                   Center(
                     child: MainTextButton(
                       text: "식단 기록하기",
-                      style: AppTextStyle.PD(Colors.white, 16, weight: FW.medium),
+                      style:
+                          AppTextStyle.PD(Colors.white, 16, weight: FW.medium),
                       backgroundColor: colorList[cateIndex],
                       width: 185,
                       height: 40,
@@ -437,7 +446,6 @@ class _FoodWriteListState extends BaseState<FoodWriteList> {
           ),
         )
       ],
-    )
-    );
+    ));
   }
 }

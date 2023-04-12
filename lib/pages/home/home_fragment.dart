@@ -7,40 +7,22 @@ import 'package:ourdoctor/global/http_service.dart';
 import 'package:ourdoctor/helpers/common_util.dart';
 import 'package:ourdoctor/helpers/transition.dart';
 import 'package:ourdoctor/language/language_service.dart';
-import 'package:ourdoctor/models/home_data_res_model.dart';
 import 'package:ourdoctor/models/home_monitor_res_model.dart';
 import 'package:ourdoctor/models/homecare_data_res_model.dart';
-import 'package:ourdoctor/pages/app_event.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
 import 'package:ourdoctor/pages/base/page_layout.dart';
 import 'package:ourdoctor/pages/care/product_show.dart';
-import 'package:ourdoctor/pages/community/community_search.dart';
-import 'package:ourdoctor/pages/components/h14.dart';
-import 'package:ourdoctor/pages/components/h20.dart';
-import 'package:ourdoctor/pages/components/noline_input.dart';
 import 'package:ourdoctor/pages/home/banner_area.dart';
-import 'package:ourdoctor/pages/home/community_area.dart';
-import 'package:ourdoctor/pages/home/developmental_class_area.dart';
-import 'package:ourdoctor/pages/home/growth_store_area.dart';
 import 'package:ourdoctor/pages/home/news_area.dart';
-import 'package:ourdoctor/pages/home/quiz_area.dart';
-import 'package:ourdoctor/pages/home/radar_chart.dart';
-import 'package:ourdoctor/pages/home/report_area.dart';
 import 'package:ourdoctor/pages/home/review_dialog.dart';
 import 'package:ourdoctor/pages/home/school_area.dart';
 import 'package:ourdoctor/pages/home/talk_area.dart';
 import 'package:ourdoctor/pages/home/top_area.dart';
 import 'package:ourdoctor/pages/home/weather_area.dart';
 import 'package:ourdoctor/pages/intro/first.dart';
-import 'package:ourdoctor/pages/monitoring/solution_area.dart';
 import 'package:ourdoctor/provider/convert_score_provider.dart';
-import 'package:ourdoctor/provider/monitoring_note_profile_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:show_more_text_popup/show_more_text_popup.dart';
-
-import 'circular_progress.dart';
-import 'community_area_monitor.dart';
-import 'info_area.dart';
 
 class HomeFragment extends StatefulWidget {
   @override
@@ -69,11 +51,10 @@ class HomeFragmentState extends BaseState<HomeFragment> {
         width: 200,
         backgroundColor: Colors.white,
         padding: EdgeInsets.symmetric(horizontal: 4, vertical: 10),
-        borderRadius: BorderRadius.circular(10.0),
-        onDismiss: () {
-          // ScaffoldMessenger.of(context)
-          //     .showSnackBar(SnackBar(content: Text("Dismiss callback!")));
-        });
+        borderRadius: BorderRadius.circular(10.0), onDismiss: () {
+      // ScaffoldMessenger.of(context)
+      //     .showSnackBar(SnackBar(content: Text("Dismiss callback!")));
+    });
 
     /// show the popup for specific widget
     popup.show(
@@ -97,15 +78,14 @@ class HomeFragmentState extends BaseState<HomeFragment> {
   void showReviewDialog() async {
     Future.delayed(
         const Duration(seconds: 1),
-            () =>
-        {
-          showDialog(
-              barrierDismissible: false,
-              context: context,
-              builder: (BuildContext context) {
-                return const ReviewDialog();
-              })
-        });
+        () => {
+              showDialog(
+                  barrierDismissible: false,
+                  context: context,
+                  builder: (BuildContext context) {
+                    return const ReviewDialog();
+                  })
+            });
   }
 
   void onChooseCategory(int index) {
@@ -114,7 +94,6 @@ class HomeFragmentState extends BaseState<HomeFragment> {
       category = index;
     });
   }
-
 
   // Network functions
   //////////////////////////////////
@@ -155,7 +134,7 @@ class HomeFragmentState extends BaseState<HomeFragment> {
     });
 
     Future<HomeCareDataResModel> info =
-    httpService.homecareDataInfo(category == 0 ? "GROWTH" : "DEVELOPMENT");
+        httpService.homecareDataInfo(category == 0 ? "GROWTH" : "DEVELOPMENT");
     info.then((HomeCareDataResModel value) async {
       setState(() {
         isLoading = false;
@@ -180,11 +159,10 @@ class HomeFragmentState extends BaseState<HomeFragment> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     final p = Provider.of<ConvertScoreProvider>(context, listen: false);
-    p.changeCareTab(1);
+    p.changeCareTab(0);
     return PageLayout(
         isLoading: isLoading,
         child: Stack(
@@ -200,22 +178,29 @@ class HomeFragmentState extends BaseState<HomeFragment> {
                     const SizedBox(height: 30),
                     const BannerArea(),
                     // searchBar(),
-                    const SizedBox(height: 30,),
+                    const SizedBox(
+                      height: 30,
+                    ),
                     WeatherArea(),
                     const SizedBox(height: 50),
-                    TalkArea(board: 0,),// 질문 게시판
+                    TalkArea(
+                      board: 0,
+                    ), // 질문 게시판
                     const SizedBox(height: 50),
-                    TalkArea(board: 1,),// 자유 게시판
+                    TalkArea(
+                      board: 1,
+                    ), // 자유 게시판
                     const SizedBox(height: 10),
                     // QuizArea(),//질문
                     // const SizedBox(height: 50),
-                    NewsArea(curCategory: 1),//뉴스
+                    NewsArea(curCategory: 1), //뉴스
                     const SizedBox(height: 50),
-                    SchoolArea(curCategory: 2),//교육
+                    SchoolArea(curCategory: 2), //교육
                     const SizedBox(height: 50),
                     // CommunityArea(curCategory: 0), //우아팁
                     // const SizedBox(height: 50),
-                    ProductShow(//발달클래스
+                    ProductShow(
+                        //발달클래스
                         category: category,
                         title: "우아 클래스",
                         list: arrLikeList),
@@ -237,10 +222,15 @@ class HomeFragmentState extends BaseState<HomeFragment> {
                     elevation: 0,
                     backgroundColor: AppColor_Primary,
                     shape: const CircleBorder(),
-                    onPressed: (){
-                      sc.animateTo(0, duration: const Duration(milliseconds: 500), curve: Curves.easeOut);
+                    onPressed: () {
+                      sc.animateTo(0,
+                          duration: const Duration(milliseconds: 500),
+                          curve: Curves.easeOut);
                     },
-                    child: const Icon(Icons.arrow_upward_rounded, size: 30,),
+                    child: const Icon(
+                      Icons.arrow_upward_rounded,
+                      size: 30,
+                    ),
                   ),
                 ),
                 right: 12,
@@ -250,7 +240,4 @@ class HomeFragmentState extends BaseState<HomeFragment> {
           ],
         ));
   }
-
 }
-
-
