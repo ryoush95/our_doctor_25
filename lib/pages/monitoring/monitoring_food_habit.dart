@@ -7,7 +7,6 @@ import 'package:ourdoctor/global/global.dart';
 import 'package:ourdoctor/global/http_service.dart';
 import 'package:ourdoctor/helpers/transition.dart';
 import 'package:ourdoctor/models/monitoring/food_habits_result_model.dart';
-import 'package:ourdoctor/models/monitoring/food_home_model.dart';
 import 'package:ourdoctor/models/monitoring/note_profile_model.dart';
 import 'package:ourdoctor/pages/components/h14.dart';
 import 'package:ourdoctor/pages/components/h16.dart';
@@ -27,8 +26,9 @@ class MonitoringFoodHabit extends StatefulWidget {
 class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
   HttpService httpService = HttpService();
   bool isLoading = false;
-  List<dynamic> commentsList = []; //코멘트
-  List<String> missionResults = []; //미션
+  List<Comment> commentsList = []; //코멘트
+  List<String> missionKeys = []; //미션키
+  List<Mission> missionList = []; //미션
   MonitoringProfileDto? data;
   bool isChecked = false;
 
@@ -44,16 +44,14 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
     info.then((FoodHabitModel value) {
       if (value.data!.comments!.isNotEmpty) {
         setState(() {
-          isChecked=true;
+          isChecked = true;
         });
-        for (int i = 0; i < value.data!.comments!.length; i++) {
-          commentsList.add(value.data!.comments![i]);
-        }
-        Map<String, dynamic>? mission_temp = value.data!.missions;
-        mission_temp!.values.forEach((element) => missionResults.add(element));
-      }else {
+        commentsList = value.data!.comments!.values.toList();
+        missionKeys = value.data!.missions!.keys.toList();
+        missionList = value.data!.missions!.values.toList();
+      } else {
         setState(() {
-          isChecked=false;
+          isChecked = false;
         });
       }
       setState(() {});
@@ -78,7 +76,7 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
     );
   }
 
-  Widget pageItem(index, comment) {
+  Widget pageItem(index, Comment comment) {
     return Column(
       children: [
         Row(
@@ -98,7 +96,7 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
                     width: MediaQuery.of(context).size.width - 130,
                     padding: const EdgeInsets.symmetric(vertical: 10.0),
                     child: H16(
-                      text: comment['title'],
+                      text: comment.title!,
                       height: 1.3,
                       maxLine: 2,
                       align: TextAlign.start,
@@ -110,7 +108,7 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
                       weight: FW.regular,
                       color: AppColor_707071,
                       height: 1.3,
-                      text: comment['content'],
+                      text: comment.content!,
                       maxLine: 99,
                       align: TextAlign.start,
                     ),
@@ -126,7 +124,7 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
 
   Widget page1Item(index) {
     return SizedBox(
-      height: 90,
+      height: 100,
       child: Column(
         children: [
           Row(
@@ -145,7 +143,7 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
                   Row(
                     children: [
                       H14(
-                        text: missionResults[index],
+                        text: missionList[index].text!,
                         height: 1.3,
                         weight: FW.bold,
                       ),
@@ -298,10 +296,10 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
             const Divider(),
             if (isChecked)
               SizedBox(
-                height: missionResults.length * 90,
+                height: missionList.length * 100,
                 child: ListView.builder(
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: missionResults.length,
+                  itemCount: missionList.length,
                   itemBuilder: (context, index) {
                     return page1Item(index);
                   },

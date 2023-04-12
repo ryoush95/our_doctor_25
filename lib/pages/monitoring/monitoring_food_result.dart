@@ -102,6 +102,9 @@ class _MonitoringFoodResultState extends BaseState<MonitoringFoodResult> {
       child: GestureDetector(
         behavior: HitTestBehavior.translucent,
         onTap: () {
+          if (index == 0) {
+            getFoodHomeData();
+          }
           setState(() {
             cateIndex = index;
           });
@@ -372,9 +375,9 @@ class _MonitoringFoodResultState extends BaseState<MonitoringFoodResult> {
                 const SizedBox(height: 20),
                 foodHome!.food == null || foodHome!.food!.isEmpty
                     ? SizedBox(
-                    height: 50,
-                    child: Center(child: H16(text: "아직 검사기록이 없습니다.")),
-                )
+                        height: 50,
+                        child: Center(child: H16(text: "아직 검사기록이 없습니다.")),
+                      )
                     : SizedBox(
                         height: 150,
                         child: ListView.builder(
@@ -416,7 +419,8 @@ class _MonitoringFoodResultState extends BaseState<MonitoringFoodResult> {
                                                   text: foodHome!
                                                           .food![
                                                               foodList[index]]!
-                                                          .text ?? "없음",
+                                                          .text ??
+                                                      "없음",
                                                   color: Colors.white,
                                                 )),
                                               ],

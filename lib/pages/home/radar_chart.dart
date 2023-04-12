@@ -342,9 +342,8 @@ class _RadarChartWidgetState extends State<RadarChartWidget> {
                           SlideRightTransRoute(
                               builder: (context) => FoodWriteList()),
                         );
-                        print(result);
+
                         if (result) {
-                          print("refresh");
                           getChartData();
                         }
                       },
