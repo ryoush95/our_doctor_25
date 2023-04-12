@@ -48,8 +48,7 @@ class _BannerAreaState extends State<BannerArea> {
     await info.then((HomeBannerModel value) async {
       if (value.result == 0) {
         setState(() {
-          bannerList = value.data!;
-          print(bannerList);
+          bannerList = value.data!.values.toList();
         });
       } else {
         if (value.result != 106) {

@@ -1856,7 +1856,6 @@ class HttpService {
       return FoodListMonitorModel.fromJson(json.decode(response.body));
     } else {
       // If that call was not successful, throw an error.
-      print(response.statusCode);
       showToast(LanguageService.trans("server_fail"));
       throw Exception(LanguageService.trans("server_fail"));
     }
@@ -2012,11 +2011,9 @@ class HttpService {
       'normal_score' : normal_score,
       'control_score' : control_score,
     };
-    print(body);
     Uri myUri = Uri.parse(_url);
     final response = await http.post(myUri, body: body);
     if (response.statusCode == 200) {
-      print("success");
       return DefaultResModel.fromJson(json.decode(response.body));
     } else {
       // If that call was not successful, throw an error.
@@ -2190,6 +2187,25 @@ class HttpService {
     final response = await http.post(myUri, body: body);
     if (response.statusCode == 200) {
       return HomeGraphWeightResModel.fromJson(json.decode(response.body));
+    } else {
+      // If that call was not successful, throw an error.
+      showToast(LanguageService.trans("server_fail"));
+      throw Exception(LanguageService.trans("server_fail"));
+    }
+  }
+
+  // 영양 모니터링 미션 완료
+  Future<DefaultResModel> missionComplete(missionId) async {
+    String _url = API_BASE_URL + "api/monitoring/mission_complete";
+
+    Map<String, String> body = {
+      'access_token': gUserInfo!.accessToken!,
+      'mission_id' : missionId,
+    };
+    Uri myUri = Uri.parse(_url);
+    final response = await http.post(myUri, body: body);
+    if (response.statusCode == 200) {
+      return DefaultResModel.fromJson(json.decode(response.body));
     } else {
       // If that call was not successful, throw an error.
       showToast(LanguageService.trans("server_fail"));
@@ -2867,7 +2883,6 @@ class HttpService {
       'score': score,
     };
     Uri myUri = Uri.parse(_url);
-    print(body);
     final response = await http.post(myUri, body: body);
     if (response.statusCode == 200) {
       return DefaultResModel.fromJson(json.decode(response.body));
@@ -2965,9 +2980,7 @@ class HttpService {
   //홈 그래프 생활습관
   Future<HomeGraphLifeStyleResModel> homeGraphLifeStyle1(String month) async {
     String _url = API_BASE_URL + "api/Monitor2/home_graph_lifestyle2";
-    print(gUserInfo!.accessToken!);
     Map<String, String> body = {'access_token': gUserInfo!.accessToken!, 'month': month};
-    log(gUserInfo!.accessToken!);
     Uri myUri = Uri.parse(_url);
     final response = await http.post(myUri, body: body);
     if (response.statusCode == 200) {
