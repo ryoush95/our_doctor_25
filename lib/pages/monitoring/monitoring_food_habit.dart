@@ -7,6 +7,7 @@ import 'package:ourdoctor/global/global.dart';
 import 'package:ourdoctor/global/http_service.dart';
 import 'package:ourdoctor/helpers/transition.dart';
 import 'package:ourdoctor/models/monitoring/food_habits_result_model.dart';
+import 'package:ourdoctor/models/monitoring/food_home_model.dart';
 import 'package:ourdoctor/models/monitoring/note_profile_model.dart';
 import 'package:ourdoctor/pages/components/h14.dart';
 import 'package:ourdoctor/pages/components/h16.dart';
@@ -14,9 +15,7 @@ import 'package:ourdoctor/pages/components/h18.dart';
 import 'package:ourdoctor/pages/components/main_text_button.dart';
 import 'package:ourdoctor/provider/global_provider.dart';
 import 'package:provider/provider.dart';
-
 import 'monitoring_food_test1.dart';
-import 'monitoring_food_test2.dart';
 
 class MonitoringFoodHabit extends StatefulWidget {
   const MonitoringFoodHabit({Key? key}) : super(key: key);
@@ -35,39 +34,27 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
 
   @override
   void initState() {
-    checkUserFoodTested();
     getFoodHabitResult();
     super.initState();
-  }
-
-  Future<void> checkUserFoodTested() async {
-    final p = Provider.of<GlobalProvider>(context, listen: false);
-    await p.getNoteInfo(context);
-    data = p.profile;
-    if (data!.food != null) {
-      //TODO 현재 데이터 없어서 분기처리 반대로 했음 추후 수정필요함
-      setState(() {
-        isChecked = false;
-      });
-      // } else {
-      //   setState(() {
-      //     isChecked = true;
-      //   });
-    }
   }
 
   Future<void> getFoodHabitResult() async {
     Future<FoodHabitModel> info = httpService.getFoodHabitResults();
 
     info.then((FoodHabitModel value) {
-      if (value.data != null) {
-        isChecked = true;
+      if (value.data!.comments!.isNotEmpty) {
+        setState(() {
+          isChecked=true;
+        });
         for (int i = 0; i < value.data!.comments!.length; i++) {
           commentsList.add(value.data!.comments![i]);
         }
-        for (int i = 1; i < value.data!.missions!.length + 1; i++) {
-          // missionResults.add(value.data!.missions!['$i']['text']);
-        }
+        Map<String, dynamic>? mission_temp = value.data!.missions;
+        mission_temp!.values.forEach((element) => missionResults.add(element));
+      }else {
+        setState(() {
+          isChecked=false;
+        });
       }
       setState(() {});
     }).catchError((onError) {
@@ -209,7 +196,7 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
               padding: const EdgeInsets.symmetric(vertical: 30),
               child: H18(
                 height: isChecked ? 1.0 : 1.3,
-                weight: isChecked ? FW.bold : FW.regular,
+                weight: FW.bold,
                 text: isChecked
                     ? "식습관 분석을 완료했어요!"
                     : "우리 아이의 냠냠 습관은 어떤가요?\n식습관과 문제행동을 체크해 보고,\n 더 건강한 냠냠습관을 가져 보세요.",
