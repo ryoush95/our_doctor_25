@@ -104,7 +104,7 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
                       align: TextAlign.start,
                     ),
                   ),
-                  Container(
+                  SizedBox(
                     width: MediaQuery.of(context).size.width - 130,
                     child: H14(
                       weight: FW.regular,
@@ -145,7 +145,7 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
                   Row(
                     children: [
                       H14(
-                        text: "${missionResults[index]}",
+                        text: missionResults[index],
                         height: 1.3,
                         weight: FW.bold,
                       ),
@@ -297,8 +297,8 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
             ),
             const Divider(),
             if (isChecked)
-              Container(
-                height: missionResults.length * 100,
+              SizedBox(
+                height: missionResults.length * 90,
                 child: ListView.builder(
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: missionResults.length,

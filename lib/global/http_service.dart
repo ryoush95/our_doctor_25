@@ -127,7 +127,8 @@ class HttpService {
   }
 
   //로그인
-  Future<LoginResModel> login(String name, String pwd, String token, String area, String hospital) async {
+  Future<LoginResModel> login(String name, String pwd, String token,
+      String area, String hospital) async {
     String _url = API_BASE_URL + "api/user/login";
     String devtype = "";
     if (Platform.isAndroid) {
@@ -156,7 +157,8 @@ class HttpService {
   }
 
   //로그인
-  Future<LoginResModel> login2(String id, String pwd, String type, String token) async {
+  Future<LoginResModel> login2(
+      String id, String pwd, String type, String token) async {
     String _url = API_BASE_URL + "api/user/login2";
     String devtype = "";
     if (Platform.isAndroid) {
@@ -183,7 +185,8 @@ class HttpService {
     }
   }
 
-  Future<LoginResModel> login3(String id, String pwd, String type, String token) async {
+  Future<LoginResModel> login3(
+      String id, String pwd, String type, String token) async {
     String _url = API_BASE_URL + "api/user/login3";
     String devtype = "";
     if (Platform.isAndroid) {
@@ -238,7 +241,7 @@ class HttpService {
     }
 
     Map<String, String> body = {
-      'platform' : devtype,
+      'platform': devtype,
     };
     Uri myUri = Uri.parse(_url);
     final response = await http.post(myUri, body: body);
@@ -321,7 +324,8 @@ class HttpService {
   }
 
   //order추가
-  Future<DefaultResModel> addOrder(String address, String uaPoint, String payMethod, String pList, String fee) async {
+  Future<DefaultResModel> addOrder(String address, String uaPoint,
+      String payMethod, String pList, String fee) async {
     String _url = API_BASE_URL + "api/order/new";
     Map<String, String> body = {
       'access_token': gUserInfo!.accessToken!,
@@ -343,9 +347,15 @@ class HttpService {
   }
 
   //favorite product얻기
-  Future<ProductListResModel> getFavoriteList(String start, String length) async {
+  Future<ProductListResModel> getFavoriteList(
+      String start, String length) async {
     String _url = API_BASE_URL + "api/product/list";
-    Map<String, String> body = {'access_token': gUserInfo!.accessToken!, 'only_like': "1", 'start': start, 'length': length};
+    Map<String, String> body = {
+      'access_token': gUserInfo!.accessToken!,
+      'only_like': "1",
+      'start': start,
+      'length': length
+    };
     Uri myUri = Uri.parse(_url);
     final response = await http.post(myUri, body: body);
     if (response.statusCode == 200) {
@@ -358,9 +368,15 @@ class HttpService {
   }
 
   //review 목록얻기
-  Future<ReviewListResModel> getReviews(String status, String start, String length) async {
+  Future<ReviewListResModel> getReviews(
+      String status, String start, String length) async {
     String _url = API_BASE_URL + "api/review/review_products";
-    Map<String, String> body = {'access_token': gUserInfo!.accessToken!, 'status': status, 'start': start, 'length': length};
+    Map<String, String> body = {
+      'access_token': gUserInfo!.accessToken!,
+      'status': status,
+      'start': start,
+      'length': length
+    };
     Uri myUri = Uri.parse(_url);
     final response = await http.post(myUri, body: body);
     if (response.statusCode == 200) {
@@ -391,7 +407,8 @@ class HttpService {
   }
 
   //review 쓰기
-  Future<ProductReviewWriteResModel> writeReview(String pid, String rating, String text, String photos) async {
+  Future<ProductReviewWriteResModel> writeReview(
+      String pid, String rating, String text, String photos) async {
     String _url = API_BASE_URL + "api/ProductReview/write_review";
     Map<String, String> body = {
       'access_token': gUserInfo!.accessToken!,
@@ -430,7 +447,8 @@ class HttpService {
   }
 
   //review 수정
-  Future<DefaultResModel> editReview(String reviewId, String rating, String text, String photos) async {
+  Future<DefaultResModel> editReview(
+      String reviewId, String rating, String text, String photos) async {
     String _url = API_BASE_URL + "api/ProductReview/edit";
     Map<String, String> body = {
       'access_token': gUserInfo!.accessToken!,
@@ -506,13 +524,18 @@ class HttpService {
   Future<FileUploadResModel> uploadFile(File uploadFile) async {
     late MultipartFile multipartFile;
     if (uploadFile != null) {
-      final mimeTypeData = lookupMimeType(uploadFile.path, headerBytes: [0xFF, 0xD8])!.split('/');
-      multipartFile = await MultipartFile.fromFile(uploadFile.path, filename: basename(uploadFile.path), contentType: MediaType(mimeTypeData[0], mimeTypeData[1]));
+      final mimeTypeData =
+          lookupMimeType(uploadFile.path, headerBytes: [0xFF, 0xD8])!
+              .split('/');
+      multipartFile = await MultipartFile.fromFile(uploadFile.path,
+          filename: basename(uploadFile.path),
+          contentType: MediaType(mimeTypeData[0], mimeTypeData[1]));
     }
     var dio = Dio();
     FormData formData = FormData.fromMap({'uploadfile': multipartFile});
     dio.options.baseUrl = API_BASE_URL + "api/common/upload_file";
-    final response = await dio.post(API_BASE_URL + "api/common/upload_file", data: formData);
+    final response =
+        await dio.post(API_BASE_URL + "api/common/upload_file", data: formData);
     if (response.statusCode == 200) {
       return FileUploadResModel.fromJson(response.data);
     } else {
@@ -540,7 +563,8 @@ class HttpService {
   }
 
   //story list
-  Future<StoryResModel> storyList(int page, int order, String category, String keyword) async {
+  Future<StoryResModel> storyList(
+      int page, int order, String category, String keyword) async {
     String _url = API_BASE_URL + "api/story/story_list";
     Map<String, String> body = {
       'access_token': gUserInfo!.accessToken!,
@@ -579,7 +603,8 @@ class HttpService {
   }
 
   //faq list
-  Future<FaqResModel> faqList(int page, int order, String category, String keyword) async {
+  Future<FaqResModel> faqList(
+      int page, int order, String category, String keyword) async {
     String _url = API_BASE_URL + "api/Story/faq_list";
     Map<String, String> body = {
       'access_token': gUserInfo!.accessToken!,
@@ -618,15 +643,16 @@ class HttpService {
   }
 
   //정보수정
-  Future<DefaultResModel> userEdit(String phone_relation, String address, String disease, String prescription, String profile_img_url) async {
+  Future<DefaultResModel> userEdit(String phoneRelation, String address,
+      String disease, String prescription, String profileImgUrl) async {
     String _url = API_BASE_URL + "api/user/change_profile";
     Map<String, String> body = {
       'access_token': gUserInfo!.accessToken!,
-      'phone_relation': phone_relation,
+      'phone_relation': phoneRelation,
       'address': address,
       'disease': disease,
       'prescription': prescription,
-      'profile_img_url': profile_img_url,
+      'profile_img_url': profileImgUrl,
     };
     Uri myUri = Uri.parse(_url);
     final response = await http.post(myUri, body: body);
@@ -675,7 +701,15 @@ class HttpService {
   }
 
   //monitor 쓰기
-  Future<MonitorWriteResModel> monitorWrite(String datetime, String uid, String temperature, String oxygen, String heart_cnt, String symptom, String pill_url, String speciality) async {
+  Future<MonitorWriteResModel> monitorWrite(
+      String datetime,
+      String uid,
+      String temperature,
+      String oxygen,
+      String heartCnt,
+      String symptom,
+      String pillUrl,
+      String speciality) async {
     String _url = API_BASE_URL + "api/monitor/write";
     Map<String, String> body = {
       'access_token': gUserInfo!.accessToken!,
@@ -683,9 +717,9 @@ class HttpService {
       'uid': uid,
       'temperature': temperature,
       'oxygen': oxygen,
-      'heart_cnt': heart_cnt,
+      'heart_cnt': heartCnt,
       'symptom': symptom,
-      'pill_url': pill_url,
+      'pill_url': pillUrl,
       'speciality': speciality,
     };
     Uri myUri = Uri.parse(_url);
@@ -736,7 +770,23 @@ class HttpService {
   }
 
   //회원가입 사용안함
-  Future<SignupParentResModel> signup2(String id, String pwd, String type, String token, String name, String birth, String phone, String code, String addr1, String addr2, String dad_height, String mom_height, String family_history, String child_list, String realtion, String alarm) async {
+  Future<SignupParentResModel> signup2(
+      String id,
+      String pwd,
+      String type,
+      String token,
+      String name,
+      String birth,
+      String phone,
+      String code,
+      String addr1,
+      String addr2,
+      String dadHeight,
+      String momHeight,
+      String familyHistory,
+      String childList,
+      String realtion,
+      String alarm) async {
     String _url = API_BASE_URL + "api/user/signup2";
     String devtype = "";
     if (Platform.isAndroid) {
@@ -756,12 +806,12 @@ class HttpService {
       'postcode': code == "" ? "code" : code,
       'address': addr1 == "" ? "addr1" : addr1,
       'address_detail': addr2 == "" ? "addr2" : addr2,
-      'dad_height': dad_height,
+      'dad_height': dadHeight,
       // 'dad_weight': dad_weight,
-      'mom_kidney': mom_height,
+      'mom_kidney': momHeight,
       // 'mom_weight': mom_weight,
-      'family_history': family_history,
-      'child_list': child_list,
+      'family_history': familyHistory,
+      'child_list': childList,
       'relation': realtion,
       'alarm_yn': alarm,
     };
@@ -777,7 +827,24 @@ class HttpService {
   }
 
   //회원가입 부모회원가입 적용
-  Future<SignupParentResModel> signup3(String id, String pwd, String type, String token, String name, String birth, String phone, String code, String addr1, String addr2, String dad_height, String mom_height, String family_history, String child_list, String realtion, String nickname, String alarm) async {
+  Future<SignupParentResModel> signup3(
+      String id,
+      String pwd,
+      String type,
+      String token,
+      String name,
+      String birth,
+      String phone,
+      String code,
+      String addr1,
+      String addr2,
+      String dadHeight,
+      String momHeight,
+      String familyHistory,
+      String childList,
+      String realtion,
+      String nickname,
+      String alarm) async {
     String _url = API_BASE_URL + "api/user/signup2";
     String devtype = "";
     if (Platform.isAndroid) {
@@ -798,15 +865,15 @@ class HttpService {
       'address': addr1,
       'address_detail': addr2,
       'child_relation': realtion,
-      'dad_height': dad_height,
+      'dad_height': dadHeight,
       // 'dad_weight': dad_weight,
-      'mom_height': mom_height,
+      'mom_height': momHeight,
       // 'mom_weight': mom_weight,
-      'family_history': family_history,
-      'child_list': child_list,
+      'family_history': familyHistory,
+      'child_list': childList,
       'nickname': nickname,
-      'alarm_yn' : alarm,
-      'system_alarm_yn' : 'y',
+      'alarm_yn': alarm,
+      'system_alarm_yn': 'y',
     };
     Uri myUri = Uri.parse(_url);
     final response = await http.post(myUri, body: body);
@@ -820,17 +887,31 @@ class HttpService {
   }
 
   Future<DefaultResModel> addChildren2(
-      String access_token, String uid, String name, int gender, String height, String weight, String birthday, String medical_history, String testdate, String address1, String address2, String address3, String hospitalId, String relationship, String profileImage) async {
+      String accessToken,
+      String uid,
+      String name,
+      int gender,
+      String height,
+      String weight,
+      String birthday,
+      String medicalHistory,
+      String testdate,
+      String address1,
+      String address2,
+      String address3,
+      String hospitalId,
+      String relationship,
+      String profileImage) async {
     String _url = API_BASE_URL + "api/user/add_child2";
     Map<String, String> body = {
-      'access_token': access_token,
+      'access_token': accessToken,
       'uid': uid,
       'name': name,
       'gender': gender.toString(),
       'height': height,
       'weight': weight,
       'birth': birthday,
-      'medical_history': medical_history,
+      'medical_history': medicalHistory,
       'confirmed_date': testdate,
       'postcode': address1 == "" ? "address1" : address1,
       'address': address2 == "" ? "address2" : address2,
@@ -850,17 +931,26 @@ class HttpService {
     }
   }
 
-  Future<AddChildResModel> addChildren3(String access_token, String uid, String name, int gender, String height, String weight, String birthday, String medical_history, String profileImage) async {
+  Future<AddChildResModel> addChildren3(
+      String accessToken,
+      String uid,
+      String name,
+      int gender,
+      String height,
+      String weight,
+      String birthday,
+      String medicalHistory,
+      String profileImage) async {
     String _url = API_BASE_URL + "api/user/add_child2";
     Map<String, String> body = {
-      'access_token': access_token,
+      'access_token': accessToken,
       'uid': uid,
       'name': name,
       'gender': gender.toString(),
       'height': height,
       'weight': weight,
       'birth': birthday,
-      'family_history': medical_history,
+      'family_history': medicalHistory,
       'profile_img': profileImage == "" ? "profileImage" : profileImage,
     };
     Uri myUri = Uri.parse(_url);
@@ -874,17 +964,26 @@ class HttpService {
     }
   }
 
-  Future<DefaultResModel> editChildren3(String access_token, String uid, String name, int gender, String height, String weight, String birthday, String medical_history, String profileImage) async {
+  Future<DefaultResModel> editChildren3(
+      String accessToken,
+      String uid,
+      String name,
+      int gender,
+      String height,
+      String weight,
+      String birthday,
+      String medicalHistory,
+      String profileImage) async {
     String _url = API_BASE_URL + "api/user/add_child2";
     Map<String, String> body = {
-      'access_token': access_token,
+      'access_token': accessToken,
       'uid': uid,
       'name': name,
       'gender': gender.toString(),
       'height': height,
       'weight': weight,
       'birth': birthday,
-      'family_history': medical_history,
+      'family_history': medicalHistory,
       'profile_img': profileImage == "" ? "profileImage" : profileImage,
     };
     Uri myUri = Uri.parse(_url);
@@ -899,7 +998,23 @@ class HttpService {
   }
 
   //회원가입
-  Future<DefaultResModel> signup(String id, String pwd, String type, String token, String name, String birth, int gender, String phone, String date, String postcode, String address1, String address2, String isChild, String alarm, String childList, String hosiptalId) async {
+  Future<DefaultResModel> signup(
+      String id,
+      String pwd,
+      String type,
+      String token,
+      String name,
+      String birth,
+      int gender,
+      String phone,
+      String date,
+      String postcode,
+      String address1,
+      String address2,
+      String isChild,
+      String alarm,
+      String childList,
+      String hosiptalId) async {
     String _url = API_BASE_URL + "api/user/signup";
     String devtype = "";
     if (Platform.isAndroid) {
@@ -923,7 +1038,7 @@ class HttpService {
       'address_detail': address2,
       'add_child': isChild,
       'alarm_yn': alarm,
-      'system_alarm_yn' : 'y',
+      'system_alarm_yn': 'y',
       'child_list': childList,
       'gender': gender.toString(),
       'hospital_id': hosiptalId,
@@ -940,14 +1055,15 @@ class HttpService {
   }
 
   //인증번호 요청
-  Future<DefaultResModel> authKey(String name,String phone,String type,String loginId) async {
+  Future<DefaultResModel> authKey(
+      String name, String phone, String type, String loginId) async {
     String _url = API_BASE_URL + "api/user/request_auth_key";
 
     Map<String, String> body = {
-      'name' : name,
+      'name': name,
       'phone': phone,
-      'type' : type,
-      'login_id' : loginId,
+      'type': type,
+      'login_id': loginId,
     };
     Uri myUri = Uri.parse(_url);
     final response = await http.post(myUri, body: body);
@@ -961,7 +1077,8 @@ class HttpService {
   }
 
   //아이디 찾기
-  Future<FindIdResModel> findId(String phone, String name, String certKey) async {
+  Future<FindIdResModel> findId(
+      String phone, String name, String certKey) async {
     String _url = API_BASE_URL + "api/user/find_id";
 
     Map<String, String> body = {
@@ -1000,7 +1117,8 @@ class HttpService {
   }
 
   //비밀번호 찾기
-  Future<PassSetResModel> findPwd(String phone, String name, String id, String cetKey) async {
+  Future<PassSetResModel> findPwd(
+      String phone, String name, String id, String cetKey) async {
     String _url = API_BASE_URL + "api/user/find_pwd";
 
     Map<String, String> body = {
@@ -1041,12 +1159,12 @@ class HttpService {
 
   //community 추가
   Future<CommunityAddResModel> communityAdd(
-    String topic, 
-    String title, 
-    String content, 
+    String topic,
+    String title,
+    String content,
     String imgUrl,
-    String uid, 
-    String secret, 
+    String uid,
+    String secret,
     String imgs,
     String ages,
   ) async {
@@ -1132,7 +1250,8 @@ class HttpService {
   }
 
   //댓글 추가
-  Future<DefaultResModel> commentAdd(String uid, String parentUid, String content) async {
+  Future<DefaultResModel> commentAdd(
+      String uid, String parentUid, String content) async {
     String _url = API_BASE_URL + "api/community/comment_add";
 
     Map<String, String> body = {
@@ -1170,14 +1289,14 @@ class HttpService {
       throw Exception(LanguageService.trans("server_fail"));
     }
   }
-  
+
   //댓글 수정
   Future<DefaultResModel> commentEdit(String uid, String content) async {
     String _url = API_BASE_URL + "api/community/comment_edit";
-    
+
     Map<String, String> body = {
       'access_token': gUserInfo!.accessToken!,
-      'content': content, 
+      'content': content,
       'uid': uid,
     };
     Uri myUri = Uri.parse(_url);
@@ -1188,7 +1307,7 @@ class HttpService {
       showToast(LanguageService.trans("server_fail"));
       throw Exception(LanguageService.trans("server_fail"));
     }
-  } 
+  }
 
   //댓글 list
   Future<CommentListResModel> commentList(String uid, int page) async {
@@ -1211,7 +1330,8 @@ class HttpService {
   }
 
   //신고하기
-  Future<DefaultResModel> report(String type, String uid, String content, String reportType) async {
+  Future<DefaultResModel> report(
+      String type, String uid, String content, String reportType) async {
     String _url = API_BASE_URL + "api/community/report";
 
     Map<String, String> body = {
@@ -1233,7 +1353,8 @@ class HttpService {
   }
 
   //병원 list
-  Future<HospitalListResModel> hospitalList(String city, String district) async {
+  Future<HospitalListResModel> hospitalList(
+      String city, String district) async {
     String _url = API_BASE_URL + "api/common/hospital_list";
 
     Map<String, String> body = {
@@ -1272,7 +1393,19 @@ class HttpService {
   }
 
   //자녀추가하기
-  Future<DefaultResModel> addChildren(String uid, String name, String birth, int gender, String phone, String date, String postcode, String address1, String address2, String hosiptalId, String profile, String weight) async {
+  Future<DefaultResModel> addChildren(
+      String uid,
+      String name,
+      String birth,
+      int gender,
+      String phone,
+      String date,
+      String postcode,
+      String address1,
+      String address2,
+      String hosiptalId,
+      String profile,
+      String weight) async {
     String _url = API_BASE_URL + "api/user/add_child";
 
     Map<String, String> body = {
@@ -1302,12 +1435,12 @@ class HttpService {
   }
 
   //설정
-  Future<DefaultResModel> setting(String alarm_yn, String system_alarm_yn) async {
+  Future<DefaultResModel> setting(String alarmYn, String systemAlarmYn) async {
     String _url = API_BASE_URL + "api/user/change_setting";
     Map<String, String> body = {
       'access_token': gUserInfo!.accessToken!,
-      'alarm_yn': alarm_yn,
-      'system_alarm_yn' : system_alarm_yn,
+      'alarm_yn': alarmYn,
+      'system_alarm_yn': systemAlarmYn,
     };
     Uri myUri = Uri.parse(_url);
     final response = await http.post(myUri, body: body);
@@ -1321,7 +1454,8 @@ class HttpService {
   }
 
   //문의하기
-  Future<DefaultResModel> addAsk(String title, String content, String imgUrl) async {
+  Future<DefaultResModel> addAsk(
+      String title, String content, String imgUrl) async {
     String _url = API_BASE_URL + "api/user/ask_add";
     Map<String, String> body = {
       'access_token': gUserInfo!.accessToken!,
@@ -1359,11 +1493,11 @@ class HttpService {
   }
 
   //유저 자식정보 얻기
-  Future<ChildInfoResModel> childInfo(String child_uid) async {
+  Future<ChildInfoResModel> childInfo(String childUid) async {
     String _url = API_BASE_URL + "api/user/get_child_profile";
     Map<String, String> body = {
       'access_token': gUserInfo!.accessToken!,
-      'child_uid': child_uid,
+      'child_uid': childUid,
     };
     Uri myUri = Uri.parse(_url);
     final response = await http.post(myUri, body: body);
@@ -1376,11 +1510,11 @@ class HttpService {
     }
   }
 
-  Future<ChildInfoResModel> childInfo2(String child_uid) async {
+  Future<ChildInfoResModel> childInfo2(String childUid) async {
     String _url = API_BASE_URL + "api/user/get_child_profile2";
     Map<String, String> body = {
       'access_token': gUserInfo!.accessToken!,
-      'child_uid': child_uid,
+      'child_uid': childUid,
     };
     Uri myUri = Uri.parse(_url);
     final response = await http.post(myUri, body: body);
@@ -1394,11 +1528,11 @@ class HttpService {
   }
 
   //유저 자식 선택
-  Future<DefaultResModel> selchild(String child_uid) async {
+  Future<DefaultResModel> selchild(String childUid) async {
     String _url = API_BASE_URL + "api/user/select_child";
     Map<String, String> body = {
       'access_token': gUserInfo!.accessToken!,
-      'child_uid': child_uid,
+      'child_uid': childUid,
     };
     Uri myUri = Uri.parse(_url);
     final response = await http.post(myUri, body: body);
@@ -1412,7 +1546,18 @@ class HttpService {
   }
 
   //회원정보 수정
-  Future<DefaultResModel> changeProfile(String pwd, String name, String birth, String profile, int gender, String phone, String date, String postcode, String address1, String address2, String hosiptalId) async {
+  Future<DefaultResModel> changeProfile(
+      String pwd,
+      String name,
+      String birth,
+      String profile,
+      int gender,
+      String phone,
+      String date,
+      String postcode,
+      String address1,
+      String address2,
+      String hosiptalId) async {
     String _url = API_BASE_URL + "api/user/change_profile2";
 
     Map<String, String> body = {
@@ -1441,7 +1586,22 @@ class HttpService {
   }
 
   //회원정보수정-부모정보수정
-  Future<DefaultResModel> changeParentProfile(String pwd, String name, String birth, String phone, String postcode, String address, String address_detail, String dad_height, String dad_weight, String mom_kidney, String mom_weight, String relation, String nickname, String alarm, String systemAlarm) async {
+  Future<DefaultResModel> changeParentProfile(
+      String pwd,
+      String name,
+      String birth,
+      String phone,
+      String postcode,
+      String address,
+      String addressDetail,
+      String dadHeight,
+      String dadWeight,
+      String momKidney,
+      String momWeight,
+      String relation,
+      String nickname,
+      String alarm,
+      String systemAlarm) async {
     String _url = API_BASE_URL + "api/user/change_profile3";
 
     Map<String, String> body = {
@@ -1452,15 +1612,15 @@ class HttpService {
       'phone': phone,
       'postcode': postcode,
       'address': address,
-      'address_detail': address_detail,
-      'dad_height': dad_height,
-      'dad_weight': dad_weight,
-      'mom_height': mom_kidney,
-      'mom_weight': mom_weight,
+      'address_detail': addressDetail,
+      'dad_height': dadHeight,
+      'dad_weight': dadWeight,
+      'mom_height': momKidney,
+      'mom_weight': momWeight,
       'relation': relation,
       'nickname': nickname,
-      'alarm' : alarm,
-      'system_alarm' : systemAlarm,
+      'alarm': alarm,
+      'system_alarm': systemAlarm,
     };
     Uri myUri = Uri.parse(_url);
     final response = await http.post(myUri, body: body);
@@ -1474,11 +1634,11 @@ class HttpService {
   }
 
   //유저 자식 삭제
-  Future<DefaultResModel> delchild(String child_uid) async {
+  Future<DefaultResModel> delchild(String childUid) async {
     String _url = API_BASE_URL + "api/user/delete_child";
     Map<String, String> body = {
       'access_token': gUserInfo!.accessToken!,
-      'child_uid': child_uid,
+      'child_uid': childUid,
     };
     Uri myUri = Uri.parse(_url);
     final response = await http.post(myUri, body: body);
@@ -1510,9 +1670,18 @@ class HttpService {
   }
 
   //producctList
-  Future<ProductListResModel> getProductList(String category1, String category2, String category3, String start, String length, String keyword) async {
+  Future<ProductListResModel> getProductList(String category1, String category2,
+      String category3, String start, String length, String keyword) async {
     String _url = API_BASE_URL + "api/product/list";
-    Map<String, String> body = {'access_token': gUserInfo!.accessToken!, 'category_1': category1, 'category_2': category2, 'category_3': category3, 'start': start, 'length': length, 'keyword': keyword};
+    Map<String, String> body = {
+      'access_token': gUserInfo!.accessToken!,
+      'category_1': category1,
+      'category_2': category2,
+      'category_3': category3,
+      'start': start,
+      'length': length,
+      'keyword': keyword
+    };
     Uri myUri = Uri.parse(_url);
     final response = await http.post(myUri, body: body);
     if (response.statusCode == 200) {
@@ -1525,14 +1694,15 @@ class HttpService {
   }
 
   //상품 리뷰리스트
-  Future<ProductReviewListResModel> getProductReview(String pid, int start, String order_by) async {
+  Future<ProductReviewListResModel> getProductReview(
+      String pid, int start, String orderBy) async {
     String _url = API_BASE_URL + "api/ProductReview/review_list";
     Map<String, String> body = {
       'access_token': gUserInfo!.accessToken!,
       'pid': pid,
       'start': start.toString(),
       'length': "20",
-      'order_by': order_by,
+      'order_by': orderBy,
     };
     Uri myUri = Uri.parse(_url);
     final response = await http.post(myUri, body: body);
@@ -1548,7 +1718,10 @@ class HttpService {
   //producctList
   Future<ProductListResModel> getProductOptionList(String name) async {
     String _url = API_BASE_URL + "api/product/list";
-    Map<String, String> body = {'access_token': gUserInfo!.accessToken!, 'name': name};
+    Map<String, String> body = {
+      'access_token': gUserInfo!.accessToken!,
+      'name': name
+    };
     Uri myUri = Uri.parse(_url);
     final response = await http.post(myUri, body: body);
     if (response.statusCode == 200) {
@@ -1580,12 +1753,7 @@ class HttpService {
 
   //community list
   Future<CommunityListResModel> communityList(
-    String keyword, 
-    int page, 
-    String topic, 
-    String sort, 
-    String age
-  ) async {
+      String keyword, int page, String topic, String sort, String age) async {
     String _url = API_BASE_URL + "api/community/community_list";
 
     Map<String, String> body = {
@@ -1678,8 +1846,8 @@ class HttpService {
     String _url = API_BASE_URL + "api/monitor/save";
     Map<String, String> body = {
       'access_token': gUserInfo!.accessToken!,
-      'body_temp' : monitoringData!.bodyTemp!,
-      'body_loca' : tempLoca,
+      'body_temp': monitoringData!.bodyTemp!,
+      'body_loca': tempLoca,
       'sleep_at_night': monitoringData!.sleep_at_night!,
       'sleep_at_lunch': monitoringData!.sleep_at_lunch!,
       'symptom_list': json.encode(monitoringData!.symptom_list!),
@@ -1700,17 +1868,25 @@ class HttpService {
   }
 
   //1분 무료진단 결과 얻기
-  Future<FreeTestResModel> freeTest(String dad_height, String mom_height, String gender, String height, String weight, String birth, String sleep_time_launch, String sleep_time_night) async {
+  Future<FreeTestResModel> freeTest(
+      String dadHeight,
+      String momHeight,
+      String gender,
+      String height,
+      String weight,
+      String birth,
+      String sleepTimeLaunch,
+      String sleepTimeNight) async {
     String _url = API_BASE_URL + "api/Common/free_test";
     Map<String, String> body = {
-      'dad_height': dad_height,
-      'mom_height': mom_height,
+      'dad_height': dadHeight,
+      'mom_height': momHeight,
       'gender': gender,
       'height': height,
       'weight': weight,
       'birth': birth,
-      'sleep_time_launch': sleep_time_launch,
-      'sleep_time_night': sleep_time_night,
+      'sleep_time_launch': sleepTimeLaunch,
+      'sleep_time_night': sleepTimeNight,
     };
     Uri myUri = Uri.parse(_url);
     final response = await http.post(myUri, body: body);
@@ -1760,7 +1936,8 @@ class HttpService {
   }
 
   //홈케어 스토어 데이터
-  Future<HomeCareListResModel> homecareStoreData(String category_1, String category_2) async {
+  Future<HomeCareListResModel> homecareStoreData(
+      String category_1, String category_2) async {
     String _url = API_BASE_URL + "api/Product/store_home_data";
     Map<String, String> body = {
       'access_token': gUserInfo!.accessToken!,
@@ -1794,11 +1971,11 @@ class HttpService {
   }
 
   //모니터링 음식 리스트
-  Future<FoodListResModel> foodList(String category, String sub_category) async {
+  Future<FoodListResModel> foodList(String category, String subCategory) async {
     String _url = API_BASE_URL + "api/Monitor2/food_list";
     Map<String, String> body = {
       'category': category,
-      'sub_category': sub_category,
+      'sub_category': subCategory,
     };
     Uri myUri = Uri.parse(_url);
     final response = await http.post(myUri, body: body);
@@ -1829,7 +2006,7 @@ class HttpService {
   }
 
   Future<FoodHomeModel> getFoodHome() async {
-    String _url = API_BASE_URL + "api/monitoring/get_food_home";
+    String _url = API_BASE_URL + "api/Monitoring/get_food_home";
     Map<String, String> body = {
       'access_token': gUserInfo!.accessToken!,
     };
@@ -1879,12 +2056,12 @@ class HttpService {
   }
 
   //장바구니 추가
-  Future<BasketAddResModel> addBakset(String pid, String opt_list) async {
+  Future<BasketAddResModel> addBakset(String pid, String optList) async {
     String _url = API_BASE_URL + "api/Product/basket_put_in";
     Map<String, String> body = {
       'access_token': gUserInfo!.accessToken!,
       'pid': pid,
-      'opt_list': opt_list,
+      'opt_list': optList,
     };
     Uri myUri = Uri.parse(_url);
     final response = await http.post(myUri, body: body);
@@ -1898,11 +2075,11 @@ class HttpService {
   }
 
   //장바구니 갯수 변경
-  Future<DefaultResModel> changeBakset(String basket_id, int count) async {
+  Future<DefaultResModel> changeBakset(String basketId, int count) async {
     String _url = API_BASE_URL + "api/Product/basket_change";
     Map<String, String> body = {
       'access_token': gUserInfo!.accessToken!,
-      'basket_id': basket_id,
+      'basket_id': basketId,
       'count': count.toString(),
     };
     Uri myUri = Uri.parse(_url);
@@ -1917,25 +2094,40 @@ class HttpService {
   }
 
   //모니터링 기록
-  Future<MonitoringRecordResModel> monitoringRecord(String monitoring_time,String height, String weight, String nutrition, String sleep_at_night, String sleep_at_lunch, String symptom_list, String language, String sociability, String work_out, String breakfast, String lunch, String snack, String dinner, String uid) async {
+  Future<MonitoringRecordResModel> monitoringRecord(
+      String monitoringTime,
+      String height,
+      String weight,
+      String nutrition,
+      String sleepAtNight,
+      String sleepAtLunch,
+      String symptomList,
+      String language,
+      String sociability,
+      String workOut,
+      String breakfast,
+      String lunch,
+      String snack,
+      String dinner,
+      String uid) async {
     String _url = API_BASE_URL + "api/Monitor2/save";
     if (uid == "") {
       Map<String, String> body = {
         'access_token': gUserInfo!.accessToken!,
-        'monitoring_time': monitoring_time,
+        'monitoring_time': monitoringTime,
         'height': height,
         'weight': weight,
         'nutrition': nutrition,
-        'sleep_at_night': sleep_at_night,
-        'sleep_at_lunch': sleep_at_lunch,
-        'symptom_list': symptom_list,
+        'sleep_at_night': sleepAtNight,
+        'sleep_at_lunch': sleepAtLunch,
+        'symptom_list': symptomList,
         'language': language,
         'sociability': sociability,
-        'work_out': work_out,
-        'breakfast' : breakfast,
-        'lunch' : lunch,
-        'snack' : snack,
-        'dinner' : dinner,
+        'work_out': workOut,
+        'breakfast': breakfast,
+        'lunch': lunch,
+        'snack': snack,
+        'dinner': dinner,
       };
       Uri myUri = Uri.parse(_url);
       final response = await http.post(myUri, body: body);
@@ -1949,20 +2141,20 @@ class HttpService {
     } else {
       Map<String, String> body = {
         'access_token': gUserInfo!.accessToken!,
-        'monitoring_time': monitoring_time,
+        'monitoring_time': monitoringTime,
         'height': height,
         'weight': weight,
         'nutrition': nutrition,
-        'sleep_at_night': sleep_at_night,
-        'sleep_at_lunch': sleep_at_lunch,
-        'symptom_list': symptom_list,
+        'sleep_at_night': sleepAtNight,
+        'sleep_at_lunch': sleepAtLunch,
+        'symptom_list': symptomList,
         'language': language,
         'sociability': sociability,
-        'work_out': work_out,
-        'breakfast' : breakfast,
-        'lunch' : lunch,
-        'snack' : snack,
-        'dinner' : dinner,
+        'work_out': workOut,
+        'breakfast': breakfast,
+        'lunch': lunch,
+        'snack': snack,
+        'dinner': dinner,
         'uid': uid,
       };
       Uri myUri = Uri.parse(_url);
@@ -1977,39 +2169,47 @@ class HttpService {
     }
   }
 
-  Future<MonitoringRecordResModel> monitoringBodyRecord(String monitoring_time,String height, String weight, String point) async {
+  Future<MonitoringRecordResModel> monitoringBodyRecord(
+      String monitoringTime, String height, String weight, String point) async {
     String _url = API_BASE_URL + "api/Monitor2/save";
-      Map<String, String> body = {
-        'access_token': gUserInfo!.accessToken!,
-        'monitoring_time': monitoring_time,
-        'height': height,
-        'weight': weight,
-        'quiz_score': point,
-      };
-      Uri myUri = Uri.parse(_url);
-      final response = await http.post(myUri, body: body);
-      if (response.statusCode == 200) {
-        return MonitoringRecordResModel.fromJson(json.decode(response.body));
-      } else {
-        // If that call was not successful, throw an error.
-        showToast(LanguageService.trans("server_fail"));
-        throw Exception(LanguageService.trans("server_fail"));
-      }
+    Map<String, String> body = {
+      'access_token': gUserInfo!.accessToken!,
+      'monitoring_time': monitoringTime,
+      'height': height,
+      'weight': weight,
+      'quiz_score': point,
+    };
+    Uri myUri = Uri.parse(_url);
+    final response = await http.post(myUri, body: body);
+    if (response.statusCode == 200) {
+      return MonitoringRecordResModel.fromJson(json.decode(response.body));
+    } else {
+      // If that call was not successful, throw an error.
+      showToast(LanguageService.trans("server_fail"));
+      throw Exception(LanguageService.trans("server_fail"));
+    }
   }
 
   //성장노트 저장하기
-  Future<DefaultResModel> monitoringRecord2(String temperature, String temp_location, String sleep_at_night, String sleep_at_lunch, String symptom_list, String normal_score, String control_score) async {
+  Future<DefaultResModel> monitoringRecord2(
+      String temperature,
+      String tempLocation,
+      String sleepAtNight,
+      String sleepAtLunch,
+      String symptomList,
+      String normalScore,
+      String controlScore) async {
     String _url = API_BASE_URL + "api/monitoring/save_growth_note";
 
     Map<String, String> body = {
       'access_token': gUserInfo!.accessToken!,
-      'temperature' : temperature,
-      'location' : temp_location,
-      'sleep_at_night': sleep_at_night,
-      'sleep_at_lunch': sleep_at_lunch,
-      'symptom_list': symptom_list,
-      'normal_score' : normal_score,
-      'control_score' : control_score,
+      'temperature': temperature,
+      'location': tempLocation,
+      'sleep_at_night': sleepAtNight,
+      'sleep_at_lunch': sleepAtLunch,
+      'symptom_list': symptomList,
+      'normal_score': normalScore,
+      'control_score': controlScore,
     };
     Uri myUri = Uri.parse(_url);
     final response = await http.post(myUri, body: body);
@@ -2144,10 +2344,11 @@ class HttpService {
   }
 
   //영양 그래프 가져오기
-  Future<FoodRadarchartModel> getFoodRadarChart() async {
+  Future<FoodRadarchartModel> getFoodRadarChart(selDate) async {
     String _url = API_BASE_URL + "api/monitoring/get_food_list_home";
     Map<String, String> body = {
       'access_token': gUserInfo!.accessToken!,
+      'date': selDate,
     };
     Uri myUri = Uri.parse(_url);
     final response = await http.post(myUri, body: body);
@@ -2200,7 +2401,7 @@ class HttpService {
 
     Map<String, String> body = {
       'access_token': gUserInfo!.accessToken!,
-      'mission_id' : missionId,
+      'mission_id': missionId,
     };
     Uri myUri = Uri.parse(_url);
     final response = await http.post(myUri, body: body);
@@ -2269,14 +2470,15 @@ class HttpService {
   }
 
   //찜한 상품 목록 얻기
-  Future<ProductLikeListResModel> productLikeList(String keyword, String name, String only_like, String order_by, int page, String tags) async {
+  Future<ProductLikeListResModel> productLikeList(String keyword, String name,
+      String onlyLike, String orderBy, int page, String tags) async {
     String _url = API_BASE_URL + "api/Product/get_list";
     Map<String, String> body = {
       'access_token': gUserInfo!.accessToken!,
       'keyword': keyword,
       'name': name,
-      'only_like': only_like,
-      'order_by': order_by,
+      'only_like': onlyLike,
+      'order_by': orderBy,
       'page': page.toString(),
       'tags': tags,
     };
@@ -2292,7 +2494,16 @@ class HttpService {
   }
 
   //상품 목록 얻기
-  Future<ProductLikeListResModel> productLikeList1(String category_1, String category_2, String category_3, String keyword, String name, String only_like, String order_by, int page, String tags) async {
+  Future<ProductLikeListResModel> productLikeList1(
+      String category_1,
+      String category_2,
+      String category_3,
+      String keyword,
+      String name,
+      String onlyLike,
+      String orderBy,
+      int page,
+      String tags) async {
     String _url = API_BASE_URL + "api/Product/get_list";
     Map<String, String> body = {
       'access_token': gUserInfo!.accessToken!,
@@ -2301,8 +2512,8 @@ class HttpService {
       'category_3': category_3,
       'keyword': keyword,
       'name': name,
-      'only_like': only_like,
-      'order_by': order_by,
+      'only_like': onlyLike,
+      'order_by': orderBy,
       'page': page.toString(),
       'tags': tags,
     };
@@ -2350,9 +2561,12 @@ class HttpService {
   }
 
   //장바구니 삭제
-  Future<DefaultResModel> basketDelete(String basket_ids) async {
+  Future<DefaultResModel> basketDelete(String basketIds) async {
     String _url = API_BASE_URL + "api/Product/basket_delete";
-    Map<String, String> body = {'access_token': gUserInfo!.accessToken!, 'basket_ids': basket_ids};
+    Map<String, String> body = {
+      'access_token': gUserInfo!.accessToken!,
+      'basket_ids': basketIds
+    };
     Uri myUri = Uri.parse(_url);
     final response = await http.post(myUri, body: body);
     if (response.statusCode == 200) {
@@ -2365,10 +2579,17 @@ class HttpService {
   }
 
   //배송지 주소 변경
-  Future<DefaultResModel> changeDeliverAddress(String postcode, String address, String address_detail, String main_yn) async {
+  Future<DefaultResModel> changeDeliverAddress(String postcode, String address,
+      String addressDetail, String mainYn) async {
     String _url = API_BASE_URL + "api/Product/change_deliver_address";
 
-    Map<String, String> body = {'access_token': gUserInfo!.accessToken!, 'postcode': postcode, 'address': address, 'address_detail': address_detail, 'main_yn': main_yn};
+    Map<String, String> body = {
+      'access_token': gUserInfo!.accessToken!,
+      'postcode': postcode,
+      'address': address,
+      'address_detail': addressDetail,
+      'main_yn': mainYn
+    };
     Uri myUri = Uri.parse(_url);
     final response = await http.post(myUri, body: body);
     if (response.statusCode == 200) {
@@ -2385,8 +2606,8 @@ class HttpService {
     String _url = API_BASE_URL + "api/User/add_point";
     Map<String, String> body = {
       'access_token': gUserInfo!.accessToken!,
-      'type' : type,
-      'point' : point,
+      'type': type,
+      'point': point,
     };
     Uri myUri = Uri.parse(_url);
     final response = await http.post(myUri, body: body);
@@ -2400,14 +2621,15 @@ class HttpService {
   }
 
   //order추가 - 주문하기
-  Future<OrderStartResModel> orderStart(String pdt_info, String point, String pay_method, String deliver_address) async {
+  Future<OrderStartResModel> orderStart(String pdtInfo, String point,
+      String payMethod, String deliverAddress) async {
     String _url = API_BASE_URL + "api/Order/start";
     Map<String, String> body = {
       'access_token': gUserInfo!.accessToken!,
-      'pdt_info': pdt_info,
+      'pdt_info': pdtInfo,
       'point': point,
-      'pay_method': pay_method,
-      'deliver_address': deliver_address,
+      'pay_method': payMethod,
+      'deliver_address': deliverAddress,
     };
     Uri myUri = Uri.parse(_url);
     final response = await http.post(myUri, body: body);
@@ -2423,7 +2645,11 @@ class HttpService {
   //주문내역 목록얻기
   Future<OrderListResModel> getUserOrders(String start, String length) async {
     String _url = API_BASE_URL + "api/Order/get_list";
-    Map<String, String> body = {'access_token': gUserInfo!.accessToken!, 'start': start, 'length': length};
+    Map<String, String> body = {
+      'access_token': gUserInfo!.accessToken!,
+      'start': start,
+      'length': length
+    };
     Uri myUri = Uri.parse(_url);
     final response = await http.post(myUri, body: body);
     if (response.statusCode == 200) {
@@ -2472,7 +2698,8 @@ class HttpService {
   }
 
   //구매 확정
-  Future<DefaultResModel> changeOrderStatus(String orderId, String status) async {
+  Future<DefaultResModel> changeOrderStatus(
+      String orderId, String status) async {
     String _url = API_BASE_URL + "api/Order/change_status";
     Map<String, String> body = {
       'access_token': gUserInfo!.accessToken!,
@@ -2491,17 +2718,24 @@ class HttpService {
   }
 
   //교환반품 신청
-  Future<DefaultResModel> requestExchangeReturn(String orderId, String action, String problem, String problem_detail, String plist, String product_addr, String deliver_addr) async {
+  Future<DefaultResModel> requestExchangeReturn(
+      String orderId,
+      String action,
+      String problem,
+      String problemDetail,
+      String plist,
+      String productAddr,
+      String deliverAddr) async {
     String _url = API_BASE_URL + "api/Order/exchange_o_return";
     Map<String, String> body = {
       'access_token': gUserInfo!.accessToken!,
       'order_id': orderId,
       'action': action,
       'problem': problem,
-      'problem_detail': problem_detail,
+      'problem_detail': problemDetail,
       'plist': plist,
-      'product_addr': product_addr,
-      'deliver_addr': deliver_addr,
+      'product_addr': productAddr,
+      'deliver_addr': deliverAddr,
     };
     Uri myUri = Uri.parse(_url);
     final response = await http.post(myUri, body: body);
@@ -2530,12 +2764,13 @@ class HttpService {
       throw Exception(LanguageService.trans("server_fail"));
     }
   }
+
   //맞춤검사 결과
-  Future<CheckChatResModel> checkChat(String chat_info) async {
+  Future<CheckChatResModel> checkChat(String chatInfo) async {
     String _url = API_BASE_URL + "api/Monitor2/check_m_chat";
     Map<String, String> body = {
       'access_token': gUserInfo!.accessToken!,
-      'chat_info': chat_info,
+      'chat_info': chatInfo,
     };
     Uri myUri = Uri.parse(_url);
     final response = await http.post(myUri, body: body);
@@ -2566,14 +2801,15 @@ class HttpService {
   }
 
   //영유아 검사 결과 전송
-  Future<CheckChildQuizModel> checkChildQuiz( String quiz_id, String quiz_result,String birth_code) async {
+  Future<CheckChildQuizModel> checkChildQuiz(
+      String quizId, String quizResult, String birthCode) async {
     String _url = API_BASE_URL + "api/Monitor2/m_child_quiz_result";
     Map<String, String> body = {
       'access_token': gUserInfo!.accessToken!,
       'patient_id': gSelChildInfo!.id!,
-      'quiz_id': quiz_id,
-      'quiz_result': quiz_result,
-      'quiz_code' : birth_code,
+      'quiz_id': quizId,
+      'quiz_result': quizResult,
+      'quiz_code': birthCode,
     };
     Uri myUri = Uri.parse(_url);
     final response = await http.post(myUri, body: body);
@@ -2604,12 +2840,13 @@ class HttpService {
   }
 
   //mbti 검사 결과 저장
-  Future<MbtiQuizSendResModel> getMbtiSendResult(String result_list, String mbti) async {
+  Future<MbtiQuizSendResModel> getMbtiSendResult(
+      String resultList, String mbti) async {
     String _url = API_BASE_URL + "api/Monitor2/mtbi_quiz_result";
     Map<String, String> body = {
       'access_token': gUserInfo!.accessToken!,
       'patient_id': gSelChildInfo!.id!,
-      'mbti_result_list' : result_list,
+      'mbti_result_list': resultList,
       'mbti_result': mbti,
     };
     Uri myUri = Uri.parse(_url);
@@ -2628,7 +2865,7 @@ class HttpService {
     String _url = API_BASE_URL + "api/Monitor2/test2_quiz_list";
     Map<String, String> body = {
       'access_token': gUserInfo!.accessToken!,
-      'quiz_id' : quizName,
+      'quiz_id': quizName,
     };
     Uri myUri = Uri.parse(_url);
     final response = await http.post(myUri, body: body);
@@ -2646,7 +2883,7 @@ class HttpService {
     String _url = API_BASE_URL + "api/Monitor2/test4_quiz_list";
     Map<String, String> body = {
       'access_token': gUserInfo!.accessToken!,
-      'quiz_id' : quizName,
+      'quiz_id': quizName,
     };
     Uri myUri = Uri.parse(_url);
     final response = await http.post(myUri, body: body);
@@ -2660,12 +2897,13 @@ class HttpService {
   }
 
   //test 결과 가져오기
-  Future<TestQuizResultModel> getTestQuizResult(String quizName, String quizResult) async {
+  Future<TestQuizResultModel> getTestQuizResult(
+      String quizName, String quizResult) async {
     String _url = API_BASE_URL + "api/Monitor2/test_quiz_result";
     Map<String, String> body = {
       'access_token': gUserInfo!.accessToken!,
-      'quiz_id' : quizName,
-      'quiz_result' : quizResult,
+      'quiz_id': quizName,
+      'quiz_result': quizResult,
     };
     Uri myUri = Uri.parse(_url);
     final response = await http.post(myUri, body: body);
@@ -2677,7 +2915,6 @@ class HttpService {
       throw Exception(LanguageService.trans("server_fail"));
     }
   }
-
 
   // 식습관체크리스트
   Future<FoodCheckList1> getCheckList1() async {
@@ -2717,7 +2954,7 @@ class HttpService {
     String _url = API_BASE_URL + "api/Monitoring/save_food_checklist";
     Map<String, String> body = {
       'access_token': gUserInfo!.accessToken!,
-      'answer' : result,
+      'answer': result,
     };
     Uri myUri = Uri.parse(_url);
     final response = await http.post(myUri, body: body);
@@ -2731,16 +2968,16 @@ class HttpService {
   }
 
   // 식단 기록하기
-  Future<FoodRadarchartModel> saveFoodWriteList(String result) async {
+  Future<DefaultResModel> saveFoodWriteList(String result) async {
     String _url = API_BASE_URL + "api/Monitoring/save_food_list";
     Map<String, String> body = {
       'access_token': gUserInfo!.accessToken!,
-      'answer' : result,
+      'answer': result,
     };
     Uri myUri = Uri.parse(_url);
     final response = await http.post(myUri, body: body);
     if (response.statusCode == 200) {
-      return FoodRadarchartModel.fromJson(json.decode(response.body));
+      return DefaultResModel.fromJson(json.decode(response.body));
     } else {
       // If that call was not successful, throw an error.
       showToast(LanguageService.trans("server_fail"));
@@ -2836,11 +3073,12 @@ class HttpService {
   }
 
   //발달습관 결과 저장
-  Future<DefaultResModel> inputHealthSendResult(String quizNum, String answer) async {
+  Future<DefaultResModel> inputHealthSendResult(
+      String quizNum, String answer) async {
     String _url = API_BASE_URL + "api/monitoring/save_development_monitoring";
     Map<String, String> body = {
       'access_token': gUserInfo!.accessToken!,
-      'question' : quizNum,
+      'question': quizNum,
       'answer': answer,
     };
     Uri myUri = Uri.parse(_url);
@@ -2855,11 +3093,12 @@ class HttpService {
   }
 
   //생활습관 결과 저장
-  Future<DefaultResModel> inputLifeSendResult(String quizNum, String answer) async {
+  Future<DefaultResModel> inputLifeSendResult(
+      String quizNum, String answer) async {
     String _url = API_BASE_URL + "api/monitoring/save_lifestyle_monitoring";
     Map<String, String> body = {
       'access_token': gUserInfo!.accessToken!,
-      'question' : quizNum,
+      'question': quizNum,
       'answer': answer,
     };
     Uri myUri = Uri.parse(_url);
@@ -2874,11 +3113,12 @@ class HttpService {
   }
 
   //발달습관 결과 저장
-  Future<DefaultResModel> inputBodySendResult(String tall, String weight, String score) async {
+  Future<DefaultResModel> inputBodySendResult(
+      String tall, String weight, String score) async {
     String _url = API_BASE_URL + "api/monitoring/save_health_monitoring";
     Map<String, String> body = {
       'access_token': gUserInfo!.accessToken!,
-      'tall' : tall,
+      'tall': tall,
       'weight': weight,
       'score': score,
     };
@@ -2963,9 +3203,13 @@ class HttpService {
   }
 
   //홈 그래프 생활습관
-  Future<HomeGraphLifeStyleResModel> homeGraphLifeStyle(String startDate) async {
+  Future<HomeGraphLifeStyleResModel> homeGraphLifeStyle(
+      String startDate) async {
     String _url = API_BASE_URL + "api/Monitor2/home_graph_lifestyle";
-    Map<String, String> body = {'access_token': gUserInfo!.accessToken!, 'start_date': startDate};
+    Map<String, String> body = {
+      'access_token': gUserInfo!.accessToken!,
+      'start_date': startDate
+    };
     Uri myUri = Uri.parse(_url);
     final response = await http.post(myUri, body: body);
     if (response.statusCode == 200) {
@@ -2980,7 +3224,10 @@ class HttpService {
   //홈 그래프 생활습관
   Future<HomeGraphLifeStyleResModel> homeGraphLifeStyle1(String month) async {
     String _url = API_BASE_URL + "api/Monitor2/home_graph_lifestyle2";
-    Map<String, String> body = {'access_token': gUserInfo!.accessToken!, 'month': month};
+    Map<String, String> body = {
+      'access_token': gUserInfo!.accessToken!,
+      'month': month
+    };
     Uri myUri = Uri.parse(_url);
     final response = await http.post(myUri, body: body);
     if (response.statusCode == 200) {
@@ -3047,11 +3294,11 @@ class HttpService {
   }
 
   //질병 완쾌
-  Future<DefaultResModel> symptomComplete(String symptom_id) async {
+  Future<DefaultResModel> symptomComplete(String symptomId) async {
     String _url = API_BASE_URL + "api/Monitor2/symptom_complete";
     Map<String, String> body = {
       'access_token': gUserInfo!.accessToken!,
-      'symptom_id': symptom_id,
+      'symptom_id': symptomId,
     };
     Uri myUri = Uri.parse(_url);
     final response = await http.post(myUri, body: body);
@@ -3137,14 +3384,14 @@ class HttpService {
   //내 게시글 보기
   Future<CommunityListResModel> getMyPosts(int page) async {
     String _url = API_BASE_URL + "api/user/community_list";
-    
+
     Map<String, String> body = {
       'access_token': gUserInfo!.accessToken!,
       'page': page.toString(),
     };
     Uri myUri = Uri.parse(_url);
     final response = await http.post(myUri, body: body);
-    if(response.statusCode == 200) {
+    if (response.statusCode == 200) {
       return CommunityListResModel.fromJson(json.decode(response.body));
     } else {
       showToast(LanguageService.trans("server_fail"));
@@ -3162,7 +3409,7 @@ class HttpService {
     };
     Uri myUri = Uri.parse(_url);
     final response = await http.post(myUri, body: body);
-    if(response.statusCode == 200) {
+    if (response.statusCode == 200) {
       return CommunityListResModel.fromJson(json.decode(response.body));
     } else {
       showToast(LanguageService.trans("server_fail"));
@@ -3203,6 +3450,4 @@ class HttpService {
       throw Exception(LanguageService.trans("server_fail"));
     }
   }
-
-
 }

@@ -130,7 +130,8 @@ class TalkAreaState extends BaseState<TalkArea> {
                     H18(text: widget.board == 0 ? '질문게시판': '자유게시판'),
                     InkWell(
                       onTap: () {
-                        eventBus.fire(MoreCommunityEvent(type: 5));
+                        int ctab = widget.board == 0 ? 4 : 5;
+                        eventBus.fire(MoreCommunityEvent(type: ctab));
                       },
                       child: H14(
                           text: LanguageService.trans('more'),

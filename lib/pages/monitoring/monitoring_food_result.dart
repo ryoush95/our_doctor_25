@@ -47,7 +47,7 @@ class _MonitoringFoodResultState extends BaseState<MonitoringFoodResult> {
 
   DateTime _selectedDay = DateTime.now();
   DateTime _focusedDay = DateTime.now();
-  bool _showMessage = false;
+  final bool _showMessage = false;
 
   int graphIndex = 0;
 
@@ -73,7 +73,10 @@ class _MonitoringFoodResultState extends BaseState<MonitoringFoodResult> {
     await getFoodAll.then((value) {
       if (value.result == 0) {
         foodHome = value.data!;
-        foodHome!.habits!.missions!.putIfAbsent("0", () =>  Mission(complete: false, text: foodHome!.habits!.score!.text),);
+        foodHome!.habits!.missions!.putIfAbsent(
+          "0",
+          () => Mission(complete: false, text: foodHome!.habits!.score!.text),
+        );
         lastDate = foodHome!.habits!.lastMonitoring!;
         _events = addEvent();
         setState(() {
@@ -84,7 +87,7 @@ class _MonitoringFoodResultState extends BaseState<MonitoringFoodResult> {
       setState(() {
         isLoading = false;
       });
-      showToast(onError);
+      print(onError.toString());
     });
   }
 
@@ -109,7 +112,9 @@ class _MonitoringFoodResultState extends BaseState<MonitoringFoodResult> {
                   weight: FW.medium,
                   align: TextAlign.center,
                   maxLine: 2,
-                  color: cateIndex == index ? AppColor_BlackText : AppColor_BlackText.withOpacity(0.2),
+                  color: cateIndex == index
+                      ? AppColor_BlackText
+                      : AppColor_BlackText.withOpacity(0.2),
                 ),
               ),
               Positioned(
@@ -119,7 +124,9 @@ class _MonitoringFoodResultState extends BaseState<MonitoringFoodResult> {
                     child: Container(
                       width: 80,
                       height: MediaQuery.of(context).size.width,
-                      color: cateIndex == index ? AppColor_Primary : AppColor_BlackText.withOpacity(0.1),
+                      color: cateIndex == index
+                          ? AppColor_Primary
+                          : AppColor_BlackText.withOpacity(0.1),
                     )),
                 bottom: 0,
               )
@@ -131,7 +138,8 @@ class _MonitoringFoodResultState extends BaseState<MonitoringFoodResult> {
   }
 
   Future<void> sendMission(Mission mdata, int index) async {
-    Future<DefaultResModel> info = httpService.missionComplete(index.toString());
+    Future<DefaultResModel> info =
+        httpService.missionComplete(index.toString());
     await info.then((value) {
       if (value.result == 0) {
         Fluttertoast.cancel();
@@ -149,12 +157,11 @@ class _MonitoringFoodResultState extends BaseState<MonitoringFoodResult> {
     });
   }
 
-
   Widget foodListTile(index) {
     final mdata = foodHome!.habits!.missions!["$index"]!;
     return InkWell(
       onTap: () {
-        if (index == 0){
+        if (index == 0) {
           return;
         }
         if (!mdata.complete!) {
@@ -173,12 +180,20 @@ class _MonitoringFoodResultState extends BaseState<MonitoringFoodResult> {
             width: (MediaQuery.of(context).size.width - 40) / 2.5,
             height: 100,
             padding: EdgeInsets.all(10),
-            margin: index == foodHome!.habits!.missions!.length - 1 ? EdgeInsets.symmetric(horizontal: 10) : EdgeInsets.only(left: 10),
+            margin: index == foodHome!.habits!.missions!.length - 1
+                ? EdgeInsets.symmetric(horizontal: 10)
+                : EdgeInsets.only(left: 10),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
-              color: mdata.complete! ? AppColor_Primary.withOpacity(0.5) : Colors.transparent,
+              color: mdata.complete!
+                  ? AppColor_Primary.withOpacity(0.5)
+                  : Colors.transparent,
               border: Border.all(
-                color: index == 0 ? colorSwitch(foodHome!.habits!.score!.status) : !mdata.complete! ? AppColor_Primary : Colors.transparent,
+                color: index == 0
+                    ? colorSwitch(foodHome!.habits!.score!.status)
+                    : !mdata.complete!
+                        ? AppColor_Primary
+                        : Colors.transparent,
                 width: 2,
               ),
             ),
@@ -187,19 +202,21 @@ class _MonitoringFoodResultState extends BaseState<MonitoringFoodResult> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 H14(
-                  text : index == 0 ? "식습관 지수" : mdata.text!,
+                  text: index == 0 ? "식습관 지수" : mdata.text!,
                   color: mdata.complete! ? Colors.white : Colors.black,
                 ),
                 Center(
                   child: H16(
-                    text : mdata.text!,
+                    text: mdata.text!,
                     weight: FW.regular,
                     maxLine: 3,
                     align: TextAlign.start,
                     color: mdata.complete! ? Colors.white : Colors.black,
                   ),
                 ),
-                SizedBox(height: 14,),
+                SizedBox(
+                  height: 14,
+                ),
               ],
             ),
           ),
@@ -209,12 +226,16 @@ class _MonitoringFoodResultState extends BaseState<MonitoringFoodResult> {
               width: (MediaQuery.of(context).size.width - 40) / 2.5,
               height: 100,
               padding: EdgeInsets.all(6),
-              margin: index == 3 ? EdgeInsets.symmetric(horizontal: 10) : EdgeInsets.only(left: 10),
+              margin: index == 3
+                  ? EdgeInsets.symmetric(horizontal: 10)
+                  : EdgeInsets.only(left: 10),
               // decoration: BoxDecoration(
               //   borderRadius: BorderRadius.circular(8),
               //   color: AppColor_Primary.withOpacity(0.5),
               // ),
-              child: Image.asset("assets/도장_$index.png",),
+              child: Image.asset(
+                "assets/도장_$index.png",
+              ),
             ),
           ),
           // AnimatedPositioned(
@@ -311,9 +332,9 @@ class _MonitoringFoodResultState extends BaseState<MonitoringFoodResult> {
   }
 
   Color colorSwitch(status) {
-    if (status == "R"){
+    if (status == "R") {
       return AppColor_Red;
-    } else if (status == "G"){
+    } else if (status == "G") {
       return AppColor_Oxygen;
     } else {
       return Colors.amber;
@@ -330,7 +351,7 @@ class _MonitoringFoodResultState extends BaseState<MonitoringFoodResult> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                HeaderText(text: "${gSelChildInfo!.name}의 ${DateTime.now().month}월 리포트\n이번달은 골고루 먹었을까요?"),
+                HeaderText(text: foodHome!.title!),
                 foodCalendar(),
                 const SizedBox(height: 30),
                 // 식단 상태 area
@@ -340,50 +361,55 @@ class _MonitoringFoodResultState extends BaseState<MonitoringFoodResult> {
                   align: TextAlign.start,
                 ),
                 const SizedBox(height: 20),
-                SizedBox(
-                  height: 150,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: 5,
-                    itemBuilder: (context, index) {
-                      return Container(
-                        width: (MediaQuery.of(context).size.width - 40) / 5,
-                        child: Column(
-                          children: [
-                            H14(text: foodList[index]),
-                            Container(
-                              margin: const EdgeInsets.all(3),
-                              height: 60,
-                              decoration: BoxDecoration(
-                                color: colorSwitch(foodHome!.food![foodList[index]]!.status),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(5.0),
-                                child: Column(
-                                  children: [
-                                    Image.asset(
-                                      "assets/food_icon_noback_$index.png",
-                                      width: 30,
-                                      height: 30,
+                foodHome!.habits!.missions!.isEmpty
+                    ? H16(text: "아직 검사기록이 없습니다.")
+                    : SizedBox(
+                        height: 150,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: 5,
+                          itemBuilder: (context, index) {
+                            return SizedBox(
+                              width:
+                                  (MediaQuery.of(context).size.width - 40) / 5,
+                              child: Column(
+                                children: [
+                                  H14(text: foodList[index]),
+                                  Container(
+                                    margin: const EdgeInsets.all(3),
+                                    height: 60,
+                                    decoration: BoxDecoration(
+                                      color: colorSwitch(foodHome!
+                                          .food![foodList[index]]!.status),
+                                      borderRadius: BorderRadius.circular(8),
                                     ),
-                                    const SizedBox(height: 4),
-                                    Center(
-                                        child: H14(
-                                          text: foodHome!.food![foodList[index]]!.text!,
-                                          color: Colors.white,
-                                        )),
-                                  ],
-                                ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(5.0),
+                                      child: Column(
+                                        children: [
+                                          Image.asset(
+                                            "assets/food_icon_noback_$index.png",
+                                            width: 30,
+                                            height: 30,
+                                          ),
+                                          const SizedBox(height: 4),
+                                          Center(
+                                              child: H14(
+                                            text: foodHome!
+                                                .food![foodList[index]]!.text!,
+                                            color: Colors.white,
+                                          )),
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                                ],
                               ),
-                            )
-                          ],
+                            );
+                          },
                         ),
-                      );
-                    },
-                  ),
-                ),
+                      ),
                 // 미션 area
                 missionAreaText(),
               ],
@@ -391,16 +417,19 @@ class _MonitoringFoodResultState extends BaseState<MonitoringFoodResult> {
           ),
           const SizedBox(height: 12),
           // 미션 area list
-          Container(
-            height: 160,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              physics: const BouncingScrollPhysics(),
-              itemCount: foodHome!.habits!.missions!.length,
-              itemBuilder: (context, index) {
-                return foodListTile(index);
-              },),
-          ),
+          foodHome!.habits!.missions!.isEmpty
+              ? H16(text: "아직 검사기록이 없습니다.")
+              : SizedBox(
+                  height: 160,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    physics: const BouncingScrollPhysics(),
+                    itemCount: foodHome!.habits!.missions!.length,
+                    itemBuilder: (context, index) {
+                      return foodListTile(index);
+                    },
+                  ),
+                ),
           // Center(
           //   child: MainTextButton(
           //     text: "duddid",
@@ -448,6 +477,12 @@ class _MonitoringFoodResultState extends BaseState<MonitoringFoodResult> {
             _focusedDay = focusedDay;
           });
         }
+        if (_events.containsKey(selectedDay)) {
+          setState(() {
+            // p.changeSelDate(DateFormat('yyyy-MM-dd').format(selectedDay));
+            cateIndex = 1;
+          });
+        }
       },
       onPageChanged: (focusedDay) {
         _focusedDay = focusedDay;
@@ -466,7 +501,8 @@ class _MonitoringFoodResultState extends BaseState<MonitoringFoodResult> {
             return Center(
               child: Text(
                 text,
-                style: const TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                    color: Colors.red, fontWeight: FontWeight.bold),
               ),
             );
           } else if (day.weekday == DateTime.saturday) {
@@ -474,7 +510,8 @@ class _MonitoringFoodResultState extends BaseState<MonitoringFoodResult> {
             return Center(
               child: Text(
                 text,
-                style: const TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                    color: Colors.blue, fontWeight: FontWeight.bold),
               ),
             );
           } else {
@@ -517,7 +554,8 @@ class _MonitoringFoodResultState extends BaseState<MonitoringFoodResult> {
             child: Center(
               child: Text(
                 day.day.toString(),
-                style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                    color: Colors.white, fontWeight: FontWeight.bold),
               ),
             ),
             width: 40,
@@ -534,7 +572,10 @@ class _MonitoringFoodResultState extends BaseState<MonitoringFoodResult> {
             child: Center(
               child: Text(
                 day.day.toString(),
-                style: const TextStyle(fontSize: 16,color: Colors.white, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                    fontSize: 16,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold),
               ),
             ),
             width: 40,
@@ -542,7 +583,7 @@ class _MonitoringFoodResultState extends BaseState<MonitoringFoodResult> {
           );
         },
         markerBuilder: (context, day, events) {
-          if(events.isNotEmpty && _selectedDay != day) {
+          if (events.isNotEmpty && _selectedDay != day) {
             return Container(
               decoration: const BoxDecoration(
                 shape: BoxShape.circle,
@@ -564,22 +605,13 @@ class _MonitoringFoodResultState extends BaseState<MonitoringFoodResult> {
   }
 
   Widget monitor2() {
+    String selDate = DateFormat('yyyy-MM-dd').format(_selectedDay);
     return SingleChildScrollView(
       child: SizedBox(
           height: MediaQuery.of(context).size.width + 550,
-          child: Column(
-            children: [
-              Container(
-                width: MediaQuery.of(context).size.width,
-                padding: const EdgeInsets.all(20),
-                child: H16(
-                  text: DateFormat("yyyy년 M월 d일").format(DateTime.now()),
-                  align: TextAlign.start,
-                ),
-              ),
-              RadarChartWidget(state: true,),
-              // explain(),
-            ],
+          child: RadarChartWidget(
+            state: true,
+            date: selDate,
           )),
     );
   }
@@ -593,13 +625,15 @@ class _MonitoringFoodResultState extends BaseState<MonitoringFoodResult> {
           Column(
             children: [
               CachedNetworkImage(
-                imageUrl: "https://mingles-dev.s3.ap-northeast-2.amazonaws.com/uploads/product/main_image_object/41/%EB%B0%B0%EC%93%B0%EB%B0%A4_%EC%8D%B8%EB%84%A4%EC%9D%BC.jpg",
+                imageUrl:
+                    "https://mingles-dev.s3.ap-northeast-2.amazonaws.com/uploads/product/main_image_object/41/%EB%B0%B0%EC%93%B0%EB%B0%A4_%EC%8D%B8%EB%84%A4%EC%9D%BC.jpg",
                 width: 200,
                 height: 200,
                 fit: BoxFit.fill,
               ),
               H18(
-                text: "미션을 수행하며\n건강한 식습관을 가져보세요!",maxLine: 2,
+                text: "미션을 수행하며\n건강한 식습관을 가져보세요!",
+                maxLine: 2,
               ),
               Divider(),
               MainTextButton(
@@ -609,7 +643,11 @@ class _MonitoringFoodResultState extends BaseState<MonitoringFoodResult> {
                 height: 40,
                 radius: 6,
                 onPressed: () {
-                  Navigator.push(context, SlideRightTransRoute(builder: (context) => MonitoringFoodTest1(),));
+                  Navigator.push(
+                      context,
+                      SlideRightTransRoute(
+                        builder: (context) => MonitoringFoodTest1(),
+                      ));
                 },
               ),
             ],
@@ -622,7 +660,11 @@ class _MonitoringFoodResultState extends BaseState<MonitoringFoodResult> {
 
   Widget _body() {
     if (cateIndex == 0) {
-      return foodHome == null ? const Center(child: CircularProgressIndicator(),) : monitor1();
+      return foodHome == null
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : monitor1();
     } else if (cateIndex == 1) {
       return monitor2();
     } else {
@@ -637,7 +679,10 @@ class _MonitoringFoodResultState extends BaseState<MonitoringFoodResult> {
       onBack: onBackPressed,
       child: Column(
         children: [
-          SimpleHeader(title:"영양모니터링",onBackPressed: onBackPressed,),
+          SimpleHeader(
+            title: "영양모니터링",
+            onBackPressed: onBackPressed,
+          ),
           SizedBox(
             height: 50,
             child: ListView.builder(
@@ -658,4 +703,3 @@ class _MonitoringFoodResultState extends BaseState<MonitoringFoodResult> {
     );
   }
 }
-
