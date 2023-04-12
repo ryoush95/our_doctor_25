@@ -1,3 +1,7 @@
+// To parse this JSON data, do
+//
+//     final foodHabitModel = foodHabitModelFromJson(jsonString);
+
 import 'dart:convert';
 
 class FoodHabitModel {
@@ -8,56 +12,61 @@ class FoodHabitModel {
     this.reason,
   });
 
-  FoodHabitModelDto? data;
+  Data? data;
   int? result;
   String? msg;
   String? reason;
 
-  factory FoodHabitModel.fromRawJson(String str) => FoodHabitModel.fromJson(json.decode(str));
+  factory FoodHabitModel.fromRawJson(String str) =>
+      FoodHabitModel.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
   factory FoodHabitModel.fromJson(Map<String, dynamic> json) => FoodHabitModel(
-    data: json["data"] == null ? null : FoodHabitModelDto.fromJson(json["data"]),
-    result: json["result"],
-    msg: json["msg"],
-    reason: json["reason"],
-  );
+        data: json["data"] == null ? null : Data.fromJson(json["data"]),
+        result: json["result"],
+        msg: json["msg"],
+        reason: json["reason"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "data": data?.toJson(),
-    "result": result,
-    "msg": msg,
-    "reason": reason,
-  };
+        "data": data?.toJson(),
+        "result": result,
+        "msg": msg,
+        "reason": reason,
+      };
 }
 
-class FoodHabitModelDto {
-  FoodHabitModelDto({
+class Data {
+  Data({
     this.comments,
     this.missions,
   });
 
-  List<dynamic>? comments;
-  Map<String, dynamic>? missions;
+  Map<String, Comment>? comments;
+  Map<String, Mission>? missions;
 
-  factory FoodHabitModelDto.fromRawJson(String str) => FoodHabitModelDto.fromJson(json.decode(str));
+  factory Data.fromRawJson(String str) => Data.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
-  factory FoodHabitModelDto.fromJson(Map<String, dynamic> json) => FoodHabitModelDto(
-    comments: json["comments"],
-    missions: json["missions"],
-  );
+  factory Data.fromJson(Map<String, dynamic> json) => Data(
+        comments: Map.from(json["comments"]!)
+            .map((k, v) => MapEntry<String, Comment>(k, Comment.fromJson(v))),
+        missions: Map.from(json["missions"]!)
+            .map((k, v) => MapEntry<String, Mission>(k, Mission.fromJson(v))),
+      );
 
   Map<String, dynamic> toJson() => {
-    "comments": comments,
-    "missions": missions,
-  };
+        "comments": Map.from(comments!)
+            .map((k, v) => MapEntry<String, dynamic>(k, v.toJson())),
+        "missions": Map.from(missions!)
+            .map((k, v) => MapEntry<String, dynamic>(k, v.toJson())),
+      };
 }
 
-class CommentDto {
-  CommentDto({
+class Comment {
+  Comment({
     this.title,
     this.content,
   });
@@ -65,17 +74,41 @@ class CommentDto {
   String? title;
   String? content;
 
-  factory CommentDto.fromRawJson(String str) => CommentDto.fromJson(json.decode(str));
+  factory Comment.fromRawJson(String str) => Comment.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
-  factory CommentDto.fromJson(Map<String, dynamic> json) => CommentDto(
-    title: json["title"],
-    content: json["content"],
-  );
+  factory Comment.fromJson(Map<String, dynamic> json) => Comment(
+        title: json["title"],
+        content: json["content"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "title": title,
-    "content": content,
-  };
+        "title": title,
+        "content": content,
+      };
+}
+
+class Mission {
+  Mission({
+    this.text,
+    this.complete,
+  });
+
+  String? text;
+  bool? complete;
+
+  factory Mission.fromRawJson(String str) => Mission.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
+  factory Mission.fromJson(Map<String, dynamic> json) => Mission(
+        text: json["text"],
+        complete: json["complete"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "text": text,
+        "complete": complete,
+      };
 }

@@ -66,7 +66,7 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
           commentsList.add(value.data!.comments![i]);
         }
         for (int i = 1; i < value.data!.missions!.length + 1; i++) {
-          missionResults.add(value.data!.missions!['$i']['text']);
+          // missionResults.add(value.data!.missions!['$i']['text']);
         }
       }
       setState(() {});

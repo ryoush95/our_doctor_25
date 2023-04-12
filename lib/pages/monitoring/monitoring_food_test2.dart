@@ -51,9 +51,10 @@ class _MonitoringFoodTest2State extends BaseState<MonitoringFoodTest2> {
     });
   }
 
-  Future<void> saveCheckList() async{
+  Future<void> saveCheckList() async {
     widget.test1Data.addAll(answerList.map((e) => e.answer));
     String result = jsonEncode(widget.test1Data);
+    print(result);
     Future<FoodHabitModel> insert = httpService.saveCheckList(result);
     insert.then((value) async {
       setState(() {
@@ -175,7 +176,8 @@ class _MonitoringFoodTest2State extends BaseState<MonitoringFoodTest2> {
                       const SizedBox(height: 55),
                       MainTextButton(
                         text: "완료하기",
-                        style: AppTextStyle.PD(Colors.white, 18, weight: FW.medium),
+                        style: AppTextStyle.PD(Colors.white, 18,
+                            weight: FW.medium),
                         width: double.infinity,
                         height: 60,
                         radius: 10,

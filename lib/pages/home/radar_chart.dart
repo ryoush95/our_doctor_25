@@ -22,7 +22,7 @@ import 'package:ourdoctor/pages/monitoring/food_write_list.dart';
 import 'package:ourdoctor/pages/monitoring/provider/food_result_provider.dart';
 import 'package:provider/provider.dart';
 
-final List<String> foodList = ["고기, 생선, 달걀, 콩류", "과일류", "채소류", "유제품", "곡류"];
+final List<String> foodList = ["고기, 생선, 달걀, 콩류", "과일", "채소", "유제품", "곡류"];
 final List<Color> colorList = [
   Colors.amber,
   Colors.orange,
@@ -119,6 +119,7 @@ class _RadarChartWidgetState extends State<RadarChartWidget> {
     Comment? com = commentList[index];
     return Container(
       width: MediaQuery.of(context).size.width - 64,
+      height: 170,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(6.0), color: AppColor_Light_Gray),
       margin: const EdgeInsets.symmetric(horizontal: 10),
@@ -126,18 +127,30 @@ class _RadarChartWidgetState extends State<RadarChartWidget> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          H16(text: selIndex == -1 ? foodData!.comment!.title : com!.title),
+          com!.content.isEmpty
+              ? H16(text: "아직 기록이 없어요.")
+              : H16(
+                  text: selIndex == -1 ? foodData!.comment!.title : com.title),
           const SizedBox(
             height: 10,
           ),
-          H14(
-            text: selIndex == -1 ? foodData!.comment!.content : com!.content,
-            maxLine: 10,
-            height: 1.3,
-            align: TextAlign.start,
-            color: const Color(0xff707071),
-            weight: FW.medium,
-          ),
+          com.content.isEmpty
+              ? H14(
+                  text: "기록이 필요해요 :)",
+                  maxLine: 2,
+                  align: TextAlign.start,
+                  color: const Color(0xff707071),
+                  weight: FW.medium,
+                )
+              : H14(
+                  text:
+                      selIndex == -1 ? foodData!.comment!.content : com.content,
+                  maxLine: 10,
+                  height: 1.3,
+                  align: TextAlign.start,
+                  color: const Color(0xff707071),
+                  weight: FW.medium,
+                ),
         ],
       ),
     );
@@ -175,7 +188,7 @@ class _RadarChartWidgetState extends State<RadarChartWidget> {
         ),
         const SizedBox(height: 30),
         // bannerList.isNotEmpty ? CareBanner() : const Center(child: CircularProgressIndicator()),
-        SizedBox(height: 150, child: banner()),
+        SizedBox(height: 180, child: banner()),
         SizedBox(
           height: 50,
           child: Column(
@@ -306,7 +319,7 @@ class _RadarChartWidgetState extends State<RadarChartWidget> {
               height: 450,
               child: Column(
                 children: [
-                  foodData == null || foodData!.comment!.content.isEmpty
+                  foodData == null
                       ? SizedBox(
                           height: 50,
                           child: H16(
@@ -323,11 +336,17 @@ class _RadarChartWidgetState extends State<RadarChartWidget> {
                       width: 185,
                       height: 40,
                       radius: 6,
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            SlideRightTransRoute(
-                                builder: (context) => FoodWriteList()));
+                      onPressed: () async {
+                        final result = await Navigator.push(
+                          context,
+                          SlideRightTransRoute(
+                              builder: (context) => FoodWriteList()),
+                        );
+                        print(result);
+                        if (result) {
+                          print("refresh");
+                          getChartData();
+                        }
                       },
                     ),
                   ),

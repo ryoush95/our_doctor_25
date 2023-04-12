@@ -41,6 +41,8 @@ class _MonitoringFoodResultState extends BaseState<MonitoringFoodResult> {
   List<String> cateList = ["종합", "식단", "식습관"];
   List<String> foodList = ["곡류", "고기", "채소", "과일", "유제품"];
   List<bool> missionList = [];
+  List<String> missionKey = [];
+  Map<String, Mission> missionListData = {};
   FoodHomeData? foodHome;
   Map<DateTime, List> _events = {};
   DateTime? lastDate;
@@ -73,10 +75,13 @@ class _MonitoringFoodResultState extends BaseState<MonitoringFoodResult> {
     await getFoodAll.then((value) {
       if (value.result == 0) {
         foodHome = value.data!;
-        foodHome!.habits!.missions!.putIfAbsent(
-          "0",
-          () => Mission(complete: false, text: foodHome!.habits!.score!.text),
-        );
+        missionListData = foodHome!.habits!.missions!;
+        missionListData = {
+          "0": Mission(complete: false, text: foodHome!.habits!.score!.text),
+          ...missionListData,
+        };
+        foodHome!.habits!.missions = missionListData;
+        missionKey = foodHome!.habits!.missions!.keys.toList();
         lastDate = foodHome!.habits!.lastMonitoring!;
         _events = addEvent();
         setState(() {
@@ -139,7 +144,7 @@ class _MonitoringFoodResultState extends BaseState<MonitoringFoodResult> {
 
   Future<void> sendMission(Mission mdata, int index) async {
     Future<DefaultResModel> info =
-        httpService.missionComplete(index.toString());
+        httpService.missionComplete(missionKey[index]);
     await info.then((value) {
       if (value.result == 0) {
         Fluttertoast.cancel();
@@ -153,12 +158,12 @@ class _MonitoringFoodResultState extends BaseState<MonitoringFoodResult> {
       setState(() {
         isLoading = false;
       });
-      showToast(onError);
+      print(onError.toString());
     });
   }
 
   Widget foodListTile(index) {
-    final mdata = foodHome!.habits!.missions!["$index"]!;
+    final mdata = missionListData[missionKey[index]]!;
     return InkWell(
       onTap: () {
         if (index == 0) {
@@ -202,7 +207,7 @@ class _MonitoringFoodResultState extends BaseState<MonitoringFoodResult> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 H14(
-                  text: index == 0 ? "식습관 지수" : mdata.text!,
+                  text: index == 0 ? "식습관 지수" : "미션$index",
                   color: mdata.complete! ? Colors.white : Colors.black,
                 ),
                 Center(
@@ -289,27 +294,29 @@ class _MonitoringFoodResultState extends BaseState<MonitoringFoodResult> {
               maxLine: 2,
               align: TextAlign.start,
             ),
-            RichText(
-              text: TextSpan(
-                children: [
-                  TextSpan(
-                    text: "최신 기록은 ",
-                    style: AppTextStyle.PD(AppColor_BlackText, 16,
-                        weight: FW.regular),
+            lastDate == null
+                ? H16(text: "", color: AppColor_BlackText, weight: FW.regular)
+                : RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: "최신 기록은 ",
+                          style: AppTextStyle.PD(AppColor_BlackText, 16,
+                              weight: FW.regular),
+                        ),
+                        TextSpan(
+                          text: "${lastDate!.month}월 ${lastDate!.day}일",
+                          style: AppTextStyle.PD(AppColor_Primary, 16,
+                              weight: FW.bold, height: 1.4),
+                        ),
+                        TextSpan(
+                          text: " 이에요",
+                          style: AppTextStyle.PD(AppColor_BlackText, 16,
+                              weight: FW.regular, height: 1.4),
+                        ),
+                      ],
+                    ),
                   ),
-                  TextSpan(
-                    text: "${lastDate!.month}월 ${lastDate!.day}일",
-                    style: AppTextStyle.PD(AppColor_Primary, 16,
-                        weight: FW.bold, height: 1.4),
-                  ),
-                  TextSpan(
-                    text: " 이에요",
-                    style: AppTextStyle.PD(AppColor_BlackText, 16,
-                        weight: FW.regular, height: 1.4),
-                  ),
-                ],
-              ),
-            ),
           ],
         ),
         // Container(
@@ -332,12 +339,14 @@ class _MonitoringFoodResultState extends BaseState<MonitoringFoodResult> {
   }
 
   Color colorSwitch(status) {
-    if (status == "R") {
-      return AppColor_Red;
-    } else if (status == "G") {
+    if (status == "G") {
       return AppColor_Oxygen;
-    } else {
+    } else if (status == "Y") {
       return Colors.amber;
+    } else if (status == "R") {
+      return AppColor_Red;
+    } else {
+      return Colors.grey;
     }
   }
 
@@ -361,8 +370,11 @@ class _MonitoringFoodResultState extends BaseState<MonitoringFoodResult> {
                   align: TextAlign.start,
                 ),
                 const SizedBox(height: 20),
-                foodHome!.habits!.missions!.isEmpty
-                    ? H16(text: "아직 검사기록이 없습니다.")
+                foodHome!.food == null || foodHome!.food!.isEmpty
+                    ? SizedBox(
+                    height: 50,
+                    child: Center(child: H16(text: "아직 검사기록이 없습니다.")),
+                )
                     : SizedBox(
                         height: 150,
                         child: ListView.builder(
@@ -370,43 +382,50 @@ class _MonitoringFoodResultState extends BaseState<MonitoringFoodResult> {
                           physics: const NeverScrollableScrollPhysics(),
                           itemCount: 5,
                           itemBuilder: (context, index) {
-                            return SizedBox(
-                              width:
-                                  (MediaQuery.of(context).size.width - 40) / 5,
-                              child: Column(
-                                children: [
-                                  H14(text: foodList[index]),
-                                  Container(
-                                    margin: const EdgeInsets.all(3),
-                                    height: 60,
-                                    decoration: BoxDecoration(
-                                      color: colorSwitch(foodHome!
-                                          .food![foodList[index]]!.status),
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(5.0),
-                                      child: Column(
-                                        children: [
-                                          Image.asset(
-                                            "assets/food_icon_noback_$index.png",
-                                            width: 30,
-                                            height: 30,
+                            return foodHome!.food![foodList[index]] == null
+                                ? Container()
+                                : SizedBox(
+                                    width: (MediaQuery.of(context).size.width -
+                                            40) /
+                                        5,
+                                    child: Column(
+                                      children: [
+                                        H14(text: foodList[index]),
+                                        Container(
+                                          margin: const EdgeInsets.all(3),
+                                          height: 60,
+                                          decoration: BoxDecoration(
+                                            color: colorSwitch(foodHome!
+                                                .food![foodList[index]]!
+                                                .status),
+                                            borderRadius:
+                                                BorderRadius.circular(8),
                                           ),
-                                          const SizedBox(height: 4),
-                                          Center(
-                                              child: H14(
-                                            text: foodHome!
-                                                .food![foodList[index]]!.text!,
-                                            color: Colors.white,
-                                          )),
-                                        ],
-                                      ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(5.0),
+                                            child: Column(
+                                              children: [
+                                                Image.asset(
+                                                  "assets/food_icon_noback_$index.png",
+                                                  width: 30,
+                                                  height: 30,
+                                                ),
+                                                const SizedBox(height: 4),
+                                                Center(
+                                                    child: H14(
+                                                  text: foodHome!
+                                                          .food![
+                                                              foodList[index]]!
+                                                          .text ?? "없음",
+                                                  color: Colors.white,
+                                                )),
+                                              ],
+                                            ),
+                                          ),
+                                        )
+                                      ],
                                     ),
-                                  )
-                                ],
-                              ),
-                            );
+                                  );
                           },
                         ),
                       ),
@@ -417,14 +436,14 @@ class _MonitoringFoodResultState extends BaseState<MonitoringFoodResult> {
           ),
           const SizedBox(height: 12),
           // 미션 area list
-          foodHome!.habits!.missions!.isEmpty
+          foodHome!.habits!.missions!.isEmpty || lastDate == null
               ? H16(text: "아직 검사기록이 없습니다.")
               : SizedBox(
                   height: 160,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     physics: const BouncingScrollPhysics(),
-                    itemCount: foodHome!.habits!.missions!.length,
+                    itemCount: missionKey.length,
                     itemBuilder: (context, index) {
                       return foodListTile(index);
                     },

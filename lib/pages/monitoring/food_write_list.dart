@@ -65,8 +65,8 @@ class _FoodWriteListState extends BaseState<FoodWriteList> {
   }
 
   Future<bool> onBackPressed() async {
-    Navigator.pop(context);
-    return true;
+    Navigator.pop(context, false);
+    return false;
   }
 
   // 모니터링 음식 리스트
@@ -324,9 +324,8 @@ class _FoodWriteListState extends BaseState<FoodWriteList> {
         isLoading = false;
       });
       if (value.result == 0) {
-        // Provider.of<FoodResultProvider>(context).setDataProvider(value.data!);
         showToast("저장되었습니다.");
-        Navigator.pop(context);
+        Navigator.pop(context, true);
       }
     }).catchError((onError) {
       print(onError.toString());
