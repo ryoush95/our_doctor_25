@@ -13,6 +13,7 @@ import 'package:ourdoctor/pages/components/h16.dart';
 import 'package:ourdoctor/pages/components/h18.dart';
 import 'package:ourdoctor/pages/components/main_text_button.dart';
 import 'package:ourdoctor/pages/components/simple_header.dart';
+import 'package:ourdoctor/pages/monitoring/monitoring_food_result.dart';
 
 class MonitoringFoodTest2 extends StatefulWidget {
   MonitoringFoodTest2({Key? key, required this.test1Data}) : super(key: key);
@@ -61,7 +62,12 @@ class _MonitoringFoodTest2State extends BaseState<MonitoringFoodTest2> {
         isLoading = false;
       });
       if (value.result == 0) {
-        Navigator.pop(context);
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MonitoringFoodResult(),
+          ),
+        );
       }
     }).catchError((onError) {
       print(onError.toString());
