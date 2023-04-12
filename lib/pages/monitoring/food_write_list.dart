@@ -24,7 +24,8 @@ import 'package:provider/provider.dart';
 import 'package:show_more_text_popup/show_more_text_popup.dart';
 
 class FoodWriteList extends StatefulWidget {
-  const FoodWriteList({Key? key}) : super(key: key);
+  FoodWriteList({Key? key, required this.date}) : super(key: key);
+  String? date;
 
   @override
   State<FoodWriteList> createState() => _FoodWriteListState();
@@ -74,7 +75,7 @@ class _FoodWriteListState extends BaseState<FoodWriteList> {
     setState(() {
       isLoading = true;
     });
-    Future<FoodItemListModel> getInfo = httpService.foodWriteList();
+    Future<FoodItemListModel> getInfo = httpService.foodWriteList(widget.date!);
     getInfo.then((FoodItemListModel value) {
       if (value.result == 0) {
         foodAllList = value.data!.result!;
@@ -318,7 +319,8 @@ class _FoodWriteListState extends BaseState<FoodWriteList> {
     }
 
     String result = jsonEncode(countList);
-    Future<DefaultResModel> insert = httpService.saveFoodWriteList(result);
+    Future<DefaultResModel> insert =
+        httpService.saveFoodWriteList(result, widget.date!);
     await insert.then((value) async {
       setState(() {
         isLoading = false;

@@ -20,6 +20,7 @@ import 'package:ourdoctor/pages/components/header_text.dart';
 import 'package:ourdoctor/pages/components/main_text_button.dart';
 import 'package:ourdoctor/pages/components/simple_header.dart';
 import 'package:ourdoctor/pages/home/radar_chart.dart';
+import 'package:ourdoctor/pages/monitoring/food_write_list.dart';
 import 'package:ourdoctor/pages/monitoring/monitoring_food_habit.dart';
 import 'package:ourdoctor/pages/monitoring/monitoring_food_test1.dart';
 import 'package:ourdoctor/pages/monitoring/provider/food_result_provider.dart';
@@ -493,7 +494,7 @@ class _MonitoringFoodResultState extends BaseState<MonitoringFoodResult> {
       selectedDayPredicate: (day) {
         return isSameDay(_selectedDay, day);
       },
-      onDaySelected: (selectedDay, focusedDay) {
+      onDaySelected: (selectedDay, focusedDay) async {
         if (!isSameDay(_selectedDay, selectedDay)) {
           setState(() {
             _selectedDay = selectedDay;
@@ -502,9 +503,23 @@ class _MonitoringFoodResultState extends BaseState<MonitoringFoodResult> {
         }
         if (_events.containsKey(selectedDay)) {
           setState(() {
-            // p.changeSelDate(DateFormat('yyyy-MM-dd').format(selectedDay));
             cateIndex = 1;
           });
+        } else {
+          if (selectedDay.isAfter(DateTime.now())) {
+            return;
+          }
+          String selDate = DateFormat('yyyy-MM-dd').format(_selectedDay);
+          final result = await Navigator.push(
+              context,
+              SlideRightTransRoute(
+                builder: (context) => FoodWriteList(
+                  date: selDate,
+                ),
+              ));
+          if (result != null && result) {
+            getFoodHomeData();
+          }
         }
       },
       onPageChanged: (focusedDay) {
@@ -640,7 +655,6 @@ class _MonitoringFoodResultState extends BaseState<MonitoringFoodResult> {
   }
 
   Widget monitor3() {
-    print(gUserInfo!.accessToken!);
     return Container(
       color: Colors.transparent,
       child: Stack(

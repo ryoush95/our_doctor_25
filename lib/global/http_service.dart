@@ -2039,10 +2039,11 @@ class HttpService {
   }
 
   //모니터링 음식 리스트
-  Future<FoodItemListModel> foodWriteList() async {
+  Future<FoodItemListModel> foodWriteList(date) async {
     String _url = API_BASE_URL + "api/monitoring/get_food_list";
     Map<String, String> body = {
       'access_token': gUserInfo!.accessToken!,
+      'date': date,
     };
     Uri myUri = Uri.parse(_url);
     final response = await http.post(myUri, body: body);
@@ -2968,11 +2969,12 @@ class HttpService {
   }
 
   // 식단 기록하기
-  Future<DefaultResModel> saveFoodWriteList(String result) async {
+  Future<DefaultResModel> saveFoodWriteList(String result, date) async {
     String _url = API_BASE_URL + "api/Monitoring/save_food_list";
     Map<String, String> body = {
       'access_token': gUserInfo!.accessToken!,
       'answer': result,
+      'date': date,
     };
     Uri myUri = Uri.parse(_url);
     final response = await http.post(myUri, body: body);

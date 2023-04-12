@@ -181,14 +181,10 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
             const SizedBox(
               height: 40,
             ),
-            FutureBuilder(
-              builder: (context, snapshot) => CachedNetworkImage(
-                imageUrl:
-                    "https://mingles-dev.s3.ap-northeast-2.amazonaws.com/uploads/product/main_image_object/41/%EB%B0%B0%EC%93%B0%EB%B0%A4_%EC%8D%B8%EB%84%A4%EC%9D%BC.jpg",
-                width: 200,
-                height: 200,
-                fit: BoxFit.fill,
-              ),
+            Image.asset(
+              "assets/food_habit_0.png",
+              width: 200,
+              height: 200,
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 30),
@@ -268,14 +264,10 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
             const SizedBox(
               height: 40,
             ),
-            FutureBuilder(
-              builder: (context, snapshot) => CachedNetworkImage(
-                imageUrl:
-                    "https://mingles-dev.s3.ap-northeast-2.amazonaws.com/uploads/product/main_image_object/41/%EB%B0%B0%EC%93%B0%EB%B0%A4_%EC%8D%B8%EB%84%A4%EC%9D%BC.jpg",
-                width: 200,
-                height: 200,
-                fit: BoxFit.fill,
-              ),
+            Image.asset(
+              "assets/food_habit_1.png",
+              width: 200,
+              height: 200,
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 30),

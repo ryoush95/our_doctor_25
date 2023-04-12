@@ -340,7 +340,8 @@ class _RadarChartWidgetState extends State<RadarChartWidget> {
                         final result = await Navigator.push(
                           context,
                           SlideRightTransRoute(
-                              builder: (context) => FoodWriteList()),
+                              builder: (context) =>
+                                  FoodWriteList(date: widget.date!)),
                         );
 
                         if (result) {
