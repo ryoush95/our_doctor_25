@@ -7,6 +7,7 @@ import 'package:ourdoctor/global/global.dart';
 import 'package:ourdoctor/global/http_service.dart';
 import 'package:ourdoctor/helpers/transition.dart';
 import 'package:ourdoctor/models/monitoring/food_habits_result_model.dart';
+import 'package:ourdoctor/models/monitoring/food_home_model.dart';
 import 'package:ourdoctor/models/monitoring/note_profile_model.dart';
 import 'package:ourdoctor/pages/components/h14.dart';
 import 'package:ourdoctor/pages/components/h16.dart';
@@ -14,9 +15,7 @@ import 'package:ourdoctor/pages/components/h18.dart';
 import 'package:ourdoctor/pages/components/main_text_button.dart';
 import 'package:ourdoctor/provider/global_provider.dart';
 import 'package:provider/provider.dart';
-
 import 'monitoring_food_test1.dart';
-import 'monitoring_food_test2.dart';
 
 class MonitoringFoodHabit extends StatefulWidget {
   const MonitoringFoodHabit({Key? key}) : super(key: key);
@@ -45,13 +44,12 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
     await p.getNoteInfo(context);
     data = p.profile;
     if (data!.food != null) {
-      //TODO 현재 데이터 없어서 분기처리 반대로 했음 추후 수정필요함
       setState(() {
-        isChecked = false;
+        isChecked = true;
       });
     } else {
       setState(() {
-        isChecked = true;
+        isChecked = false;
       });
     }
   }
