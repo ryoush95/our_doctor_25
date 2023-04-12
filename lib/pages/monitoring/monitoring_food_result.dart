@@ -64,7 +64,7 @@ class _MonitoringFoodResultState extends BaseState<MonitoringFoodResult> {
   }
 
   Future<bool> onBackPressed() async {
-    Navigator.pop(context);
+    Navigator.pop(context, true);
     return true;
   }
 

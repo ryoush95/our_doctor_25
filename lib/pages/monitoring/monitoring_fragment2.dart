@@ -649,6 +649,7 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
             height: 40,
             radius: 6,
             onPressed: () async {
+              tabIndex = 1;
               final info = await httpService.getChildMonths();
               var months = info["data"]["month"];
 
@@ -677,10 +678,15 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
                 );
               } else if (months > 12) {
                 //12개월 초과 자녀
-                Navigator.push(
+                final result = await Navigator.push(
                     context,
                     SlideRightTransRoute(
                         builder: (context) => MonitoringFoodResult()));
+                if (result != null && result) {
+                  setState(() {
+                    tabIndex = 0;
+                  });
+                }
               } else {
                 //12개월 이하 자녀
                 Navigator.push(

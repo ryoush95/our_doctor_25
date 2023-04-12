@@ -130,7 +130,8 @@ class _FoodWriteListState extends BaseState<FoodWriteList> {
   }
 
   String changeUnit(FoodItem unit) {
-    String v = (unit.unit! * unit.count!).toString();
+    String v = (unit.unit! * unit.count!).toStringAsFixed(2);
+    v = double.parse(v).toString();
     if (v.contains(".0")) {
       v = v.substring(0, v.length - 2);
     }
