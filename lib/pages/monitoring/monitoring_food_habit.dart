@@ -40,22 +40,20 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
 
   Future<void> getFoodHabitResult() async {
     Future<FoodHabitModel> info = httpService.getFoodHabitResults();
-
     info.then((FoodHabitModel value) {
-      if (value.data == null) {
+      if (value.data!.comments!.isNotEmpty) {
         setState(() {
-          isChecked = false;
+          isChecked=true;
         });
-        return;
-      }
-      setState(() {
-        isChecked = true;
-      });
-      for (int i = 0; i < value.data!.comments!.length; i++) {
-        commentsList.add(value.data!.comments![i]);
-      }
-      for (int i = 1; i < value.data!.missions!.length + 1; i++) {
-        missionResults.add(value.data!.missions!['$i']['text']);
+        for (int i = 0; i < value.data!.comments!.length; i++) {
+          commentsList.add(value.data!.comments![i]);
+        }
+        Map<String, dynamic>? mission_temp = value.data!.missions;
+        mission_temp!.values.forEach((element) => missionResults.add(element));
+      }else {
+        setState(() {
+          isChecked=false;
+        });
       }
     }).catchError((onError) {
       print(onError.toString());
