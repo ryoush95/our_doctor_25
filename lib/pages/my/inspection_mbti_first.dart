@@ -111,7 +111,7 @@ class InspectionMbtiFirstPageState extends BaseState<InspectionMbtiFirstPage> {
                           ),
                           TextSpan(
                             text: "다음 질문에 응답해 주세요.\n\n\n",
-                            style: AppTextStyle.PD(AppColor_BlackText, 19,
+                            style: AppTextStyle.PD(AppColor_BlackText, 18,
                                 weight: FW.bold),
                           ),
                           TextSpan(

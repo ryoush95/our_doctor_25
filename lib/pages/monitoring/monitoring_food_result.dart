@@ -28,7 +28,8 @@ import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class MonitoringFoodResult extends StatefulWidget {
-  const MonitoringFoodResult({Key? key}) : super(key: key);
+  MonitoringFoodResult({Key? key, this.tab = 0}) : super(key: key);
+  int? tab;
 
   @override
   State<MonitoringFoodResult> createState() => _MonitoringFoodResultState();
@@ -58,6 +59,7 @@ class _MonitoringFoodResultState extends BaseState<MonitoringFoodResult> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    cateIndex = widget.tab!;
     p.changeGraphIndex(-1);
     getFoodHomeData();
     missionList = List.generate(5, (_) => false);
@@ -118,11 +120,11 @@ class _MonitoringFoodResultState extends BaseState<MonitoringFoodResult> {
               Center(
                 child: H14(
                   text: cateList[index],
-                  weight: FW.medium,
+                  weight: cateIndex == index ? FW.bold : FW.regular,
                   align: TextAlign.center,
                   maxLine: 2,
                   color: cateIndex == index
-                      ? AppColor_BlackText
+                      ? AppColor_Primary
                       : AppColor_BlackText.withOpacity(0.2),
                 ),
               ),
@@ -152,7 +154,7 @@ class _MonitoringFoodResultState extends BaseState<MonitoringFoodResult> {
     await info.then((value) {
       if (value.result == 0) {
         Fluttertoast.cancel();
-        showToast("미션을 완료했어요! +1point");
+        showToast("미션을 완료했어요!");
         setState(() {
           // _showMessage = true;
           mdata.complete = !mdata.complete!;
@@ -536,27 +538,36 @@ class _MonitoringFoodResultState extends BaseState<MonitoringFoodResult> {
         defaultBuilder: (context, day, focusedDay) {
           final text = day.day.toString();
           if (day.weekday == DateTime.sunday) {
-            return Center(
-              child: Text(
-                text,
-                style: const TextStyle(
-                    color: Colors.red, fontWeight: FontWeight.bold),
+            return Container(
+              margin: EdgeInsets.only(bottom: 15),
+              child: Center(
+                child: Text(
+                  text,
+                  style: const TextStyle(
+                      color: Colors.red, fontWeight: FontWeight.bold),
+                ),
               ),
             );
           } else if (day.weekday == DateTime.saturday) {
             final text = day.day.toString();
-            return Center(
-              child: Text(
-                text,
-                style: const TextStyle(
-                    color: Colors.blue, fontWeight: FontWeight.bold),
+            return Container(
+              margin: EdgeInsets.only(bottom: 15),
+              child: Center(
+                child: Text(
+                  text,
+                  style: const TextStyle(
+                      color: Colors.blue, fontWeight: FontWeight.bold),
+                ),
               ),
             );
           } else {
-            return Center(
-              child: Text(
-                text,
-                style: const TextStyle(fontWeight: FontWeight.bold),
+            return Container(
+              margin: EdgeInsets.only(bottom: 15),
+              child: Center(
+                child: Text(
+                  text,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
               ),
             );
           }
@@ -584,7 +595,7 @@ class _MonitoringFoodResultState extends BaseState<MonitoringFoodResult> {
         },
         todayBuilder: (context, day, focusedDay) {
           return Container(
-            margin: EdgeInsets.only(bottom: 5),
+            margin: EdgeInsets.only(bottom: 15),
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               color: AppColor_Primary.withOpacity(0.6),
@@ -602,7 +613,7 @@ class _MonitoringFoodResultState extends BaseState<MonitoringFoodResult> {
         },
         selectedBuilder: (context, day, focusedDay) {
           return Container(
-            margin: const EdgeInsets.only(bottom: 5),
+            margin: const EdgeInsets.only(bottom: 15),
             decoration: const BoxDecoration(
               shape: BoxShape.circle,
               color: AppColor_Primary,
@@ -620,9 +631,26 @@ class _MonitoringFoodResultState extends BaseState<MonitoringFoodResult> {
             height: 40,
           );
         },
+        outsideBuilder: (context, day, focusedDay) {
+          return Container(
+            margin: const EdgeInsets.only(bottom: 15),
+            child: Center(
+              child: Text(
+                day.day.toString(),
+                style: const TextStyle(
+                    fontSize: 16,
+                    color: Colors.grey,
+                    fontWeight: FontWeight.normal),
+              ),
+            ),
+            width: 40,
+            height: 40,
+          );
+        },
         markerBuilder: (context, day, events) {
           if (events.isNotEmpty && _selectedDay != day) {
             return Container(
+              margin: const EdgeInsets.only(bottom: 3),
               decoration: const BoxDecoration(
                 shape: BoxShape.circle,
                 color: AppColor_Primary,

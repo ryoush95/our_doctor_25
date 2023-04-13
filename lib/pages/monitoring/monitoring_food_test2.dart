@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:ourdoctor/global/app_colors.dart';
 import 'package:ourdoctor/global/app_styles.dart';
 import 'package:ourdoctor/global/http_service.dart';
+import 'package:ourdoctor/helpers/transition.dart';
 import 'package:ourdoctor/models/default_res_model.dart';
 import 'package:ourdoctor/models/monitoring/food_check_list2_model.dart';
-import 'package:ourdoctor/models/monitoring/food_habits_result_model.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
 import 'package:ourdoctor/pages/base/page_layout.dart';
 import 'package:ourdoctor/pages/components/h16.dart';
@@ -64,7 +64,9 @@ class _MonitoringFoodTest2State extends BaseState<MonitoringFoodTest2> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => MonitoringFoodResult(),
+            builder: (context) => MonitoringFoodResult(
+              tab: 2,
+            ),
           ),
         );
       }
@@ -74,7 +76,13 @@ class _MonitoringFoodTest2State extends BaseState<MonitoringFoodTest2> {
   }
 
   Future<bool> onBackPressed() async {
-    Navigator.pop(context);
+    Navigator.pushReplacement(
+        context,
+        SlideRightTransRoute(
+          builder: (context) => MonitoringFoodResult(
+            tab: 2,
+          ),
+        ));
     return true;
   }
 
@@ -134,71 +142,72 @@ class _MonitoringFoodTest2State extends BaseState<MonitoringFoodTest2> {
   @override
   Widget build(BuildContext context) {
     return PageLayout(
+        onBack: onBackPressed,
         child: Column(
-      children: [
-        SimpleHeader(
-          title: "영양모니터링",
-          onBackPressed: onBackPressed,
-        ),
-        Expanded(
-          child: Container(
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: SingleChildScrollView(
-              child: Stack(
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SimpleHeader(
+              title: "영양모니터링",
+              onBackPressed: onBackPressed,
+            ),
+            Expanded(
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: SingleChildScrollView(
+                  child: Stack(
                     children: [
-                      const SizedBox(height: 25),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        child: H18(
-                          text: "문제 행동",
-                          color: AppColor_Primary,
-                          align: TextAlign.start,
-                        ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(height: 25),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            child: H18(
+                              text: "문제 행동",
+                              color: AppColor_Primary,
+                              align: TextAlign.start,
+                            ),
+                          ),
+                          H18(
+                            text: "체크리스트",
+                            align: TextAlign.start,
+                          ),
+                          const SizedBox(height: 35),
+                          SizedBox(
+                            height: checkList.length * 100,
+                            child: ListView.builder(
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: checkList.length,
+                              itemBuilder: (context, index) {
+                                return Container(
+                                  padding: EdgeInsets.only(bottom: 10),
+                                  height: 100,
+                                  child: foodHabitTestTile1(index),
+                                );
+                              },
+                            ),
+                          ),
+                          const SizedBox(height: 55),
+                          MainTextButton(
+                            text: "완료하기",
+                            style: AppTextStyle.PD(Colors.white, 18,
+                                weight: FW.medium),
+                            width: double.infinity,
+                            height: 60,
+                            radius: 10,
+                            onPressed: () {
+                              saveCheckList();
+                            },
+                          ),
+                          const SizedBox(height: 55),
+                        ],
                       ),
-                      H18(
-                        text: "체크리스트",
-                        align: TextAlign.start,
-                      ),
-                      const SizedBox(height: 35),
-                      SizedBox(
-                        height: checkList.length * 100,
-                        child: ListView.builder(
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: checkList.length,
-                          itemBuilder: (context, index) {
-                            return Container(
-                              padding: EdgeInsets.only(bottom: 10),
-                              height: 100,
-                              child: foodHabitTestTile1(index),
-                            );
-                          },
-                        ),
-                      ),
-                      const SizedBox(height: 55),
-                      MainTextButton(
-                        text: "완료하기",
-                        style: AppTextStyle.PD(Colors.white, 18,
-                            weight: FW.medium),
-                        width: double.infinity,
-                        height: 60,
-                        radius: 10,
-                        onPressed: () {
-                          saveCheckList();
-                        },
-                      ),
-                      const SizedBox(height: 55),
                     ],
                   ),
-                ],
+                ),
               ),
             ),
-          ),
-        ),
-      ],
-    ));
+          ],
+        ));
   }
 }

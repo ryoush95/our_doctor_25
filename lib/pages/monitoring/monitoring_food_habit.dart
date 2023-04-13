@@ -12,6 +12,7 @@ import 'package:ourdoctor/pages/components/h14.dart';
 import 'package:ourdoctor/pages/components/h16.dart';
 import 'package:ourdoctor/pages/components/h18.dart';
 import 'package:ourdoctor/pages/components/main_text_button.dart';
+import 'package:ourdoctor/pages/monitoring/monitoring_food_test2.dart';
 import 'package:ourdoctor/provider/global_provider.dart';
 import 'package:provider/provider.dart';
 import 'monitoring_food_test1.dart';
@@ -32,6 +33,7 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
   MonitoringProfileDto? data;
   bool isChecked = false; //식습관 테스트 완료 comment O
   bool hasComments = false; //식습관 테스트 완료 comment X mission O
+  int months = 0;
 
   @override
   void initState() {
@@ -40,30 +42,31 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
   }
 
   Future<void> getFoodHabitResult() async {
+    final ageInfo = await httpService.getChildMonths();
+    months = ageInfo["data"]["month"];
     Future<FoodHabitModel> info = httpService.getFoodHabitResults();
-
     info.then((FoodHabitModel value) {
-      if(value.data!.comments!.isEmpty && value.data!.missions!.isNotEmpty){
+      if (value.data!.comments!.isEmpty && value.data!.missions!.isNotEmpty) {
         setState(() {
-          isChecked=true;
-          hasComments=false;
+          isChecked = true;
+          hasComments = false;
           commentsList = value.data!.comments!.values.toList();
           missionKeys = value.data!.missions!.keys.toList();
           missionList = value.data!.missions!.values.toList();
         });
-      }else if (value.data!.comments!.isNotEmpty && value.data!.missions!.isNotEmpty) {
+      } else if (value.data!.comments!.isNotEmpty &&
+          value.data!.missions!.isNotEmpty) {
         setState(() {
-          isChecked=true;
-          hasComments= true;
+          isChecked = true;
+          hasComments = true;
         });
         commentsList = value.data!.comments!.values.toList();
         missionKeys = value.data!.missions!.keys.toList();
         missionList = value.data!.missions!.values.toList();
-
-      }else {
+      } else {
         setState(() {
-          isChecked=false;
-          hasComments=false;
+          isChecked = false;
+          hasComments = false;
         });
       }
       setState(() {});
@@ -246,7 +249,7 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
               height: 40,
               radius: 6,
               onPressed: () {
-                Navigator.push(
+                Navigator.pushReplacement(
                     context,
                     SlideRightTransRoute(
                       builder: (context) => MonitoringFoodTest1(),
@@ -304,7 +307,7 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
                   },
                 ),
               ),
-            _dotIndicator(1.0),
+            months > 36 ? const SizedBox() : _dotIndicator(1.0),
             const SizedBox(
               height: 20,
             ),
@@ -315,11 +318,15 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
               height: 40,
               radius: 6,
               onPressed: () {
-                Navigator.push(
-                    context,
-                    SlideRightTransRoute(
-                      builder: (context) => MonitoringFoodTest1(),
-                    ));
+                Navigator.pushReplacement(context, SlideRightTransRoute(
+                  builder: (context) {
+                    if (months > 36) {
+                      return MonitoringFoodTest1();
+                    } else {
+                      return MonitoringFoodTest2(test1Data: const []);
+                    }
+                  },
+                ));
               },
             ),
             const SizedBox(
@@ -337,7 +344,9 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
       backgroundColor: Colors.white,
       body: PageView(
         children: [
-          page(),
+          if (months > 36) ...[
+            page(),
+          ],
           page1(),
         ],
       ),

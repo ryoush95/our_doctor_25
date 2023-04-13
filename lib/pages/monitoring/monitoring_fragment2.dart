@@ -21,6 +21,7 @@ import 'package:ourdoctor/pages/components/h16.dart';
 import 'package:ourdoctor/pages/components/h18.dart';
 import 'package:ourdoctor/pages/components/h20.dart';
 import 'package:ourdoctor/pages/components/h24_b.dart';
+import 'package:ourdoctor/pages/components/header_text.dart';
 import 'package:ourdoctor/pages/components/main_text_button.dart';
 import 'package:ourdoctor/pages/components/round_container.dart';
 import 'package:ourdoctor/pages/home/circular_progress2.dart';
@@ -58,15 +59,14 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
   List<String> category = ["영양", "발달", "성장노트"];
   String lifeIcon = "assets/icon_normal.png";
   String lifeText = "";
+  int months = 0;
 
   @override
   void initState() {
     getMonitor2HomeDataInfo();
 
     eventBus.on<SelectChildEvent>().listen((event) {
-      if (mounted) {
-        getMonitor2HomeDataInfo();
-      }
+      getMonitor2HomeDataInfo();
     });
     super.initState();
   }
@@ -81,7 +81,8 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
     setState(() {
       isLoading = true;
     });
-
+    final info2 = await httpService.getChildMonths();
+    months = info2["data"]["month"];
     Future<HomeMonitorResModel> info = httpService.homeMonitorInfo();
     info.then((HomeMonitorResModel value) async {
       setState(() {
@@ -138,11 +139,11 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
             Center(
               child: H14(
                 text: category[index],
-                weight: FW.medium,
+                weight: tabIndex == index ? FW.bold : FW.regular,
                 align: TextAlign.center,
                 maxLine: 2,
                 color: tabIndex == index
-                    ? AppColor_BlackText
+                    ? AppColor_Primary
                     : AppColor_BlackText.withOpacity(0.2),
               ),
             ),
@@ -170,8 +171,10 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        H18(
-          text: "짜잔!\n${gSelChildInfo!.name}의 발달 분석 결과가 나왔어요",
+        HeaderText(
+          text: p.development!.score == 0
+              ? "${gSelChildInfo!.name}(이)의 발달 상태를 체크하러 가 볼까요?"
+              : "짜잔!\n${gSelChildInfo!.name}의 발달 분석 결과가 나왔어요",
           maxLine: 2,
           align: TextAlign.start,
         ),
@@ -387,8 +390,10 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            H18(
-              text: "${gSelChildInfo!.name}의\n성장을 기록해볼까요?",
+            HeaderText(
+              text: p.temperature!.status == "N"
+                  ? "${gSelChildInfo!.name}의\n성장을 기록해볼까요?"
+                  : "오늘도 쑥쑥 성장 중이에요!",
               maxLine: 2,
               align: TextAlign.start,
             ),
@@ -637,10 +642,28 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
   Widget monitorFood() {
     return Column(
       children: [
-        RadarChartWidget(
-          state: false,
-          date: DateFormat('yyyy-MM-dd').format(DateTime.now()),
-        ),
+        months < 36
+            ? RadarChartWidget(
+                state: false,
+                date: DateFormat('yyyy-MM-dd').format(DateTime.now()),
+              )
+            : Column(
+                children: [
+                  Column(
+                    children: [
+                      Image.asset("assets/food_main_page.jpg"),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 30),
+                        child: HeaderText(
+                          text: "우리아이의 건강한 성장을 위한\n영양 꿀 TIP!",
+                          maxLine: 2,
+                          align: TextAlign.center,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
         Center(
           child: MainTextButton(
             text: "영양 기록하기",
@@ -650,8 +673,6 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
             radius: 6,
             onPressed: () async {
               tabIndex = 1;
-              final info = await httpService.getChildMonths();
-              var months = info["data"]["month"];
 
               //132개월 초과 자녀(만 11세) , 자녀 분기
               if (months > 132) {

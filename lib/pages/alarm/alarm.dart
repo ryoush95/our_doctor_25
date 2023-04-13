@@ -417,7 +417,7 @@ class AlarmPageState extends BaseState<AlarmPage> {
                           Center(
                             child: H14(
                               text: LanguageService.trans('notice1'),
-                              weight: FW.medium,
+                              weight: nTabIndex == 0 ? FW.bold : FW.medium,
                               align: TextAlign.center,
                               color: nTabIndex == 0 ? AppColor_BlackText : AppColor_BlackText.withOpacity(0.2),
                             ),
@@ -453,7 +453,7 @@ class AlarmPageState extends BaseState<AlarmPage> {
                           Center(
                             child: H14(
                               text: LanguageService.trans('action'),
-                              weight: FW.medium,
+                              weight: nTabIndex == 1 ? FW.bold : FW.medium,
                               align: TextAlign.center,
                               color: nTabIndex == 1 ? AppColor_BlackText : AppColor_BlackText.withOpacity(0.2),
                             ),

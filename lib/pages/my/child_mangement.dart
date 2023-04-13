@@ -16,6 +16,7 @@ import 'package:ourdoctor/pages/base/page_layout.dart';
 import 'package:ourdoctor/pages/components/h14.dart';
 import 'package:ourdoctor/pages/components/h16.dart';
 import 'package:ourdoctor/pages/components/h24_b.dart';
+import 'package:ourdoctor/pages/components/header_text.dart';
 import 'package:ourdoctor/pages/components/main_text_button.dart';
 import 'package:ourdoctor/pages/components/simple_header.dart';
 import 'package:ourdoctor/pages/dialog/dlg_title_two_btn.dart';
@@ -237,7 +238,7 @@ class ChildManagementPageState extends BaseState<ChildManagementPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 20),
-                    H24B(text: "가족력", color: AppColor_BlackText),
+                    HeaderText(text: "가족력", color: AppColor_BlackText),
                     const SizedBox(height: 10),
                     //고혈압
                     Visibility(
@@ -446,7 +447,7 @@ class ChildManagementPageState extends BaseState<ChildManagementPage> {
                       },
                     ),
                     const SizedBox(height: 60),
-                    H24B(text: "아이 관리", color: AppColor_BlackText),
+                    HeaderText(text: "아이 관리", color: AppColor_BlackText),
                     const SizedBox(height: 10),
                     Container(
                         height: 125,

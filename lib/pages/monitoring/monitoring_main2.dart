@@ -593,14 +593,14 @@ class _MonitoringMain2State extends BaseState<MonitoringMain2> {
                           const SizedBox(height: 20),
                           tempInfo(screenSize),
                           const SizedBox(height: 20),
-                          H16(
-                            text: "2. 오늘의 영양상태를 기록해주세요.",
-                            weight: FW.medium,
-                            color: AppColor_BlackText,
-                            align: TextAlign.start,
-                          ),
-                          const SizedBox(height: 20),
-                          foodInfo2(),
+                          // H16(
+                          //   text: "2. 오늘의 영양상태를 기록해주세요.",
+                          //   weight: FW.medium,
+                          //   color: AppColor_BlackText,
+                          //   align: TextAlign.start,
+                          // ),
+                          // const SizedBox(height: 20),
+                          // foodInfo2(),
                           // foodInfo(),
                           const SizedBox(height: 20),
                           H16(

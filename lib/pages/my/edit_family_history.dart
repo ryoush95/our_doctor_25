@@ -17,6 +17,7 @@ import 'package:ourdoctor/pages/components/app_checkbox.dart';
 import 'package:ourdoctor/pages/components/h14.dart';
 import 'package:ourdoctor/pages/components/h16.dart';
 import 'package:ourdoctor/pages/components/h24_b.dart';
+import 'package:ourdoctor/pages/components/header_text.dart';
 import 'package:ourdoctor/pages/components/main_text_button.dart';
 import 'package:ourdoctor/pages/components/outline_input.dart';
 import 'package:ourdoctor/pages/components/simple_header.dart';
@@ -434,7 +435,7 @@ class EditFamilyHisPageState extends BaseState<EditFamilyHisPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 20),
-                    H24B(text: "가족력", color: AppColor_BlackText),
+                    HeaderText(text: "가족력", color: AppColor_BlackText),
                     const SizedBox(height: 14),
                     GridView.builder(
                         shrinkWrap: true,

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:ourdoctor/global/app_colors.dart';
 import 'package:ourdoctor/global/app_styles.dart';
@@ -13,6 +11,7 @@ import 'package:ourdoctor/pages/components/h12.dart';
 import 'package:ourdoctor/pages/components/h16.dart';
 import 'package:ourdoctor/pages/components/main_text_button.dart';
 import 'package:ourdoctor/pages/components/simple_header.dart';
+import 'package:ourdoctor/pages/monitoring/monitoring_food_result.dart';
 import 'package:ourdoctor/pages/monitoring/monitoring_food_test2.dart';
 
 class MonitoringFoodTest1 extends StatefulWidget {
@@ -43,7 +42,11 @@ class _MonitoringFoodTest1State extends BaseState<MonitoringFoodTest1> {
   }
 
   Future<bool> onBackPressed() async {
-    Navigator.pop(context);
+    Navigator.pushReplacement(
+        context,
+        SlideRightTransRoute(
+          builder: (context) => MonitoringFoodResult(),
+        ));
     return true;
   }
 
@@ -88,7 +91,7 @@ class _MonitoringFoodTest1State extends BaseState<MonitoringFoodTest1> {
     quizList.clear();
     pageNum++;
     for (int i = nowNum; i < nowNum + itemCount; i++) {
-      if(list.length == i) {
+      if (list.length == i) {
         lastPage = true;
         break;
       }
@@ -105,34 +108,15 @@ class _MonitoringFoodTest1State extends BaseState<MonitoringFoodTest1> {
 
   Future<void> getResult() async {
     quizResult = list.map((e) => e.answer).toList();
-    Navigator
-        .of(context)
-        .pushReplacement(
-        SlideRightTransRoute(
-            builder: (context) => MonitoringFoodTest2(test1Data: quizResult,)));
-    // Future<TestQuizResultModel> info = httpService.getTestQuizResult(widget.info.id!, r);
-    // info.then((value) async {
-    //   setState(() {
-    //     isLoading = false;
-    //   });
-    //   if (value.result == 0) {
-    //     Navigator.of(context).pushReplacement(
-    //       SlideRightTransRoute(
-    //           builder: (context) => InspectionTest4FinalPage(
-    //               info: widget.info, result: value.data!)),
-    //     );
-    //     quizNum = 0;
-    //     quizResult.clear();
-    //     setState(() {});
-    //   }
-    // }).catchError((onError) {
-    //   print(onError.toString());
-    // });
+    Navigator.of(context).pushReplacement(SlideRightTransRoute(
+        builder: (context) => MonitoringFoodTest2(
+              test1Data: quizResult,
+            )));
   }
 
   Widget _itemBuilder(BuildContext context, int index) {
     int numId = index + ((pageNum - 1) * itemCount);
-    return Container(
+    return SizedBox(
       height: 400,
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         RichText(
@@ -162,14 +146,14 @@ class _MonitoringFoodTest1State extends BaseState<MonitoringFoodTest1> {
     List<String> chekcList = quizList[index].choices!.split(",");
     return Column(
       children: [
-        Container(
+        SizedBox(
           height: 250,
           width: MediaQuery.of(context).size.width - 64,
           child: ListView.builder(
             // scrollDirection: Axis.horizontal,
             physics: const NeverScrollableScrollPhysics(),
             itemCount: 5,
-            itemBuilder: (context, check) =>  Container(
+            itemBuilder: (context, check) => SizedBox(
               height: 50,
               width: (MediaQuery.of(context).size.width - 64) / 5,
               child: Row(
@@ -205,57 +189,61 @@ class _MonitoringFoodTest1State extends BaseState<MonitoringFoodTest1> {
   @override
   Widget build(BuildContext context) {
     return PageLayout(
-        child: Column(children: [
-      SimpleHeader(
-        title: "영양모니터링",
-        onBackPressed: onBackPressed,
-      ),
-          Expanded(
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 30),
+      onBack: onBackPressed,
+      child: Column(children: [
+        SimpleHeader(
+          title: "영양모니터링",
+          onBackPressed: onBackPressed,
+        ),
+        Expanded(
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 30),
             child: SingleChildScrollView(
-                controller: _listController,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Container(
-                      width: double.infinity,
-                      child: RichText(
-                        textAlign: TextAlign.start,
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                              text: "식습관\n",
-                              style: AppTextStyle.PD(AppColor_Primary, 18,
-                                  weight: FW.bold,),
+              controller: _listController,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    width: double.infinity,
+                    child: RichText(
+                      textAlign: TextAlign.start,
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: "식습관\n",
+                            style: AppTextStyle.PD(
+                              AppColor_Primary,
+                              18,
+                              weight: FW.bold,
                             ),
-                            TextSpan(
-                              text: "체크리스트\n\n",
-                              style: AppTextStyle.PD(AppColor_BlackText, 18,
-                                  weight: FW.bold,height: 1.5),
-                            ),
-                            TextSpan(
-                              text: "$pageNum / ${(list.length / itemCount).round()}",
-                              style: AppTextStyle.PD(
-                                  AppColor_Table_DateTime, 15,
-                                  weight: FW.regular),
-                            ),
-                          ],
-                        ),
+                          ),
+                          TextSpan(
+                            text: "체크리스트\n\n",
+                            style: AppTextStyle.PD(AppColor_BlackText, 18,
+                                weight: FW.bold, height: 1.5),
+                          ),
+                          TextSpan(
+                            text:
+                                "$pageNum / ${(list.length / itemCount).round()}",
+                            style: AppTextStyle.PD(AppColor_Table_DateTime, 15,
+                                weight: FW.regular),
+                          ),
+                        ],
                       ),
                     ),
-                    const SizedBox(height: 15),
-                    const Divider(),
-                    const SizedBox(height: 30),
-                    Container(
-                      height: quizList.length * 400,
-                      child: ListView.builder(
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: quizList.length,
-                        itemBuilder: _itemBuilder,
-                      ),
+                  ),
+                  const SizedBox(height: 15),
+                  const Divider(),
+                  const SizedBox(height: 30),
+                  SizedBox(
+                    height: quizList.length * 400,
+                    child: ListView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: quizList.length,
+                      itemBuilder: _itemBuilder,
                     ),
-                  Container(
+                  ),
+                  SizedBox(
                     height: 130,
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -277,7 +265,7 @@ class _MonitoringFoodTest1State extends BaseState<MonitoringFoodTest1> {
                             ),
                             H12(
                               text:
-                              "\n김혜영. 어린이, 노인 등 맞춤 건강 식생활 정보 개발 및 활용 연구.\n\n식품의약안전처 연구용역보고서, 2021년",
+                                  "\n김혜영. 어린이, 노인 등 맞춤 건강 식생활 정보 개발 및 활용 연구.\n\n식품의약안전처 연구용역보고서, 2021년",
                               color: AppColor_Gray,
                               align: TextAlign.start,
                             ),
@@ -287,35 +275,36 @@ class _MonitoringFoodTest1State extends BaseState<MonitoringFoodTest1> {
                     ),
                   ),
                   MainTextButton(
-                      text: "다음",
-                      backgroundColor: AppColor_Primary,
-                      style: AppTextStyle.PD(Colors.white, 18, weight: FW.medium),
-                      width: double.infinity,
-                      height: 60,
-                      radius: 10,
-                      disable: !checkValid(),
-                      disableBackground:
-                      !checkValid() ? AppColor_Primary_Disable : Colors.transparent,
-                      onPressed: () {
-                        if (!checkValid()) {
-                          showToast("모든 문항에 체크해주세요");
-                          return;
-                        }
-                        if (lastPage) {
-                          getResult();
-                          return;
-                        }
-                        goNext();
-                        _listController.jumpTo(0.0);
-                      },
-                    ),
-                    const SizedBox(height: 50),
-                  ],
-                ),
+                    text: "다음",
+                    backgroundColor: AppColor_Primary,
+                    style: AppTextStyle.PD(Colors.white, 18, weight: FW.medium),
+                    width: double.infinity,
+                    height: 60,
+                    radius: 10,
+                    disable: !checkValid(),
+                    disableBackground: !checkValid()
+                        ? AppColor_Primary_Disable
+                        : Colors.transparent,
+                    onPressed: () {
+                      if (!checkValid()) {
+                        showToast("모든 문항에 체크해주세요");
+                        return;
+                      }
+                      if (lastPage) {
+                        getResult();
+                        return;
+                      }
+                      goNext();
+                      _listController.jumpTo(0.0);
+                    },
+                  ),
+                  const SizedBox(height: 50),
+                ],
               ),
             ),
           ),
-    ]),
+        ),
+      ]),
     );
   }
 }

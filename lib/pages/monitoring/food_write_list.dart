@@ -244,7 +244,7 @@ class _FoodWriteListState extends BaseState<FoodWriteList> {
     );
   }
 
-  void _showTooltip(second, img) {
+  void _showTooltip() {
     if (_overlayEntry != null) return;
 
     RenderBox? renderBox =
@@ -260,8 +260,6 @@ class _FoodWriteListState extends BaseState<FoodWriteList> {
         final screenHeight = MediaQuery.of(context).size.height;
 
         return Positioned(
-          // top: 100,
-          // left: 24,
           top: 0,
           left: 0,
           child: Material(
@@ -279,19 +277,14 @@ class _FoodWriteListState extends BaseState<FoodWriteList> {
                   child: Container(
                     width: screenWidth - 48,
                     // height: screenHeight,
-                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(4),
                     ),
                     child: SingleChildScrollView(
-                      child: second
-                          ? FutureBuilder(
-                              builder: (context, snapshot) {
-                                return CachedNetworkImage(imageUrl: img);
-                              },
-                            )
-                          : Image.asset(img),
+                      child: Image.asset("assets/food_tooltip_second.jpg"),
                     ),
                   ),
                 ),
@@ -368,53 +361,25 @@ class _FoodWriteListState extends BaseState<FoodWriteList> {
                     ),
                   ),
                   const SizedBox(height: 15),
-                  Row(
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          _showTooltip(true, standardImages[cateIndex]);
-                        },
-                        child: Container(
-                          key: _tooltipKey,
-                          child: Image.asset(
-                            'assets/question_mark_black_24dp.png',
-                            width: 24,
-                          ),
+                  InkWell(
+                    onTap: () {
+                      _showTooltip();
+                    },
+                    child: Row(
+                      key: _tooltipKey,
+                      children: [
+                        Image.asset(
+                          'assets/question_mark_black_24dp.png',
+                          width: 24,
                         ),
-                      ),
-                      const SizedBox(width: 5),
-                      H14(
-                        text: "기준이 궁금해요",
-                        weight: FW.medium,
-                        color: Colors.grey,
-                      ),
-                      const SizedBox(width: 5),
-                      Visibility(
-                        visible: cateIndex == 0,
-                        child: InkWell(
-                          onTap: () {
-                            _showTooltip(
-                                false, "assets/food_tooltip_second.jpg");
-                          },
-                          child: Container(
-                            // key: _tooltipKey,
-                            child: Image.asset(
-                              'assets/question_mark_black_24dp.png',
-                              width: 24,
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 5),
-                      Visibility(
-                        visible: cateIndex == 0,
-                        child: H14(
+                        const SizedBox(width: 5),
+                        H14(
                           text: "계량 기준이 궁금해요",
                           weight: FW.medium,
                           color: Colors.grey,
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                   SizedBox(
                     height: foodList.length * 210,

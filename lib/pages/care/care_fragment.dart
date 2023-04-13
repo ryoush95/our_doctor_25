@@ -385,10 +385,10 @@ class CareFragmentState extends BaseState<CareFragment>
             Center(
               child: H14(
                 text: cateList[index],
-                weight: FW.medium,
+                weight: tabIndex == index ? FW.bold : FW.regular,
                 align: TextAlign.center,
                 maxLine: 2,
-                color: tabIndex == index ? AppColor_BlackText : AppColor_BlackText.withOpacity(0.2),
+                color: tabIndex == index ? AppColor_Primary : AppColor_BlackText.withOpacity(0.2),
               ),
             ),
             Positioned(

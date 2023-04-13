@@ -16,6 +16,7 @@ import 'package:ourdoctor/pages/components/h12.dart';
 import 'package:ourdoctor/pages/components/h14.dart';
 import 'package:ourdoctor/pages/components/h16.dart';
 import 'package:ourdoctor/pages/components/h18.dart';
+import 'package:ourdoctor/pages/components/header_text.dart';
 import 'package:ourdoctor/pages/components/main_text_button.dart';
 import 'package:ourdoctor/pages/intro/first.dart';
 import 'package:ourdoctor/pages/monitoring/food_write_list.dart';
@@ -46,6 +47,9 @@ class _RadarChartWidgetState extends State<RadarChartWidget> {
   ChartData? foodData;
   List<double> main = [0, 0, 0, 0, 0];
   List<double> average = [0, 0, 0, 0, 0];
+  List<double> min = [0, 0, 0, 0, 0];
+  List<double> max = [0, 0, 0, 0, 0];
+  List<List<double>> dataList = [];
   List<Comment?> commentList = [null, null, null, null, null];
 
   double clickX = 50;
@@ -73,7 +77,7 @@ class _RadarChartWidgetState extends State<RadarChartWidget> {
   Future<void> getChartData() async {
     final p = Provider.of<FoodResultProvider>(context, listen: false);
     Future<FoodRadarchartModel> info =
-    httpService.getFoodRadarChart(widget.date);
+        httpService.getFoodRadarChart(widget.date);
     await info.then((FoodRadarchartModel value) async {
       if (value.result == 0) {
         p.setDataProvider(value.data!);
@@ -81,8 +85,14 @@ class _RadarChartWidgetState extends State<RadarChartWidget> {
         for (int i = 0; i < foodData!.graph!.length; i++) {
           main[i] = value.data!.graph![foodList[i]]!.data;
           average[i] = value.data!.graph![foodList[i]]!.average;
+          max[i] = value.data!.graph![foodList[i]]!.max;
+          min[i] = value.data!.graph![foodList[i]]!.min;
           commentList[i] = foodData!.graph![foodList[i]]!.comment!;
         }
+        dataList.add(main);
+        dataList.add(average);
+        dataList.add(min);
+        dataList.add(max);
         // p.changeSelDate(DateFormat('yyyy-MM-dd').format(DateTime.now()));
         setState(() {});
       } else {
@@ -130,27 +140,27 @@ class _RadarChartWidgetState extends State<RadarChartWidget> {
           com!.content.isEmpty
               ? H16(text: "아직 기록이 없어요.")
               : H16(
-              text: selIndex == -1 ? foodData!.comment!.title : com.title),
+                  text: selIndex == -1 ? foodData!.comment!.title : com.title),
           const SizedBox(
             height: 10,
           ),
           com.content.isEmpty
               ? H14(
-            text: "기록이 필요해요 :)",
-            maxLine: 2,
-            align: TextAlign.start,
-            color: const Color(0xff707071),
-            weight: FW.medium,
-          )
+                  text: "기록이 필요해요 :)",
+                  maxLine: 2,
+                  align: TextAlign.start,
+                  color: const Color(0xff707071),
+                  weight: FW.medium,
+                )
               : H14(
-            text:
-            selIndex == -1 ? foodData!.comment!.content : com.content,
-            maxLine: 10,
-            height: 1.3,
-            align: TextAlign.start,
-            color: const Color(0xff707071),
-            weight: FW.medium,
-          ),
+                  text:
+                      selIndex == -1 ? foodData!.comment!.content : com.content,
+                  maxLine: 10,
+                  height: 1.3,
+                  align: TextAlign.start,
+                  color: const Color(0xff707071),
+                  weight: FW.medium,
+                ),
         ],
       ),
     );
@@ -221,8 +231,8 @@ class _RadarChartWidgetState extends State<RadarChartWidget> {
       sel = sel != -1
           ? sel
           : click
-          ? i
-          : -1;
+              ? i
+              : -1;
     }
     return sel;
   }
@@ -233,17 +243,17 @@ class _RadarChartWidgetState extends State<RadarChartWidget> {
 
     return Container(
       padding:
-      widget.state! ? const EdgeInsets.all(20) : const EdgeInsets.all(0),
+          widget.state! ? const EdgeInsets.all(20) : const EdgeInsets.all(0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           foodData == null
               ? const SizedBox()
-              : H18(
-            text: !widget.state! ? foodData!.title! : widget.date!,
-            align: TextAlign.start,
-            maxLine: 3,
-          ),
+              : HeaderText(
+                  text: !widget.state! ? foodData!.title! : widget.date!,
+                  align: TextAlign.start,
+                  maxLine: 3,
+                ),
           const SizedBox(height: 20),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -256,7 +266,7 @@ class _RadarChartWidgetState extends State<RadarChartWidget> {
                         borderRadius: BorderRadius.circular(18.0),
                         color: Colors.pink.withOpacity(0.3)),
                     padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                        const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                     // left: 10, right: 10, top: 20, bottom: 20),
                     child: H12(
                       text: "권장량",
@@ -270,7 +280,7 @@ class _RadarChartWidgetState extends State<RadarChartWidget> {
                         borderRadius: BorderRadius.circular(18.0),
                         color: AppColor_Primary.withOpacity(0.3)),
                     padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                        const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                     // left: 10, right: 10, top: 20, bottom: 20),
                     child: H12(
                       text: gSelChildInfo!.name!,
@@ -286,10 +296,13 @@ class _RadarChartWidgetState extends State<RadarChartWidget> {
                     padding: const EdgeInsets.symmetric(vertical: 5),
                     child: Row(
                       children: [
-                        Container( height:1.0,
-                            width:40.0,
-                            color:Colors.black.withOpacity(0.4)),
-                        SizedBox(width: 15,),
+                        Container(
+                            height: 1.0,
+                            width: 40.0,
+                            color: Colors.black.withOpacity(0.4)),
+                        SizedBox(
+                          width: 15,
+                        ),
                         H12(
                           text: "과다 섭취 기준선",
                           color: AppColor_GrayText,
@@ -302,10 +315,14 @@ class _RadarChartWidgetState extends State<RadarChartWidget> {
                     padding: const EdgeInsets.symmetric(vertical: 5),
                     child: Row(
                       children: [
-                        Container( height:1.0,
-                          width:40.0,
-                          color:AppColor_Red,),
-                        SizedBox(width: 15,),
+                        Container(
+                          height: 1.0,
+                          width: 40.0,
+                          color: AppColor_Red,
+                        ),
+                        const SizedBox(
+                          width: 15,
+                        ),
                         H12(
                           text: "부족 섭취 기준선",
                           color: AppColor_GrayText,
@@ -318,7 +335,6 @@ class _RadarChartWidgetState extends State<RadarChartWidget> {
               )
             ],
           ),
-
           Container(
             height: size + 200,
             width: size + 200,
@@ -338,19 +354,17 @@ class _RadarChartWidgetState extends State<RadarChartWidget> {
                 child: CustomPaint(
                   painter: widget.state!
                       ? RadarChartPainter(
-                    context,
-                    main,
-                    average,
-                    clickX,
-                    clickY,
-                  )
+                          context,
+                          dataList,
+                          clickX,
+                          clickY,
+                        )
                       : RadarChartPainter(
-                    context,
-                    main,
-                    average,
-                    -1,
-                    -1,
-                  ),
+                          context,
+                          dataList,
+                          -1,
+                          -1,
+                        ),
                   size: Size(size, size),
                 ),
               ),
@@ -364,18 +378,18 @@ class _RadarChartWidgetState extends State<RadarChartWidget> {
                 children: [
                   foodData == null
                       ? SizedBox(
-                    height: 50,
-                    child: H16(
-                      text: "아직 기록된 식단이 없습니다.",
-                      color: AppColor_BlackText,
-                    ),
-                  )
+                          height: 50,
+                          child: H16(
+                            text: "아직 기록된 식단이 없습니다.",
+                            color: AppColor_BlackText,
+                          ),
+                        )
                       : explain(),
                   Center(
                     child: MainTextButton(
                       text: "식단 기록하기",
                       style:
-                      AppTextStyle.PD(Colors.white, 16, weight: FW.medium),
+                          AppTextStyle.PD(Colors.white, 16, weight: FW.medium),
                       width: 185,
                       height: 40,
                       radius: 6,
@@ -406,13 +420,17 @@ class _RadarChartWidgetState extends State<RadarChartWidget> {
 // 레이더 차트를 그리는 CustomPainter 클래스
 class RadarChartPainter extends CustomPainter {
   final context;
-  final List<double> avg; // 데이터 리스트
-  final List<double> main; // 데이터 리스트
+  final List<List<double>> dataList;
   double clickX;
   double clickY;
 
   RadarChartPainter(
-      this.context, this.avg, this.main, this.clickX, this.clickY); // 생성자
+      this.context, this.dataList, this.clickX, this.clickY); // 생성자
+
+  //   dataList.add(main);
+  //   dataList.add(average);
+  //   dataList.add(min);
+  //   dataList.add(max);
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -507,18 +525,15 @@ class RadarChartPainter extends CustomPainter {
       textPainter.paint(canvas, Offset(textX, textY));
     }
 
-
-
-
     //과다 라인 그리기
     paint.color = Colors.black.withOpacity(0.4);
     final dataPoints4 = <Offset>[]; // 데이터 좌표 리스트
     for (var i = 0; i < 5; i++) {
       // 5개의 데이터 좌표 계산
       final angle = 2 * pi / 5 * i - pi / 2; // 데이터의 각도
-      final value = main[i]; // 데이터 값
-      final x = centerX + radius * cos(angle) * (value*2); // 데이터의 x좌표
-      final y = centerY + radius * sin(angle) * (value*2); // 데이터의 y좌표
+      final value = dataList[3][i]; // 데이터 값
+      final x = centerX + radius * cos(angle) * (value); // 데이터의 x좌표
+      final y = centerY + radius * sin(angle) * (value); // 데이터의 y좌표
       dataPoints4.add(Offset(x, y)); // 데이터 좌표 리스트에 추가
     }
     final dataPath4 = Path()..addPolygon(dataPoints4, true); // 데이터 다각형 경로 생성
@@ -533,7 +548,7 @@ class RadarChartPainter extends CustomPainter {
     for (var i = 0; i < 5; i++) {
       // 5개의 데이터 좌표 계산
       final angle = 2 * pi / 5 * i - pi / 2; // 데이터의 각도
-      final value = main[i]; // 데이터 값
+      final value = dataList[1][i]; // 데이터 값
       final x = centerX + radius * cos(angle) * value; // 데이터의 x좌표
       final y = centerY + radius * sin(angle) * value; // 데이터의 y좌표
       dataPoints.add(Offset(x, y)); // 데이터 좌표 리스트에 추가
@@ -542,16 +557,15 @@ class RadarChartPainter extends CustomPainter {
     final dataPath = Path()..addPolygon(dataPoints, true); // 데이터 다각형 경로 생성
     canvas.drawPath(dataPath, fillPaint); // 데이터 다각형 그리기
 
-
     //부족 라인 그리기
-    paint.color= AppColor_Red;
+    paint.color = AppColor_Red;
     final dataPoints3 = <Offset>[]; // 데이터 좌표 리스트
     for (var i = 0; i < 5; i++) {
       // 5개의 데이터 좌표 계산
       final angle = 2 * pi / 5 * i - pi / 2; // 데이터의 각도
-      final value = main[i]; // 데이터 값
-      final x = centerX + radius * cos(angle) * (value/2); // 데이터의 x좌표
-      final y = centerY + radius * sin(angle) * (value/2); // 데이터의 y좌표
+      final value = dataList[2][i]; // 데이터 값
+      final x = centerX + radius * cos(angle) * (value); // 데이터의 x좌표
+      final y = centerY + radius * sin(angle) * (value); // 데이터의 y좌표
       dataPoints3.add(Offset(x, y)); // 데이터 좌표 리스트에 추가
     }
     final dataPath3 = Path()..addPolygon(dataPoints3, true); // 데이터 다각형 경로 생성
@@ -563,7 +577,7 @@ class RadarChartPainter extends CustomPainter {
     fillPaint.color = Colors.blueAccent.withOpacity(0.5);
 
     final dataPoints1 = <Offset>[]; // 데이터 좌표 리스트
-    final List<double> data2 = avg;
+    final List<double> data2 = dataList[0];
     for (var i = 0; i < 5; i++) {
       // 5개의 데이터 좌표 계산
       final angle = 2 * pi / 5 * i - pi / 2; // 데이터의 각도
@@ -576,10 +590,6 @@ class RadarChartPainter extends CustomPainter {
     final dataPath1 = Path()..addPolygon(dataPoints1, true); // 데이터 다각형 경로 생성
 
     canvas.drawPath(dataPath1, fillPaint); // 데이터 다각형 그리기
-
-
-
-
   }
 
   @override

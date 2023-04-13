@@ -316,8 +316,8 @@ class CustomMbtiInspectionResultPageState extends BaseState<CustomMbtiInspection
                     borderRadius:
                     BorderRadius.all(Radius.circular(100)),
                   ),
-                  child: const Center(
-                    child: H22(
+                  child: Center(
+                    child: H18(
                       text: "우리 아이의 성격테스트!",
                       align: TextAlign.center,
                       color: Colors.white,

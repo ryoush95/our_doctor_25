@@ -98,11 +98,15 @@ class Graph {
   Graph({
     required this.average,
     required this.data,
+    required this.max,
+    required this.min,
     this.comment,
   });
 
   double average;
   double data;
+  double max;
+  double min;
   Comment? comment;
 
   factory Graph.fromRawJson(String str) => Graph.fromJson(json.decode(str));
@@ -112,6 +116,8 @@ class Graph {
   factory Graph.fromJson(Map<String, dynamic> json) => Graph(
         average: json["average"]?.toDouble(),
         data: json["data"]?.toDouble(),
+        max: json["max"]?.toDouble(),
+        min: json["min"]?.toDouble(),
         comment:
             json["comment"] == null ? null : Comment.fromJson(json["comment"]),
       );
@@ -119,6 +125,8 @@ class Graph {
   Map<String, dynamic> toJson() => {
         "average": average,
         "data": data,
+        "max": max,
+        "min": min,
         "comment": comment?.toJson(),
       };
 }

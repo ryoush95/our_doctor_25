@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ourdoctor/global/app_colors.dart';
 import 'package:ourdoctor/global/app_styles.dart';
+import 'package:ourdoctor/global/global.dart';
 import 'package:ourdoctor/helpers/bind_json.dart';
 import 'package:ourdoctor/helpers/common_util.dart';
 import 'package:ourdoctor/language/language_service.dart';

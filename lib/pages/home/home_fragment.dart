@@ -178,15 +178,13 @@ class HomeFragmentState extends BaseState<HomeFragment> {
                     const SizedBox(height: 30),
                     const BannerArea(),
                     // searchBar(),
-                    const SizedBox(
-                      height: 30,
-                    ),
+                    const SizedBox(height: 30),
                     WeatherArea(),
-                    const SizedBox(height: 50),
+                    const SizedBox(height: 40),
                     TalkArea(
                       board: 0,
                     ), // 질문 게시판
-                    const SizedBox(height: 50),
+                    const SizedBox(height: 20),
                     TalkArea(
                       board: 1,
                     ), // 자유 게시판
@@ -194,9 +192,9 @@ class HomeFragmentState extends BaseState<HomeFragment> {
                     // QuizArea(),//질문
                     // const SizedBox(height: 50),
                     NewsArea(curCategory: 1), //뉴스
-                    const SizedBox(height: 50),
+                    const SizedBox(height: 40),
                     SchoolArea(curCategory: 2), //교육
-                    const SizedBox(height: 50),
+                    const SizedBox(height: 20),
                     // CommunityArea(curCategory: 0), //우아팁
                     // const SizedBox(height: 50),
                     ProductShow(
