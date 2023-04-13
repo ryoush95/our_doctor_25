@@ -55,7 +55,7 @@ class DiagnosisResult1PageState extends BaseState<DiagnosisResult1Page> {
       width: 220,
       backgroundColor: Colors.white,
       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-      borderRadius: BorderRadius.circular(5.0),
+      borderRadius: BorderRadius.circular(0.0),
       onDismiss: () {},
     );
     popup.show(
@@ -74,7 +74,7 @@ class DiagnosisResult1PageState extends BaseState<DiagnosisResult1Page> {
       width: 200,
       backgroundColor: Colors.white,
       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-      borderRadius: BorderRadius.circular(5.0),
+      borderRadius: BorderRadius.circular(0.0),
       onDismiss: () {},
     );
     popup.show(
@@ -93,7 +93,7 @@ class DiagnosisResult1PageState extends BaseState<DiagnosisResult1Page> {
       width: 200,
       backgroundColor: Colors.white,
       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-      borderRadius: BorderRadius.circular(5.0),
+      borderRadius: BorderRadius.circular(0.0),
       onDismiss: () {},
     );
     popup.show(
@@ -105,7 +105,7 @@ class DiagnosisResult1PageState extends BaseState<DiagnosisResult1Page> {
 
   void showMoreText3(String msg) {
     ShowMoreTextPopup popup =
-        ShowMoreTextPopup(context, text: msg, textStyle: AppTextStyle.PD(AppColor_BlackText, 14, height: 1.2), height: 87, width: 200, backgroundColor: Colors.white, padding: EdgeInsets.symmetric(horizontal: 4, vertical: 10), borderRadius: BorderRadius.circular(10.0), onDismiss: () {});
+        ShowMoreTextPopup(context, text: msg, textStyle: AppTextStyle.PD(AppColor_BlackText, 14, height: 1.2), height: 87, width: 200, backgroundColor: Colors.white, padding: EdgeInsets.symmetric(horizontal: 4, vertical: 10), borderRadius: BorderRadius.circular(0.0), onDismiss: () {});
     popup.show(
       widgetKey: tooltip3,
     );
