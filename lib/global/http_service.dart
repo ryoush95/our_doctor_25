@@ -2951,7 +2951,7 @@ class HttpService {
   }
 
   // 음식 체크리스트 입력
-  Future<FoodHabitModel> saveCheckList(String result) async {
+  Future<DefaultResModel> saveCheckList(String result) async {
     String _url = API_BASE_URL + "api/Monitoring/save_food_checklist";
     Map<String, String> body = {
       'access_token': gUserInfo!.accessToken!,
@@ -2960,7 +2960,7 @@ class HttpService {
     Uri myUri = Uri.parse(_url);
     final response = await http.post(myUri, body: body);
     if (response.statusCode == 200) {
-      return FoodHabitModel.fromJson(json.decode(response.body));
+      return DefaultResModel.fromJson(json.decode(response.body));
     } else {
       // If that call was not successful, throw an error.
       showToast(LanguageService.trans("server_fail"));
