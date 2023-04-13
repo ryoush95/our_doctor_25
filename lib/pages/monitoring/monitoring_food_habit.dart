@@ -30,7 +30,9 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
   List<String> missionKeys = []; //미션키
   List<Mission> missionList = []; //미션
   MonitoringProfileDto? data;
-  bool isChecked = false;
+  bool isChecked = false; //식습관 테스트 완료 comment O
+  bool hasComments = false; //식습관 테스트 완료 comment X mission O
+
 
   @override
   void initState() {
@@ -42,16 +44,26 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
     Future<FoodHabitModel> info = httpService.getFoodHabitResults();
 
     info.then((FoodHabitModel value) {
-      if (value.data!.comments!.isNotEmpty) {
+      if(value.data!.comments!.isEmpty && value.data!.missions!.isNotEmpty){
         setState(() {
-          isChecked = true;
+          isChecked=true;
+          hasComments=false;
+          commentsList = value.data!.comments!.values.toList();
+          missionKeys = value.data!.missions!.keys.toList();
+          missionList = value.data!.missions!.values.toList();
+        });
+      }else if (value.data!.comments!.isNotEmpty && value.data!.missions!.isNotEmpty) {
+        setState(() {
+          isChecked=true;
+          hasComments= true;
         });
         commentsList = value.data!.comments!.values.toList();
         missionKeys = value.data!.missions!.keys.toList();
         missionList = value.data!.missions!.values.toList();
-      } else {
+      }else {
         setState(() {
-          isChecked = false;
+          isChecked=false;
+          hasComments=false;
         });
       }
       setState(() {});
@@ -154,7 +166,7 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
               const Spacer(),
               if (index >= 4)
                 Image.asset(
-                  "assets/food_mission_icon_1.png",
+                  "assets/food_mission_icon_${missionList.length%index}.png",
                   height: 70,
                   width: 70,
                 ),
@@ -189,16 +201,16 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 30),
               child: H18(
-                height: isChecked ? 1.0 : 1.3,
+                height: hasComments ? 1.0 : 1.3,
                 weight: FW.bold,
-                text: isChecked
+                text: hasComments
                     ? "식습관 분석을 완료했어요!"
                     : "우리 아이의 냠냠 습관은 어떤가요?\n식습관과 문제행동을 체크해 보고,\n 더 건강한 냠냠습관을 가져 보세요.",
-                maxLine: isChecked ? 2 : 3,
-                color: isChecked ? AppColor_Primary : AppColor_BlackText,
+                maxLine: hasComments ? 2 : 3,
+                color: hasComments ? AppColor_Primary : AppColor_BlackText,
               ),
             ),
-            if (isChecked)
+            if (hasComments)
               Container(
                 width: double.infinity,
                 margin: const EdgeInsets.all(5.0),
