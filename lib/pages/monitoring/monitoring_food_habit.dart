@@ -33,7 +33,6 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
   bool isChecked = false; //식습관 테스트 완료 comment O
   bool hasComments = false; //식습관 테스트 완료 comment X mission O
 
-
   @override
   void initState() {
     getFoodHabitResult();
@@ -60,6 +59,7 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
         commentsList = value.data!.comments!.values.toList();
         missionKeys = value.data!.missions!.keys.toList();
         missionList = value.data!.missions!.values.toList();
+
       }else {
         setState(() {
           isChecked=false;
@@ -164,15 +164,8 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
                 ],
               ),
               const Spacer(),
-              if (index >= 4)
-                Image.asset(
-                  "assets/food_mission_icon_${missionList.length%index}.png",
-                  height: 70,
-                  width: 70,
-                ),
-              if (index < 4)
-                Image.asset(
-                  "assets/food_mission_icon_${index + 1}.png",
+                CachedNetworkImage(
+                  imageUrl: missionList[index].imgUrl!,
                   height: 70,
                   width: 70,
                 ),

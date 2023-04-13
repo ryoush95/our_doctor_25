@@ -93,10 +93,12 @@ class Mission {
   Mission({
     this.text,
     this.complete,
+    this.imgUrl,
   });
 
   String? text;
   bool? complete;
+  String? imgUrl;
 
   factory Mission.fromRawJson(String str) => Mission.fromJson(json.decode(str));
 
@@ -105,10 +107,12 @@ class Mission {
   factory Mission.fromJson(Map<String, dynamic> json) => Mission(
         text: json["text"],
         complete: json["complete"],
+        imgUrl: json["imgUrl"],
       );
 
   Map<String, dynamic> toJson() => {
         "text": text,
         "complete": complete,
+        "imgUrl": imgUrl,
       };
 }
