@@ -50,7 +50,7 @@ class RangeShowState extends BaseState<RangeShow> {
     var screenSize = MediaQuery.of(context).size;
     var customPadding = 40.0;
     var slideWidth = screenSize.width - 60 - customPadding * 2;
-    var customTop = 70.0;
+    var customTop = 80.0;
     return Container(
         height: 110,
         child: Stack(
@@ -129,9 +129,10 @@ class RangeShowState extends BaseState<RangeShow> {
                 child: Image.asset('assets/Path 12612.png', width: 80)),
             Positioned(
                 left: customPadding + slideWidth * (widget.rate / 100) - 40,
-                top: !widget.isInspect ? customTop - 68 : customTop - 48,
+                top: !widget.isInspect ? customTop - 73 : customTop - 48,
                 child: Container(
                   width: 80,
+                  height: 30,
                   alignment: Alignment.center,
                   child: H18(
                     text: !widget.isInspect ? sprintf("%.0f%", [widget.rate, widget.unit]) : "${widget.cur_value.toInt()}점",

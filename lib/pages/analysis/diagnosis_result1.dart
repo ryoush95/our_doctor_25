@@ -243,19 +243,19 @@ class DiagnosisResult1PageState extends BaseState<DiagnosisResult1Page> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const SizedBox(height: 32),
-                            H24B(
+                            H18(
                               text: LanguageService.trans("diagnosis_result_title"),
                             ),
                             const SizedBox(height: 10),
                             Row(children: [
-                              H24B(
+                              H18(
                                 text: LanguageService.trans("diagnosis_result_title1"),
                               ),
                               const SizedBox(width: 3),
-                              Image.asset('assets/ic_daily_monitoring.png', width: 25),
+                              Image.asset('assets/ic_daily_monitoring.png', width: 18),
                             ]),
                             const SizedBox(height: 50),
-                            H20(
+                            H16(
                               text: LanguageService.trans("height"),
                             ),
                             const SizedBox(height: 20),
