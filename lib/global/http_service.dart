@@ -3365,6 +3365,23 @@ class HttpService {
     }
   }
 
+  //휴대폰 중복 체크
+  Future<DuplicateResModel> checkPhone(String _phone) async {
+    String _url = API_BASE_URL + "api/user/check_phone";
+    Map<String, String> body = {
+      'phone': _phone,
+    };
+    Uri myUri = Uri.parse(_url);
+    final response = await http.post(myUri, body: body);
+    if (response.statusCode == 200) {
+      return DuplicateResModel.fromJson(json.decode(response.body));
+    } else {
+      // If that call was not successful, throw an error.
+      showToast(LanguageService.trans("server_fail"));
+      throw Exception(LanguageService.trans("server_fail"));
+    }
+  }
+
   //가족력 수정하기
   Future<DefaultResModel> changeFamilyHistory(String familyHistory) async {
     String _url = API_BASE_URL + "api/user/change_family_history";
