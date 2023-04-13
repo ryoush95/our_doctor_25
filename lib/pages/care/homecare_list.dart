@@ -267,7 +267,7 @@ class HomeCareListPageState extends BaseState<HomeCareListPage> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                H24B(
+                                H18(
                                   text: getTitle(),
                                   color: AppColor_BlackText,
                                 ),

@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:ourdoctor/global/app_colors.dart';
 import 'package:ourdoctor/global/app_styles.dart';
+import 'package:ourdoctor/global/global.dart';
 import 'package:ourdoctor/global/http_service.dart';
 import 'package:ourdoctor/helpers/common_util.dart';
 import 'package:ourdoctor/helpers/transition.dart';
@@ -11,6 +12,7 @@ import 'package:ourdoctor/language/language_service.dart';
 import 'package:ourdoctor/models/monitoring/heath_result_model.dart';
 import 'package:ourdoctor/models/home_grapth_res_model.dart';
 import 'package:ourdoctor/models/monitor_list_res_model.dart';
+import 'package:ourdoctor/pages/app_event.dart';
 import 'package:ourdoctor/pages/base/base_state.dart';
 import 'package:ourdoctor/pages/base/page_layout.dart';
 import 'package:ourdoctor/pages/care/product_detail.dart';
@@ -626,14 +628,17 @@ class _MonitorReport1State extends BaseState<MonitorReport1> {
                 healthList[subTabIndex].status == "R"
                     ? Center(
                         child: MainTextButton(
-                          text: "카카오톡으로 상담하기",
+                          text: "질문하기",
                           style: AppTextStyle.PD(Colors.white, 16,
                               weight: FW.medium),
                           width: 200,
                           height: 40,
                           radius: 20,
                           onPressed: () {
-                            launch("http://pf.kakao.com/_xgkwexj");
+                            eventBus.fire(MoreCommunityEvent(type: 4));
+                            Navigator.pop(context);
+                            //TODO 추후 사용할 코드 삭제하지 말기
+                            // launch("http://pf.kakao.com/_xgkwexj");
                           },
                         ),
                       )
