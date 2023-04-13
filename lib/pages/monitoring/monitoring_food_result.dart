@@ -243,7 +243,7 @@ class _MonitoringFoodResultState extends BaseState<MonitoringFoodResult> {
               //   color: AppColor_Primary.withOpacity(0.5),
               // ),
               child: Image.asset(
-                "assets/도장_$index.png",
+                "assets/도장_${index / 6 > 0 ? index % 5 + 1 : index}.png",
               ),
             ),
           ),

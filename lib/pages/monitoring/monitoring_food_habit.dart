@@ -164,11 +164,13 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
                 ],
               ),
               const Spacer(),
-                CachedNetworkImage(
-                  imageUrl: missionList[index].imgUrl!,
-                  height: 70,
-                  width: 70,
-                ),
+              missionList[index].imgUrl != null
+                  ? CachedNetworkImage(
+                      imageUrl: missionList[index].imgUrl!,
+                      height: 70,
+                      width: 70,
+                    )
+                  : const SizedBox(height: 70),
             ],
           ),
           const Divider(),

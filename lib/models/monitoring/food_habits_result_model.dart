@@ -107,12 +107,12 @@ class Mission {
   factory Mission.fromJson(Map<String, dynamic> json) => Mission(
         text: json["text"],
         complete: json["complete"],
-        imgUrl: json["imgUrl"],
+        imgUrl: json["image_url"],
       );
 
   Map<String, dynamic> toJson() => {
         "text": text,
         "complete": complete,
-        "imgUrl": imgUrl,
+        "image_url": imgUrl,
       };
 }
