@@ -55,7 +55,7 @@ class DiagnosisResult1PageState extends BaseState<DiagnosisResult1Page> {
       width: 220,
       backgroundColor: Colors.white,
       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-      borderRadius: BorderRadius.circular(5.0),
+      borderRadius: BorderRadius.circular(0.0),
       onDismiss: () {},
     );
     popup.show(
@@ -74,7 +74,7 @@ class DiagnosisResult1PageState extends BaseState<DiagnosisResult1Page> {
       width: 200,
       backgroundColor: Colors.white,
       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-      borderRadius: BorderRadius.circular(5.0),
+      borderRadius: BorderRadius.circular(0.0),
       onDismiss: () {},
     );
     popup.show(
@@ -93,7 +93,7 @@ class DiagnosisResult1PageState extends BaseState<DiagnosisResult1Page> {
       width: 200,
       backgroundColor: Colors.white,
       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-      borderRadius: BorderRadius.circular(5.0),
+      borderRadius: BorderRadius.circular(0.0),
       onDismiss: () {},
     );
     popup.show(
@@ -105,7 +105,7 @@ class DiagnosisResult1PageState extends BaseState<DiagnosisResult1Page> {
 
   void showMoreText3(String msg) {
     ShowMoreTextPopup popup =
-        ShowMoreTextPopup(context, text: msg, textStyle: AppTextStyle.PD(AppColor_BlackText, 14, height: 1.2), height: 87, width: 200, backgroundColor: Colors.white, padding: EdgeInsets.symmetric(horizontal: 4, vertical: 10), borderRadius: BorderRadius.circular(10.0), onDismiss: () {});
+        ShowMoreTextPopup(context, text: msg, textStyle: AppTextStyle.PD(AppColor_BlackText, 14, height: 1.2), height: 87, width: 200, backgroundColor: Colors.white, padding: EdgeInsets.symmetric(horizontal: 4, vertical: 10), borderRadius: BorderRadius.circular(0.0), onDismiss: () {});
     popup.show(
       widgetKey: tooltip3,
     );
@@ -243,19 +243,19 @@ class DiagnosisResult1PageState extends BaseState<DiagnosisResult1Page> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const SizedBox(height: 32),
-                            H24B(
+                            H18(
                               text: LanguageService.trans("diagnosis_result_title"),
                             ),
                             const SizedBox(height: 10),
                             Row(children: [
-                              H24B(
+                              H18(
                                 text: LanguageService.trans("diagnosis_result_title1"),
                               ),
                               const SizedBox(width: 3),
-                              Image.asset('assets/ic_daily_monitoring.png', width: 25),
+                              Image.asset('assets/ic_daily_monitoring.png', width: 18),
                             ]),
                             const SizedBox(height: 50),
-                            H20(
+                            H16(
                               text: LanguageService.trans("height"),
                             ),
                             const SizedBox(height: 20),

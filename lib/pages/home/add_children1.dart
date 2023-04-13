@@ -596,7 +596,7 @@ class AddChildren1PageState extends BaseState<AddChildren1Page> {
                               const SizedBox(height: 35),
                               H16(text: LanguageService.trans("child_past_medical_history"), weight: FW.medium, color: AppColor_BlackText),
                               const SizedBox(height: 5),
-                              H14(text: "과거력, 수술병력, 알러지, 출생력(미숙아) 등\n있다면 적어주세요", weight: FW.medium, color: AppColor_BlackText.withOpacity(0.3), maxLine: 2, align: TextAlign.start,),
+                              H14(text: "과거력, 수술병력, 알러지, 출생력(미숙아) 등\n있다면 적어주세요", weight: FW.medium, color: AppColor_BlackText.withOpacity(0.3), maxLine: 2, align: TextAlign.start,height: 1.5,),
                               const SizedBox(height: 10),
                               // GridView.builder(
                               //     shrinkWrap: true,

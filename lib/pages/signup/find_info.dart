@@ -835,7 +835,7 @@ class FindInfoPageState extends BaseState<FindInfoPage> {
             Column(
               children: [
                 SizedBox(
-                  height: scsize.height - 100,
+                  height: scsize.height - 200,
                 ),
                 bottomButton(),
               ],

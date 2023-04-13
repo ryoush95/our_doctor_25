@@ -92,11 +92,14 @@ class SignUpParentPageState extends BaseState<SignUpParentPage> {
   bool isSame = false;
   bool _idRegexValid = false;
   bool _pwdRegexValid = false;
+  bool _phoneRegexValid=false;
 
   int nDuplicatedId = 0;
   String mValidId = ""; //중복 확인한 아이디
   int nDuplicatedNickname = 0;
+  int nDuplicatedPhone = 0; //중복 확인된 휴대폰
   String mValidNickname = ""; //중복 확인한 닉네임
+  String mValidPhone = ""; //중복 확인한 휴대폰 번호
   Color momColor = AppColor_Selector_Border;
   Color dadColor = AppColor_Selector_Border;
 
@@ -389,6 +392,48 @@ class SignUpParentPageState extends BaseState<SignUpParentPage> {
     });
   }
 
+  //휴대폰 중복 체크
+  void reqCheckLoginPhone() {
+    FocusScope.of(context).requestFocus(FocusNode());
+    final reg = RegExp(r"^01(?:0|1|[6-9])[-\\s\\.]?[0-9]{4}[-\\s\\.]?[0-9]{4}$");
+    if (phone.isEmpty) {
+      showToast("휴대폰 번호를 입력해 주세요.");
+      return;
+    } else if (!reg.hasMatch(phone)) {
+      showToast("휴대폰 번호를 형식에 맞게 입력해주세요.");
+      return;
+    }
+    setState(() {
+      isLoading = true;
+    });
+
+    Future<DuplicateResModel> info = httpService.checkPhone(phone);
+    info.then((DuplicateResModel value) {
+      setState(() {
+        isLoading = false;
+      });
+      if (value.result == 0) {
+        if (value.data!.isDuplicated!) {
+          nDuplicatedPhone = 1; //중복된 휴대폰
+        } else {
+          nDuplicatedPhone = 2;
+          mValidPhone = phone;
+        }
+      } else {
+        showToast(value.msg ?? "");
+        if (value.result == 106) {
+          //token expired
+          Navigator.pushReplacement(context, SlideRightTransRoute(builder: (context) => FirstPage()));
+        }
+      }
+    }).catchError((onError) {
+      setState(() {
+        isLoading = false;
+      });
+      showToast(onError);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final node = FocusScope.of(context);
@@ -665,13 +710,38 @@ class SignUpParentPageState extends BaseState<SignUpParentPage> {
                           weight: FW.medium,
                           color: AppColor_BlackText.withOpacity(0.5),
                         ),
-                        UnderlineNumInput(
-                          controller: phoneInputController,
-                          keyboardType: TextInputType.number,
-                          maxLength: 11,
-                          textInputAction: TextInputAction.done,
-                          placeholder: LanguageService.trans("enter_only_numbers"),
-                          onChanged: (text) => {phone = text, checkValid()},
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              child: UnderlineNumInput(
+                                controller: phoneInputController,
+                                keyboardType: TextInputType.number,
+                                maxLength: 11,
+                                textInputAction: TextInputAction.done,
+                                placeholder: LanguageService.trans("enter_only_numbers"),
+                                onChanged: (text) => {phone = text, checkValid()},
+                              ),
+                            ),
+                            MainTextButton(
+                              text: "중복확인",
+                              backgroundColor: const Color(0xFFF4F9FF),
+                              style: AppTextStyle.PD(AppColor_Primary, 14, weight: FW.bold),
+                              width: 76,
+                              height: 36,
+                              onPressed: (){
+                                  reqCheckLoginPhone();
+                              },
+                            ),
+                          ],
+                        ),
+                        Container(
+                          margin: const EdgeInsets.only(top: 9),
+                          child: H12(
+                            text: nDuplicatedPhone == 0 ? " " : (nDuplicatedPhone == 1 ? "중복 휴대폰은 사용할 수 없습니다." : "사용가능한 휴대폰입니다."),
+                            weight: FW.medium,
+                            color: nDuplicatedPhone == 1 ? AppColor_Red : AppColor_Primary,
+                          ),
                         ),
                         const SizedBox(height: 30),
                         H14(
@@ -1096,6 +1166,12 @@ class SignUpParentPageState extends BaseState<SignUpParentPage> {
                                 showToast("닉네임 중복확인 해주세요.");
                                 return;
                               }
+
+                              if (nDuplicatedPhone != 2 || (nDuplicatedPhone == 2 && mValidPhone != phone)) {
+                                showToast("휴대폰 중복확인 해주세요.");
+                                return;
+                              }
+
                               goNext();
                             },
                           ),
