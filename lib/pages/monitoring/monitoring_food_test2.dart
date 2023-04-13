@@ -53,8 +53,9 @@ class _MonitoringFoodTest2State extends BaseState<MonitoringFoodTest2> {
   }
 
   Future<void> saveCheckList() async {
-    widget.test1Data.addAll(answerList.map((e) => e.answer));
-    String result = jsonEncode(widget.test1Data);
+    List<String> data = widget.test1Data;
+    data.addAll(answerList.map((e) => e.answer));
+    String result = jsonEncode(data);
     Future<DefaultResModel> insert = httpService.saveCheckList(result);
     insert.then((value) async {
       setState(() {

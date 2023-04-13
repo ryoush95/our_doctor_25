@@ -1011,14 +1011,14 @@ class CommunityDetailPageState extends BaseState<CommunityDetailPage> {
   }
 
   //댓글 리스트
-  void getReplyList() {
+  void getReplyList() async {
     setState(() {
       isLoading = true;
     });
 
     Future<CommentListResModel> info =
         httpService.commentList(widget.uid!, nPage);
-    info.then((CommentListResModel value) {
+    await info.then((CommentListResModel value) {
       setState(() {
         isLoading = false;
       });

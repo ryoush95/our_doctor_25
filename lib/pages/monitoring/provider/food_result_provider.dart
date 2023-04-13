@@ -5,7 +5,7 @@ import 'package:ourdoctor/models/monitoring/food_radarchart_model.dart';
 
 class FoodResultProvider extends ChangeNotifier {
   final HttpService httpService = HttpService();
-  int _foodGraphIndex = -1;
+  int _foodGraphIndex = 5;
   int get foodGraphIndex => _foodGraphIndex;
   ChartData? foodData;
   List<double> main = [0, 0, 0, 0, 0];

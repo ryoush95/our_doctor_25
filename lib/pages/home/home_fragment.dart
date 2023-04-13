@@ -199,9 +199,11 @@ class HomeFragmentState extends BaseState<HomeFragment> {
                     // const SizedBox(height: 50),
                     ProductShow(
                         //발달클래스
-                        category: category,
+                        category: 1,
                         title: "우아 클래스",
-                        list: arrLikeList),
+                        list: arrLikeList,
+                      homeCate: 1,
+                    ),
                     // GrowthStoreArea(curCategory: 0),//성장스토어
                     // const SizedBox(height: 90),
                   ],

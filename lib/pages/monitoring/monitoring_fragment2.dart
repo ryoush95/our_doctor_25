@@ -259,33 +259,37 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
                   ),
                 ],
               ),
-              Spacer(),
+              const Spacer(),
               SizedBox(
                 height: 100,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    RichText(
-                        text: TextSpan(children: [
-                      TextSpan(
-                          text: " 모니터링을 ",
-                          style: AppTextStyle.PD(
-                            AppColor_BlackText,
-                            16,
-                            weight: FW.semi_bold,
-                          )),
-                      TextSpan(
-                          text: p.monitoringProgress != 3 ? "시작" : "완료",
-                          style: AppTextStyle.PD(AppColor_Primary, 16,
-                              weight: FW.bold)),
-                      TextSpan(
-                          text: p.monitoringProgress != 3 ? "해볼까요?" : "했어요!",
-                          style: AppTextStyle.PD(
-                            AppColor_BlackText,
-                            16,
-                            weight: FW.semi_bold,
-                          )),
-                    ])),
+                    months > 72
+                        ? Text("")
+                        : RichText(
+                            text: TextSpan(children: [
+                            TextSpan(
+                                text: " 모니터링을 ",
+                                style: AppTextStyle.PD(
+                                  AppColor_BlackText,
+                                  16,
+                                  weight: FW.semi_bold,
+                                )),
+                            TextSpan(
+                                text: p.monitoringProgress != 3 ? "시작" : "완료",
+                                style: AppTextStyle.PD(AppColor_Primary, 16,
+                                    weight: FW.bold)),
+                            TextSpan(
+                                text: p.monitoringProgress != 3
+                                    ? "해볼까요?"
+                                    : "했어요!",
+                                style: AppTextStyle.PD(
+                                  AppColor_BlackText,
+                                  16,
+                                  weight: FW.semi_bold,
+                                )),
+                          ])),
                     const SizedBox(height: 15),
                     H14(
                       text: p.monitoringProgress != 3
@@ -642,7 +646,7 @@ class MonitoringFragment2State extends BaseState<MonitoringFragment2> {
   Widget monitorFood() {
     return Column(
       children: [
-        months < 36
+        months > 12
             ? RadarChartWidget(
                 state: false,
                 date: DateFormat('yyyy-MM-dd').format(DateTime.now()),

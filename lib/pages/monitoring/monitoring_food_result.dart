@@ -71,6 +71,7 @@ class _MonitoringFoodResultState extends BaseState<MonitoringFoodResult> {
   }
 
   getFoodHomeData() async {
+    print(gUserInfo!.accessToken);
     setState(() {
       isLoading = true;
     });

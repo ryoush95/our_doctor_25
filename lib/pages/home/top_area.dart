@@ -33,7 +33,7 @@ class TopArea extends StatefulWidget {
   final name;
   final type;
 
-  TopArea({Key? key, this.name, this.type}) : super(key: key);
+  const TopArea({Key? key, this.name, this.type}) : super(key: key);
 
   @override
   TopAreaState createState() => TopAreaState();
@@ -170,11 +170,10 @@ class TopAreaState extends BaseState<TopArea> {
   }
 
   void goMonitorStart() {
-
     // if (dicHomeDataInfo == null || dicHomeDataInfo!.todayResult == null) {
     //   monitoringData = null;
-      Navigator.push(context,
-          SlideRightTransRoute(builder: (context) => MonitoringTestForm()));
+    Navigator.push(context,
+        SlideRightTransRoute(builder: (context) => MonitoringTestForm()));
     // } else {
     //   //모니터링 리스트페이지로
     //   Navigator.push(context,
@@ -189,6 +188,9 @@ class TopAreaState extends BaseState<TopArea> {
     setState(() {
       isLoading = true;
     });
+
+    final ageInfo = await httpService.getChildMonths();
+    months = ageInfo["data"]["month"];
 
     Future<HomeMonitorResModel> info = httpService.homeMonitorInfo();
     info.then((HomeMonitorResModel value) async {
@@ -221,9 +223,11 @@ class TopAreaState extends BaseState<TopArea> {
 
     Future<TopAreaModel> info = httpService.getToparea();
     info.then((value) async {
-
       if (value.result == 0) {
-        Provider.of<GlobalProvider>(context, listen: false).topAreaInfo(value.data!.height!, value.data!.weight!, value.data!.nextMonitoring!);
+        Provider.of<GlobalProvider>(context, listen: false).topAreaInfo(
+            value.data!.height!,
+            value.data!.weight!,
+            value.data!.nextMonitoring!);
         setState(() {});
       } else {
         showToast(value.msg ?? "");
@@ -276,172 +280,188 @@ class TopAreaState extends BaseState<TopArea> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         H18(
-                            text: month +
-                                LanguageService.trans('month') +
-                                ' ' +
-                                day +
-                                LanguageService.trans('day') +
-                                ' ' +
-                                days[weekday % 7], weight: FW.bold,),
+                          text: month +
+                              LanguageService.trans('month') +
+                              ' ' +
+                              day +
+                              LanguageService.trans('day') +
+                              ' ' +
+                              days[weekday % 7],
+                          weight: FW.bold,
+                        ),
                         const SizedBox(height: 20),
-                        dicHomeDataInfo == null ? CircularProgressIndicator() :
-                        Row(
-                          children: [
-                            dicHomeDataInfo!.profileImgUrl! != ""
-                                ? CachedNetworkImage(
-                                    alignment: Alignment.center,
-                                    fit: BoxFit.cover,
-                                    imageUrl: dicHomeDataInfo!.profileImgUrl!,
-                                    imageBuilder: (context, image) =>
-                                        CircleAvatar(
-                                      backgroundColor: Colors.white,
-                                      backgroundImage: image,
-                                      radius: 64,
-                                    ),
-                              progressIndicatorBuilder: (context, url, downloadProgress) =>
-                                  Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
-                                  )
-                                : RoundContainer(
-                                    width: 128,
-                                    height: 128,
-                                    bgColor: Colors.white,
-                                    child: Center(
-                                      child: Image.asset(
-                                          (dicHomeDataInfo == null ||
-                                                  dicHomeDataInfo!.gender ==
-                                                      1)
-                                              ? 'assets/ic_default_male.png'
-                                              : 'assets/ic_default_female.png',
-                                          width: 45),
-                                    ),
-                                  ),
-                            const SizedBox(width: 20),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                        dicHomeDataInfo == null
+                            ? CircularProgressIndicator()
+                            : Row(
                                 children: [
-                                  RichText(
-                                      text: TextSpan(children: [
-                                        TextSpan(
-                                            text: dif,
-                                            style: AppTextStyle.PD(
-                                                AppColor_Primary, 16,
-                                                weight: FW.bold)),
-                                        TextSpan(
-                                            text: " 일째",
-                                            style: AppTextStyle.PD(
-                                              AppColor_BlackText,
-                                              16,
+                                  dicHomeDataInfo!.profileImgUrl! != ""
+                                      ? CachedNetworkImage(
+                                          alignment: Alignment.center,
+                                          fit: BoxFit.cover,
+                                          imageUrl:
+                                              dicHomeDataInfo!.profileImgUrl!,
+                                          imageBuilder: (context, image) =>
+                                              CircleAvatar(
+                                            backgroundColor: Colors.white,
+                                            backgroundImage: image,
+                                            radius: 64,
+                                          ),
+                                          progressIndicatorBuilder: (context,
+                                                  url, downloadProgress) =>
+                                              Center(
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                          value:
+                                                              downloadProgress
+                                                                  .progress)),
+                                        )
+                                      : RoundContainer(
+                                          width: 128,
+                                          height: 128,
+                                          bgColor: Colors.white,
+                                          child: Center(
+                                            child: Image.asset(
+                                                (dicHomeDataInfo == null ||
+                                                        dicHomeDataInfo!
+                                                                .gender ==
+                                                            1)
+                                                    ? 'assets/ic_default_male.png'
+                                                    : 'assets/ic_default_female.png',
+                                                width: 45),
+                                          ),
+                                        ),
+                                  const SizedBox(width: 20),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        RichText(
+                                            text: TextSpan(children: [
+                                          TextSpan(
+                                              text: dif,
+                                              style: AppTextStyle.PD(
+                                                  AppColor_Primary, 16,
+                                                  weight: FW.bold)),
+                                          TextSpan(
+                                              text: " 일째",
+                                              style: AppTextStyle.PD(
+                                                AppColor_BlackText,
+                                                16,
+                                                weight: FW.regular,
+                                              )),
+                                          TextSpan(
+                                              text: " 쑥쑥성장중!!",
+                                              style: AppTextStyle.PD(
+                                                AppColor_BlackText,
+                                                16,
+                                                weight: FW.regular,
+                                              )),
+                                        ])),
+                                        const SizedBox(height: 32),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            H16(
+                                              text: "키",
                                               weight: FW.regular,
-                                            )),
-                                        TextSpan(
-                                            text: " 쑥쑥성장중!!",
-                                            style: AppTextStyle.PD(
-                                              AppColor_BlackText,
-                                              16,
+                                            ),
+                                            // Expanded(child: SizedBox()),
+                                            RichText(
+                                                text: TextSpan(children: [
+                                              TextSpan(
+                                                  text: p.topAreaHeight,
+                                                  style: AppTextStyle.PD(
+                                                      AppColor_Primary, 16,
+                                                      weight: FW.bold)),
+                                              TextSpan(
+                                                  text: " cm",
+                                                  style: AppTextStyle.PD(
+                                                    AppColor_BlackText,
+                                                    16,
+                                                    weight: FW.regular,
+                                                  )),
+                                            ])),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 15),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            H16(
+                                              text: "체중",
                                               weight: FW.regular,
-                                            )),
-                                      ])),
-                                  const SizedBox(height: 32),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      H16(
-                                        text: "키",
-                                        weight: FW.regular,
-                                      ),
-                                      // Expanded(child: SizedBox()),
-                                      RichText(
-                                          text: TextSpan(children: [
-                                        TextSpan(
-                                            text: p.topAreaHeight,
-                                            style: AppTextStyle.PD(
-                                                AppColor_Primary, 16,
-                                                weight: FW.bold)),
-                                        TextSpan(
-                                            text: " cm",
-                                            style: AppTextStyle.PD(
-                                              AppColor_BlackText,
-                                              16,
-                                              weight: FW.regular,
-                                            )),
-                                      ])),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 15),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      H16(
-                                        text: "체중",
-                                        weight: FW.regular,
-                                      ),
-                                      RichText(
-                                          text: TextSpan(children: [
-                                        TextSpan(
-                                            text: p.topAreaWeight,
-                                            style: AppTextStyle.PD(
-                                                AppColor_Primary, 16,
-                                                weight: FW.bold)),
-                                        TextSpan(
-                                            text: " kg",
-                                            style: AppTextStyle.PD(
-                                              AppColor_BlackText,
-                                              16,
-                                              weight: FW.regular,
-                                            )),
-                                      ])),
-                                    ],
+                                            ),
+                                            RichText(
+                                                text: TextSpan(children: [
+                                              TextSpan(
+                                                  text: p.topAreaWeight,
+                                                  style: AppTextStyle.PD(
+                                                      AppColor_Primary, 16,
+                                                      weight: FW.bold)),
+                                              TextSpan(
+                                                  text: " kg",
+                                                  style: AppTextStyle.PD(
+                                                    AppColor_BlackText,
+                                                    16,
+                                                    weight: FW.regular,
+                                                  )),
+                                            ])),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ],
                               ),
-                            ),
-                          ],
-                        ),
                         const SizedBox(height: 20),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Container(
-                              width: 128,
-                              child: Center(
-                                child: H16(text: widget.name, color: AppColor_Primary,),
-                              )
-                            ),
-                            p.nextDate == "-1"?
-                                H16(text: "검사가 가능해요")
-                                : RichText(text: TextSpan(
-                                children: [
-                                  TextSpan(
-                                      text: "다음검사 ",
-                                      style: AppTextStyle.PD(
-                                        AppColor_BlackText,
-                                        16,
-                                        weight: FW.regular,
-                                      )),
-                                  TextSpan(
-                                      text: " ${p.nextDate}일 후",
-                                      // text: " 40일 후",
-                                      style: AppTextStyle.PD(
-                                          AppColor_Primary, 16,
-                                          weight: FW.bold)),
-                                ]
-                            )),
+                            SizedBox(
+                                width: 128,
+                                child: Center(
+                                  child: H16(
+                                    text: widget.name,
+                                    color: AppColor_Primary,
+                                  ),
+                                )),
+                            months > 72
+                                ? H16(text: "")
+                                : p.nextDate == "-1"
+                                    ? H16(text: "검사가 가능해요")
+                                    : RichText(
+                                        text: TextSpan(children: [
+                                        TextSpan(
+                                            text: "다음검사 ",
+                                            style: AppTextStyle.PD(
+                                              AppColor_BlackText,
+                                              16,
+                                              weight: FW.regular,
+                                            )),
+                                        TextSpan(
+                                            text: " ${p.nextDate}일 후",
+                                            // text: " 40일 후",
+                                            style: AppTextStyle.PD(
+                                                AppColor_Primary, 16,
+                                                weight: FW.bold)),
+                                      ])),
                           ],
                         ),
                         const SizedBox(height: 25),
                         SizedBox(
                             width: double.infinity,
                             child: Center(
-                              child: Container(
+                              child: SizedBox(
                                 width: 284,
                                 child: Stack(
                                   children: [
                                     Center(
                                       child: MainTextButton(
                                         text: "모니터링 하러가기",
-                                        style: AppTextStyle.PD(
-                                            Colors.white, 16,
+                                        style: AppTextStyle.PD(Colors.white, 16,
                                             weight: FW.medium),
                                         width: 185,
                                         height: 40,

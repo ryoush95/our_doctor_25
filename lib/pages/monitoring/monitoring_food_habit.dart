@@ -307,7 +307,7 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
                   },
                 ),
               ),
-            months > 36 ? const SizedBox() : _dotIndicator(1.0),
+            months < 36 ? const SizedBox() : _dotIndicator(1.0),
             const SizedBox(
               height: 20,
             ),
@@ -323,7 +323,7 @@ class _MonitoringFoodHabitState extends State<MonitoringFoodHabit> {
                     if (months > 36) {
                       return MonitoringFoodTest1();
                     } else {
-                      return MonitoringFoodTest2(test1Data: const []);
+                      return MonitoringFoodTest2(test1Data: []);
                     }
                   },
                 ));

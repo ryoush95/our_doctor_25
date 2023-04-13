@@ -15,11 +15,12 @@ import 'package:ourdoctor/provider/convert_score_provider.dart';
 import 'package:provider/provider.dart';
 
 class ProductShow extends StatefulWidget {
-  ProductShow({Key? key, this.category = 0, this.title = "items", required this.list}) : super(key: key);
+  ProductShow({Key? key, this.category = 0, this.title = "items", required this.list, this.homeCate = 0}) : super(key: key);
 
   final int category;
   final String title;
   final List<PdtLikeDto>? list;
+  final int homeCate;
 
   @override
   ProductShowState createState() => ProductShowState();
@@ -73,7 +74,7 @@ class ProductShowState extends BaseState<ProductShow> {
                         context,
                         SlideRightTransRoute(
                             builder: (context) => ProductList(
-                                  category: cate == 0 ? "GROWTH" : "DEVELOPMENT",
+                                  category: widget.homeCate == 1 ? "DEVELOPMENT" : cate == 0 ? "GROWTH" : "DEVELOPMENT",
                                   order: widget.title == "인기 상품" ? "like" : "new",
                                 )));
                     if (recv == "200") {
