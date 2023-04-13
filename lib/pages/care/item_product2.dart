@@ -74,7 +74,7 @@ class ItemProduct2State extends BaseState<ItemProduct2> {
       child: Container(
           width: (MediaQuery.of(context).size.width - 64 - 10) / 2,
           // margin: const EdgeInsets.only(right: 20, top: 20),
-          height: (MediaQuery.of(context).size.width - 64 - 10) / 2 + 120,
+          height: (MediaQuery.of(context).size.width - 64 - 10) / 2 + 150,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -124,7 +124,6 @@ class ItemProduct2State extends BaseState<ItemProduct2> {
                     right: 5,
                     top: 5),
               ]),
-              const SizedBox(height: 15),
               Container(
                 width: 150,
                 child: H16(
