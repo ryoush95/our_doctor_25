@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'dart:ui' as ui;
 
 import 'package:ourdoctor/global/app_colors.dart';
@@ -50,7 +49,7 @@ class _RadarChartWidgetState extends State<RadarChartWidget> {
   List<double> min = [0, 0, 0, 0, 0];
   List<double> max = [0, 0, 0, 0, 0];
   List<List<double>> dataList = [];
-  List<Comment?> commentList = [null, null, null, null, null];
+  List<Comment?> commentList = [];
 
   double clickX = 50;
   double clickY = 50;
@@ -87,12 +86,17 @@ class _RadarChartWidgetState extends State<RadarChartWidget> {
           average[i] = value.data!.graph![foodList[i]]!.average;
           max[i] = value.data!.graph![foodList[i]]!.max;
           min[i] = value.data!.graph![foodList[i]]!.min;
-          commentList[i] = foodData!.graph![foodList[i]]!.comment!;
+          commentList.add(foodData!.graph![foodList[i]]!.comment!);
         }
         dataList.add(main);
         dataList.add(average);
         dataList.add(min);
         dataList.add(max);
+        commentList.insert(
+            0,
+            Comment(
+                title: foodData!.comment!.title,
+                content: foodData!.comment!.content));
         // p.changeSelDate(DateFormat('yyyy-MM-dd').format(DateTime.now()));
         setState(() {});
       } else {
@@ -112,14 +116,14 @@ class _RadarChartWidgetState extends State<RadarChartWidget> {
     final selIndex = context.watch<FoodResultProvider>().foodGraphIndex;
     return PageView.builder(
       controller: bannerController,
-      itemCount: foodList.length,
+      itemCount: commentList.length,
       itemBuilder: (context, index) =>
           buildBannerItem(context, index, selIndex),
       onPageChanged: (i) {
         setState(() {
           bannerNum = i.toDouble();
           Provider.of<FoodResultProvider>(context, listen: false)
-              .changeGraphIndex(i);
+              .changeGraphIndex(i - 1);
         });
       },
     );
@@ -171,7 +175,7 @@ class _RadarChartWidgetState extends State<RadarChartWidget> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: DotsIndicator(
-        dotsCount: 5,
+        dotsCount: commentList.length,
         position: bannerNum,
         decorator: DotsDecorator(
           color: const Color(0xFF000000).withOpacity(0.12), // Inactive color
@@ -300,9 +304,7 @@ class _RadarChartWidgetState extends State<RadarChartWidget> {
                             height: 1.0,
                             width: 40.0,
                             color: Colors.black.withOpacity(0.4)),
-                        SizedBox(
-                          width: 15,
-                        ),
+                        const SizedBox(width: 15),
                         H12(
                           text: "과다 섭취 기준선",
                           color: AppColor_GrayText,
@@ -346,7 +348,7 @@ class _RadarChartWidgetState extends State<RadarChartWidget> {
                     clickX = details.localPosition.dx;
                     clickY = details.localPosition.dy;
                     int cacul = caculator(Size(size, size), clickX, clickY);
-                    bannerController.jumpToPage(cacul);
+                    bannerController.jumpToPage(cacul + 1);
                     Provider.of<FoodResultProvider>(context, listen: false)
                         .changeGraphIndex(cacul);
                   }
@@ -373,7 +375,7 @@ class _RadarChartWidgetState extends State<RadarChartWidget> {
           Visibility(
             visible: widget.state!,
             child: SizedBox(
-              height: 450,
+              height: 420,
               child: Column(
                 children: [
                   foodData == null
